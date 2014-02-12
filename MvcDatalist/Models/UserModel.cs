@@ -1,11 +1,12 @@
 ﻿using Datalist;
+using MvcDatalist.Datalists;
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace MvcDatalist.Models
 {
     public class UserModel
     {
+        [Datalist(Type = typeof(DefaultDatalist))]
         public String Id { get; set; }
 
         [DatalistColumn]

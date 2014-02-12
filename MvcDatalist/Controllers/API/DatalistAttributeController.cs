@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using MvcDatalist.Models;
+using System.Web.Mvc;
 
 namespace MvcDatalist.Controllers.API
 {
@@ -9,7 +10,7 @@ namespace MvcDatalist.Controllers.API
         [HttpGet]
         public ActionResult Type()
         {
-            return View();
+            return View(new UserModel());
         }
 
         #endregion
