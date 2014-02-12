@@ -15,10 +15,10 @@ namespace MvcDatalist.Models
         [DatalistColumn]
         public String LastName { get; set; }
 
-        [DatalistColumn]
+        [DatalistColumn(4)]
         public DateTime DateOfBirth { get; set; }
 
-        [DatalistColumn(Relation = "LoginName")]
+        [DatalistColumn(7, Relation = "LoginName")]
         public AccountModel Account { get; set; }
     }
 }
