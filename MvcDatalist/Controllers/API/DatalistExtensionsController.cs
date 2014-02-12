@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using MvcDatalist.Models;
+using System.Web.Mvc;
 
 namespace MvcDatalist.Controllers.API
 {
@@ -15,7 +16,7 @@ namespace MvcDatalist.Controllers.API
         [HttpGet]
         public ActionResult AutocompleteFor()
         {
-            return View();
+            return View(new UserModel());
         }
 
         [HttpGet]
@@ -27,7 +28,7 @@ namespace MvcDatalist.Controllers.API
         [HttpGet]
         public ActionResult DatalistFor()
         {
-            return View();
+            return View(new UserModel());
         }
 
         #endregion

@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "DatalistExtensions.DatalistFor";
 }
+@model MvcDatalist.Models.UserModel
 
 <div class="panel panel-default">
     <div class="panel-heading">DatalistFor</div>
@@ -9,5 +10,12 @@
         <pre>Html helper for creating datalist input controls.</pre>
         <strong>Remarks</strong>
         <pre>This method should be used on inputs which require datalist search dialog.</pre>
+        <strong>Examples</strong>
+        <pre>
+Creates datalist autocomplete input with id <span class="str">"DatalistId"</span> and <span class="str">"example-class"</span> class, which is mapped with hidden input <span class="str">"Id"</span>.
+It also has datalist open addon, which opens datalist for more specific search.
+
+<span class="esc">@@</span>Html.DatalistFor(model => model.Id, <span class="kwrd">new</span> <span class="cls">DefaultDatalist</span>(), <span class="kwrd">new</span> { @@class = <span class="str">"example-class"</span> })</pre>
+        @Html.DatalistFor(model => model.Id, new DefaultDatalist(), new { @class = "example-class" })
     </div>
 </div>
