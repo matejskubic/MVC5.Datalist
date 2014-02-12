@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "AbstractDatalist.DefaultSortColumn";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">DefaultSortColumn</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>Specifies default datalist column to be sorted, unless explicit sorting is specified.</pre>
+        <strong>Defaults</strong>
+        <pre><span class="kwrd">null</span></pre>
+        <strong>Remarks</strong>
+        <pre>Default sort column should be used on next datalist data table load, unless user sort column explicitly.</pre>
+        <strong>Examples</strong>
+        <pre>
+<strong>Columns:</strong> { <span class="str">"FirstName"</span>, <span class="str">"FirstName"</span> }, { <span class="str">"LastName"</span>, <span class="str">"LastName"</span> }, { <span class="str">"DateOfBirth"</span>, <span class="str">"DateOfBirth"</span> }, { <span class="str">"Account.LoginName"</span>, <span class="str">"LoginName"</span> }
+<strong>DefaultSortColumn:</strong> <span class="str">"LastName"</span>
+
+On first load, data should be sorted by <span class="str">"LastName"</span> column.
+
+<span class="kwrd">public</span> LastNameSortColumnExample()
+{
+    DefaultSortColumn = <span class="str">"LastName"</span>;
+}
+</pre>
+        @Html.Datalist("DefaultSortColumn2", null, new ExampleDatalist())
+    </div>
+</div>

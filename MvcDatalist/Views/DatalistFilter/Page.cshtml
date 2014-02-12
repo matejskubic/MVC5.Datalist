@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "DatalistFilter.Page";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Page</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>Property representing which page is filtered.</pre>
+        <strong>Defaults</strong>
+        <pre>0</pre>
+        <strong>Remarks</strong>
+        <pre>Page value will be equal to selected page value minus 1.</pre>
+        <strong>Examples</strong>
+        <pre>If user presses page 2, this property wil be set to 1, if 3 then 2 and so on.</pre>
+        @Html.Datalist("Page1", null, new DefaultDatalist())
+    </div>
+</div>

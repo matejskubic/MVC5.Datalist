@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Datalist: Installation";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Installation</div>
+    <div class="panel-body">
+        <strong>Install Datalist from nuget</strong>
+        <div class="nuget-install">
+            <p>
+                <code>PM&gt; Install-Package Datalist
+                </code>
+            </p>
+        </div>
+        <div class="separator"></div>
+        <strong>Include styles</strong>
+        <div class="html-code">
+            <p>
+                <code>
+                    <span style="color: #0000FF">&lt;</span>link <span style="color: #FF0000">href</span><span style="color: #0000FF">="~/Content/bootstrap.css"</span> <span style="color: #FF0000">rel</span><span style="color: #0000FF">="stylesheet" /&gt;</span><br />
+                    <span style="color: #0000FF">&lt;</span>link <span style="color: #FF0000">href</span><span style="color: #0000FF">="~/Content/themes/base/jquery.ui.all.css"</span> <span style="color: #FF0000">rel</span><span style="color: #0000FF">="stylesheet" /&gt;</span><br />
+                    <span style="color: #0000FF">&lt;</span>link <span style="color: #FF0000">href</span><span style="color: #0000FF">="~/Content/Datalist/datalist.css"</span> <span style="color: #FF0000">rel</span><span style="color: #0000FF">="stylesheet" /&gt;</span>
+                </code>
+            </p>
+        </div>
+        <div class="separator"></div>
+        <strong>Include scripts</strong>
+        <div class="html-code">
+            <p>
+                <code>
+                    <span style="color: #0000FF">&lt;</span>script <span style="color: #FF0000">src</span><span style="color: #0000FF">="~/Scripts/jquery-2.1.0.min.js"</span> <span style="color: #0000FF">/&gt;</span><br />
+                    <span style="color: #0000FF">&lt;</span>script <span style="color: #FF0000">src</span><span style="color: #0000FF">="~/Scripts/bootstrap.min.js"</span> <span style="color: #0000FF">/&gt;</span><br />
+                    <span style="color: #0000FF">&lt;</span>script <span style="color: #FF0000">src</span><span style="color: #0000FF">="~/Scripts/jquery-ui-1.10.4.min.js"</span> <span style="color: #0000FF">/&gt;</span><br />
+                    <span style="color: #0000FF">&lt;</span>script <span style="color: #FF0000">src</span><span style="color: #0000FF">="~/Scripts/Datalist/bind-with-delay.js"</span> <span style="color: #0000FF">/&gt;</span><br />
+                    <span style="color: #0000FF">&lt;</span>script <span style="color: #FF0000">src</span><span style="color: #0000FF">="~/Scripts/Datalist/bootstrap-paginator.js"</span> <span style="color: #0000FF">/&gt;</span><br />
+                    <span style="color: #0000FF">&lt;</span>script <span style="color: #FF0000">src</span><span style="color: #0000FF">="~/Scripts/Datalist/datalist.js"</span> <span style="color: #0000FF">/&gt;</span><br />
+                </code>
+            </p>
+        </div>
+
+        <strong>Initialize datalist instances</strong>
+        <div class="html-code">
+            <p>
+                <code>
+                    <span style="color: #000000">$(</span>'.datalist-input'<span style="color: #000000">).datalist();</span>
+                </code>
+            </p>
+        </div>
+    </div>
+</div>

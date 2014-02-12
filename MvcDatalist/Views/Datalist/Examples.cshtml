@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Datalist: Examples";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Examples</div>
+    <div class="panel-body">
+        <strong>Simple datalist</strong>
+        <pre>To create a datalist you need to:
+    Implement <a href="/Datalist/API/GenericDatalist">GenericDatalist</a>.
+    Create <span class="cls">JsonResult</span> method for getting data for datalist in <span class="cls">DatalistController</span> or your specified one.
+    Decorate selected properties with <a href="/Datalist/API/DatalistColumnAttribute">DatalistColumnAttribute</a>.
+    Create datalist html control using one of <a href="/Datalist/API/DatalistExtensions">DatalistExtensions</a> methods.
+
+<strong>DefaultDatalist class</strong>
+<span class="kwrd">public class</span> <span class="cls">DefaultDatalist</span> : <a href="/Datalist/API/GenericDatalist">GenericDatalist</a>&lt;<span class="cls">UserModel</span>&gt;
+{
+    <span class="kwrd">public override</span> <span class="cls">IQueryable</span>&lt;<span class="cls">UserModel</span>&gt; GetModels()
+    {
+        <span class="kwrd">return new</span> <span class="cls">UserModelRepository</span>().Users();
+    }
+}
+
+<strong>DatalistController class</strong>
+<span class="kwrd">private</span> <span class="cls">JsonResult</span> GetData(<a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a> datalist, <a href="/Datalist/API/DatalistFilter">DatalistFilter</a> filter, <span class="cls">IDictionary</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt; filters = <span class="kwrd">null</span>)
+{
+    datalist.CurrentFilter = filter;
+    filter.AdditionalFilters = filters ?? filter.AdditionalFilters;
+    return Json(datalist.GetData(), <span class="cls">JsonRequestBehavior</span>.AllowGet);
+}
+
+<span class="kwrd">public</span> <span class="cls">JsonResult</span> Default(<a href="/Datalist/API/DatalistFilter">DatalistFilter</a> filter)
+{
+    <span class="kwrd">return</span> GetData(<span class="kwrd">new</span> <span class="cls">DefaultDatalist</span>(), filter);
+}
+
+<strong>UserModel class</strong>
+<span class="kwrd">public class</span> <span class="cls">UserModel</span>
+{
+    <span class="kwrd">public</span> <span class="cls">String</span> Id { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+
+    [<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>]
+    <span class="kwrd">public</span> <span class="cls">String</span> FirstName { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+
+    [<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>]
+    <span class="kwrd">public</span> <span class="cls">String</span> LastName { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+
+    [<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>]
+    <span class="kwrd">public</span> <span class="cls">DateTime</span> DateOfBirth { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+
+    [<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>(Relation = <span class="str">"LoginName"</span>)]
+    <span class="kwrd">public</span> <span class="cls">Account</span> Account { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+}
+
+<strong>AccountModel class</strong>
+<span class="kwrd">public class</span> <span class="cls">AccountModel</span>
+{
+    <span class="kwrd">public</span> <span class="cls">String</span> Id { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+
+    [<span class="cls">Display</span>(Name = <span class="str">"Login name"</span>)]
+    <span class="kwrd">public</span> <span class="cls">String</span> LoginName { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+}
+
+<strong>View</strong>
+<span class="esc">@@</span>Html.Datalist(<span class="str">"UserId"</span>, <span class="kwrd">null</span>, <span class="kwrd">new</span> <span class="cls">DefaultDatalist</span>())</pre>
+        @Html.Datalist("UserId", null, new DefaultDatalist())
+    </div>
+</div>

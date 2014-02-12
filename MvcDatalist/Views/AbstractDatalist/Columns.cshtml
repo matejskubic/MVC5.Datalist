@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "AbstractDatalist.Columns";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Columns</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>Specifies datalist visible column keys and their headers.</pre>
+        <strong>Defaults</strong>
+        <pre>Empty dictionary.</pre>
+        <strong>Examples</strong>
+        <pre>
+<strong>Columns:</strong> { <span class="str">"FirstName"</span>, <span class="str">"First name"</span> }, { <span class="str">"LastName"</span>, <span class="str">"Last name"</span> }
+
+Datalist will have two visible columns with headers <span class="str">"First name"</span>, <span class="str">"Last name"</span>.
+And their keys respectively <span class="str">"FirstName"</span>, <span class="str">"LastName"</span>.
+
+<span class="kwrd">public</span> ExampleDatalist()
+{
+    Columns.Add(<span class="str">"FirstName"</span>, <span class="str">"First name"</span>);
+    Columns.Add(<span class="str">"LastName"</span>, <span class="str">"Last name"</span>);
+}</pre>
+        @Html.Datalist("Columns1", null, new ExampleDatalist())
+    </div>
+</div>

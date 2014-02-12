@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "DatalistData.Rows";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Rows</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>List of data dictionaries, each representing a datalist data row.</pre>
+        <strong>Defaults</strong>
+        <pre>Empty dictionary list.</pre>
+        <strong>Remarks</strong>
+        <pre>Each dictionary should at least contain keys from <a href="/Datalist/API/DatalistData">DatalistData</a>.<a href="/Datalist/API/DatalistData/Columns">Columns</a>, <a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a>.<a href="/Datalist/API/AbstractDatalist/IdKey">IdKey</a> and <a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a>.<a href="/Datalist/API/AbstractDatalist/AcKey">AcKey</a>.
+Any additional keys will not be rendered into a datalist table, but will be kept for use in javascript. // TODO: add javascript links</pre>
+        <strong>Examples</strong>
+        <pre>This is how <a href="/Datalist/API/DatalistData">DatalistData</a>.Rows could be filled with data.
+
+<span class="kwrd">public</span> <span class="kwrd">override</span> <a href="/Datalist/API/DatalistData">DatalistData</a> FormDatalistData(<span class="cls">IQueryable</span>&lt;<span class="cls">UserModel</span>&gt; models)
+{
+    <span class="kwrd">var</span> data = <span class="kwrd">new</span> <a href="/Datalist/API/DatalistData">DatalistData</a>();
+    data.FilteredRecords = models.Count();
+    data.Columns.Add(<span class="str">"FirstName"</span>, <span class="str">"First name"</span>);
+    data.Columns.Add(<span class="str">"LastName"</span>, <span class="str">"Last name"</span>);
+
+    <span class="kwrd">var</span> pagedModels = models
+        .Skip(CurrentFilter.Page * CurrentFilter.RecordsPerPage)
+        .Take(CurrentFilter.RecordsPerPage);
+
+    <span class="kwrd">foreach</span> (<span class="cls">UserModel</span> model <span class="kwrd">in</span> pagedModels)
+    {
+        <span class="kwrd">var</span> row = <span class="kwrd">new</span> <span class="cls">Dictionary</span>&lt;<span class="cls">String</span>, <span class="cls">String</span>&gt;();
+        row.Add(IdKey, model.Id);
+        row.Add(AcKey, <span class="cls">String</span>.Format(<span class="str">"{0} {1}"</span>, model.FirstName, model.LastName));
+        row.Add(<span class="str">"FirstName"</span>, model.FirstName);
+        row.Add(<span class="str">"LastName"</span>, model.LastName);
+        row.Add(<span class="str">"AdditionalData"</span>, <span class="str">"Additional data"</span>);
+
+        data.Rows.Add(row);
+    }
+
+    <span class="kwrd">return</span> data;
+}
+
+$(<span class="str">'.datalist-input'</span>).datalist({
+    onSelect: <span class="kwrd">function</span> (hiddenInput, datalistInput, data) {
+        hiddenInput.val(data.DatalistIdKey).change();
+        datalistInput.val(data.DatalistAcKey).change();
+        alert(data.AdditionalData + <span class="str">' script'</span>);
+    }
+});</pre>
+        @Html.Datalist("Rows1", null, new DatalistDataDatalist())
+        @Html.Datalist("Rows2", null, new DatalistDataDatalist())
+    </div>
+    @section scripts {
+        <script>
+            $('.datalist-input').datalist();
+        </script>
+    }
+</div>

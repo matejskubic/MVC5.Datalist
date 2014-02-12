@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/Datalist/datalist.css" rel="stylesheet" />
+    <link href="~/Content/site.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Datalist</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+                <ul class="nav navbar-nav">
+                    <li><a href="/Datalist/Installation">Installation</a></li>
+                    <li><a href="/Datalist/Examples">Examples</a></li>
+                    <li><a href="/Datalist/API">API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        @RenderBody()
+        @Html.Partial("_Datalist")
+    </div>
+    <script src="~/Scripts/jquery-2.1.0.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.10.4.min.js"></script>
+    <script src="~/Scripts/Datalist/bind-with-delay.js"></script>
+    <script src="~/Scripts/Datalist/bootstrap-paginator.js"></script>
+    <script src="~/Scripts/Datalist/datalist.js"></script>
+    <script src="~/Scripts/site.js"></script>
+    @RenderSection("scripts", false)
+</body>
+</html>

@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "AbstractDatalist.Identifier";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Identifier</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>Specifies datalist identifier.</pre>
+        <strong>Defaults</strong>
+        <pre>Implementing type's name.</pre>
+        <strong>Remarks</strong>
+        <pre>It is used for giving unique identifier for datalist.
+It is needed for datalist to work internally and should not be changed using javascript.</pre>
+        <strong>Examples</strong>
+        <pre><strong>Implementing type:</strong> DefaultDatalist
+<strong>Identifier:</strong> DefaultDatalist</pre>
+        @Html.Datalist("Identifier1", null, new DefaultDatalist())
+    </div>
+</div>

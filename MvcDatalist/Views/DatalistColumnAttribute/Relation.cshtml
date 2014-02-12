@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "DatalistColumnAttribute.Relation";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Relation</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>Specified that column relation.</pre>
+        <strong>Defaults</strong>
+        <pre><span class="kwrd">null</span></pre>
+        <strong>Remarks</strong>
+        <pre>Having not null relation values means that, value which is rendered in datalist should be taken from attributed member properties.</pre>
+        <strong>Example</strong>
+        <pre>Specifying Relation to <span class="str">"LoginName"</span> on Account property would mean that rendered value will be equal to
+Account.LoginName value and not the Account. This relation mapping can have as many relations as needed.
+If by any chance <span class="str">"LoginName"</span> relation property would have <span class="cls">DatalistColumn</span> attribute specified
+with another relation to <span class="str">"EncodedName"</span>, the value would be taken from Account.LoginName.EncodedName property.
+
+<span class="kwrd">public class</span> <span class="cls">User</span>
+{
+    <span class="kwrd">public</span> <span class="cls">String</span> Id { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+
+    [<span class="cls">DatalistColumn</span>]
+    <span class="kwrd">public</span> <span class="cls">String</span> FirstName { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+
+    [<span class="cls">DatalistColumn</span>]
+    <span class="kwrd">public</span> <span class="cls">String</span> LastName { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+
+    [<span class="cls">DatalistColumn</span>]
+    <span class="kwrd">public</span> <span class="cls">DateTime</span> DateOfBirth { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+
+    [<span class="cls">DatalistColumn</span>(Relation = <span class="str">"LoginName"</span>)]
+    <span class="kwrd">public</span> <span class="cls">Account</span> Account { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+}</pre>
+        @Html.Datalist("CurrentFilter1", null, new DefaultDatalist())
+    </div>
+</div>

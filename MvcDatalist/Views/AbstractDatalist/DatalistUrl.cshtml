@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "AbstractDatalist.DatalistUrl";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">DatalistUrl</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>Specifies datalist's data source url.</pre>
+        <strong>Defaults</strong>
+        <pre><span class="kwrd">null</span></pre>
+        <strong>Remarks</strong>
+        <pre>Specified url will be used for datalist ajax call.</pre>
+        <strong>Examples</strong>
+        <pre>
+<strong>DatalistUrl:</strong> <a href="#">http://www.nonfactors.eu/Datalist/DifferentUrlExample</a>
+
+Ajax call will be called for <a href="#">http://www.nonfactors.eu/Datalist/DifferentUrlExample</a>
+
+<span class="kwrd">public</span> ExampleDatalist()
+{
+    DatalistUrl = <span class="cls">String</span>.Format(<span class="str">"{0}://{1}{2}{3}/{4}"</span>,
+        <span class="cls">HttpContext</span>.Current.Request.Url.Scheme,
+        <span class="cls">HttpContext</span>.Current.Request.Url.Authority,
+        <span class="cls">HttpContext</span>.Current.Request.ApplicationPath,
+        <span class="cls">AbstractDatalist</span>.Prefix,
+        <span class="str">"DifferentUrlExample"</span>);
+}
+</pre>
+        @Html.Datalist("DatalistUrlExample3", null, new ExampleDatalist())
+    </div>
+</div>

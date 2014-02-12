@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datalist", "Datalist\Datalist.csproj", "{B6B77EFD-C18A-4947-99C7-63A7AF09B606}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatalistContent", "DatalistContent\DatalistContent.csproj", "{26C12896-1718-4AA1-BF64-65A43AE85A3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcDatalist", "MvcDatalist\MvcDatalist.csproj", "{88D1A9D6-65FF-426D-9055-4594FF8268BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B6B77EFD-C18A-4947-99C7-63A7AF09B606}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6B77EFD-C18A-4947-99C7-63A7AF09B606}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6B77EFD-C18A-4947-99C7-63A7AF09B606}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6B77EFD-C18A-4947-99C7-63A7AF09B606}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26C12896-1718-4AA1-BF64-65A43AE85A3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26C12896-1718-4AA1-BF64-65A43AE85A3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26C12896-1718-4AA1-BF64-65A43AE85A3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26C12896-1718-4AA1-BF64-65A43AE85A3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88D1A9D6-65FF-426D-9055-4594FF8268BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88D1A9D6-65FF-426D-9055-4594FF8268BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88D1A9D6-65FF-426D-9055-4594FF8268BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88D1A9D6-65FF-426D-9055-4594FF8268BF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "AbstractDatalist.DialogTitle";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">DialogTitle</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>Specifies datalist dialog window title.</pre>
+        <strong>Defaults</strong>
+        <pre><span class="kwrd">null</span></pre>
+        <strong>Remarks</strong>
+        <pre>Dialog title will be visible for datalist dialog window.</pre>
+        <strong>Examples</strong>
+        <pre>
+<strong>DialogTitle:</strong> <span class="str">"Normal dialog title"</span>
+
+Datalist dialog title will be <span class="str">"Normal dialog title"</span>.
+
+<span class="kwrd">public</span> ExampleDatalist()
+{
+    DialogTitle = <span class="str">"Normal dialog title"</span>;
+}</pre>
+        @Html.Datalist("CurrentFilter1", null, new ExampleDatalist())
+    </div>
+</div>

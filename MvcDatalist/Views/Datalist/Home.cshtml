@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Home</div>
+    <div class="panel-body">
+        Datalist is autocomplete plus data tables like feature for retrieving, showing and selecting remote data in MVC projects.
+        <div class="separator"></div>
+        <strong>Autocomplete</strong>
+        <div class="autocomplete-group">
+            @Html.AutoComplete("AutocompleteId", null, new DefaultDatalist())
+        </div>
+        <div class="separator"></div>
+        <strong>Datalist</strong>
+        @Html.Datalist("DatalistId", null, new DefaultDatalist())
+    </div>
+</div>
