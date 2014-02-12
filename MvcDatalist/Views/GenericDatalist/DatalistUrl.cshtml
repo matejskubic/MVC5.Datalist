@@ -9,7 +9,7 @@
         <pre>Specifies datalist's data source url.</pre>
         <strong>Defaults</strong>
         <pre>
-<span class="cls">String</span> sanitizedName = <a href="/Datalist/AbstractDatalist/Identifier">Identifier</a>.Replace(<a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a>.<a href="/Datalist/GenericDatalist/Prefix">Prefix</a>, <span class="cls">String</span>.Empty);
+<span class="cls">String</span> sanitizedName = GetType().Name.Replace(<a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a>.<a href="/Datalist/GenericDatalist/Prefix">Prefix</a>, <span class="cls">String</span>.Empty);
 DatalistUrl = <span class="cls">String</span>.Format(<span class="str">"{0}://{1}{2}{3}/{4}"</span>,
     <span class="cls">HttpContext</span>.Current.Request.Url.Scheme,
     <span class="cls">HttpContext</span>.Current.Request.Url.Authority,
@@ -21,16 +21,16 @@ DatalistUrl = <span class="cls">String</span>.Format(<span class="str">"{0}://{1
         <strong>Examples</strong>
         <pre>
 <strong>Implementing type:</strong> DefaultDatalist
-<strong>DatalistUrl:</strong> <a href="#">http://www.nonfactors.eu/Datalist/Default</a>
+<strong>DatalistUrl:</strong> <a href="#">http://localhost:7013/Datalist/Default</a>
 
-Ajax call will be called for <a href="#">http://www.nonfactors.eu/Datalist/Default</a></pre>
+Ajax call will be called for <a href="#">http://localhost:7013/Datalist/Default</a></pre>
         @Html.Datalist("DatalistUrlExample1", null, new DefaultDatalist())
         <div class="separator"></div>
         <pre>
 <strong>Implementing type:</strong> ExampleDatalist
-<strong>DatalistUrl:</strong> <a href="#">http://www.nonfactors.eu/Datalist/DifferentUrlExample</a>
+<strong>DatalistUrl:</strong> <a href="#">http://localhost:7013/Datalist/DifferentUrlExample</a>
 
-Ajax call will be called for <a href="#">http://www.nonfactors.eu/Datalist/DifferentUrlExample</a>
+Ajax call will be called for <a href="#">http://localhost:7013/Datalist/DifferentUrlExample</a>
 
 <span class="kwrd">public</span> ExampleDatalist()
 {
@@ -42,6 +42,6 @@ Ajax call will be called for <a href="#">http://www.nonfactors.eu/Datalist/Diffe
         <span class="str">"DifferentUrlExample"</span>);
 }
 </pre>
-        @Html.Datalist("DatalistUrlExample3", null, new ExampleDatalist())
+        @Html.Datalist("DatalistUrlExample2", null, new ExampleDatalist())
     </div>
 </div>

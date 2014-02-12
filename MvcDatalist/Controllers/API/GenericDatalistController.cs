@@ -28,13 +28,6 @@ namespace MvcDatalist.Controllers.API
 
         #region Properties
 
-
-        [HttpGet]
-        public ActionResult Identifier()
-        {
-            return View();
-        }
-
         [HttpGet]
         public ActionResult Columns()
         {

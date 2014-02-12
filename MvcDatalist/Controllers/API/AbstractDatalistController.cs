@@ -28,13 +28,6 @@ namespace MvcDatalist.Controllers.API
         
         #region Properties
 
-
-        [HttpGet]
-        public ActionResult Identifier()
-        {
-            return View();
-        }
-
         [HttpGet]
         public ActionResult Columns()
         {
@@ -73,6 +66,12 @@ namespace MvcDatalist.Controllers.API
 
         [HttpGet]
         public ActionResult DefaultSortColumn()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult DefaultRecordsPerPage()
         {
             return View();
         }

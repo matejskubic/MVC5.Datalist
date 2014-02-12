@@ -15,6 +15,7 @@ namespace MvcDatalist.Datalists
 
             DefaultSortColumn = "LastName";
             DefaultSortOrder = DatalistSortOrder.Desc;
+            DefaultRecordsPerPage = 5;
 
             DatalistUrl = String.Format("{0}://{1}{2}{3}/{4}",
                 HttpContext.Current.Request.Url.Scheme,
