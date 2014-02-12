@@ -23,5 +23,10 @@
 
     <span class="kwrd">return</span> GetData(<span class="kwrd">new</span> <span class="cls">ExampleDatalist</span>(), filter, additionalFilters);
 }</pre>
+        <div class="input-group">
+            <span class="input-group-addon">User id</span>
+            @Html.TextBox("AdditionalFilterId", 1, new { @class = "form-control" })
+        </div>
+        @Html.Datalist("AdditionalFilters2", null, new ExampleDatalist())
     </div>
 </div>

@@ -43,7 +43,7 @@ Any additional keys will not be rendered into a datalist table, but will be kept
 
 $(<span class="str">'.datalist-input'</span>).datalist({
     select: <span class="kwrd">function</span> (e, element, data) {
-        alert(data.AdditionalData + <span class="str">' for '</span> + data.FirstName);
+        console.log(data.AdditionalData + <span class="str">' for '</span> + data.FirstName);
     }
 });</pre>
         @Html.Datalist("Rows1", null, new DatalistDataDatalist())
@@ -52,7 +52,7 @@ $(<span class="str">'.datalist-input'</span>).datalist({
         <script>
             $('.datalist-input').datalist({
                 select: function (e, element, data) {
-                    alert(data.AdditionalData + ' for ' + data.FirstName);
+                    console.log(data.AdditionalData + ' for ' + data.FirstName);
                 }
             });
         </script>

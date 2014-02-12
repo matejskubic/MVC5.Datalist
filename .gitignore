@@ -5,3 +5,4 @@ DatalistContent/obj/
 MvcDatalist/bin/
 MvcDatalist/obj/
 packages/
+*.suo

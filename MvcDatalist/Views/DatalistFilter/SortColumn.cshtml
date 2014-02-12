@@ -11,6 +11,10 @@
         <pre><span class="kwrd">null</span></pre>
         <strong>Remarks</strong>
         <pre>Sort column will be equal to <a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a>.<a href="/Datalist/API/AbstractDatalist/DefaultSortColumn">DefaultSortColumn</a> unless explicit sort column is specified.
-All sort columns values are from <a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a>.<a href="/Datalist/API/AbstractDatalist/Columns">Columns</a> keys.</pre>
+All sort column values should be from <a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a>.<a href="/Datalist/API/AbstractDatalist/Columns">Columns</a> keys.</pre>
+        <strong>Examples</strong>
+        <pre>If SortColumn is null or it is not one of <a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a>.<a href="/Datalist/API/AbstractDatalist/Columns">Columns</a> keys, data will be sorted by <a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a>.<a href="/Datalist/API/AbstractDatalist/DefaultSortColumn">DefaultSortColumn</a>
+or first column from <a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a>.<a href="/Datalist/API/AbstractDatalist/Columns">Columns</a>, because query can not be paged without any sorting.</pre>
+        @Html.Datalist("SearchTerm1", null, new DefaultDatalist())
     </div>
 </div>

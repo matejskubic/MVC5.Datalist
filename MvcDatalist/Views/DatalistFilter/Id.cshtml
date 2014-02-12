@@ -11,5 +11,26 @@
         <pre><span class="kwrd">null</span></pre>
         <strong>Remarks</strong>
         <pre>Id value will only be passed then datalist is loaded for the first time. It is used for getting visible value for datalist's autocomplete input.</pre>
+        <strong>Examples</strong>
+        <pre>One of datalist's functionality is to load already selected autocomplete value if it's id was specified in of <a href="/Datalist/API/DatalistExtensions">DatalistExtensions</a> helper methods.
+In this example it loads user which has id equal to one.
+
+<span class="esc">@@</span>Html.Datalist(<span class="str">"IdExample"</span>, 1, <span class="kwrd">new</span> <span class="cls">DefaultDatalist</span>())
+
+$(<span class="str">'.datalist-input'</span>).datalist({
+    select: <span class="kwrd">function</span> (e, element, data) {
+        console.log(<span class="str">'Loaded selected value  '</span> + data.DatalistAcKey);
+    }
+});</pre>
+        @Html.Datalist("IdExample", 1, new DefaultDatalist())
     </div>
+    @section scripts {
+        <script>
+            $('.datalist-input').datalist({
+                select: function (e, element, data) {
+                    console.log('Loaded selected value ' + data.DatalistAcKey);
+                }
+            });
+        </script>
+    }
 </div>
