@@ -11,7 +11,8 @@
         <pre>Empty list</pre>
         <strong>Remarks</strong>
         <pre>Additional filters list, specifies html input ids which should be passed to a datalist ajax call.
-Default implementation filters AdditionalFilters by using == operator. And null values are not considered as valid filter values.</pre>
+Default implementation filters AdditionalFilters by using == operator.
+<span class="kwrd">null</span> values are not considered as valid filter values and by default are not filtered.</pre>
         <strong>Examples</strong>
         <pre>
 <strong>AdditionalFilters:</strong> Empty list
@@ -39,7 +40,7 @@ As shown in bolded code, we are using <span class="str">"AdditionalFilterId"</sp
 }
 </pre>
         <div class="input-group">
-            <span class="input-group-addon">User id</span>
+            <span class="input-group-addon">UserModel id</span>
             @Html.TextBox("AdditionalFilterId", 1, new { @class = "form-control" })
         </div>
         @Html.Datalist("AdditionalFilters2", null, new ExampleDatalist())

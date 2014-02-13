@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "GenericDatalist.FilterByAdditionalFilters()";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">FilterByAdditionalFilters()</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>Filters a models by additional filters specified in <a href="/Datalist/API/AbstractDatalist/CurrentFilter">CurrentFilter</a>.<a href="/Datalist/API/DatalistFilter/AdditionalFilters">AdditionalFilters</a>.</pre>
+        <strong>Remarks</strong>
+        <pre>This method filters models by it's properties which are equal to the one specified in <a href="/Datalist/API/AbstractDatalist/CurrentFilter">CurrentFilter</a>.<a href="/Datalist/API/DatalistFilter/AdditionalFilters">AdditionalFilters</a> keys.
+<a href="/Datalist/API/GenericDatalist">GenericDatalist</a> implementation will call this method from <a href="/Datalist/API/GenericDatalist/GetData">GetData()</a> method only then <a href="/Datalist/API/AbstractDatalist/CurrentFilter">CurrentFilter</a>.<a href="/Datalist/API/DatalistFilter/AdditionalFilters">AdditionalFilters</a> contains at least one filter.
+Default implementation filter's only numeric and <span class="cls">String</span> properties by using == operator on each additional filter value.</pre>
+        <strong>Examples</strong>
+        <pre><strong>AdditionalFilters:</strong> { <span class="str">"FirstName"</span>, <span class="str">"Kim"</span> }
+<strong>Query:</strong> Where(model => (model.FirstName != <span class="kwrd">null</span> && model.FirstName == <span class="str">"Kim"</span>))</pre>
+        <pre><strong>AdditionalFilters:</strong> { <span class="str">"FirstName"</span>, <span class="str">"Kim"</span> }, { <span class="str">"Account.LoginName"</span>, <span class="str">"kimzer"</span> }
+<strong>Query:</strong> Where(model => (model.FirstName != <span class="kwrd">null</span> && model.FirstName == <span class="str">"Kim"</span>) &&
+                      (model => model.Account != <span class="kwrd">null</span> && model.Account.LoginName != <span class="kwrd">null</span> && model.Account.LoginName == <span class="str">"kimzer"</span>))</pre>
+    </div>
+</div>

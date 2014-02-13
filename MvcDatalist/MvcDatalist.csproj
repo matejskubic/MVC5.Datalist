@@ -304,12 +304,6 @@
     <Content Include="Views\GenericDatalist\Prefix.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\GenericDatalist\IdKey.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\GenericDatalist\AcKey.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\API\DatalistAttribute.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -347,6 +341,48 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\AbstractDatalist\DefaultRecordsPerPage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GenericDatalist\AddColumns.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GenericDatalist\GetModels.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GenericDatalist\FilterById.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GenericDatalist\FilterBySearchTerm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GenericDatalist\AddId.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GenericDatalist\AddAutocomplete.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GenericDatalist\FormDatalistData.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GenericDatalist\FilterByAdditionalFilters.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GenericDatalist\Sort.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GenericDatalist\AttributedProperties.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GenericDatalist\GetColumnKey.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GenericDatalist\GetData.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GenericDatalist\AddAdditionalData.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GenericDatalist\GetColumnHeader.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -13,17 +13,17 @@
         <pre>Default sort order should be used on next datalist data table load, unless user sort column explicitly.</pre>
         <strong>Examples</strong>
         <pre>
-<strong>Columns:</strong> { <span class="str">"FirstName"</span>, <span class="str">"FirstName"</span> }, { <span class="str">"LastName"</span>, <span class="str">"LastName"</span> }, { <span class="str">"DateOfBirth"</span>, <span class="str">"DateOfBirth"</span> }, { <span class="str">"Account.LoginName"</span>, <span class="str">"LoginName"</span> }
+<strong>Columns:</strong> { <span class="str">"FirstName"</span>, <span class="str">"FirstName"</span> }, { <span class="str">"LastName"</span>, <span class="str">"LastName"</span> }, { <span class="str">"DateOfBirth"</span>, <span class="str">"DateOfBirth"</span> }, { <span class="str">"Account.LoginName"</span>, <span class="str">"Login name"</span> }
 <strong>DefaultSortOrder:</strong> <a href="/Datalist/API/DatalistSortOrder">DatalistSortOrder</a>.<a href="/Datalist/DatalistSortOrder/Asc">Asc</a>
 
 On first load, data should be sorted by first column in Ascending order.</pre>
         @Html.Datalist("DefaultSortOrder1", null, new DefaultDatalist())
         <div class="separator"></div>
         <pre>
-<strong>Columns:</strong> { <span class="str">"FirstName"</span>, <span class="str">"FirstName"</span> }, { <span class="str">"LastName"</span>, <span class="str">"LastName"</span> }, { <span class="str">"DateOfBirth"</span>, <span class="str">"DateOfBirth"</span> }, { <span class="str">"Account.LoginName"</span>, <span class="str">"LoginName"</span> }
+<strong>Columns:</strong> { <span class="str">"FirstName"</span>, <span class="str">"FirstName"</span> }, { <span class="str">"LastName"</span>, <span class="str">"LastName"</span> }, { <span class="str">"DateOfBirth"</span>, <span class="str">"DateOfBirth"</span> }, { <span class="str">"Account.LoginName"</span>, <span class="str">"Login name"</span> }
 <strong>DefaultSortOrder:</strong> <a href="/Datalist/API/DatalistSortOrder">DatalistSortOrder</a>.<a href="/Datalist/DatalistSortOrder/Desc">Desc</a>
 
-On first load, data should be sorted by <span class="str">"LastName"</span> column in Descending order.
+On first load, data should be sorted by <span class="str">"LastName"</span> column in <a href="/Datalist/DatalistSortOrder/Desc">Descending</a> order.
 
 <span class="kwrd">public</span> ExampleDatalist()
 {

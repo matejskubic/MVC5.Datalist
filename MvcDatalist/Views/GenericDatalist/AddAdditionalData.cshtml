@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "GenericDatalist.AddAdditionalData()";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">AddAdditionalData()</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>Adds any additional values for current data row.</pre>
+        <strong>Remarks</strong>
+        <pre>This method is left empty for overriding. Any data added here will not be visible in datalist table (unless it's key is one of <a href="/Datalist/API/GenericDatalist/Columns">Columns</a> keys).
+It will be accessible from javascript code.</pre>
+        <strong>Examples</strong>
+        <pre>row.Add(<span class="str">"AdditionalData"</span>, <span class="str">"Additional data"</span>);
+
+$(<span class="str">'.datalist-input'</span>).datalist({
+    select: <span class="kwrd">function</span> (e, element, data) {
+        console.log(data.AdditionalData);
+    }
+});</pre>
+        @Html.Datalist("Rows1", null, new DatalistDataDatalist())
+    </div>
+    @section scripts {
+        <script>
+            $('.datalist-input').datalist({
+                select: function (e, element, data) {
+                    console.log(data.AdditionalData);
+                }
+            });
+        </script>
+    }
+</div>

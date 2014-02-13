@@ -8,7 +8,7 @@ namespace MvcDatalist.Datalists
 {
     public class DatalistDataDatalist : DefaultDatalist
     {
-        public override DatalistData FormDatalistData(IQueryable<UserModel> models)
+        protected override DatalistData FormDatalistData(IQueryable<UserModel> models)
         {
             var data = new DatalistData();
             data.FilteredRecords = models.Count();

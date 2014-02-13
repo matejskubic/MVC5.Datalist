@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "GenericDatalist.FormDatalistData()";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">FormDatalistData()</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>Forms an instance of <a href="/Datalist/API/DatalistData">DatalistData</a> with data from specified models.</pre>
+        <strong>Remarks</strong>
+        <pre>This method sets <a href="/Datalist/API/DatalistData">DatalistData</a> properties like this:
+    FilteredRecords - count of passed models.
+    Columns - same as <a href="/Datalist/API/GenericDatalist">GenericDatalist</a>.<a href="/Datalist/API/GenericDatalist/Columns">Columns</a>.
+    Rows - data from filtered models page. Each data row dictionary is filled using four data adding methods:
+        <a href="/Datalist/API/GenericDatalist/AddId">AddId()</a>
+        <a href="/Datalist/API/GenericDatalist/AddAutocomplete">AddAutocomplete()</a>
+        <a href="/Datalist/API/GenericDatalist/AddColumns">AddColumns()</a>
+        <a href="/Datalist/API/GenericDatalist/AddAdditionalData">AddAdditionalData()</a>
+        </pre>
+    </div>
+</div>

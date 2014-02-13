@@ -9,22 +9,22 @@
         <pre>Specifies datalist visible column keys and their headers.</pre>
         <strong>Defaults</strong>
         <pre>Dictionary of datalist model's properties which has <a href="/Datalist/API/DatalistColumnAttribute">DatalistColumnAttribute</a>.
-Where key is equal to full property name with all it's <a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>.<a href="/Datalist/DatalistColumn/Relation">Relations</a>.
-And value equal to key or last property relation name if it has relations, unless <a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.dataannotations.displayattribute(v=vs.110).aspx">DisplayAttribute</a> is specified for property.</pre>
+Where key is equal to full property name with all it's <a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>.<a href="/Datalist/API/DatalistColumnAttribute/Relation">Relations</a>.
+And value equal to key or last property relation name if it has <a href="/Datalist/API/DatalistColumnAttribute/Relation">Relations</a>, unless <a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.dataannotations.displayattribute(v=vs.110).aspx">DisplayAttribute</a> is specified for property.</pre>
         <strong>Remarks</strong>
         <pre>For default datalist's implementation to work correctly, column key should always map to existing model properties.</pre>
         <strong>Examples</strong>
         <pre>
-<strong>Columns:</strong> { <span class="str">"FirstName"</span>, <span class="str">"FirstName"</span> }, { <span class="str">"LastName"</span>, <span class="str">"LastName"</span> }, { <span class="str">"DateOfBirth"</span>, <span class="str">"DateOfBirth"</span> }, { <span class="str">"Account.LoginName"</span>, <span class="str">"LoginName"</span> }
+<strong>Columns:</strong> { <span class="str">"FirstName"</span>, <span class="str">"FirstName"</span> }, { <span class="str">"LastName"</span>, <span class="str">"LastName"</span> }, { <span class="str">"DateOfBirth"</span>, <span class="str">"DateOfBirth"</span> }, { <span class="str">"Account.LoginName"</span>, <span class="str">"Login name"</span> }
 
-Datalist will have three visible columns with headers <span class="str">"FirstName"</span>, <span class="str">"LastName"</span>, <span class="str">"DateOfBirth"</span> and <span class="str">"LoginName"</span>.
+Datalist will have four visible columns with headers <span class="str">"FirstName"</span>, <span class="str">"LastName"</span>, <span class="str">"DateOfBirth"</span> and <span class="str">"Login name"</span>.
 Which will map to datalist model properties named <span class="str">"FirstName"</span>, <span class="str">"LastName"</span>, <span class="str">"DateOfBirth"</span> and <span class="str">"Account.LoginName"</span>.</pre>
         @Html.Datalist("Columns1", null, new DefaultDatalist())
         <div class="separator"></div>
         <pre>
 <strong>Columns:</strong> { <span class="str">"FirstName"</span>, <span class="str">"First name"</span> }, { <span class="str">"LastName"</span>, <span class="str">"Last name"</span> }
 
-Datalist will have three visible columns with headers <span class="str">"First name"</span>, <span class="str">"Last name"</span>.
+Datalist will have two visible columns with headers <span class="str">"First name"</span>, <span class="str">"Last name"</span>.
 Which will map to datalist model properties named <span class="str">"FirstName"</span>, <span class="str">"LastName"</span>.
 
 <span class="kwrd">public</span> ExampleDatalist()

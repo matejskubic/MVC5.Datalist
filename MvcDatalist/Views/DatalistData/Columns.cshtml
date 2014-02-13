@@ -16,7 +16,7 @@
 There will be two visible columns with keys <span class="str">"FirstName"</span> and <span class="str">"LastName"</span>,
 which will have headers <span class="str">"First name"</span> and <span class="str">"Last name"</span> rescpetively.
 
-<span class="kwrd">public</span> <span class="kwrd">override</span> <a href="/Datalist/API/DatalistData">DatalistData</a> FormDatalistData(<span class="cls">IQueryable</span>&lt;<span class="cls">UserModel</span>&gt; models)
+<span class="kwrd">protected</span> <span class="kwrd">override</span> <a href="/Datalist/API/DatalistData">DatalistData</a> FormDatalistData(<span class="cls">IQueryable</span>&lt;<span class="cls">UserModel</span>&gt; models)
 {
     <span class="kwrd">var</span> data = <span class="kwrd">new</span> <a href="/Datalist/API/DatalistData">DatalistData</a>();
     data.FilteredRecords = models.Count();

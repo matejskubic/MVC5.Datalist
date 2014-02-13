@@ -1,36 +1,34 @@
 ﻿@{
-    ViewBag.Title = "DatalistColumnAttribute.Relation";
+    ViewBag.Title = "GenericDatalist.GetColumnHeader()";
 }
 
 <div class="panel panel-default">
-    <div class="panel-heading">Relation</div>
+    <div class="panel-heading">GetColumnHeader()</div>
     <div class="panel-body">
         <strong>Description</strong>
-        <pre>Specifies colummn relation property.</pre>
-        <strong>Defaults</strong>
-        <pre><span class="kwrd">null</span></pre>
+        <pre>Get's an header title for a property.</pre>
         <strong>Remarks</strong>
-        <pre>Having not <span class="kwrd">null</span> relation values means that, value which is rendered in datalist should be taken from attributed member properties.</pre>
-        <strong>Example</strong>
-        <pre>Specifying Relation to <span class="str">"LoginName"</span> on Account property would mean that rendered value will be equal to
-Account.LoginName value and not the Account. This relation mapping can have as many relations as needed.
-If by any chance <span class="str">"LoginName"</span> relation property would have <span class="cls">DatalistColumn</span> attribute specified
-with another relation to <span class="str">"EncodedName"</span>, the value would be taken from Account.LoginName.EncodedName property.
+        <pre>This method is used for getting header column title for datalist model properties, which later will be used as <a href="/Datalist/API/GenericDatalist/Columns">Columns</a> values.
+Return value is equal to property or it's relation property name, unless <a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.dataannotations.displayattribute(v=vs.110).aspx">DisplayAttribute</a> is specified.</pre>
+        <strong>Examples</strong>
+        <pre>
+GetColumnHeader(<span class="kwrd">typeof</span>(<span class="cls">UserModel</span>).GetProperty(<span class="str">"FirstName"</span>)) will be equal to <span class="str">"FirstName"</span>
+GetColumnHeader(<span class="kwrd">typeof</span>(<span class="cls">UserModel</span>).GetProperty(<span class="str">"Account"</span>)) will be equal to <span class="str">"Login name"</span>
 
 <span class="kwrd">public class</span> <span class="cls">UserModel</span>
 {
     <span class="kwrd">public</span> <span class="cls">String</span> Id { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
 
-    [<span class="cls">DatalistColumn</span>]
+    [<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>]
     <span class="kwrd">public</span> <span class="cls">String</span> FirstName { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
 
-    [<span class="cls">DatalistColumn</span>]
+    [<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>]
     <span class="kwrd">public</span> <span class="cls">String</span> LastName { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
 
-    [<span class="cls">DatalistColumn</span>]
+    [<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>]
     <span class="kwrd">public</span> <span class="cls">DateTime</span> DateOfBirth { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
 
-    [<span class="cls">DatalistColumn</span>(Relation = <span class="str">"LoginName"</span>)]
+    [<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>(Relation = <span class="str">"LoginName"</span>)]
     <span class="kwrd">public</span> <span class="cls">AccountModel</span> Account { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
 }
 
@@ -40,7 +38,7 @@ with another relation to <span class="str">"EncodedName"</span>, the value would
 
     [<span class="cls">Display</span>(Name = <span class="str">"Login name"</span>)]
     <span class="kwrd">public</span> <span class="cls">String</span> LoginName { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
-}</pre>
-        @Html.Datalist("Relation1", null, new DefaultDatalist())
+}
+        </pre>
     </div>
 </div>

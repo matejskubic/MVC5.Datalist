@@ -169,6 +169,7 @@
 
                         datalist.find('.datalist-search-input').attr('placeholder', $.fn.datalist.lang.Search);
                         datalist.find('.datalist-error-span').html($.fn.datalist.lang.Error);
+                        datalist.dialog('option', 'title', this.options.title);
                         datalist.dialog('open');
                         that._update(datalist);
                     }

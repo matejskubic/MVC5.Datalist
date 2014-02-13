@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "GenericDatalist.FilterBySearchTerm()";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">FilterBySearchTerm()</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>Filters models by search term specified in <a href="/Datalist/API/AbstractDatalist/CurrentFilter">CurrentFilter</a>.<a href="/Datalist/API/DatalistFilter/SearchTerm">SearchTerm</a>.</pre>
+        <strong>Remarks</strong>
+        <pre>This method filters models <span class="cls">String</span> properties by specified search term.
+<a href="/Datalist/API/GenericDatalist">GenericDatalist</a> implementation will always call this method from <a href="/Datalist/API/GenericDatalist/GetData">GetData()</a> method.
+Only not <span class="kwrd">null</span> or whitespace search terms will be considered as valid search terms.
+Before filtering term will be changed to lower case. Filtered properties will be search in lower cased by using contains method.
+This method should be overriden then non <span class="cls">String</span> properties needs to be filtered or dynamic query performance is considered to be too slow.</pre>
+    </div>
+</div>
