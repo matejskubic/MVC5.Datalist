@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\API\AbstractDatalistController.cs" />
+    <Compile Include="Controllers\API\JavascriptController.cs" />
     <Compile Include="Controllers\API\DatalistExtensionsController.cs" />
     <Compile Include="Controllers\API\DatalistSortOrderController.cs" />
     <Compile Include="Controllers\API\DatalistAttributeController.cs" />
@@ -383,6 +384,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\GenericDatalist\GetColumnHeader.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Javascript\Select.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Javascript\OnAdditionalFilterChange.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

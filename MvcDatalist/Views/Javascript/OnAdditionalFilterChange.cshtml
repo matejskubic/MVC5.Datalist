@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Javascript.onAdditionalFilterChange";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">onAdditionalFilterChange</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>Triggered then datalist additional filter value is changed.</pre>
+        <strong>Parameters</strong>
+        <pre><strong>event</strong> - original event for handling filter value change, which is calling <a href="/Datalist/API/Javascript/Select">select</a> with data = <span class="kwrd">null</span>.
+<strong>element</strong> - datalist autocomplete input for which additional filter has changed.
+<strong>hiddenElement</strong> - datalist's hidden input on which datalist was created.
+<strong>filter</strong> - changed filter input.</pre>
+        <strong>Examples</strong>
+        <pre>
+$(<span class="str">'.datalist-input'</span>).datalist({
+    onAdditionalFilterChange: <span class="kwrd">function</span> (e, element, hiddenElement, filter) {
+        e.preventDefault();
+        console.log(<span class="str">'Value changed to '</span> + filter.value);
+    }
+});</pre>
+        <div class="input-group">
+            <span class="input-group-addon">UserModel id</span>
+            @Html.TextBox("AdditionalFilterId", 1, new { @class = "form-control" })
+        </div>
+        @Html.Datalist("AdditionalFilters1", null, new ExampleDatalist())
+    </div>
+    @section scripts {
+        <script>
+            $('.datalist-input').datalist({
+                onAdditionalFilterChange: function (e, element, hiddenElement, filter) {
+                    e.preventDefault();
+                    console.log('Value changed to ' + filter.value);
+                }
+            });
+        </script>
+    }
+</div>

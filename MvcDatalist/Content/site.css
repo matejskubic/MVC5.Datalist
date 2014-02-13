@@ -66,6 +66,10 @@ pre {
     color: #4EB1BA;
 }
 
+.com {
+    color: #6A9C53;
+}
+
 .nuget-install,
 .html-code {
     margin-left: 15px;
