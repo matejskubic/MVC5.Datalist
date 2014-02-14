@@ -40,16 +40,7 @@ namespace Datalist
 
             var column = property.GetCustomAttribute<DatalistColumnAttribute>(false);
             if (column != null && !String.IsNullOrWhiteSpace(column.Relation))
-            {
-                var relationProperty = property.PropertyType.GetProperty(column.Relation);
-                if (relationProperty == null)
-                    throw new Exception(String.Format("{0}.{1} does not have property named {2}",
-                        property.DeclaringType.Name,
-                        property.PropertyType.Name,
-                        column.Relation));
-
-                return property.Name + "." + GetColumnKey(relationProperty);
-            }
+                return property.Name + "." + GetColumnKey(GetRelationProperty(property, column.Relation));
 
             return property.Name;
         }
@@ -59,20 +50,22 @@ namespace Datalist
 
             var column = property.GetCustomAttribute<DatalistColumnAttribute>(false);
             if (column != null && !String.IsNullOrWhiteSpace(column.Relation))
-            {
-                var relationProperty = property.PropertyType.GetProperty(column.Relation);
-                if (relationProperty == null)
-                    throw new Exception(String.Format("{0}.{1} does not have property named {2}",
-                        property.DeclaringType.Name,
-                        property.PropertyType.Name,
-                        column.Relation));
-
-                return GetColumnHeader(relationProperty);
-            }
+                return GetColumnHeader(GetRelationProperty(property, column.Relation));
 
             var header = property.GetCustomAttribute<DisplayAttribute>(false);
             if (header != null) return header.GetName();
             return property.Name;
+        }
+        private PropertyInfo GetRelationProperty(PropertyInfo property, String relation)
+        {
+            var relationProperty = property.PropertyType.GetProperty(relation);
+            if (relationProperty != null)
+                return relationProperty;
+
+            throw new DatalistException(String.Format("{0}.{1} does not have property named \"{2}\"",
+                property.DeclaringType.Name,
+                property.Name,
+                relation));
         }
 
         public override DatalistData GetData()
@@ -90,18 +83,16 @@ namespace Datalist
             if (!String.IsNullOrWhiteSpace(CurrentFilter.Id))
                 return FilterById(models);
 
-            models = FilterBySearchTerm(models);
-
             if (AdditionalFilters.Count > 0)
                 models = FilterByAdditionalFilters(models);
 
-            return models;
+            return FilterBySearchTerm(models);
         }
         protected virtual IQueryable<T> FilterById(IQueryable<T> models)
         {
             var idProperty = typeof(T).GetProperty("Id");
             if (idProperty == null)
-                throw new Exception(String.Format("Type {0} does not have property named Id. Consider overriding FilterById method or adding Id property to your model.", typeof(T).Name));
+                throw new DatalistException(String.Format("Type {0} does not have property named Id. Consider overriding FilterById method or adding Id property to your model.", typeof(T).Name));
 
             if (idProperty.PropertyType == typeof(String))
                 return models.Where("Id = \"" + CurrentFilter.Id + "\"");
@@ -110,7 +101,18 @@ namespace Datalist
             if (IsNumeric(idProperty.PropertyType) && Decimal.TryParse(CurrentFilter.Id, out temp))
                 return models.Where("Id = " + CurrentFilter.Id);
 
-            throw new Exception(String.Format("{0}.Id can not be filtered by {1}, because of unconvertable types.", typeof(T).Name, CurrentFilter.Id));
+            throw new DatalistException(String.Format("{0}.Id can not be filtered by \"{1}\", because of unconvertable types.", typeof(T).Name, CurrentFilter.Id));
+        }
+        protected virtual IQueryable<T> FilterByAdditionalFilters(IQueryable<T> models)
+        {
+            var queries = new List<String>();
+            foreach (var filter in CurrentFilter.AdditionalFilters.Where(item => item.Value != null && item.Value != String.Empty))
+                queries.Add(FormFilterQuery(GetType(filter.Key), filter.Key, FilterType.Equals, filter.Value));
+
+            queries = queries.Where(query => !String.IsNullOrWhiteSpace(query)).ToList();
+            if (queries.Count == 0) return models;
+
+            return models.Where(String.Join(" && ", queries));
         }
         protected virtual IQueryable<T> FilterBySearchTerm(IQueryable<T> models)
         {
@@ -127,17 +129,6 @@ namespace Datalist
 
             return models.Where(String.Join(" || ", queries));
         }
-        protected virtual IQueryable<T> FilterByAdditionalFilters(IQueryable<T> models)
-        {
-            var queries = new List<String>();
-            foreach (var filter in CurrentFilter.AdditionalFilters.Where(item => item.Value != null && item.Value != String.Empty))
-                queries.Add(FormFilterQuery(GetType(filter.Key), filter.Key, FilterType.Equals, filter.Value));
-
-            queries = queries.Where(query => !String.IsNullOrWhiteSpace(query)).ToList();
-            if (queries.Count == 0) return models;
-
-            return models.Where(String.Join(" && ", queries));
-        }
         protected virtual IQueryable<T> Sort(IQueryable<T> models)
         {
             if (CurrentFilter.SortColumn != null && Columns.ContainsKey(CurrentFilter.SortColumn))
@@ -148,8 +139,8 @@ namespace Datalist
 
             if (Columns.Count > 0)
                 return models.OrderBy(String.Format("{0} {1}", Columns.First().Key, CurrentFilter.SortOrder));
-
-            throw new Exception("Columns keys does not contain sorted property.");
+            // TODO: Add errors on no property found.
+            throw new DatalistException("Columns keys does not contain sorted property.");
         }
 
         protected virtual DatalistData FormDatalistData(IQueryable<T> models)
@@ -238,7 +229,7 @@ namespace Datalist
             String[] properties = fullPropertyName.Split('.');
             PropertyInfo property = type.GetProperty(properties[0]);
             if (property == null)
-                throw new Exception(String.Format("Type {0} does not have property named {1}.", type.Name, properties[0]));
+                throw new DatalistException(String.Format("Type {0} does not have property named {1}.", type.Name, properties[0]));
 
             if (properties.Length == 1)
                 value = property.GetValue(model);
@@ -255,7 +246,7 @@ namespace Datalist
             {
                 var property = type.GetProperty(propertyName);
                 if (property == null)
-                    throw new Exception(String.Format("Type {0} does not have property named {1}.",
+                    throw new DatalistException(String.Format("Type {0} does not have property named {1}.",
                         type.Name, propertyName));
 
                 type = property.PropertyType;
