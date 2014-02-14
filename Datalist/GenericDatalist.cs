@@ -23,7 +23,6 @@ namespace Datalist
 
         public GenericDatalist()
         {
-            DefaultRecordsPerPage = 20;
             DialogTitle = GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty);
             DatalistUrl = String.Format("{0}://{1}{2}{3}/{4}",
                 HttpContext.Current.Request.Url.Scheme,
@@ -84,7 +83,7 @@ namespace Datalist
 
             return FormDatalistData(models);
         }
-        public abstract IQueryable<T> GetModels();
+        protected abstract IQueryable<T> GetModels();
 
         private IQueryable<T> Filter(IQueryable<T> models)
         {
@@ -92,7 +91,9 @@ namespace Datalist
                 return FilterById(models);
 
             models = FilterBySearchTerm(models);
-            models = FilterByAdditionalFilters(models);
+
+            if (AdditionalFilters.Count > 0)
+                models = FilterByAdditionalFilters(models);
 
             return models;
         }
@@ -106,7 +107,7 @@ namespace Datalist
                 return models.Where("Id = \"" + CurrentFilter.Id + "\"");
 
             Decimal temp;
-            if (Decimal.TryParse(CurrentFilter.Id, out temp))
+            if (IsNumeric(idProperty.PropertyType) && Decimal.TryParse(CurrentFilter.Id, out temp))
                 return models.Where("Id = " + CurrentFilter.Id);
 
             throw new Exception(String.Format("{0}.Id can not be filtered by {1}, because of unconvertable types.", typeof(T).Name, CurrentFilter.Id));
@@ -117,7 +118,7 @@ namespace Datalist
             if (Columns.Keys.Count == 0) return models;
 
             var queries = new List<String>();
-            var term = CurrentFilter.SearchTerm.ToLower();
+            var term = CurrentFilter.SearchTerm.ToLower().Trim();
             foreach (var fullPropertyName in Columns.Keys)
                 queries.Add(FormFilterQuery(GetType(fullPropertyName), fullPropertyName, FilterType.Contains, term));
 
@@ -135,10 +136,70 @@ namespace Datalist
             queries = queries.Where(query => !String.IsNullOrWhiteSpace(query)).ToList();
             if (queries.Count == 0) return models;
 
-            return models.Where(String.Join(" || ", queries));
+            return models.Where(String.Join(" && ", queries));
         }
+        protected virtual IQueryable<T> Sort(IQueryable<T> models)
+        {
+            if (CurrentFilter.SortColumn != null && Columns.ContainsKey(CurrentFilter.SortColumn))
+                return models.OrderBy(String.Format("{0} {1}", CurrentFilter.SortColumn, CurrentFilter.SortOrder));
+
+            if (DefaultSortColumn != null && Columns.ContainsKey(DefaultSortColumn))
+                return models.OrderBy(String.Format("{0} {1}", DefaultSortColumn, CurrentFilter.SortOrder));
+
+            if (Columns.Count > 0)
+                return models.OrderBy(String.Format("{0} {1}", Columns.First().Key, CurrentFilter.SortOrder));
+
+            throw new Exception("Columns keys does not contain sorted property.");
+        }
+
+        protected virtual DatalistData FormDatalistData(IQueryable<T> models)
+        {
+            var data = new DatalistData();
+            data.FilteredRecords = models.Count();
+            data.Columns = Columns;
+
+            var pagedModels = models
+                .Skip(CurrentFilter.Page * CurrentFilter.RecordsPerPage)
+                .Take(CurrentFilter.RecordsPerPage);
+
+            foreach (T model in pagedModels)
+            {
+                var row = new Dictionary<String, String>();
+                AddId(row, model);
+                AddAutocomplete(row, model);
+                AddColumns(row, model);
+                AddAdditionalData(row, model);
+
+                data.Rows.Add(row);
+            }
+
+            return data;
+        }
+        protected virtual void AddId(Dictionary<String, String> row, T model)
+        {
+            row.Add(IdKey, GetValue(model, "Id")); // TODO: Change to get id and get autocomplete values
+        }
+        protected virtual void AddAutocomplete(Dictionary<String, String> row, T model)
+        {
+            // Remove COlumns.Count checking and make it more global like
+            if (Columns.Count == 0)
+                row.Add(AcKey, String.Empty);
+            else
+                row.Add(AcKey, GetValue(model, Columns.Keys.First()));
+        }
+        protected virtual void AddColumns(Dictionary<String, String> row, T model)
+        {
+            foreach (String column in Columns.Keys)
+                AddColumn(row, column, model);
+        }
+        protected virtual void AddAdditionalData(Dictionary<String, String> row, T model)
+        {
+        }
+
         private String FormFilterQuery(Type type, String fullPropertyName, FilterType filterType, Object term)
         {
+            // TODO: It should not check for != null, on properties without relation
+            // TODO: Check if != null coverts to proper sql in MsSql
             if (filterType == FilterType.Contains)
                 if (type == typeof(String))
                     return String.Format(@"({0} && {1}.ToLower().Contains(""{2}""))", FormNotNullQuery(fullPropertyName), fullPropertyName, term);
@@ -162,64 +223,6 @@ namespace Datalist
                 queries.Add(String.Join(".", properties.Take(i + 1)) + " != null");
 
             return String.Join(" && ", queries);
-        }
-
-        protected virtual IQueryable<T> Sort(IQueryable<T> models)
-        {
-            if (CurrentFilter.SortColumn != null && Columns.ContainsKey(CurrentFilter.SortColumn))
-                return models.OrderBy(String.Format("{0} {1}", CurrentFilter.SortColumn, CurrentFilter.SortOrder));
-
-            if (DefaultSortColumn != null && Columns.ContainsKey(DefaultSortColumn))
-                return models.OrderBy(String.Format("{0} {1}", DefaultSortColumn, CurrentFilter.SortOrder));
-
-            if (Columns.Count > 0)
-                return models.OrderBy(String.Format("{0} {1}", Columns.First().Key, CurrentFilter.SortOrder));
-
-            return models;
-        }
-
-        public virtual DatalistData FormDatalistData(IQueryable<T> models)
-        {
-            var data = new DatalistData();
-            data.FilteredRecords = models.Count();
-            data.Columns = Columns;
-
-            var pagedModels = models
-                .Skip(CurrentFilter.Page * CurrentFilter.RecordsPerPage)
-                .Take(CurrentFilter.RecordsPerPage);
-
-            foreach (T model in pagedModels)
-            {
-                var row = new Dictionary<String, String>();
-                AddId(row, model);
-                AddAutocomplete(row, model);
-                AddColumns(row, model);
-                AddAdditionalData(row, model);
-
-                data.Rows.Add(row);
-            }
-
-            return data;
-        }
-
-        public virtual void AddId(Dictionary<String, String> row, T model)
-        {
-            row.Add(IdKey, GetValue(model, "Id"));
-        }
-        public virtual void AddAutocomplete(Dictionary<String, String> row, T model)
-        {
-            if (Columns.Count == 0)
-                row.Add(AcKey, String.Empty);
-            else
-                row.Add(AcKey, GetValue(model, Columns.Keys.First()));
-        }
-        public virtual void AddColumns(Dictionary<String, String> row, T model)
-        {
-            foreach (String column in Columns.Keys)
-                AddColumn(row, column, model);
-        }
-        public virtual void AddAdditionalData(Dictionary<String, String> row, T model)
-        {
         }
 
         private void AddColumn(Dictionary<String, String> row, String column, T model)

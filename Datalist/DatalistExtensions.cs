@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using System.Web.Routing;
 
 namespace Datalist
 {
@@ -13,7 +14,7 @@ namespace Datalist
             String name, Object value, AbstractDatalist model, Object htmlAttributes = null)
         {
             String autoComplete = FormAutoComplete(html, model, name, htmlAttributes);
-            String hiddenInput = FormHiddenInput(html, model, name, value, htmlAttributes);
+            String hiddenInput = FormHiddenInput(html, model, name, value);
 
             return new MvcHtmlString(autoComplete + hiddenInput);
         }
@@ -62,6 +63,7 @@ namespace Datalist
         private static String FormAutoComplete<TModel>(HtmlHelper<TModel> html, AbstractDatalist model, String hiddenInput, Object htmlAttributes)
         {
             var attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
+            attributes["class"] = String.Format("{0} {1}", attributes["class"], "form-control datalist-input").Trim();
             attributes.Add("data-datalist-filters", String.Join(",", model.AdditionalFilters));
             attributes.Add("data-datalist-records-per-page", model.DefaultRecordsPerPage);
             attributes.Add("data-datalist-sort-column", model.DefaultSortColumn);
@@ -69,13 +71,13 @@ namespace Datalist
             attributes.Add("data-datalist-dialog-title", model.DialogTitle);
             attributes.Add("data-datalist-hidden-input", hiddenInput);
             attributes.Add("data-datalist-url", model.DatalistUrl);
-            attributes.Add("class", "form-control datalist-input");
+            
 
             return html.TextBox(AbstractDatalist.Prefix + hiddenInput, null, attributes).ToString();
         }
-        private static String FormHiddenInput<TModel>(HtmlHelper<TModel> html, AbstractDatalist model, String name, Object value, Object htmlAttributes)
+        private static String FormHiddenInput<TModel>(HtmlHelper<TModel> html, AbstractDatalist model, String name, Object value)
         {
-            var attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
+            var attributes = new RouteValueDictionary();
             attributes.Add("class", "datalist-hidden-input");
 
             return html.Hidden(name, value, attributes).ToString();

@@ -14,8 +14,8 @@
             this._cleanUp();
         },
         _initOptions: function () {
-            this.options.select = function(e, element, data) { },
-            this.options.onAdditionalFilterChange = function(e, filter) { }
+            this.options.select = function (event, element, hiddenElement, data) { },
+            this.options.onAdditionalFilterChange = function (event, element, hiddenElement, filter) { }
 
             this.options.recordsPerPage = this.element.attr('data-datalist-records-per-page');
             this.hiddenElement = $('#' + this.element.attr('data-datalist-hidden-input'));
@@ -33,7 +33,7 @@
             for (i = 0; i < filters.length; i++) {
                 $('#' + filters[i]).change(function () {
                     var event = $.Event(that._defaultAdditionalFilterChange);
-                    that.options.onAdditionalFilterChange(event, this);
+                    that.options.onAdditionalFilterChange(event, that.element[0], that.hiddenElement[0], this);
                     if (!event.isDefaultPrevented())
                         that._defaultAdditionalFilterChange(this);
                 });
@@ -45,13 +45,13 @@
                 $(element).val(data.DatalistAcKey).change();
             }
             else {
-                element.value = null;
-                this.hiddenElement.val(null);
+                $(element).val(null).change();
+                this.hiddenElement.val(null).change();
             }
         },
         _defaultAdditionalFilterChange: function (filter) {
             var event = $.Event(this._defaultSelect);
-            this.options.select(this.element[0], null);
+            this.options.select(event, this.element[0], this.hiddenElement[0], null);
             if (!event.isDefaultPrevented())
                 this._defaultSelect(this.element[0], null);
         },
@@ -74,7 +74,7 @@
                 },
                 select: function (e, selection) {
                     var event = $.Event(that._defaultSelect);
-                    that.options.select(event, that.element[0], selection.item.item);
+                    that.options.select(event, that.element[0], that.hiddenElement[0], selection.item.item);
                     if (!event.isDefaultPrevented())
                         that._defaultSelect(that.element[0], selection.item.item);
                 },
@@ -84,7 +84,7 @@
             this.element.keyup(function () {
                 if (this.value.length == 0) {
                     var event = $.Event(that._defaultSelect);
-                    that.options.select(event, this, null);
+                    that.options.select(event, this, that.hiddenElement[0], null);
                     if (!event.isDefaultPrevented())
                         that._defaultSelect(this, null);
                 }
@@ -130,7 +130,7 @@
                     success: function (data) {
                         if (data.Rows.length > 0) {
                             var event = $.Event(that._defaultSelect);
-                            that.options.select(event, that.element[0], data.Rows[0]);
+                            that.options.select(event, that.element[0], that.hiddenElement[0], data.Rows[0]);
                             if (!event.isDefaultPrevented())
                                 that._defaultSelect(that.element[0], data.Rows[0]);
                         }
@@ -314,7 +314,7 @@
                 'click': function () {
                     datalist.dialog('close');
                     var event = $.Event(that._defaultSelect);
-                    that.options.select(event, that.element[0], data);
+                    that.options.select(event, that.element[0], that.hiddenElement[0], data);
                     if (!event.isDefaultPrevented())
                         that._defaultSelect(that.element[0], data);
                 }

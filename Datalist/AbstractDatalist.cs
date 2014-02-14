@@ -53,6 +53,7 @@ namespace Datalist
 
         protected AbstractDatalist()
         {
+            DefaultRecordsPerPage = 20;
             CurrentFilter = new DatalistFilter();
             AdditionalFilters = new List<String>();
             Columns = new Dictionary<String, String>();

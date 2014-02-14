@@ -103,9 +103,9 @@
 }
 
 .datalist-data {
-    margin: 5px 5px 5px;
     height: auto;
     clear: both;
+    margin: 5px;
 }
 
 .datalist-table {
@@ -163,7 +163,7 @@
 }
 
     .datalist-pager .pagination {
-        margin: 5px 4px 0 0;
+        margin: 5px 5px 0 0;
         float: right;
     }
 
