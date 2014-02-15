@@ -98,7 +98,7 @@ namespace Datalist
         {
             var queries = new List<String>();
             foreach (var filter in CurrentFilter.AdditionalFilters.Where(item => item.Value != null))
-                queries.Add(FormFilterQuery(GetType(filter.Key), filter.Key, FilterType.Equals, filter.Value));
+                queries.Add(FormEqualsQuery(GetType(filter.Key), filter.Key, filter.Value));
 
             queries = queries.Where(query => query != String.Empty).ToList();
             if (queries.Count == 0) return models;
@@ -108,12 +108,13 @@ namespace Datalist
         protected virtual IQueryable<T> FilterBySearchTerm(IQueryable<T> models)
         {
             if (CurrentFilter.SearchTerm == null) return models;
-            
+
+            String term = CurrentFilter.SearchTerm.ToLower(); // TODO: Fix resizing on different datalists.
             var queries = new List<String>(); // TODO: Fix null values in javascript html code
-            var term = CurrentFilter.SearchTerm.ToLower().Trim(); // TODO: Fix resizing on different datalists.
-            foreach (var fullPropertyName in Columns.Keys)
-                if (GetType(fullPropertyName) == typeof(String))
-                    queries.Add(FormFilterQuery(null, fullPropertyName, FilterType.Contains, term)); // TODO: Remove null type if possible
+
+            foreach (var propertyName in Columns.Keys)
+                if (GetType(propertyName) == typeof(String))
+                    queries.Add(FormContainsQuery(propertyName, term));
 
             if (queries.Count == 0) return models; 
             return models.Where(String.Join(" || ", queries));
@@ -175,20 +176,22 @@ namespace Datalist
         {
         }
 
-        private String FormFilterQuery(Type type, String fullPropertyName, FilterType filterType, Object term)
+        private String FormContainsQuery(String propertyName, String term)
+        {
+            return String.Format(@"({0} && {1}.ToLower().Contains(""{2}""))", FormNotNullQuery(propertyName), propertyName, term);
+        }
+        private String FormEqualsQuery(Type type, String propertyName, Object term)
         {
             // TODO: It should not check for != null, on properties without relation
             // TODO: Check if != null coverts to proper sql in MsSql
             // TODO: Remove String.Empty queries
-            if (filterType == FilterType.Contains)
-                return String.Format(@"({0} && {1}.ToLower().Contains(""{2}""))", FormNotNullQuery(fullPropertyName), fullPropertyName, term);
 
             if (type == typeof(String))
-                return String.Format(@"({0} && {1} == ""{2}"")", FormNotNullQuery(fullPropertyName), fullPropertyName, term);
+                return String.Format(@"({0} && {1} == ""{2}"")", FormNotNullQuery(propertyName), propertyName, term);
 
             Decimal number;
             if (IsNumeric(type) && Decimal.TryParse(term.ToString(), out number))
-                return String.Format("({0} && {1} == {2})", FormNotNullQuery(fullPropertyName), fullPropertyName, number.ToString().Replace(',', '.'));
+                return String.Format("({0} && {1} == {2})", FormNotNullQuery(propertyName), propertyName, number.ToString().Replace(',', '.'));
 
             return String.Empty;
         }
@@ -262,12 +265,6 @@ namespace Datalist
                 default:
                     return false;
             }
-        }
-
-        private enum FilterType
-        {
-            Contains,
-            Equals
         }
     }
 }
