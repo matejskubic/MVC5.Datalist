@@ -7,8 +7,6 @@ namespace DatalistTests.GenericDatalistTests
     [TestClass]
     public class SortTests : GenericDatalistTests
     {
-        #region Tests
-
         [TestMethod]
         public void SortColumnTest()
         {
@@ -65,7 +63,5 @@ namespace DatalistTests.GenericDatalistTests
             Datalist.Columns.Clear();
             Datalist.BaseSort(Datalist.Models);
         }
-
-        #endregion
     }
 }

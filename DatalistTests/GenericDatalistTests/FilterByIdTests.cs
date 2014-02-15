@@ -10,8 +10,6 @@ namespace DatalistTests.GenericDatalistTests
     [TestClass]
     public class FilterByIdTests : GenericDatalistTests
     {
-        #region Tests
-
         [TestMethod]
         [ExpectedException(typeof(DatalistException))]
         public void NoIdTest()
@@ -47,7 +45,7 @@ namespace DatalistTests.GenericDatalistTests
 
             CollectionAssert.AreEquivalent(expected, actual);
         }
-        // TODO: Remove regions
+        
         [TestMethod]
         [ExpectedException(typeof(DatalistException))]
         public void NonNumericIdTest()
@@ -59,7 +57,5 @@ namespace DatalistTests.GenericDatalistTests
             nonNumericIdDatalist.CurrentFilter.Id = "9";
             var actual = nonNumericIdDatalist.BaseFilterById(nonNumericIdDatalist.Models).ToList();
         }
-
-        #endregion
     }
 }

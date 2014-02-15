@@ -6,8 +6,6 @@ namespace DatalistTests.GenericDatalistTests
     [TestClass]
     public class FilterBySearchTermTests : GenericDatalistTests
     {
-        #region Tests
-
         [TestMethod]
         public void NullTermTest()
         {
@@ -45,7 +43,5 @@ namespace DatalistTests.GenericDatalistTests
 
             CollectionAssert.AreEquivalent(expected, actual);
         }
-
-        #endregion
     }
 }

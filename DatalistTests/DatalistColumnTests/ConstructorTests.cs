@@ -7,8 +7,6 @@ namespace DatalistTests.DatalistColumnTests
     [TestClass]
     public class ConstructorTests
     {
-        #region Tests
-
         [TestMethod]
         public void ParameterlessPositionTest()
         {
@@ -40,7 +38,5 @@ namespace DatalistTests.DatalistColumnTests
 
             Assert.AreEqual(expected, column.Relation);
         }
-
-        #endregion
     }
 }

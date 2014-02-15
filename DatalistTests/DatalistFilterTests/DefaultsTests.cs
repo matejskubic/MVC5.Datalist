@@ -6,8 +6,6 @@ namespace DatalistTests.DatalistFilterTests
     [TestClass]
     public class DefaultsTests
     {
-        #region Set up / Tear down
-
         private DatalistFilter filter;
 
         [TestInitialize]
@@ -16,10 +14,7 @@ namespace DatalistTests.DatalistFilterTests
             filter = new DatalistFilter();
         }
 
-        #endregion
-
-        #region Tests
-
+        
         [TestMethod]
         public void IdTest()
         {
@@ -61,7 +56,5 @@ namespace DatalistTests.DatalistFilterTests
         {
             Assert.AreEqual(0, filter.AdditionalFilters.Count);
         }
-
-        #endregion
     }
 }

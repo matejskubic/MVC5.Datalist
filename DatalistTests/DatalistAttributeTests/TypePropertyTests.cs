@@ -10,8 +10,6 @@ namespace DatalistTests.DatalistAttributeTests
     [TestClass]
     public class TypePropertyTests
     {
-        #region
-
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void NullTest()
@@ -40,7 +38,5 @@ namespace DatalistTests.DatalistAttributeTests
 
             Assert.AreEqual(expected, attribute.Type);
         }
-
-        #endregion
     }
 }

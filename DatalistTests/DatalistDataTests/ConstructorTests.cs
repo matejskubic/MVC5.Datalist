@@ -6,8 +6,6 @@ namespace DatalistTests.DatalistDataTests
     [TestClass]
     public class ConstructorTests
     {
-        #region Set up / Tear down
-
         private DatalistData data;
 
         [TestInitialize]
@@ -16,10 +14,7 @@ namespace DatalistTests.DatalistDataTests
             data = new DatalistData();
         }
 
-        #endregion
-
-        #region Tests
-
+        
         [TestMethod]
         public void FilteredRecordsTest()
         {
@@ -37,7 +32,5 @@ namespace DatalistTests.DatalistDataTests
         {
             Assert.AreEqual(0, data.Rows.Count);
         }
-
-        #endregion
     }
 }

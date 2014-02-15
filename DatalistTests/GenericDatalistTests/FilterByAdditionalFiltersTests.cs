@@ -8,8 +8,6 @@ namespace DatalistTests.GenericDatalistTests
     [TestClass]
     public class FilterByAdditionalFiltersTests : GenericDatalistTests
     {
-        #region Tests
-
         [TestMethod]
         public void NullValuesTest()
         {
@@ -40,7 +38,5 @@ namespace DatalistTests.GenericDatalistTests
             Datalist.CurrentFilter.AdditionalFilters.Add("CreationDate", DateTime.Now);
             Datalist.BaseFilterByAdditionalFilters(Datalist.Models);
         }
-
-        #endregion
     }
 }

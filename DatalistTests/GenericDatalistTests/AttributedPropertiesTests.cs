@@ -9,8 +9,6 @@ namespace DatalistTests.GenericDatalistTests
     [TestClass]
     public class AttributedPropertiesTests : GenericDatalistTests
     {
-        #region Tests
-
         [TestMethod]
         public void AttributeTest()
         {
@@ -33,7 +31,5 @@ namespace DatalistTests.GenericDatalistTests
 
             CollectionAssert.AreEqual(expected, actual);
         }
-
-        #endregion
     }
 }

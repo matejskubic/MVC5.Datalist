@@ -9,8 +9,6 @@ namespace DatalistTests.GenericDatalistTests
     [TestClass]
     public class GetColumnHeaderTests : GenericDatalistTests
     {
-        #region Tests
-
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void NullPropertyTest()
@@ -75,7 +73,5 @@ namespace DatalistTests.GenericDatalistTests
 
             Assert.AreEqual(expected, actual);
         }
-
-        #endregion
     }
 }

@@ -6,8 +6,6 @@ namespace DatalistTests.DatalistExceptionTests
     [TestClass]
     public class ConstructorTests
     {
-        #region Tests
-
         [TestMethod]
         public void MessageTest()
         {
@@ -15,7 +13,5 @@ namespace DatalistTests.DatalistExceptionTests
             var exception = new DatalistException(expected);
             Assert.AreEqual(expected, exception.Message);
         }
-
-        #endregion
     }
 }
