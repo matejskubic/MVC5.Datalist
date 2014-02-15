@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Reflection;
-using System.Web;
 
 namespace Datalist
 {
@@ -23,14 +22,6 @@ namespace Datalist
 
         public GenericDatalist()
         {
-            DialogTitle = GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty);
-            DatalistUrl = String.Format("{0}://{1}{2}{3}/{4}",
-                HttpContext.Current.Request.Url.Scheme,
-                HttpContext.Current.Request.Url.Authority,
-                HttpContext.Current.Request.ApplicationPath,
-                AbstractDatalist.Prefix,
-                DialogTitle);
-
             foreach (PropertyInfo property in AttributedProperties)
                 Columns.Add(GetColumnKey(property), GetColumnHeader(property));
         }
@@ -39,7 +30,7 @@ namespace Datalist
             if (property == null) throw new ArgumentNullException("property");
 
             var column = property.GetCustomAttribute<DatalistColumnAttribute>(false);
-            if (column != null && !String.IsNullOrWhiteSpace(column.Relation))
+            if (column != null && column.Relation != null)
                 return property.Name + "." + GetColumnKey(GetRelationProperty(property, column.Relation));
 
             return property.Name;
@@ -62,7 +53,7 @@ namespace Datalist
             if (relationProperty != null)
                 return relationProperty;
 
-            throw new DatalistException(String.Format("{0}.{1} does not have property named \"{2}\"",
+            throw new DatalistException(String.Format("{0}.{1} does not have property named \"{2}\".",
                 property.DeclaringType.Name,
                 property.Name,
                 relation));
@@ -83,7 +74,7 @@ namespace Datalist
             if (!String.IsNullOrWhiteSpace(CurrentFilter.Id))
                 return FilterById(models);
 
-            if (AdditionalFilters.Count > 0)
+            if (CurrentFilter.AdditionalFilters.Count > 0)
                 models = FilterByAdditionalFilters(models);
 
             return FilterBySearchTerm(models);
@@ -92,7 +83,7 @@ namespace Datalist
         {
             var idProperty = typeof(T).GetProperty("Id");
             if (idProperty == null)
-                throw new DatalistException(String.Format("Type {0} does not have property named Id. Consider overriding FilterById method or adding Id property to your model.", typeof(T).Name));
+                throw new DatalistException(String.Format("Type {0} does not have property named Id.", typeof(T).Name));
 
             if (idProperty.PropertyType == typeof(String))
                 return models.Where("Id = \"" + CurrentFilter.Id + "\"");
@@ -106,7 +97,7 @@ namespace Datalist
         protected virtual IQueryable<T> FilterByAdditionalFilters(IQueryable<T> models)
         {
             var queries = new List<String>();
-            foreach (var filter in CurrentFilter.AdditionalFilters.Where(item => item.Value != null && item.Value != String.Empty))
+            foreach (var filter in CurrentFilter.AdditionalFilters.Where(item => item.Value != null))
                 queries.Add(FormFilterQuery(GetType(filter.Key), filter.Key, FilterType.Equals, filter.Value));
 
             queries = queries.Where(query => !String.IsNullOrWhiteSpace(query)).ToList();
@@ -117,15 +108,13 @@ namespace Datalist
         protected virtual IQueryable<T> FilterBySearchTerm(IQueryable<T> models)
         {
             if (String.IsNullOrWhiteSpace(CurrentFilter.SearchTerm)) return models;
-            if (Columns.Keys.Count == 0) return models;
+            if (Columns.Keys.Count == 0) return models; // TODO: Add exceptions on zero Columns count
 
-            var queries = new List<String>();
-            var term = CurrentFilter.SearchTerm.ToLower().Trim();
+            var queries = new List<String>(); // TODO: Fix null values in javascript html code
+            var term = CurrentFilter.SearchTerm.ToLower().Trim(); // TODO: Fix resizing on different datalists.
             foreach (var fullPropertyName in Columns.Keys)
-                queries.Add(FormFilterQuery(GetType(fullPropertyName), fullPropertyName, FilterType.Contains, term));
-
-            queries = queries.Where(query => !String.IsNullOrWhiteSpace(query)).ToList();
-            if (queries.Count == 0) return models;
+                if (GetType(fullPropertyName) == typeof(String))
+                    queries.Add(FormFilterQuery(null, fullPropertyName, FilterType.Contains, term)); // TODO: Remove null type if possible
 
             return models.Where(String.Join(" || ", queries));
         }
@@ -137,7 +126,7 @@ namespace Datalist
             if (DefaultSortColumn != null && Columns.ContainsKey(DefaultSortColumn))
                 return models.OrderBy(String.Format("{0} {1}", DefaultSortColumn, CurrentFilter.SortOrder));
 
-            if (Columns.Count > 0)
+            if (Columns.Count > 0) // TODO: Add exceptions on zero Columns count
                 return models.OrderBy(String.Format("{0} {1}", Columns.First().Key, CurrentFilter.SortOrder));
             // TODO: Add errors on no property found.
             throw new DatalistException("Columns keys does not contain sorted property.");
@@ -172,7 +161,7 @@ namespace Datalist
         }
         protected virtual void AddAutocomplete(Dictionary<String, String> row, T model)
         {
-            // Remove COlumns.Count checking and make it more global like
+            // Remove Columns.Count checking and make it more global like
             if (Columns.Count == 0)
                 row.Add(AcKey, String.Empty);
             else
@@ -191,11 +180,9 @@ namespace Datalist
         {
             // TODO: It should not check for != null, on properties without relation
             // TODO: Check if != null coverts to proper sql in MsSql
+            // TODO: Remove String.Empty queries
             if (filterType == FilterType.Contains)
-                if (type == typeof(String))
-                    return String.Format(@"({0} && {1}.ToLower().Contains(""{2}""))", FormNotNullQuery(fullPropertyName), fullPropertyName, term);
-                else
-                    return String.Empty;
+                return String.Format(@"({0} && {1}.ToLower().Contains(""{2}""))", FormNotNullQuery(fullPropertyName), fullPropertyName, term);
 
             if (type == typeof(String))
                 return String.Format(@"({0} && {1} == ""{2}"")", FormNotNullQuery(fullPropertyName), fullPropertyName, term);
@@ -257,26 +244,25 @@ namespace Datalist
         private Boolean IsNumeric(Type type)
         {
             type = Nullable.GetUnderlyingType(type) ?? type;
-            if (!type.IsEnum)
-            {
-                switch (Type.GetTypeCode(type))
-                {
-                    case TypeCode.SByte:
-                    case TypeCode.Byte:
-                    case TypeCode.Int16:
-                    case TypeCode.UInt16:
-                    case TypeCode.Int32:
-                    case TypeCode.UInt32:
-                    case TypeCode.Int64:
-                    case TypeCode.UInt64:
-                    case TypeCode.Single:
-                    case TypeCode.Double:
-                    case TypeCode.Decimal:
-                        return true;
-                }
-            }
+            if (type.IsEnum) return false;
 
-            return false;
+            switch (Type.GetTypeCode(type))
+            {
+                case TypeCode.SByte:
+                case TypeCode.Byte:
+                case TypeCode.Int16:
+                case TypeCode.UInt16:
+                case TypeCode.Int32:
+                case TypeCode.UInt32:
+                case TypeCode.Int64:
+                case TypeCode.UInt64:
+                case TypeCode.Single:
+                case TypeCode.Double:
+                case TypeCode.Decimal:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         private enum FilterType

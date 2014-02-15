@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web;
 
 namespace Datalist
 {
@@ -39,7 +40,7 @@ namespace Datalist
             get;
             protected set;
         }
-        public IDictionary<String, String> Columns
+        public Dictionary<String, String> Columns
         {
             get;
             protected set;
@@ -53,10 +54,19 @@ namespace Datalist
 
         protected AbstractDatalist()
         {
-            DefaultRecordsPerPage = 20;
-            CurrentFilter = new DatalistFilter();
-            AdditionalFilters = new List<String>();
+            String sanitizedName = GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty);
             Columns = new Dictionary<String, String>();
+            AdditionalFilters = new List<String>();
+            CurrentFilter = new DatalistFilter();
+            DialogTitle = sanitizedName;
+            DefaultRecordsPerPage = 20;
+
+            DatalistUrl = String.Format("{0}://{1}{2}{3}/{4}",
+                HttpContext.Current.Request.Url.Scheme,
+                HttpContext.Current.Request.Url.Authority,
+                HttpContext.Current.Request.ApplicationPath ?? "/",
+                AbstractDatalist.Prefix,
+                sanitizedName);
         }
 
         public abstract DatalistData GetData();

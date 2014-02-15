@@ -20,7 +20,7 @@ namespace MvcDatalist.Datalists
             DatalistUrl = String.Format("{0}://{1}{2}{3}/{4}",
                 HttpContext.Current.Request.Url.Scheme,
                 HttpContext.Current.Request.Url.Authority,
-                HttpContext.Current.Request.ApplicationPath,
+                HttpContext.Current.Request.ApplicationPath ?? "/",
                 AbstractDatalist.Prefix,
                 "DifferentUrlExample");
 

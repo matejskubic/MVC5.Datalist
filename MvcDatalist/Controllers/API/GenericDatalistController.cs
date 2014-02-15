@@ -23,18 +23,6 @@ namespace MvcDatalist.Controllers.API
         }
 
         [HttpGet]
-        public ActionResult DialogTitle()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public ActionResult DatalistUrl()
-        {
-            return View();
-        }
-
-        [HttpGet]
         public ActionResult AdditionalFilters()
         {
             return View();

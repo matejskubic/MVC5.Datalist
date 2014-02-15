@@ -36,7 +36,7 @@ namespace Datalist
             set;
         }
 
-        public IDictionary<String, Object> AdditionalFilters
+        public Dictionary<String, Object> AdditionalFilters
         {
             get;
             set;

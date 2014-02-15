@@ -8,7 +8,7 @@ namespace MvcDatalist.Controllers
 {
     public class DatalistController : Controller
     {
-        private JsonResult GetData(AbstractDatalist datalist, DatalistFilter filter, IDictionary<String, Object> filters = null)
+        private JsonResult GetData(AbstractDatalist datalist, DatalistFilter filter, Dictionary<String, Object> filters = null)
         {
             datalist.CurrentFilter = filter;
             filter.AdditionalFilters = filters ?? filter.AdditionalFilters;

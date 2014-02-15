@@ -22,7 +22,7 @@
 }
 
 <strong>DatalistController class</strong>
-<span class="kwrd">private</span> <span class="cls">JsonResult</span> GetData(<a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a> datalist, <a href="/Datalist/API/DatalistFilter">DatalistFilter</a> filter, <span class="cls">IDictionary</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt; filters = <span class="kwrd">null</span>)
+<span class="kwrd">private</span> <span class="cls">JsonResult</span> GetData(<a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a> datalist, <a href="/Datalist/API/DatalistFilter">DatalistFilter</a> filter, <span class="cls">Dictionary</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt; filters = <span class="kwrd">null</span>)
 {
     datalist.CurrentFilter = filter;
     filter.AdditionalFilters = filters ?? filter.AdditionalFilters;

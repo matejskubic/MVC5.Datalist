@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Web;
@@ -8,6 +9,7 @@ using System.Web.Routing;
 
 namespace Datalist
 {
+    [ExcludeFromCodeCoverage]
     public static class DatalistExtensions
     {
         public static IHtmlString AutoComplete<TModel>(this HtmlHelper<TModel> html,
@@ -56,7 +58,7 @@ namespace Datalist
 
             DatalistAttribute attr = propInfo.GetCustomAttribute<DatalistAttribute>();
             if (attr == null)
-                throw new Exception(String.Format("Property {0} does not have DatalistAttribute specified", propInfo.Name));
+                throw new DatalistException(String.Format("Property {0} does not have DatalistAttribute specified", propInfo.Name));
 
             return (AbstractDatalist)Activator.CreateInstance(attr.Type);
         }
@@ -72,7 +74,6 @@ namespace Datalist
             attributes.Add("data-datalist-hidden-input", hiddenInput);
             attributes.Add("data-datalist-url", model.DatalistUrl);
             
-
             return html.TextBox(AbstractDatalist.Prefix + hiddenInput, null, attributes).ToString();
         }
         private static String FormHiddenInput<TModel>(HtmlHelper<TModel> html, AbstractDatalist model, String name, Object value)

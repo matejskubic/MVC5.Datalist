@@ -173,9 +173,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\GenericDatalist\DatalistUrl.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
   </ItemGroup>
   <ItemGroup>
@@ -210,9 +207,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\GenericDatalist\AdditionalFilters.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\GenericDatalist\DialogTitle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\GenericDatalist\Columns.cshtml" />

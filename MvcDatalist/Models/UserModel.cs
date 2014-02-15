@@ -6,7 +6,7 @@ namespace MvcDatalist.Models
 {
     public class UserModel
     {
-        [Datalist(Type = typeof(DefaultDatalist))]
+        [Datalist(typeof(DefaultDatalist))]
         public String Id { get; set; }
 
         [DatalistColumn]
