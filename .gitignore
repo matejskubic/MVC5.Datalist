@@ -4,5 +4,8 @@ DatalistContent/bin/
 DatalistContent/obj/
 MvcDatalist/bin/
 MvcDatalist/obj/
+DatalistTests/bin/
+DatalistTests/obj/
+TestResults/
 packages/
 *.suo
