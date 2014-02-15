@@ -1,5 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using Datalist;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
 namespace DatalistTests.GenericDatalistTests
@@ -39,6 +39,14 @@ namespace DatalistTests.GenericDatalistTests
             var expected = Datalist.Models.OrderBy(model => model.Number).ToList();
 
             CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(DatalistException))]
+        public void NoColumnsTest()
+        {
+            Datalist.Columns.Clear();
+            Datalist.BaseSort(Datalist.Models);
         }
 
         #endregion

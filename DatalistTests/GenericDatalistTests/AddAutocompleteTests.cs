@@ -38,5 +38,16 @@ namespace DatalistTests.GenericDatalistTests
 
             Assert.AreEqual(firstProperty.GetValue(model).ToString(), row.First().Value);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(DatalistException))]
+        public void NoColumnsTest()
+        {
+            Datalist.Columns.Clear();
+            var model = new DatalistModel(1);
+            var row = new Dictionary<String, String>();
+
+            Datalist.BaseAddAutocomplete(row, model);
+        }
     }
 }

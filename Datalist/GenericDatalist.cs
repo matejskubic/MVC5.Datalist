@@ -107,8 +107,7 @@ namespace Datalist
         }
         protected virtual IQueryable<T> FilterBySearchTerm(IQueryable<T> models)
         {
-            if (String.IsNullOrWhiteSpace(CurrentFilter.SearchTerm)) return models;
-            if (Columns.Keys.Count == 0) return models; // TODO: Add exceptions on zero Columns count
+            if (String.IsNullOrWhiteSpace(CurrentFilter.SearchTerm)) return models; // TODO: Remvoe all IsNullOrWhiteSpace
 
             var queries = new List<String>(); // TODO: Fix null values in javascript html code
             var term = CurrentFilter.SearchTerm.ToLower().Trim(); // TODO: Fix resizing on different datalists.
@@ -116,6 +115,7 @@ namespace Datalist
                 if (GetType(fullPropertyName) == typeof(String))
                     queries.Add(FormFilterQuery(null, fullPropertyName, FilterType.Contains, term)); // TODO: Remove null type if possible
 
+            if (queries.Count == 0) return models; 
             return models.Where(String.Join(" || ", queries));
         }
         protected virtual IQueryable<T> Sort(IQueryable<T> models)
@@ -126,10 +126,10 @@ namespace Datalist
             if (DefaultSortColumn != null && Columns.ContainsKey(DefaultSortColumn))
                 return models.OrderBy(String.Format("{0} {1}", DefaultSortColumn, CurrentFilter.SortOrder));
 
-            if (Columns.Count > 0) // TODO: Add exceptions on zero Columns count
+            if (Columns.Count > 0)
                 return models.OrderBy(String.Format("{0} {1}", Columns.First().Key, CurrentFilter.SortOrder));
             // TODO: Add errors on no property found.
-            throw new DatalistException("Columns keys does not contain sorted property.");
+            throw new DatalistException("Datalist columns can not be empty.");
         }
 
         protected virtual DatalistData FormDatalistData(IQueryable<T> models)
@@ -161,11 +161,10 @@ namespace Datalist
         }
         protected virtual void AddAutocomplete(Dictionary<String, String> row, T model)
         {
-            // Remove Columns.Count checking and make it more global like
             if (Columns.Count == 0)
-                row.Add(AcKey, String.Empty);
-            else
-                row.Add(AcKey, GetValue(model, Columns.Keys.First()));
+                throw new DatalistException("Datalist columns can not be empty.");
+
+            row.Add(AcKey, GetValue(model, Columns.Keys.First()));
         }
         protected virtual void AddColumns(Dictionary<String, String> row, T model)
         {
