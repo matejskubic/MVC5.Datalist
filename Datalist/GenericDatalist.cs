@@ -40,7 +40,7 @@ namespace Datalist
             if (property == null) throw new ArgumentNullException("property");
 
             var column = property.GetCustomAttribute<DatalistColumnAttribute>(false);
-            if (column != null && !String.IsNullOrWhiteSpace(column.Relation))
+            if (column != null && column.Relation != null)
                 return GetColumnHeader(GetRelationProperty(property, column.Relation));
 
             var header = property.GetCustomAttribute<DisplayAttribute>(false);
@@ -71,7 +71,7 @@ namespace Datalist
 
         private IQueryable<T> Filter(IQueryable<T> models)
         {
-            if (!String.IsNullOrWhiteSpace(CurrentFilter.Id))
+            if (CurrentFilter.Id != null)
                 return FilterById(models);
 
             if (CurrentFilter.AdditionalFilters.Count > 0)
@@ -100,15 +100,15 @@ namespace Datalist
             foreach (var filter in CurrentFilter.AdditionalFilters.Where(item => item.Value != null))
                 queries.Add(FormFilterQuery(GetType(filter.Key), filter.Key, FilterType.Equals, filter.Value));
 
-            queries = queries.Where(query => !String.IsNullOrWhiteSpace(query)).ToList();
+            queries = queries.Where(query => query != String.Empty).ToList();
             if (queries.Count == 0) return models;
 
             return models.Where(String.Join(" && ", queries));
         }
         protected virtual IQueryable<T> FilterBySearchTerm(IQueryable<T> models)
         {
-            if (String.IsNullOrWhiteSpace(CurrentFilter.SearchTerm)) return models; // TODO: Remvoe all IsNullOrWhiteSpace
-
+            if (CurrentFilter.SearchTerm == null) return models;
+            
             var queries = new List<String>(); // TODO: Fix null values in javascript html code
             var term = CurrentFilter.SearchTerm.ToLower().Trim(); // TODO: Fix resizing on different datalists.
             foreach (var fullPropertyName in Columns.Keys)
