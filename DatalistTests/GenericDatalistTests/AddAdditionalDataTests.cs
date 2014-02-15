@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace DatalistTests.GenericDatalistTests
 {
     [TestClass]
-    public class AddAdditionalDataTests : GenericDatalistTests
+    public class AddAdditionalDataTests : BaseTests
     {
         [TestMethod]
         public void KeyCountTest()

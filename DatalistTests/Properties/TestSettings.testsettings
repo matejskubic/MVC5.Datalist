@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <TestSettings name="Default" id="86888100-4d12-463d-b1d1-1f2e06e4327c" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Deployment>
+    <DeploymentItem filename="packages\EntityFramework.6.0.2\lib\net45\EntityFramework.SqlServer.dll" />
+  </Deployment>
   <NamingScheme baseName="Test" appendTimeStamp="false" useDefault="false" />
   <Execution>
     <TestTypeSpecific>

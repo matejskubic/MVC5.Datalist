@@ -9,13 +9,13 @@ using System.Linq;
 namespace DatalistTests.GenericDatalistTests
 {
     [TestClass]
-    public class FormDatalistTests : GenericDatalistTests
+    public class FormDatalistTests : BaseTests
     {
         [TestMethod]
         public void FilteredRecordsTest()
         {
-            var expected = Datalist.Models.Count;
-            var actual = Datalist.BaseFormDatalistData(Datalist.Models.AsQueryable()).FilteredRecords;
+            var expected = Datalist.BaseGetModels().Count();
+            var actual = Datalist.BaseFormDatalistData(Datalist.BaseGetModels()).FilteredRecords;
 
             Assert.AreEqual(expected, actual);
         }
@@ -24,7 +24,7 @@ namespace DatalistTests.GenericDatalistTests
         public void ColumnsTest()
         {
             var expected = Datalist.Columns;
-            var actual = Datalist.BaseFormDatalistData(Datalist.Models.AsQueryable()).Columns;
+            var actual = Datalist.BaseFormDatalistData(Datalist.BaseGetModels()).Columns;
 
             Assert.ReferenceEquals(expected, actual);
         }
@@ -33,7 +33,7 @@ namespace DatalistTests.GenericDatalistTests
         public void RowsTest()
         {
             var expected = Datalist.CurrentFilter.RecordsPerPage;
-            var actual = Datalist.BaseFormDatalistData(Datalist.Models.AsQueryable()).Rows.Count;
+            var actual = Datalist.BaseFormDatalistData(Datalist.BaseGetModels()).Rows.Count;
 
             Assert.AreEqual(expected, actual);
         }
@@ -43,9 +43,9 @@ namespace DatalistTests.GenericDatalistTests
         {
             Datalist.CurrentFilter.Page = 3;
             Datalist.CurrentFilter.RecordsPerPage = 3;
-            var expectedModels = Datalist.Models.Skip(9).Take(3);
-            Datalist.BaseFormDatalistData(Datalist.Models.AsQueryable());
-            var callCount = Math.Min(Datalist.CurrentFilter.RecordsPerPage, Datalist.Models.Count);
+            Datalist.BaseFormDatalistData(Datalist.BaseGetModels());
+            var expectedModels = Datalist.BaseGetModels().Skip(9).Take(3).ToList();
+            var callCount = Math.Min(Datalist.CurrentFilter.RecordsPerPage, Datalist.BaseGetModels().Count());
 
             DatalistMock.Protected().Verify("AddId", Times.Exactly(callCount), ItExpr.IsAny<Dictionary<String, String>>(), ItExpr.Is<TestModel>(match => expectedModels.Contains(match)));
         }
@@ -53,32 +53,32 @@ namespace DatalistTests.GenericDatalistTests
         [TestMethod]
         public void AddIdCalledTest()
         {
-            Datalist.BaseFormDatalistData(Datalist.Models.AsQueryable());
-            var callCount = Math.Min(Datalist.CurrentFilter.RecordsPerPage, Datalist.Models.Count);
+            Datalist.BaseFormDatalistData(Datalist.BaseGetModels());
+            var callCount = Math.Min(Datalist.CurrentFilter.RecordsPerPage, Datalist.BaseGetModels().Count());
             DatalistMock.Protected().Verify("AddId", Times.Exactly(callCount), ItExpr.IsAny<Dictionary<String, String>>(), ItExpr.IsAny<TestModel>());
         }
 
         [TestMethod]
         public void AddAutocompleteCalledTest()
         {
-            Datalist.BaseFormDatalistData(Datalist.Models.AsQueryable());
-            var callCount = Math.Min(Datalist.CurrentFilter.RecordsPerPage, Datalist.Models.Count);
+            Datalist.BaseFormDatalistData(Datalist.BaseGetModels());
+            var callCount = Math.Min(Datalist.CurrentFilter.RecordsPerPage, Datalist.BaseGetModels().Count());
             DatalistMock.Protected().Verify("AddAutocomplete", Times.Exactly(callCount), ItExpr.IsAny<Dictionary<String, String>>(), ItExpr.IsAny<TestModel>());
         }
 
         [TestMethod]
         public void AddColumnsCalledTest()
         {
-            Datalist.BaseFormDatalistData(Datalist.Models.AsQueryable());
-            var callCount = Math.Min(Datalist.CurrentFilter.RecordsPerPage, Datalist.Models.Count);
+            Datalist.BaseFormDatalistData(Datalist.BaseGetModels());
+            var callCount = Math.Min(Datalist.CurrentFilter.RecordsPerPage, Datalist.BaseGetModels().Count());
             DatalistMock.Protected().Verify("AddColumns", Times.Exactly(callCount), ItExpr.IsAny<Dictionary<String, String>>(), ItExpr.IsAny<TestModel>());
         }
 
         [TestMethod]
         public void AddAdditionalDataCalledTest()
         {
-            Datalist.BaseFormDatalistData(Datalist.Models.AsQueryable());
-            var callCount = Math.Min(Datalist.CurrentFilter.RecordsPerPage, Datalist.Models.Count);
+            Datalist.BaseFormDatalistData(Datalist.BaseGetModels());
+            var callCount = Math.Min(Datalist.CurrentFilter.RecordsPerPage, Datalist.BaseGetModels().Count());
             DatalistMock.Protected().Verify("AddAdditionalData", Times.Exactly(callCount), ItExpr.IsAny<Dictionary<String, String>>(), ItExpr.IsAny<TestModel>());
         }
     }

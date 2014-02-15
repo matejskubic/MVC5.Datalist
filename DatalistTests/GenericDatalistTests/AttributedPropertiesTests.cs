@@ -7,7 +7,7 @@ using System.Reflection;
 namespace DatalistTests.GenericDatalistTests
 {
     [TestClass]
-    public class AttributedPropertiesTests : GenericDatalistTests
+    public class AttributedPropertiesTests : BaseTests
     {
         [TestMethod]
         public void AttributeTest()

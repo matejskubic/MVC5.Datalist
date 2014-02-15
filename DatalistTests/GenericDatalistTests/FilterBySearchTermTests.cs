@@ -4,14 +4,14 @@ using System.Linq;
 namespace DatalistTests.GenericDatalistTests
 {
     [TestClass]
-    public class FilterBySearchTermTests : GenericDatalistTests
+    public class FilterBySearchTermTests : BaseTests
     {
         [TestMethod]
         public void NullTermTest()
         {
             Datalist.CurrentFilter.SearchTerm = null;
-            var actual = Datalist.BaseFilterBySearchTerm(Datalist.Models).ToList();
-            var expected = Datalist.Models;
+            var expected = Datalist.BaseGetModels().ToList();
+            var actual = Datalist.BaseFilterBySearchTerm(Datalist.BaseGetModels()).ToList();
 
             CollectionAssert.AreEquivalent(expected, actual);
         }
@@ -19,13 +19,12 @@ namespace DatalistTests.GenericDatalistTests
         [TestMethod]
         public void WhiteSpaceTermTest()
         {
-            var term = " ";
-            Datalist.CurrentFilter.SearchTerm = term;
-            var actual = Datalist.BaseFilterBySearchTerm(Datalist.Models).ToList();
-            var expected = Datalist.Models.Where(model =>
-                (model.Id != null && model.Id.ToLower().Contains(term)) ||
-                (model.FirstRelationModel != null && model.FirstRelationModel.Value != null && model.FirstRelationModel.Value.ToLower().Contains(term)) ||
-                (model.SecondRelationModel != null && model.SecondRelationModel.Value != null && model.SecondRelationModel.Value.ToLower().Contains(term))).ToList();
+            Datalist.CurrentFilter.SearchTerm = " ";
+            var actual = Datalist.BaseFilterBySearchTerm(Datalist.BaseGetModels()).ToList();
+            var expected = Datalist.BaseGetModels().Where(model =>
+                (model.Id != null && model.Id.ToLower().Contains(Datalist.CurrentFilter.SearchTerm)) ||
+                (model.FirstRelationModel != null && model.FirstRelationModel.Value != null && model.FirstRelationModel.Value.ToLower().Contains(Datalist.CurrentFilter.SearchTerm)) ||
+                (model.SecondRelationModel != null && model.SecondRelationModel.Value != null && model.SecondRelationModel.Value.ToLower().Contains(Datalist.CurrentFilter.SearchTerm))).ToList();
 
             CollectionAssert.AreEquivalent(expected, actual);
         }
@@ -35,13 +34,13 @@ namespace DatalistTests.GenericDatalistTests
         {
             var term = "1";
             Datalist.CurrentFilter.SearchTerm = term;
-            var actual = Datalist.BaseFilterBySearchTerm(Datalist.Models).ToList();
-            var expected = Datalist.Models.Where(model =>
+            var actual = Datalist.BaseFilterBySearchTerm(Datalist.BaseGetModels()).ToList();
+            var expected = Datalist.BaseGetModels().Where(model =>
                 (model.Id != null && model.Id.ToLower().Contains(term)) ||
                 (model.FirstRelationModel != null && model.FirstRelationModel.Value != null && model.FirstRelationModel.Value.ToLower().Contains(term)) ||
-                (model.SecondRelationModel != null && model.SecondRelationModel.Value != null && model.SecondRelationModel.Value.ToLower().Contains(term))).ToList();
+                (model.SecondRelationModel != null && model.SecondRelationModel.Value != null && model.SecondRelationModel.Value.ToLower().Contains(term)));
 
-            CollectionAssert.AreEquivalent(expected, actual);
+            CollectionAssert.AreEquivalent(expected.ToList(), actual);
         }
     }
 }

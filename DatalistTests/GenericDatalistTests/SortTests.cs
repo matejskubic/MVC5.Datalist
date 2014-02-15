@@ -5,14 +5,14 @@ using System.Linq;
 namespace DatalistTests.GenericDatalistTests
 {
     [TestClass]
-    public class SortTests : GenericDatalistTests
+    public class SortTests : BaseTests
     {
         [TestMethod]
         public void SortColumnTest()
         {
             Datalist.CurrentFilter.SortColumn = Datalist.BaseAttributedProperties.First().Name;
-            var expected = Datalist.Models.OrderBy(model => model.Number).ToList();
-            var actual = Datalist.BaseSort(Datalist.Models).ToList();
+            var expected = Datalist.BaseGetModels().OrderBy(model => model.Number).ToList();
+            var actual = Datalist.BaseSort(Datalist.BaseGetModels()).ToList();
 
             CollectionAssert.AreEqual(expected, actual);
         }
@@ -22,8 +22,8 @@ namespace DatalistTests.GenericDatalistTests
         {
             Datalist.CurrentFilter.SortColumn = null;
             Datalist.BaseDefaultSortColumn = Datalist.BaseAttributedProperties.First().Name;
-            var expected = Datalist.Models.OrderBy(model => model.Number).ToList();
-            var actual = Datalist.BaseSort(Datalist.Models).ToList();
+            var expected = Datalist.BaseGetModels().OrderBy(model => model.Number).ToList();
+            var actual = Datalist.BaseSort(Datalist.BaseGetModels()).ToList();
 
             CollectionAssert.AreEqual(expected, actual);
         }
@@ -33,7 +33,7 @@ namespace DatalistTests.GenericDatalistTests
         public void NoSortColumnTest()
         {
             Datalist.CurrentFilter.SortColumn = "TestProperty";
-            Datalist.BaseSort(Datalist.Models);
+            Datalist.BaseSort(Datalist.BaseGetModels());
         }
 
         [TestMethod]
@@ -42,7 +42,7 @@ namespace DatalistTests.GenericDatalistTests
         {
             Datalist.BaseDefaultSortColumn = "TestProperty";
             Datalist.CurrentFilter.SortColumn = null;
-            Datalist.BaseSort(Datalist.Models);
+            Datalist.BaseSort(Datalist.BaseGetModels());
         }
 
         [TestMethod]
@@ -50,8 +50,8 @@ namespace DatalistTests.GenericDatalistTests
         {
             Datalist.BaseDefaultSortColumn = null;
             Datalist.CurrentFilter.SortColumn = null;
-            var actual = Datalist.BaseSort(Datalist.Models).ToList();
-            var expected = Datalist.Models.OrderBy(model => model.Number).ToList();
+            var actual = Datalist.BaseSort(Datalist.BaseGetModels()).ToList();
+            var expected = Datalist.BaseGetModels().OrderBy(model => model.Number).ToList();
 
             CollectionAssert.AreEqual(expected, actual);
         }
@@ -61,7 +61,7 @@ namespace DatalistTests.GenericDatalistTests
         public void NoColumnsTest()
         {
             Datalist.Columns.Clear();
-            Datalist.BaseSort(Datalist.Models);
+            Datalist.BaseSort(Datalist.BaseGetModels());
         }
     }
 }

@@ -8,11 +8,6 @@ namespace DatalistTests.GenericDatalistTests.Stubs
 {
     public class GenericDatalistStub<T> : GenericDatalist<T> where T : class
     {
-        public List<T> Models
-        {
-            get;
-            set;
-        }
         public String BaseDefaultSortColumn
         {
             get
@@ -32,14 +27,13 @@ namespace DatalistTests.GenericDatalistTests.Stubs
             }
         }
 
-        public GenericDatalistStub()
+        public IQueryable<T> BaseGetModels()
         {
-            Models = new List<T>();
+            return GetModels();
         }
-
         protected override IQueryable<T> GetModels()
         {
-            return Models.AsQueryable();
+            return new List<T>().AsQueryable();
         }
 
         public String BaseGetColumnKey(PropertyInfo property)
@@ -51,21 +45,21 @@ namespace DatalistTests.GenericDatalistTests.Stubs
             return GetColumnHeader(property);
         }
 
-        public IQueryable<T> BaseFilterById(List<T> models)
+        public IQueryable<T> BaseFilterById(IQueryable<T> models)
         {
-            return FilterById(models.AsQueryable());
+            return FilterById(models);
         }
-        public IQueryable<T> BaseFilterByAdditionalFilters(List<T> models)
+        public IQueryable<T> BaseFilterByAdditionalFilters(IQueryable<T> models)
         {
-            return FilterByAdditionalFilters(models.AsQueryable());
+            return FilterByAdditionalFilters(models);
         }
-        public IQueryable<T> BaseFilterBySearchTerm(List<T> models)
+        public IQueryable<T> BaseFilterBySearchTerm(IQueryable<T> models)
         {
-            return FilterBySearchTerm(models.AsQueryable());
+            return FilterBySearchTerm(models);
         }
-        public IQueryable<T> BaseSort(List<T> models)
+        public IQueryable<T> BaseSort(IQueryable<T> models)
         {
-            return Sort(models.AsQueryable());
+            return Sort(models);
         }
 
         public DatalistData BaseFormDatalistData(IQueryable<T> models)

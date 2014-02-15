@@ -6,7 +6,7 @@ using System.Linq;
 namespace DatalistTests.GenericDatalistTests
 {
     [TestClass]
-    public class GetDataTests : GenericDatalistTests
+    public class GetDataTests : BaseTests
     {
         [TestMethod]
         public void GetModelsCalledTest()
@@ -20,7 +20,7 @@ namespace DatalistTests.GenericDatalistTests
         {
             Datalist.CurrentFilter.Id = "1";
             Datalist.GetData();
-            DatalistMock.Protected().Verify("FilterById", Times.Once(), Datalist.Models.AsQueryable());
+            DatalistMock.Protected().Verify("FilterById", Times.Once(), Datalist.BaseGetModels());
         }
 
         [TestMethod]
@@ -28,7 +28,7 @@ namespace DatalistTests.GenericDatalistTests
         {
             Datalist.CurrentFilter.Id = null;
             Datalist.GetData();
-            DatalistMock.Protected().Verify("FilterById", Times.Never(), Datalist.Models.AsQueryable());
+            DatalistMock.Protected().Verify("FilterById", Times.Never(), Datalist.BaseGetModels());
         }
 
         [TestMethod]
@@ -36,7 +36,7 @@ namespace DatalistTests.GenericDatalistTests
         {
             Datalist.CurrentFilter.AdditionalFilters.Add("Id", "1");
             Datalist.GetData();
-            DatalistMock.Protected().Verify("FilterByAdditionalFilters", Times.Once(), Datalist.Models.AsQueryable());
+            DatalistMock.Protected().Verify("FilterByAdditionalFilters", Times.Once(), Datalist.BaseGetModels());
         }
 
         [TestMethod]
@@ -44,7 +44,7 @@ namespace DatalistTests.GenericDatalistTests
         {
             Datalist.CurrentFilter.AdditionalFilters.Clear();
             Datalist.GetData();
-            DatalistMock.Protected().Verify("FilterByAdditionalFilters", Times.Never(), Datalist.Models.AsQueryable());
+            DatalistMock.Protected().Verify("FilterByAdditionalFilters", Times.Never(), Datalist.BaseGetModels());
         }
 
         [TestMethod]
@@ -52,7 +52,7 @@ namespace DatalistTests.GenericDatalistTests
         {
             Datalist.CurrentFilter.Id = "1";
             Datalist.GetData();
-            DatalistMock.Protected().Verify("FilterByAdditionalFilters", Times.Never(), Datalist.Models.AsQueryable());
+            DatalistMock.Protected().Verify("FilterByAdditionalFilters", Times.Never(), Datalist.BaseGetModels());
         }
 
         [TestMethod]
@@ -61,7 +61,7 @@ namespace DatalistTests.GenericDatalistTests
             Datalist.CurrentFilter.Id = null;
 
             Datalist.GetData();
-            DatalistMock.Protected().Verify("FilterBySearchTerm", Times.Once(), Datalist.Models.AsQueryable());
+            DatalistMock.Protected().Verify("FilterBySearchTerm", Times.Once(), Datalist.BaseGetModels());
         }
 
         [TestMethod]
@@ -71,7 +71,7 @@ namespace DatalistTests.GenericDatalistTests
             Datalist.CurrentFilter.Id = null;
 
             Datalist.GetData();
-            DatalistMock.Protected().Verify("FilterBySearchTerm", Times.Once(), Datalist.Models.AsQueryable().Where(model => model.Id == "1"));
+            DatalistMock.Protected().Verify("FilterBySearchTerm", Times.Once(), Datalist.BaseGetModels().Where(model => model.Id == "1"));
         }
 
         [TestMethod]
@@ -79,14 +79,14 @@ namespace DatalistTests.GenericDatalistTests
         {
             Datalist.CurrentFilter.Id = "1";
             Datalist.GetData();
-            DatalistMock.Protected().Verify("FilterBySearchTerm", Times.Never(), Datalist.Models.AsQueryable());
+            DatalistMock.Protected().Verify("FilterBySearchTerm", Times.Never(), Datalist.BaseGetModels());
         }
 
         [TestMethod]
         public void FormDatalistDataCalledTest()
         {
             Datalist.GetData();
-            DatalistMock.Protected().Verify("FormDatalistData", Times.Never(), Datalist.Models.AsQueryable());
+            DatalistMock.Protected().Verify("FormDatalistData", Times.Never(), Datalist.BaseGetModels());
         }
     }
 }

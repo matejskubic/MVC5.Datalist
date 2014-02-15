@@ -8,7 +8,7 @@ using System.Linq;
 namespace DatalistTests.GenericDatalistTests
 {
     [TestClass]
-    public class AddAutocompleteTests : GenericDatalistTests
+    public class AddAutocompleteTests : BaseTests
     {
         [TestMethod]
         public void KeyTest()

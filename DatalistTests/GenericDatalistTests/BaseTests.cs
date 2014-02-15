@@ -1,22 +1,20 @@
 ﻿using DatalistTests.GenericDatalistTests.Stubs;
-using DatalistTests.TestContext.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
 using System.IO;
 using System.Web;
 
 namespace DatalistTests.GenericDatalistTests
 {
     [TestClass]
-    public class GenericDatalistTests
+    public class BaseTests
     {
-        protected Mock<GenericDatalistStub<TestModel>> DatalistMock
+        protected Mock<TestModelDatalistStub> DatalistMock
         {
             get;
             set;
         }
-        protected GenericDatalistStub<TestModel> Datalist
+        protected TestModelDatalistStub Datalist
         {
             get;
             set;
@@ -28,11 +26,8 @@ namespace DatalistTests.GenericDatalistTests
             var request = new HttpRequest(null, "http://localhost:7013/", null);
             var response = new HttpResponse(new StringWriter());
             HttpContext.Current = new HttpContext(request, response);
-            DatalistMock = new Mock<GenericDatalistStub<TestModel>>() { CallBase = true };
+            DatalistMock = new Mock<TestModelDatalistStub>() { CallBase = true };
             Datalist = DatalistMock.Object;
-
-            for (Int32 i = 0; i < 100; i++)
-                Datalist.Models.Add(new TestModel(i));
         }
 
         [TestCleanup]

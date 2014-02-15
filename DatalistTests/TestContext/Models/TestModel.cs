@@ -30,6 +30,9 @@ namespace DatalistTests.TestContext.Models
         [DatalistColumn(1, Relation = "NoValue")]
         public virtual TestRelationModel SecondRelationModel { get; set; }
 
+        public TestModel()
+        {
+        }
         public TestModel(Int32 index)
         {
             Id = index.ToString();

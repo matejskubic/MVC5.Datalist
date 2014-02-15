@@ -3,29 +3,28 @@ using DatalistTests.GenericDatalistTests.Stubs;
 using DatalistTests.TestContext.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DatalistTests.GenericDatalistTests
 {
     [TestClass]
-    public class FilterByIdTests : GenericDatalistTests
+    public class FilterByIdTests : BaseTests
     {
         [TestMethod]
         [ExpectedException(typeof(DatalistException))]
         public void NoIdTest()
         {
-            var noIdDatalist = new GenericDatalistStub<NoIdModel>();
-            noIdDatalist.BaseFilterById(noIdDatalist.Models);
+            var datalist = new GenericDatalistStub<NoIdModel>();
+            datalist.BaseFilterById(new List<NoIdModel>().AsQueryable());
         }
 
         [TestMethod]
         public void StringIdTest()
         {
-            var id = "9";
-            Datalist.CurrentFilter.Id = id;
-
-            var expected = Datalist.Models.Where(model => model.Id == id).ToList();
-            var actual = Datalist.BaseFilterById(Datalist.Models).ToList();
+            Datalist.CurrentFilter.Id = "9";
+            var expected = Datalist.BaseGetModels().Where(model => model.Id == Datalist.CurrentFilter.Id).ToList();
+            var actual = Datalist.BaseFilterById(Datalist.BaseGetModels()).ToList();
 
             CollectionAssert.AreEquivalent(expected, actual);
         }
@@ -33,15 +32,16 @@ namespace DatalistTests.GenericDatalistTests
         [TestMethod]
         public void NumericIdTest()
         {
-            var numericIdDatalist = new GenericDatalistStub<NumericIdModel>();
+            var models = new List<NumericIdModel>();
+            var datalist = new GenericDatalistStub<NumericIdModel>();
             for (Int32 i = 0; i < 100; i++)
-                numericIdDatalist.Models.Add(new NumericIdModel(i));
+                models.Add(new NumericIdModel(i));
 
             var id = "9";
-            numericIdDatalist.CurrentFilter.Id = id;
+            datalist.CurrentFilter.Id = id;
 
-            var expected = numericIdDatalist.Models.Where(model => model.Id == 9).ToList();
-            var actual = numericIdDatalist.BaseFilterById(numericIdDatalist.Models).ToList();
+            var expected = models.Where(model => model.Id == 9).ToList();
+            var actual = datalist.BaseFilterById(models.AsQueryable()).ToList();
 
             CollectionAssert.AreEquivalent(expected, actual);
         }
@@ -50,12 +50,10 @@ namespace DatalistTests.GenericDatalistTests
         [ExpectedException(typeof(DatalistException))]
         public void NonNumericIdTest()
         {
-            var nonNumericIdDatalist = new GenericDatalistStub<NonNumericIdModel>();
-            for (Int32 i = 0; i < 100; i++)
-                nonNumericIdDatalist.Models.Add(new NonNumericIdModel(i));
+            var datalist = new GenericDatalistStub<NonNumericIdModel>();
+            datalist.CurrentFilter.Id = "9";
 
-            nonNumericIdDatalist.CurrentFilter.Id = "9";
-            var actual = nonNumericIdDatalist.BaseFilterById(nonNumericIdDatalist.Models).ToList();
+            var actual = datalist.BaseFilterById(new List<NonNumericIdModel>().AsQueryable()).ToList();
         }
     }
 }

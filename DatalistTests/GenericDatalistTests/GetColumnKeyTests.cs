@@ -7,7 +7,7 @@ using System.Reflection;
 namespace DatalistTests.GenericDatalistTests
 {
     [TestClass]
-    public class GetColumnKeyTests : GenericDatalistTests
+    public class GetColumnKeyTests : BaseTests
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]

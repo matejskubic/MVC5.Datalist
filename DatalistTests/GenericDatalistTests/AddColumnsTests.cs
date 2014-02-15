@@ -7,7 +7,7 @@ using System.Linq;
 namespace DatalistTests.GenericDatalistTests
 {
     [TestClass]
-    public class AddColumnsTests : GenericDatalistTests
+    public class AddColumnsTests : BaseTests
     {
         [TestMethod]
         public void KeysTest()

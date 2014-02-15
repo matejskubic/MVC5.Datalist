@@ -77,10 +77,11 @@
     <Compile Include="GenericDatalistTests\FilterBySearchTermTests.cs" />
     <Compile Include="GenericDatalistTests\FormDatalistTests.cs" />
     <Compile Include="GenericDatalistTests\GetColumnHeaderTests.cs" />
-    <Compile Include="GenericDatalistTests\GenericDatalistTests.cs" />
+    <Compile Include="GenericDatalistTests\BaseTests.cs" />
     <Compile Include="GenericDatalistTests\GetColumnKeyTests.cs" />
     <Compile Include="GenericDatalistTests\GetDataTests.cs" />
     <Compile Include="GenericDatalistTests\SortTests.cs" />
+    <Compile Include="GenericDatalistTests\Stubs\TestModelDatalistStub.cs" />
     <Compile Include="Migrations\201402151654572_1.cs" />
     <Compile Include="Migrations\201402151654572_1.Designer.cs">
       <DependentUpon>201402151654572_1.cs</DependentUpon>

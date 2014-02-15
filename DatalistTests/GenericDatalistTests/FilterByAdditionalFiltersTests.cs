@@ -6,27 +6,28 @@ using System.Linq;
 namespace DatalistTests.GenericDatalistTests
 {
     [TestClass]
-    public class FilterByAdditionalFiltersTests : GenericDatalistTests
+    public class FilterByAdditionalFiltersTests : BaseTests
     {
         [TestMethod]
         public void NullValuesTest()
         {
+            var expected = Datalist.BaseGetModels().ToList();
             Datalist.CurrentFilter.AdditionalFilters.Add("Id", null);
             Datalist.CurrentFilter.AdditionalFilters.Add("Number", null);
-            var actual = Datalist.BaseFilterByAdditionalFilters(Datalist.Models).ToList();
-            var expected = Datalist.Models;
-
+            var actual = Datalist.BaseFilterByAdditionalFilters(Datalist.BaseGetModels()).ToList();
+            
             CollectionAssert.AreEquivalent(expected, actual);
         }
 
         [TestMethod]
         public void FilterTest()
         {
-            Int32 filter = 9;
-            Datalist.CurrentFilter.AdditionalFilters.Add("Id", filter);
-            Datalist.CurrentFilter.AdditionalFilters.Add("Number", filter);
-            var actual = Datalist.BaseFilterByAdditionalFilters(Datalist.Models).ToList();
-            var expected = Datalist.Models.Where(model => model.Id == filter.ToString() && model.Number == filter).ToList();
+            var numberFilter = 9;
+            var stringFilter = "9";
+            Datalist.CurrentFilter.AdditionalFilters.Add("Id", stringFilter);
+            Datalist.CurrentFilter.AdditionalFilters.Add("Number", numberFilter);
+            var actual = Datalist.BaseFilterByAdditionalFilters(Datalist.BaseGetModels()).ToList();
+            var expected = Datalist.BaseGetModels().Where(model => model.Id == stringFilter && model.Number == numberFilter).ToList();
 
             CollectionAssert.AreEquivalent(expected, actual);
         }
@@ -36,7 +37,7 @@ namespace DatalistTests.GenericDatalistTests
         public void UnfilterableTest()
         {
             Datalist.CurrentFilter.AdditionalFilters.Add("CreationDate", DateTime.Now);
-            Datalist.BaseFilterByAdditionalFilters(Datalist.Models);
+            Datalist.BaseFilterByAdditionalFilters(Datalist.BaseGetModels());
         }
     }
 }
