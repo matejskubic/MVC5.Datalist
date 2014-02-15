@@ -1,5 +1,6 @@
 ﻿using Datalist;
 using DatalistTests.GenericDatalistTests.Stubs;
+using DatalistTests.TestContext.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
@@ -55,13 +56,8 @@ namespace DatalistTests.GenericDatalistTests
             for (Int32 i = 0; i < 100; i++)
                 nonNumericIdDatalist.Models.Add(new NonNumericIdModel(i));
 
-            var id = "9";
-            nonNumericIdDatalist.CurrentFilter.Id = id;
-
-            var expected = nonNumericIdDatalist.Models.Where(model => model.Id == 9).ToList();
+            nonNumericIdDatalist.CurrentFilter.Id = "9";
             var actual = nonNumericIdDatalist.BaseFilterById(nonNumericIdDatalist.Models).ToList();
-
-            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         #endregion

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DatalistTests.GenericDatalistTests.Stubs
+namespace DatalistTests.TestContext.Models
 {
-    public class DatalistRelationModel
+    public class TestRelationModel
     {
         public const String DisplayValue = "Value of relation";
+
+        [Key]
+        public String Id { get; set; }
 
         [Display(Name = DisplayValue)]
         public String Value { get; set; }

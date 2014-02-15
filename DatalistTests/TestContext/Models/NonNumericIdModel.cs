@@ -1,18 +1,20 @@
 ﻿using Datalist;
 using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace DatalistTests.GenericDatalistTests.Stubs
+namespace DatalistTests.TestContext.Models
 {
     public class NonNumericIdModel
     {
-        public Char Id { get; set; }
+        [Key]
+        public Guid Id { get; set; }
 
         [DatalistColumn]
         public String IdString { get; set; }
 
         public NonNumericIdModel(Int32 id)
         {
-            Id = (Char)id;
+            Id = Guid.NewGuid();
             IdString = Id.ToString();
         }
     }

@@ -1,5 +1,5 @@
 ﻿using Datalist;
-using DatalistTests.GenericDatalistTests.Stubs;
+using DatalistTests.TestContext.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Reflection;
@@ -21,7 +21,7 @@ namespace DatalistTests.GenericDatalistTests
         [TestMethod]
         public void NoAttributeTest()
         {
-            PropertyInfo property = typeof(DatalistModel).GetProperty("Sum");
+            PropertyInfo property = typeof(TestModel).GetProperty("Sum");
             String actual = Datalist.BaseGetColumnHeader(property);
             String expected = property.Name;
 
@@ -31,7 +31,7 @@ namespace DatalistTests.GenericDatalistTests
         [TestMethod]
         public void SinglePropertyTest()
         {
-            PropertyInfo property = typeof(DatalistModel).GetProperty("CreationDate");
+            PropertyInfo property = typeof(TestModel).GetProperty("CreationDate");
             String actual = Datalist.BaseGetColumnHeader(property);
             String expected = property.Name;
 
@@ -41,9 +41,9 @@ namespace DatalistTests.GenericDatalistTests
         [TestMethod]
         public void SingleDisplayPropertyTest()
         {
-            PropertyInfo property = typeof(DatalistModel).GetProperty("Number");
+            PropertyInfo property = typeof(TestModel).GetProperty("Number");
             String actual = Datalist.BaseGetColumnHeader(property);
-            String expected = DatalistModel.DisplayValue;
+            String expected = TestModel.DisplayValue;
 
             Assert.AreEqual(expected, actual);
         }
@@ -59,7 +59,7 @@ namespace DatalistTests.GenericDatalistTests
         [TestMethod]
         public void RelationPropertyTest()
         {
-            PropertyInfo property = typeof(DatalistModel).GetProperty("SecondRelationModel");
+            PropertyInfo property = typeof(TestModel).GetProperty("SecondRelationModel");
             String expected = property.GetCustomAttribute<DatalistColumnAttribute>(false).Relation;
             String actual = Datalist.BaseGetColumnHeader(property);
 
@@ -69,9 +69,9 @@ namespace DatalistTests.GenericDatalistTests
         [TestMethod]
         public void RelationDisplayPropertyTest()
         {
-            PropertyInfo property = typeof(DatalistModel).GetProperty("FirstRelationModel");
+            PropertyInfo property = typeof(TestModel).GetProperty("FirstRelationModel");
             String actual = Datalist.BaseGetColumnHeader(property);
-            String expected = DatalistRelationModel.DisplayValue;
+            String expected = TestRelationModel.DisplayValue;
 
             Assert.AreEqual(expected, actual);
         }

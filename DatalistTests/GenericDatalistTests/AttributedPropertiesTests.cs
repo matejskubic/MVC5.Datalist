@@ -1,5 +1,5 @@
 ﻿using Datalist;
-using DatalistTests.GenericDatalistTests.Stubs;
+using DatalistTests.TestContext.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Reflection;
@@ -15,7 +15,7 @@ namespace DatalistTests.GenericDatalistTests
         public void AttributeTest()
         {
             var actual = Datalist.BaseAttributedProperties.ToList();
-            var expected = typeof(DatalistModel).GetProperties()
+            var expected = typeof(TestModel).GetProperties()
                 .Where(property => property.GetCustomAttribute<DatalistColumnAttribute>(false) != null)
                 .ToList();
 
@@ -26,7 +26,7 @@ namespace DatalistTests.GenericDatalistTests
         public void OrderTest()
         {
             var actual = Datalist.BaseAttributedProperties.ToList();
-            var expected = typeof(DatalistModel).GetProperties()
+            var expected = typeof(TestModel).GetProperties()
                 .Where(property => property.GetCustomAttribute<DatalistColumnAttribute>(false) != null)
                 .OrderBy(property => property.GetCustomAttribute<DatalistColumnAttribute>(false).Position)
                 .ToList();

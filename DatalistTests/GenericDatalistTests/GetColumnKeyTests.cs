@@ -1,5 +1,5 @@
 ﻿using Datalist;
-using DatalistTests.GenericDatalistTests.Stubs;
+using DatalistTests.TestContext.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Reflection;
@@ -21,7 +21,7 @@ namespace DatalistTests.GenericDatalistTests
         [TestMethod]
         public void NoAttributeTest()
         {
-            PropertyInfo property = typeof(DatalistModel).GetProperty("Sum");
+            PropertyInfo property = typeof(TestModel).GetProperty("Sum");
             String actual = Datalist.BaseGetColumnKey(property);
             String expected = property.Name;
 
@@ -31,7 +31,7 @@ namespace DatalistTests.GenericDatalistTests
         [TestMethod]
         public void SinglePropertyTest()
         {
-            PropertyInfo property = typeof(DatalistModel).GetProperty("Number");
+            PropertyInfo property = typeof(TestModel).GetProperty("Number");
             String actual = Datalist.BaseGetColumnKey(property);
             String expected = property.Name;
 
@@ -49,7 +49,7 @@ namespace DatalistTests.GenericDatalistTests
         [TestMethod]
         public void RelationPropertyTest()
         {
-            PropertyInfo property = typeof(DatalistModel).GetProperty("FirstRelationModel");
+            PropertyInfo property = typeof(TestModel).GetProperty("FirstRelationModel");
             String expected = String.Format("{0}.{1}", property.Name, property.GetCustomAttribute<DatalistColumnAttribute>(false).Relation);
             String actual = Datalist.BaseGetColumnKey(property);
 

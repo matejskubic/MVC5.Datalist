@@ -83,7 +83,7 @@ namespace Datalist
         {
             var idProperty = typeof(T).GetProperty("Id");
             if (idProperty == null)
-                throw new DatalistException(String.Format("Type {0} does not have property named Id.", typeof(T).Name));
+                throw new DatalistException(String.Format("Type {0} does not have property named \"Id\".", typeof(T).Name));
 
             if (idProperty.PropertyType == typeof(String))
                 return models.Where("Id = \"" + CurrentFilter.Id + "\"");
@@ -100,9 +100,7 @@ namespace Datalist
             foreach (var filter in CurrentFilter.AdditionalFilters.Where(item => item.Value != null))
                 queries.Add(FormEqualsQuery(GetType(filter.Key), filter.Key, filter.Value));
 
-            queries = queries.Where(query => query != String.Empty).ToList();
             if (queries.Count == 0) return models;
-
             return models.Where(String.Join(" && ", queries));
         }
         protected virtual IQueryable<T> FilterBySearchTerm(IQueryable<T> models)
@@ -185,7 +183,6 @@ namespace Datalist
         {
             // TODO: It should not check for != null, on properties without relation
             // TODO: Check if != null coverts to proper sql in MsSql
-            // TODO: Remove String.Empty queries
 
             if (type == typeof(String))
                 return String.Format(@"({0} && {1} == ""{2}"")", FormNotNullQuery(propertyName), propertyName, term);
@@ -194,12 +191,13 @@ namespace Datalist
             if (IsNumeric(type) && Decimal.TryParse(term.ToString(), out number))
                 return String.Format("({0} && {1} == {2})", FormNotNullQuery(propertyName), propertyName, number.ToString().Replace(',', '.'));
 
-            return String.Empty;
+            throw new DatalistException(String.Format("Can not create dynamic query for {0} type.", type.Name));
         }
         private String FormNotNullQuery(String fullPropertyName)
         {
             var queries = new List<String>();
             var properties = fullPropertyName.Split('.');
+
             for (Int32 i = 0; i < properties.Length; ++i)
                 queries.Add(String.Join(".", properties.Take(i + 1)) + " != null");
 

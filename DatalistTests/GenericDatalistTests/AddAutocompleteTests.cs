@@ -1,5 +1,5 @@
 ﻿using Datalist;
-using DatalistTests.GenericDatalistTests.Stubs;
+using DatalistTests.TestContext.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace DatalistTests.GenericDatalistTests
         public void KeyTest()
         {
             var row = new Dictionary<String, String>();
-            Datalist.BaseAddAutocomplete(row, new DatalistModel(1));
+            Datalist.BaseAddAutocomplete(row, new TestModel(1));
 
             Assert.AreEqual(AbstractDatalist.AcKey, row.First().Key);
         }
@@ -23,7 +23,7 @@ namespace DatalistTests.GenericDatalistTests
         public void KeyCountTest()
         {
             var row = new Dictionary<String, String>();
-            Datalist.BaseAddAutocomplete(row, new DatalistModel(1));
+            Datalist.BaseAddAutocomplete(row, new TestModel(1));
 
             Assert.AreEqual(1, row.Keys.Count);
         }
@@ -31,9 +31,9 @@ namespace DatalistTests.GenericDatalistTests
         [TestMethod]
         public void ValueTest()
         {
-            var firstProperty = typeof(DatalistModel).GetProperty(Datalist.Columns.First().Key);
+            var firstProperty = typeof(TestModel).GetProperty(Datalist.Columns.First().Key);
             var row = new Dictionary<String, String>();
-            var model = new DatalistModel(1);
+            var model = new TestModel(1);
             Datalist.BaseAddAutocomplete(row, model);
 
             Assert.AreEqual(firstProperty.GetValue(model).ToString(), row.First().Value);
@@ -44,7 +44,7 @@ namespace DatalistTests.GenericDatalistTests
         public void NoColumnsTest()
         {
             Datalist.Columns.Clear();
-            var model = new DatalistModel(1);
+            var model = new TestModel(1);
             var row = new Dictionary<String, String>();
 
             Datalist.BaseAddAutocomplete(row, model);

@@ -1,10 +1,12 @@
 ﻿using Datalist;
 using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace DatalistTests.GenericDatalistTests.Stubs
+namespace DatalistTests.TestContext.Models
 {
     public class NumericIdModel
     {
+        [Key]
         public Decimal Id { get; set; }
 
         [DatalistColumn]
