@@ -121,15 +121,16 @@ namespace Datalist
         }
         protected virtual IQueryable<T> Sort(IQueryable<T> models)
         {
-            if (CurrentFilter.SortColumn != null && Columns.ContainsKey(CurrentFilter.SortColumn))
-                return models.OrderBy(String.Format("{0} {1}", CurrentFilter.SortColumn, CurrentFilter.SortOrder));
-
-            if (DefaultSortColumn != null && Columns.ContainsKey(DefaultSortColumn))
-                return models.OrderBy(String.Format("{0} {1}", DefaultSortColumn, CurrentFilter.SortOrder));
-
+            String sortColumn = CurrentFilter.SortColumn ?? DefaultSortColumn;
+            if (sortColumn != null)
+                if (Columns.ContainsKey(sortColumn))
+                    return models.OrderBy(String.Format("{0} {1}", sortColumn, CurrentFilter.SortOrder));
+                else
+                    throw new DatalistException(String.Format("Datalist does not contain sort column named \"{0}\"", sortColumn));
+            
             if (Columns.Count > 0)
                 return models.OrderBy(String.Format("{0} {1}", Columns.First().Key, CurrentFilter.SortOrder));
-            // TODO: Add errors on no property found.
+            
             throw new DatalistException("Datalist columns can not be empty.");
         }
 

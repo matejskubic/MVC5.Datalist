@@ -31,6 +31,23 @@ namespace DatalistTests.GenericDatalistTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(DatalistException))]
+        public void NoSortColumnTest()
+        {
+            Datalist.CurrentFilter.SortColumn = "TestProperty";
+            Datalist.BaseSort(Datalist.Models);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(DatalistException))]
+        public void NoDefaultSortColumnTest()
+        {
+            Datalist.BaseDefaultSortColumn = "TestProperty";
+            Datalist.CurrentFilter.SortColumn = null;
+            Datalist.BaseSort(Datalist.Models);
+        }
+
+        [TestMethod]
         public void FirstColumnSortTest()
         {
             Datalist.BaseDefaultSortColumn = null;
