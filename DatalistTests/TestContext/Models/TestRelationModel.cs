@@ -7,7 +7,6 @@ namespace DatalistTests.TestContext.Models
     {
         public const String DisplayValue = "Value of relation";
 
-        [Key]
         public String Id { get; set; }
 
         [Display(Name = DisplayValue)]

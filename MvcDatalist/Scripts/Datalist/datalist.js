@@ -10,8 +10,8 @@
             this._initAdditionalFilters();
             this._createAutocomplete();
             this._loadSelected();
-            this._bindDatalist();
-            this._cleanUp();
+            this._bindDatalist(); // TODO: Fix null values in javascript html code
+            this._cleanUp(); // TODO: Fix resizing on different datalists.
         },
         _initOptions: function () {
             this.options.select = function (event, element, hiddenElement, data) { },

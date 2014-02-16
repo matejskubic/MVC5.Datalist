@@ -1,4 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Datalist;
+using DatalistTests.GenericDatalistTests.Stubs;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DatalistTests.GenericDatalistTests
@@ -42,5 +46,32 @@ namespace DatalistTests.GenericDatalistTests
 
             CollectionAssert.AreEquivalent(expected.ToList(), actual);
         }
+
+        [TestMethod]
+        public void NoStringPropertiesTest()
+        {
+            var datalist = new GenericDatalistStub<NoStringValuesModel>();
+            datalist.CurrentFilter.SearchTerm = "Test";
+
+            var expected = new List<NoStringValuesModel>() { new NoStringValuesModel() };
+            var actual = datalist.BaseFilterBySearchTerm(expected.AsQueryable()).ToList();
+
+            CollectionAssert.AreEquivalent(expected, actual);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(DatalistException))]
+        public void NoPropertyTest()
+        {
+            Datalist.CurrentFilter.SearchTerm = "Test";
+            Datalist.Columns.Add("TestProperty", String.Empty);
+            Datalist.BaseFilterBySearchTerm(Datalist.BaseGetModels());
+        }
+    }
+
+    public class NoStringValuesModel
+    {
+        [DatalistColumn]
+        public Decimal Value { get; set; }
     }
 }

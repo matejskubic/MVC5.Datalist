@@ -1,4 +1,5 @@
-﻿using DatalistTests.TestContext.Models;
+﻿using Datalist;
+using DatalistTests.TestContext.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace DatalistTests.GenericDatalistTests
         public void KeysTest()
         {
             var row = new Dictionary<String, String>();
-            Datalist.BaseAddColumns(row, new TestModel(1));
+            Datalist.BaseAddColumns(row, new TestModel());
 
             CollectionAssert.AreEqual(Datalist.Columns.Keys, row.Keys);
         }
@@ -22,15 +23,24 @@ namespace DatalistTests.GenericDatalistTests
         public void KeyCountTest()
         {
             var row = new Dictionary<String, String>();
-            Datalist.BaseAddColumns(row, new TestModel(1));
+            Datalist.BaseAddColumns(row, new TestModel());
 
             Assert.AreEqual(Datalist.Columns.Count, row.Keys.Count);
         }
 
         [TestMethod]
+        [ExpectedException(typeof(DatalistException))]
+        public void NoPropertyTest()
+        {
+            Datalist.Columns.Clear();
+            Datalist.Columns.Add("Test proeprty", String.Empty);
+            Datalist.BaseAddColumns(new Dictionary<String, String>(), new TestModel());
+        }
+
+        [TestMethod]
         public void ValuesTest()
         {
-            var model = new TestModel(1);
+            var model = new TestModel();
             var expected = new List<String>();
             var row = new Dictionary<String, String>();
             foreach (KeyValuePair<String, String> column in Datalist.Columns)

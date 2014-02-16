@@ -13,7 +13,7 @@ namespace DatalistTests.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201402151654572_1"; }
+            get { return "201402151934543_1"; }
         }
         
         string IMigrationMetadata.Source

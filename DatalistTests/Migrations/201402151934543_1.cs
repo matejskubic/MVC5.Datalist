@@ -15,6 +15,7 @@ namespace DatalistTests.Migrations
                         Number = c.Int(nullable: false),
                         CreationDate = c.DateTime(nullable: false),
                         Sum = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        NullableString = c.String(),
                         FirstRelationModelId = c.String(maxLength: 128),
                         SecondRelationModelId = c.String(maxLength: 128),
                     })

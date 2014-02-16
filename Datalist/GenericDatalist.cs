@@ -107,8 +107,8 @@ namespace Datalist
         {
             if (CurrentFilter.SearchTerm == null) return models;
 
-            String term = CurrentFilter.SearchTerm.ToLower(); // TODO: Fix resizing on different datalists.
-            var queries = new List<String>(); // TODO: Fix null values in javascript html code
+            String term = CurrentFilter.SearchTerm.ToLower();
+            var queries = new List<String>();
 
             foreach (var propertyName in Columns.Keys)
                 if (GetType(propertyName) == typeof(String))
@@ -157,7 +157,7 @@ namespace Datalist
         }
         protected virtual void AddId(Dictionary<String, String> row, T model)
         {
-            row.Add(IdKey, GetValue(model, "Id")); // TODO: Change to get id and get autocomplete values
+            row.Add(IdKey, GetValue(model, "Id"));
         }
         protected virtual void AddAutocomplete(Dictionary<String, String> row, T model)
         {
@@ -181,9 +181,6 @@ namespace Datalist
         }
         private String FormEqualsQuery(Type type, String propertyName, Object term)
         {
-            // TODO: It should not check for != null, on properties without relation
-            // TODO: Check if != null coverts to proper sql in MsSql
-
             if (type == typeof(String))
                 return String.Format(@"({0} && {1} == ""{2}"")", FormNotNullQuery(propertyName), propertyName, term);
 
@@ -191,7 +188,7 @@ namespace Datalist
             if (IsNumeric(type) && Decimal.TryParse(term.ToString(), out number))
                 return String.Format("({0} && {1} == {2})", FormNotNullQuery(propertyName), propertyName, number.ToString().Replace(',', '.'));
 
-            throw new DatalistException(String.Format("Can not create dynamic query for {0} type.", type.Name));
+            throw new DatalistException(String.Format("{0} type is not supported in dynamic filtering.", type.Name));
         }
         private String FormNotNullQuery(String fullPropertyName)
         {

@@ -12,7 +12,7 @@ namespace DatalistTests.GenericDatalistTests
         public void KeyCountTest()
         {
             var row = new Dictionary<String, String>();
-            Datalist.BaseAddAdditionalData(row, new TestModel(1));
+            Datalist.BaseAddAdditionalData(row, new TestModel());
 
             Assert.AreEqual(0, row.Keys.Count);
         }

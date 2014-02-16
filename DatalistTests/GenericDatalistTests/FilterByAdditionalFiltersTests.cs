@@ -1,6 +1,8 @@
 ﻿using Datalist;
+using DatalistTests.GenericDatalistTests.Stubs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DatalistTests.GenericDatalistTests
@@ -34,9 +36,27 @@ namespace DatalistTests.GenericDatalistTests
 
         [TestMethod]
         [ExpectedException(typeof(DatalistException))]
-        public void UnfilterableTest()
+        public void NotSupportedTest()
         {
             Datalist.CurrentFilter.AdditionalFilters.Add("CreationDate", DateTime.Now);
+            Datalist.BaseFilterByAdditionalFilters(Datalist.BaseGetModels());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(DatalistException))]
+        public void NotSupportedEnumTest()
+        {
+            var datalist = new GenericDatalistStub<EnumModel>();
+            datalist.CurrentFilter.AdditionalFilters.Add("IdEnum", DateTime.Now);
+
+            datalist.BaseFilterByAdditionalFilters(new List<EnumModel>().AsQueryable()).ToList();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(DatalistException))]
+        public void NoPropertyTest()
+        {
+            Datalist.CurrentFilter.AdditionalFilters.Add("TestProperty", "Test");
             Datalist.BaseFilterByAdditionalFilters(Datalist.BaseGetModels());
         }
     }
