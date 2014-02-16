@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "DatalistAttribute.Type";
+}
+@model DatalistSamples.Models.UserModel
+
+<div class="panel panel-default">
+    <div class="panel-heading">Type</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>Specifies type of datalist to be used for property.</pre>
+        <strong>Remarks</strong>
+        <pre>Property can be decorated with this attribute to not specify datalist type explicitly in
+<a href="/Datalist/API/DatalistExtensions">DatalistExtensions</a>.<a href="/Datalist/DatalistExtensions/AutocompleteFor">AutocompleteFor</a> or <a href="/Datalist/API/DatalistExtensions">DatalistExtensions</a>.<a href="/Datalist/DatalistExtensions/DatalistFor">DatalistFor</a> helper.</pre>
+        <strong>Exmaples</strong>
+        <pre>Decorated property will use <span class="cls">DefaultDatalist</span> type by default, unless other datalist is specified.
+
+<span class="kwrd">public class</span> <span class="cls">UserModel</span>
+{
+    <strong>[<a href="/Datalist/API/DatalistAttribute">Datalist</a>(<span class="kwrd">typeof</span>(<span class="cls">DefaultDatalist</span>))]</strong>
+    <span class="kwrd">public</span> <span class="cls">String</span> Id { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+
+    [<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>]
+    <span class="kwrd">public</span> <span class="cls">String</span> FirstName { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+
+    [<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>]
+    <span class="kwrd">public</span> <span class="cls">String</span> LastName { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+
+    [<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>]
+    <span class="kwrd">public</span> <span class="cls">DateTime</span> DateOfBirth { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+
+    [<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>(Relation = <span class="str">"LoginName"</span>)]
+    <span class="kwrd">public</span> <span class="cls">AccountModel</span> Account { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
+}
+
+<span class="esc">@@model</span> <span class="cls">UserModel</span>
+<span class="esc">@@</span>Html.DatalistFor(model => model.Id)</pre>
+        @Html.DatalistFor(model => model.Id)
+    </div>
+</div>
