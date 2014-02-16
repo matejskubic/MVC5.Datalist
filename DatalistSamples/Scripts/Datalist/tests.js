@@ -20,7 +20,7 @@
     ok(datalistInput.datalist('option', 'sortColumn') == 'TestColumn');
     ok(datalistInput.datalist('option', 'url') == 'http://localhost:9140/Test');
     ok(datalistInput.datalist('option', 'filters').join() == ['A', 'B', 'C'].join());
-    ok(datalistInput.datalist('option', 'hiddenElement') == document.getElementById('InitOptions'));
+    ok(datalistInput.datalist('option', 'hiddenElement') == $('#InitOptions')[0]);
 });
 
 test('Init options limit records per page', 3, function () {
@@ -43,16 +43,81 @@ test('Init options limit records per page', 3, function () {
     ok(datalistInput.datalist('option', 'recordsPerPage') == 99);
 });
 
-test('Binds change event on additional filters', 2, function () {
+test('Additional filters binding', 8, function () {
     $('#DatalistFilters').attr('data-datalist-filters', 'Filter1,Filter2');
+    var filters = [ $('#Filter1')[0], $('#Filter2')[0] ];
+    
     $('#DatalistFilters').datalist({
-        filterChange: function () {
-            ok(true);
+        filterChange: function (e, element, hiddenElement, filter) {
+            ok(element == $('#DatalistFilters')[0])
+            ok(hiddenElement == $('#Filters')[0]);
+            ok(filter == filters[0]);
+            ok(e);
+
+            filters.splice(0, 1);
         }
     });
 
     $('#Filter1').change();
     $('#Filter2').change();
+});
+
+test('Custom filter change', 2, function () {
+    $('#DatalistCustomFilterChange').attr('data-datalist-filters', 'CustomFilter');
+    $('#DatalistCustomFilterChange').datalist({
+        filterChange: function (e, element, hiddenElement, filter) {
+            e.preventDefault();
+            element.value = 'Test';
+            hiddenElement.value = 'Test';
+        },
+        select: function () {
+            ok(false);
+        }
+    });
+
+    $('#DatalistCustomFilterChange').val(1);
+    $('#CustomFilterChange').val(1);
+    $('#CustomFilter').change();
+
+    ok($('#DatalistCustomFilterChange').val() == 'Test');
+    ok($('#CustomFilterChange').val() == 'Test');
+});
+
+test('Custom select for filter change', 5, function () {
+    $('#DatalistCustomSelectFilterChange').attr('data-datalist-filters', 'CustomSelectFilter');
+    $('#DatalistCustomSelectFilterChange').datalist({
+        select: function (e, element, hiddenElement, data) {
+            e.preventDefault();
+            ok(element == $('#DatalistCustomSelectFilterChange')[0])
+            ok(hiddenElement == $('#CustomSelectFilterChange')[0]);
+            ok(data == null);
+
+            element.value = 'Test';
+            hiddenElement.value = 'Test';
+        }
+    });
+
+    $('#DatalistCustomSelectFilterChange').val(1);
+    $('#CustomSelectFilterChange').val(1);
+    $('#CustomSelectFilter').change();
+
+    ok($('#DatalistCustomSelectFilterChange').val() == 'Test');
+    ok($('#CustomSelectFilterChange').val() == 'Test');
+});
+
+test('Default filter change', 2, function () {
+    $('#DatalistDefaultFilterChange').attr('data-datalist-filters', 'DefaultFilter');
+    $('#DatalistDefaultFilterChange').datalist({
+        select: function () { },
+        filterChange: function () { }
+    });
+
+    $('#DatalistDefaultFilterChange').val(1);
+    $('#DefaultFilterChange').val(1);
+    $('#DefaultFilter').change();
+
+    ok($('#DatalistDefaultFilterChange').val() == '');
+    ok($('#DefaultFilterChange').val() == '');
 });
 
 test('Creates autocomplete', 1, function () {

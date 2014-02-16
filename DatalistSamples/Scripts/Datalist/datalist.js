@@ -13,7 +13,7 @@
             this._bindDatalist(); // TODO: Fix null values in javascript html code
             this._cleanUp(); // TODO: Fix resizing on different datalists.
         },
-        _initOptions: function () { // TESTED
+        _initOptions: function () {
             this.options.recordsPerPage = this._limitTo(this.element.attr('data-datalist-records-per-page'), 1, 99);
             this.options.hiddenElement = $('#' + this.element.attr('data-datalist-hidden-input'))[0];
             this.options.filters = this.element.attr('data-datalist-filters').split(',');
@@ -50,7 +50,7 @@
         _defaultFilterChange: function (filter) {
             var event = $.Event(this._defaultSelect);
             if (this.options.select)
-                this.options.select(event, this.element[0], this.hiddenElement[0], null);
+                this.options.select(event, this.element[0], this.options.hiddenElement, null);
             if (!event.isDefaultPrevented())
                 this._defaultSelect(this.element[0], null);
         },
@@ -345,6 +345,7 @@
             this.element.attr('data-datalist-sort-order', this.options.sortOrder);
             this.element.attr('data-datalist-dialog-title', this.options.title);
             this.element.attr('data-datalist-url', this.options.url);
+            // TODO: unbind everything
             return this._super();
         }
     });
