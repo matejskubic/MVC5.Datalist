@@ -54,5 +54,11 @@ namespace DatalistSamples.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public ActionResult Tests()
+        {
+            return View();
+        }
     }
 }

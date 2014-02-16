@@ -13,12 +13,9 @@
             this._bindDatalist(); // TODO: Fix null values in javascript html code
             this._cleanUp(); // TODO: Fix resizing on different datalists.
         },
-        _initOptions: function () {
-            this.options.select = function (event, element, hiddenElement, data) { },
-            this.options.onAdditionalFilterChange = function (event, element, hiddenElement, filter) { }
-
-            this.options.recordsPerPage = this.element.attr('data-datalist-records-per-page');
-            this.hiddenElement = $('#' + this.element.attr('data-datalist-hidden-input'));
+        _initOptions: function () { // TESTED
+            this.options.recordsPerPage = this._limitTo(this.element.attr('data-datalist-records-per-page'), 1, 99);
+            this.options.hiddenElement = $('#' + this.element.attr('data-datalist-hidden-input'))[0];
             this.options.filters = this.element.attr('data-datalist-filters').split(',');
             this.options.sortColumn = this.element.attr('data-datalist-sort-column');
             this.options.sortOrder = this.element.attr('data-datalist-sort-order');
@@ -32,26 +29,28 @@
             var filters = $.grep(this.options.filters, function (item) { return (item != null && item != ''); });
             for (i = 0; i < filters.length; i++) {
                 $('#' + filters[i]).change(function () {
-                    var event = $.Event(that._defaultAdditionalFilterChange);
-                    that.options.onAdditionalFilterChange(event, that.element[0], that.hiddenElement[0], this);
+                    var event = $.Event(that._defaultFilterChange);
+                    if (that.options.filterChange)
+                        that.options.filterChange(event, that.element[0], that.options.hiddenElement, this);
                     if (!event.isDefaultPrevented())
-                        that._defaultAdditionalFilterChange(this);
+                        that._defaultFilterChange(this);
                 });
             }
         },
         _defaultSelect: function(element, data) {
             if (data) {
-                this.hiddenElement.val(data.DatalistIdKey).change();
+                $(this.options.hiddenElement).val(data.DatalistIdKey).change();
                 $(element).val(data.DatalistAcKey).change();
             }
             else {
                 $(element).val(null).change();
-                this.hiddenElement.val(null).change();
+                $(this.options.hiddenElement).val(null).change();
             }
         },
-        _defaultAdditionalFilterChange: function (filter) {
+        _defaultFilterChange: function (filter) {
             var event = $.Event(this._defaultSelect);
-            this.options.select(event, this.element[0], this.hiddenElement[0], null);
+            if (this.options.select)
+                this.options.select(event, this.element[0], this.hiddenElement[0], null);
             if (!event.isDefaultPrevented())
                 this._defaultSelect(this.element[0], null);
         },
@@ -74,17 +73,19 @@
                 },
                 select: function (e, selection) {
                     var event = $.Event(that._defaultSelect);
-                    that.options.select(event, that.element[0], that.hiddenElement[0], selection.item.item);
+                    if (that.options.select)
+                        that.options.select(event, that.element[0], that.options.hiddenElement, selection.item.item);
                     if (!event.isDefaultPrevented())
                         that._defaultSelect(that.element[0], selection.item.item);
                 },
                 minLength: 1
             });
 
-            this.element.keyup(function () {
+            this.element.bind('keyup.datalist', function () {
                 if (this.value.length == 0) {
                     var event = $.Event(that._defaultSelect);
-                    that.options.select(event, this, that.hiddenElement[0], null);
+                    if (that.options.select)
+                        that.options.select(event, this, that.options.hiddenElement, null);
                     if (!event.isDefaultPrevented())
                         that._defaultSelect(this, null);
                 }
@@ -122,7 +123,7 @@
         },
         _loadSelected: function () {
             var that = this;
-            var id = this.hiddenElement.val();
+            var id = $(this.options.hiddenElement).val();
             if (id != '' && id != 0) {
                 $.ajax({
                     url: that.options.url + '?Id=' + id + '&RecordsPerPage=1',
@@ -130,7 +131,8 @@
                     success: function (data) {
                         if (data.Rows.length > 0) {
                             var event = $.Event(that._defaultSelect);
-                            that.options.select(event, that.element[0], that.hiddenElement[0], data.Rows[0]);
+                            if (that.options.select)
+                                that.options.select(event, that.element[0], that.options.hiddenElement, data.Rows[0]);
                             if (!event.isDefaultPrevented())
                                 that._defaultSelect(that.element[0], data.Rows[0]);
                         }
@@ -177,6 +179,7 @@
             }
         },
         _cleanUp: function () {
+            this.element.removeAttr('data-datalist-records-per-page')
             this.element.removeAttr('data-datalist-dialog-title');
             this.element.removeAttr('data-datalist-hidden-input');
             this.element.removeAttr('data-datalist-sort-column');
@@ -314,7 +317,8 @@
                 'click': function () {
                     datalist.dialog('close');
                     var event = $.Event(that._defaultSelect);
-                    that.options.select(event, that.element[0], that.hiddenElement[0], data);
+                    if (that.options.select)
+                        that.options.select(event, that.element[0], that.options.hiddenElement, data);
                     if (!event.isDefaultPrevented())
                         that._defaultSelect(that.element[0], data);
                 }
@@ -333,10 +337,14 @@
             return value;
         },
 
-        _setOption: function (key, value) {
-            return this._superApply(arguments);
-        },
         _destroy: function () {
+            this.element.attr('data-datalist-records-per-page', this.options.recordsPerPage);
+            this.element.attr('data-datalist-hidden-input', this.options.hiddenElement.id);
+            this.element.attr('data-datalist-filters', this.options.filters.join());
+            this.element.attr('data-datalist-sort-column', this.options.sortColumn);
+            this.element.attr('data-datalist-sort-order', this.options.sortOrder);
+            this.element.attr('data-datalist-dialog-title', this.options.title);
+            this.element.attr('data-datalist-url', this.options.url);
             return this._super();
         }
     });

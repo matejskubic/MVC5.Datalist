@@ -1,9 +1,9 @@
 ﻿@{
-    ViewBag.Title = "Javascript.onAdditionalFilterChange";
+    ViewBag.Title = "Javascript.filterChange";
 }
 
 <div class="panel panel-default">
-    <div class="panel-heading">onAdditionalFilterChange</div>
+    <div class="panel-heading">filterChange</div>
     <div class="panel-body">
         <strong>Description</strong>
         <pre>Triggered then datalist additional filter value is changed.</pre>
@@ -15,7 +15,7 @@
         <strong>Examples</strong>
         <pre>
 $(<span class="str">'.datalist-input'</span>).datalist({
-    onAdditionalFilterChange: <span class="kwrd">function</span> (e, element, hiddenElement, filter) {
+    filterChange: <span class="kwrd">function</span> (e, element, hiddenElement, filter) {
         e.preventDefault();
         console.log(<span class="str">'Value changed to '</span> + filter.value);
     }
@@ -29,7 +29,7 @@ $(<span class="str">'.datalist-input'</span>).datalist({
     @section scripts {
         <script>
             $('.datalist-input').datalist({
-                onAdditionalFilterChange: function (e, element, hiddenElement, filter) {
+                filterChange: function (e, element, hiddenElement, filter) {
                     e.preventDefault();
                     console.log('Value changed to ' + filter.value);
                 }

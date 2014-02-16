@@ -7,6 +7,7 @@
     <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <link href="~/Content/Datalist/datalist.css" rel="stylesheet" />
+    <link href="~/Content/qunit-1.14.0.css" rel="stylesheet" />
     <link href="~/Content/site.css" rel="stylesheet" />
 </head>
 
@@ -36,7 +37,16 @@
     <script src="~/Scripts/Datalist/bind-with-delay.js"></script>
     <script src="~/Scripts/Datalist/bootstrap-paginator.js"></script>
     <script src="~/Scripts/Datalist/datalist.js"></script>
-    <script src="~/Scripts/site.js"></script>
+    @if (ViewContext.RouteData.Values["controller"].ToString() == "Datalist" && ViewContext.RouteData.Values["action"].ToString() == "Tests")
+    {
+        <script src="/Scripts/qunit-1.14.0.js"></script>
+        <script src="/Scripts/Datalist/tests.js"></script>
+    }
+    else
+    {
+        <script src="~/Scripts/site.js"></script>   
+    }
+    
     @RenderSection("scripts", false)
 </body>
 </html>

@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Tests";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Javascript tests page</div>
+    <div class="panel-body">
+        <div id="qunit"></div>
+        <div id="qunit-fixture"></div>
+        <div id="test-data" style="display: block">
+            @Html.Datalist("InitOptions", null, new DefaultDatalist())
+            @Html.Datalist("InitOptionsLimit", null, new DefaultDatalist())
+
+            @Html.Hidden("Filter1")
+            @Html.Hidden("Filter2")
+            @Html.Datalist("Filters", null, new ExampleDatalist())
+
+            @Html.Datalist("Autocomplete", null, new DefaultDatalist())
+            @Html.Datalist("AutocompleteKeyup", null, new DefaultDatalist())
+            @Html.Datalist("AutocompleteRemoveClass", null, new DefaultDatalist())
+
+            @Html.Datalist("OnLoadNoSelect", null, new DefaultDatalist())
+            @Html.Datalist("OnLoadSelect", 1, new DefaultDatalist())
+
+            @Html.Datalist("CleanUp", 1, new DefaultDatalist())
+
+            @Html.Datalist("Destroy", 1, new DefaultDatalist())
+        </div>
+    </div>
+</div>

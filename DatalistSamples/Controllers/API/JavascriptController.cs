@@ -11,7 +11,7 @@ namespace DatalistSamples.Controllers.API
         }
 
         [HttpGet]
-        public ActionResult OnAdditionalFilterChange()
+        public ActionResult FilterChange()
         {
             return View();
         }
