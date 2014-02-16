@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DatalistTests.GenericDatalistTests.Stubs
+namespace DatalistTests.Stubs
 {
     public class GenericDatalistStub<T> : GenericDatalist<T> where T : class
     {

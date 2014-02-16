@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DatalistTests.TestContext.Models
+namespace DatalistTests.Models
 {
     public class TestRelationModel
     {

@@ -1,5 +1,5 @@
 ﻿using Datalist;
-using DatalistTests.TestContext.Models;
+using DatalistTests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Reflection;
@@ -20,16 +20,6 @@ namespace DatalistTests.GenericDatalistTests
         public void NoAttributeTest()
         {
             PropertyInfo property = typeof(TestModel).GetProperty("Sum");
-            String actual = Datalist.BaseGetColumnKey(property);
-            String expected = property.Name;
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void SinglePropertyTest()
-        {
-            PropertyInfo property = typeof(TestModel).GetProperty("Number");
             String actual = Datalist.BaseGetColumnKey(property);
             String expected = property.Name;
 

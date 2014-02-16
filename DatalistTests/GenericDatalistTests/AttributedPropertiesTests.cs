@@ -1,5 +1,5 @@
 ﻿using Datalist;
-using DatalistTests.TestContext.Models;
+using DatalistTests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Reflection;
@@ -10,18 +10,7 @@ namespace DatalistTests.GenericDatalistTests
     public class AttributedPropertiesTests : BaseTests
     {
         [TestMethod]
-        public void AttributeTest()
-        {
-            var actual = Datalist.BaseAttributedProperties.ToList();
-            var expected = typeof(TestModel).GetProperties()
-                .Where(property => property.GetCustomAttribute<DatalistColumnAttribute>(false) != null)
-                .ToList();
-
-            CollectionAssert.AreEquivalent(expected, actual);
-        }
-
-        [TestMethod]
-        public void OrderTest()
+        public void AttributedTest()
         {
             var actual = Datalist.BaseAttributedProperties.ToList();
             var expected = typeof(TestModel).GetProperties()

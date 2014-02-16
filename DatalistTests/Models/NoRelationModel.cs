@@ -1,7 +1,7 @@
 ﻿using Datalist;
 using System;
 
-namespace DatalistTests.TestContext.Models
+namespace DatalistTests.Models
 {
     public class NoRelationModel
     {

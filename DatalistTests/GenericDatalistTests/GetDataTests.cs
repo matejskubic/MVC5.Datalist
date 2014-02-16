@@ -19,6 +19,7 @@ namespace DatalistTests.GenericDatalistTests
         public void FilterByIdCalledTest()
         {
             Datalist.CurrentFilter.Id = "1";
+
             Datalist.GetData();
             DatalistMock.Protected().Verify("FilterById", Times.Once(), Datalist.BaseGetModels());
         }
@@ -27,6 +28,7 @@ namespace DatalistTests.GenericDatalistTests
         public void FilterByIdNotCalledTest()
         {
             Datalist.CurrentFilter.Id = null;
+
             Datalist.GetData();
             DatalistMock.Protected().Verify("FilterById", Times.Never(), Datalist.BaseGetModels());
         }
@@ -35,6 +37,7 @@ namespace DatalistTests.GenericDatalistTests
         public void FilterByAdditionalFiltersCalledTest()
         {
             Datalist.CurrentFilter.AdditionalFilters.Add("Id", "1");
+
             Datalist.GetData();
             DatalistMock.Protected().Verify("FilterByAdditionalFilters", Times.Once(), Datalist.BaseGetModels());
         }
@@ -43,6 +46,7 @@ namespace DatalistTests.GenericDatalistTests
         public void FilterByAdditionalFiltersNotCalledBecauseEmptyTest()
         {
             Datalist.CurrentFilter.AdditionalFilters.Clear();
+
             Datalist.GetData();
             DatalistMock.Protected().Verify("FilterByAdditionalFilters", Times.Never(), Datalist.BaseGetModels());
         }
@@ -51,6 +55,7 @@ namespace DatalistTests.GenericDatalistTests
         public void FilterByAdditionalFiltersNotCalledBecauseIdFilteredTest()
         {
             Datalist.CurrentFilter.Id = "1";
+
             Datalist.GetData();
             DatalistMock.Protected().Verify("FilterByAdditionalFilters", Times.Never(), Datalist.BaseGetModels());
         }
@@ -78,6 +83,7 @@ namespace DatalistTests.GenericDatalistTests
         public void FilterBySearchTermNotCalledTest()
         {
             Datalist.CurrentFilter.Id = "1";
+
             Datalist.GetData();
             DatalistMock.Protected().Verify("FilterBySearchTerm", Times.Never(), Datalist.BaseGetModels());
         }

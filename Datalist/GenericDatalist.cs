@@ -168,6 +168,9 @@ namespace Datalist
         }
         protected virtual void AddColumns(Dictionary<String, String> row, T model)
         {
+            if (Columns.Count == 0)
+                throw new DatalistException("Datalist columns can not be empty.");
+
             foreach (String column in Columns.Keys)
                 AddColumn(row, column, model);
         }
@@ -190,10 +193,10 @@ namespace Datalist
 
             throw new DatalistException(String.Format("{0} type is not supported in dynamic filtering.", type.Name));
         }
-        private String FormNotNullQuery(String fullPropertyName)
+        private String FormNotNullQuery(String propertyName)
         {
             var queries = new List<String>();
-            var properties = fullPropertyName.Split('.');
+            var properties = propertyName.Split('.');
 
             for (Int32 i = 0; i < properties.Length; ++i)
                 queries.Add(String.Join(".", properties.Take(i + 1)) + " != null");

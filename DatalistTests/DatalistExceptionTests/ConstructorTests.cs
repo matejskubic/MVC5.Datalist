@@ -11,6 +11,7 @@ namespace DatalistTests.DatalistExceptionTests
         {
             var expected = "Test message";
             var exception = new DatalistException(expected);
+
             Assert.AreEqual(expected, exception.Message);
         }
     }

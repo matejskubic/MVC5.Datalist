@@ -1,4 +1,4 @@
-﻿using DatalistTests.TestContext.Models;
+﻿using DatalistTests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;

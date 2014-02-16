@@ -1,5 +1,5 @@
 using DatalistTests.TestContext;
-using DatalistTests.TestContext.Models;
+using DatalistTests.Models;
 using System;
 using System.Data.Entity.Migrations;
 using System.Linq;
@@ -39,7 +39,7 @@ namespace DatalistTests.Migrations
                 }
             }
 
-            context.Save();
+            context.SaveChanges();
         }
     }
 }

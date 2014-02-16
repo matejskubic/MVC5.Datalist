@@ -1,7 +1,8 @@
 ﻿using Datalist;
-using DatalistTests.TestContext.Models;
+using DatalistTests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace DatalistTests.GenericDatalistTests
@@ -27,21 +28,11 @@ namespace DatalistTests.GenericDatalistTests
         }
 
         [TestMethod]
-        public void SinglePropertyTest()
-        {
-            PropertyInfo property = typeof(TestModel).GetProperty("CreationDate");
-            String actual = Datalist.BaseGetColumnHeader(property);
-            String expected = property.Name;
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
         public void SingleDisplayPropertyTest()
         {
             PropertyInfo property = typeof(TestModel).GetProperty("Number");
+            String expected = property.GetCustomAttribute<DisplayAttribute>().Name;
             String actual = Datalist.BaseGetColumnHeader(property);
-            String expected = TestModel.DisplayValue;
 
             Assert.AreEqual(expected, actual);
         }
@@ -68,8 +59,8 @@ namespace DatalistTests.GenericDatalistTests
         public void RelationDisplayPropertyTest()
         {
             PropertyInfo property = typeof(TestModel).GetProperty("FirstRelationModel");
+            String expected = property.PropertyType.GetProperty("Value").GetCustomAttribute<DisplayAttribute>().Name;
             String actual = Datalist.BaseGetColumnHeader(property);
-            String expected = TestRelationModel.DisplayValue;
 
             Assert.AreEqual(expected, actual);
         }

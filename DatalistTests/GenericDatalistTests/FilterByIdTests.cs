@@ -1,5 +1,6 @@
 ﻿using Datalist;
-using DatalistTests.GenericDatalistTests.Stubs;
+using DatalistTests.Models;
+using DatalistTests.Stubs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -64,31 +65,5 @@ namespace DatalistTests.GenericDatalistTests
 
             datalist.BaseFilterById(new List<NonNumericIdModel>().AsQueryable()).ToList();
         }
-    }
-
-    public class NoIdModel
-    {
-        [DatalistColumn]
-        public String Title { get; set; }
-    }
-    public class NumericIdModel
-    {
-        [DatalistColumn]
-        public Decimal Id { get; set; }
-    }
-    public class NonNumericIdModel
-    {
-        [DatalistColumn]
-        public Guid Id { get; set; }
-    }
-    public class EnumModel
-    {
-        [DatalistColumn]
-        public IdEnum Id { get; set; }
-    }
-    public enum IdEnum
-    {
-        Id,
-        Null
     }
 }

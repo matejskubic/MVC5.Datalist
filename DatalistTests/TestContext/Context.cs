@@ -1,4 +1,4 @@
-﻿using DatalistTests.TestContext.Models;
+﻿using DatalistTests.Models;
 using System.Data.Entity;
 
 namespace DatalistTests.TestContext
@@ -7,10 +7,5 @@ namespace DatalistTests.TestContext
     {
         public DbSet<TestModel> TestModels { get; set; }
         public DbSet<TestRelationModel> TestRelationModels { get; set; }
-
-        public void Save()
-        {
-            SaveChanges();
-        }
     }
 }

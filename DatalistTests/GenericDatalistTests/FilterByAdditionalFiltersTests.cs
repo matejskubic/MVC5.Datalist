@@ -1,5 +1,6 @@
 ﻿using Datalist;
-using DatalistTests.GenericDatalistTests.Stubs;
+using DatalistTests.Models;
+using DatalistTests.Stubs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,18 @@ namespace DatalistTests.GenericDatalistTests
         {
             var expected = Datalist.BaseGetModels().ToList();
             Datalist.CurrentFilter.AdditionalFilters.Add("Id", null);
-            Datalist.CurrentFilter.AdditionalFilters.Add("Number", null);
             var actual = Datalist.BaseFilterByAdditionalFilters(Datalist.BaseGetModels()).ToList();
             
             CollectionAssert.AreEquivalent(expected, actual);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(DatalistException))]
+        public void NoPropertyTest()
+        {
+            Datalist.CurrentFilter.AdditionalFilters.Add("TestProperty", "Test");
+            Datalist.BaseFilterByAdditionalFilters(Datalist.BaseGetModels());
         }
 
         [TestMethod]
@@ -52,12 +61,5 @@ namespace DatalistTests.GenericDatalistTests
             datalist.BaseFilterByAdditionalFilters(new List<EnumModel>().AsQueryable()).ToList();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(DatalistException))]
-        public void NoPropertyTest()
-        {
-            Datalist.CurrentFilter.AdditionalFilters.Add("TestProperty", "Test");
-            Datalist.BaseFilterByAdditionalFilters(Datalist.BaseGetModels());
-        }
     }
 }

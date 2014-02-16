@@ -1,10 +1,9 @@
 ﻿using Datalist;
-using DatalistTests.GenericDatalistTests.Stubs;
-using DatalistTests.TestContext.Models;
+using DatalistTests.Models;
+using DatalistTests.Stubs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DatalistTests.GenericDatalistTests
 {
@@ -12,21 +11,23 @@ namespace DatalistTests.GenericDatalistTests
     public class AddIdTests : BaseTests
     {
         [TestMethod]
+        [ExpectedException(typeof(DatalistException))]
+        public void NoIdPropertyTest()
+        {
+            var datalist = new GenericDatalistStub<NoIdModel>();
+            var row = new Dictionary<String, String>();
+            var model = new NoIdModel();
+
+            datalist.BaseAddId(row, model);
+        }
+
+        [TestMethod]
         public void KeyTest()
         {
             var row = new Dictionary<String, String>();
             Datalist.BaseAddId(row, new TestModel());
 
-            Assert.AreEqual(AbstractDatalist.IdKey, row.First().Key);
-        }
-
-        [TestMethod]
-        public void KeyCountTest()
-        {
-            var row = new Dictionary<String, String>();
-            Datalist.BaseAddId(row, new TestModel());
-
-            Assert.AreEqual(1, row.Keys.Count);
+            Assert.IsTrue(row.ContainsKey(AbstractDatalist.IdKey));
         }
 
         [TestMethod]
@@ -37,18 +38,16 @@ namespace DatalistTests.GenericDatalistTests
 
             Datalist.BaseAddId(row, model);
 
-            Assert.AreEqual(model.Id, row.First().Value);
+            Assert.IsTrue(row.ContainsValue(model.Id));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(DatalistException))]
-        public void NoIdPropertyTest()
+        public void KeyCountTest()
         {
-            var datalist = new GenericDatalistStub<NoIdModel>();
             var row = new Dictionary<String, String>();
-            var model = new NoIdModel();
+            Datalist.BaseAddId(row, new TestModel());
 
-            datalist.BaseAddId(row, model);
+            Assert.AreEqual(1, row.Keys.Count);
         }
     }
 }

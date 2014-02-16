@@ -58,7 +58,7 @@ namespace DatalistTests.AbstractDatalistTests
         [TestMethod]
         public void DatalistUrlTest()
         {
-            String expected = String.Format("{0}Datalist/{1}", baseUrl, datalist.GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty));
+            String expected = String.Format("{0}{1}/{2}", baseUrl, AbstractDatalist.Prefix, datalist.GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty));
             Assert.AreEqual(expected, datalist.DatalistUrl);
         }
 

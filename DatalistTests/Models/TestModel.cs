@@ -2,17 +2,15 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DatalistTests.TestContext.Models
+namespace DatalistTests.Models
 {
     public class TestModel
     {
-        public const String DisplayValue = "Single display";
-
         [DatalistColumn(0)]
         public String Id { get; set; }
 
         [DatalistColumn]
-        [Display(Name = DisplayValue)]
+        [Display(Name = "TestDisplay")]
         public Int32 Number { get; set; }
 
         [DatalistColumn(-5)]

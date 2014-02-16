@@ -1,6 +1,5 @@
 ﻿using Datalist;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace DatalistTests.DatalistColumnTests
 {
@@ -10,33 +9,19 @@ namespace DatalistTests.DatalistColumnTests
         [TestMethod]
         public void ParameterlessPositionTest()
         {
-            var column = new DatalistColumnAttribute();
-            Assert.IsNull(column.Position);
+            Assert.IsNull(new DatalistColumnAttribute().Position);
         }
 
         [TestMethod]
         public void ParameterlessRelationTest()
         {
-            var column = new DatalistColumnAttribute();
-            Assert.IsNull(column.Relation);
+            Assert.IsNull(new DatalistColumnAttribute().Relation);
         }
 
         [TestMethod]
         public void PositionTest()
         {
-            Int32 expected = -5;
-            var column = new DatalistColumnAttribute(expected);
-            Assert.AreEqual(expected, column.Position);
-        }
-
-        [TestMethod]
-        public void RelationTest()
-        {
-            var column = new DatalistColumnAttribute();
-            var expected = "TestRelation";
-            column.Relation = expected;
-
-            Assert.AreEqual(expected, column.Relation);
+            Assert.AreEqual(-5, new DatalistColumnAttribute(-5).Position);
         }
     }
 }
