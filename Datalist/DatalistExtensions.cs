@@ -73,8 +73,8 @@ namespace Datalist
             attributes.Add("data-datalist-dialog-title", model.DialogTitle);
             attributes.Add("data-datalist-hidden-input", hiddenInput);
             attributes.Add("data-datalist-url", model.DatalistUrl);
-            
-            return html.TextBox(AbstractDatalist.Prefix + hiddenInput, null, attributes).ToString();
+
+            return html.TextBox(hiddenInput + AbstractDatalist.Prefix, null, attributes).ToString();
         }
         private static String FormHiddenInput<TModel>(HtmlHelper<TModel> html, AbstractDatalist model, String name, Object value)
         {
