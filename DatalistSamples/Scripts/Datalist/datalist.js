@@ -108,7 +108,7 @@
         },
         _formDatalistUrl: function (term) {
             return this.options.url +
-                '?SearchTerm=' + (term != null ? term : '') +
+                '?SearchTerm=' + term +
                 '&RecordsPerPage=' + this.options.recordsPerPage +
                 '&SortColumn=' + this.options.sortColumn +
                 '&SortOrder=' + this.options.sortOrder +

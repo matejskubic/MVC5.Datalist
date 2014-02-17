@@ -224,6 +224,36 @@ test('Forms autocomplete url with filters', 1, function () {
     equal(input.data('mvc-datalist')._formAutocompleteUrl('test'), expected);
 });
 
+test('Forms datalist url', 1, function () {
+    var input = $('#DatalistUrlDatalist').datalist();
+    var expected = input.datalist('option', 'url') +
+        '?SearchTerm=test' +
+        '&RecordsPerPage=' + input.datalist('option', 'recordsPerPage') +
+        '&SortColumn=' + input.datalist('option', 'sortColumn') +
+        '&SortOrder=' + input.datalist('option', 'sortOrder') +
+        '&Page=' + input.datalist('option', 'page');
+
+    equal(input.data('mvc-datalist')._formDatalistUrl('test'), expected);
+});
+test('Forms datalist url with filters', 1, function () {
+    var input = $('#DatalistUrlWithFiltersDatalist')
+        .attr('data-datalist-filters', 'DatalistUrlFilter1,DatalistUrlFilter2')
+        .datalist();
+
+    $('#DatalistUrlFilter1').val('Filter1');
+    $('#DatalistUrlFilter2').val('Filter2');
+    var expected = input.datalist('option', 'url') +
+        '?SearchTerm=test' +
+        '&RecordsPerPage=' + input.datalist('option', 'recordsPerPage') +
+        '&SortColumn=' + input.datalist('option', 'sortColumn') +
+        '&SortOrder=' + input.datalist('option', 'sortOrder') +
+        '&Page=' + input.datalist('option', 'page') +
+        '&DatalistUrlFilter1=Filter1' +
+        '&DatalistUrlFilter2=Filter2';
+
+    equal(input.data('mvc-datalist')._formDatalistUrl('test'), expected);
+});
+
 asyncTest('Does not call select on load', 0, function () {
     $('#OnLoadNoSelectDatalist').datalist({
         select: function (e, element, hiddenElement, data) {
