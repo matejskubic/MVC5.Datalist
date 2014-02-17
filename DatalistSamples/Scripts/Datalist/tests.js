@@ -1,119 +1,110 @@
 ﻿test('Init options', 11, function() {
-    var datalistInput = $('#InitOptionsDatalist');
-    datalistInput.attr('data-datalist-url', 'http://localhost:9140/Test');
-    datalistInput.attr('data-datalist-hidden-input', 'InitOptions');
-    datalistInput.attr('data-datalist-dialog-title', 'TestTitle');
-    datalistInput.attr('data-datalist-sort-column', 'TestColumn');
-    datalistInput.attr('data-datalist-records-per-page', 30);
-    datalistInput.attr('data-datalist-sort-order', 'Desc');
-    datalistInput.attr('data-datalist-filters', 'A,B,C');
+    var input = $('#InitOptionsDatalist')
+        .attr('data-datalist-url', 'http://localhost:9140/Test')
+        .attr('data-datalist-hidden-input', 'InitOptions')
+        .attr('data-datalist-dialog-title', 'TestTitle')
+        .attr('data-datalist-sort-column', 'TestColumn')
+        .attr('data-datalist-records-per-page', 30)
+        .attr('data-datalist-sort-order', 'Desc')
+        .attr('data-datalist-filters', 'A,B,C')
+        .datalist();
 
-    datalistInput.datalist();
-
-    equal(datalistInput.datalist('option', 'page'), 0);
-    equal(datalistInput.datalist('option', 'term'), '');
-    equal(datalistInput.datalist('option', 'select'), null);
-    equal(datalistInput.datalist('option', 'sortOrder'), 'Desc');
-    equal(datalistInput.datalist('option', 'title'), 'TestTitle');
-    equal(datalistInput.datalist('option', 'filterChange'), null);
-    equal(datalistInput.datalist('option', 'recordsPerPage'), 30);
-    equal(datalistInput.datalist('option', 'sortColumn'), 'TestColumn');
-    equal(datalistInput.datalist('option', 'url'), 'http://localhost:9140/Test');
-    equal(datalistInput.datalist('option', 'filters').join(), ['A', 'B', 'C'].join());
-    equal(datalistInput.datalist('option', 'hiddenElement'), $('#InitOptions')[0]);
+    equal(input.datalist('option', 'page'), 0);
+    equal(input.datalist('option', 'term'), '');
+    equal(input.datalist('option', 'select'), null);
+    equal(input.datalist('option', 'sortOrder'), 'Desc');
+    equal(input.datalist('option', 'title'), 'TestTitle');
+    equal(input.datalist('option', 'filterChange'), null);
+    equal(input.datalist('option', 'recordsPerPage'), 30);
+    equal(input.datalist('option', 'sortColumn'), 'TestColumn');
+    equal(input.datalist('option', 'url'), 'http://localhost:9140/Test');
+    equal(input.datalist('option', 'filters').join(), ['A', 'B', 'C'].join());
+    equal(input.datalist('option', 'hiddenElement'), $('#InitOptions')[0]);
 });
 test('Init options limit records per page', 3, function () {
-    var datalistInput = $('#InitOptionsLimitDatalist');
-    datalistInput.attr('data-datalist-records-per-page', 'NaN');
-    datalistInput.datalist();
+    var input = $('#InitOptionsLimitDatalist');
+    input.attr('data-datalist-records-per-page', 'NaN').datalist();
+    equal(input.datalist('option', 'recordsPerPage'), 20);
 
-    equal(datalistInput.datalist('option', 'recordsPerPage'), 20);
+    input.datalist('destroy').attr('data-datalist-records-per-page', -1).datalist();
+    equal(input.datalist('option', 'recordsPerPage'), 1);
 
-    datalistInput.datalist('destroy');
-    datalistInput.attr('data-datalist-records-per-page', -1);
-    datalistInput.datalist();
-
-    equal(datalistInput.datalist('option', 'recordsPerPage'), 1);
-
-    datalistInput.datalist('destroy');
-    datalistInput.attr('data-datalist-records-per-page', 100);
-    datalistInput.datalist();
-
-    equal(datalistInput.datalist('option', 'recordsPerPage'), 99);
+    input.datalist('destroy').attr('data-datalist-records-per-page', 100).datalist();
+    equal(input.datalist('option', 'recordsPerPage'), 99);
 });
 
-test('Additional filters binding', 8, function () {
-    $('#FiltersDatalist').attr('data-datalist-filters', 'Filter1,Filter2');
-    var filters = [ $('#Filter1')[0], $('#Filter2')[0] ];
-    
-    $('#FiltersDatalist').datalist({
+test('Default filters binding', 20, function () {
+    var input = $('#DefaultFilterDatalist').attr('data-datalist-filters', 'Filter1,Filter2');
+    var filters = [$('#Filter1'), $('#Filter2')];
+    var hiddenInput = $('#DefaultFilter');
+    var iteration = 0;
+
+    input.datalist({
         filterChange: function (e, element, hiddenElement, filter) {
-            equal(element, $('#FiltersDatalist')[0])
-            equal(hiddenElement, $('#Filters')[0]);
-            equal(filter, filters[0]);
+            equal(filter, filters[iteration++][0]);
+            equal(hiddenElement, hiddenInput[0]);
+            equal(element, input[0]);
             ok(e);
-
-            filters.splice(0, 1);
-        }
-    });
-
-    $('#Filter1').change();
-    $('#Filter2').change();
-});
-test('Custom filter change', 2, function () {
-    $('#CustomFilterChangeDatalist').attr('data-datalist-filters', 'CustomFilter');
-    $('#CustomFilterChangeDatalist').datalist({
-        filterChange: function (e, element, hiddenElement, filter) {
-            hiddenElement.value = 'Test';
-            element.value = 'Test';
-            e.preventDefault();
         },
-        select: function () {
-            ok(false);
-        }
-    });
-
-    $('#CustomFilterChangeDatalist').val(1);
-    $('#CustomFilterChange').val(1);
-    $('#CustomFilter').change();
-
-    equal($('#CustomFilterChangeDatalist').val(), 'Test');
-    equal($('#CustomFilterChange').val(), 'Test');
-});
-test('Custom select for filter change', 5, function () {
-    $('#CustomSelectFilterChangeDatalist').attr('data-datalist-filters', 'CustomSelectFilter');
-    $('#CustomSelectFilterChangeDatalist').datalist({
         select: function (e, element, hiddenElement, data) {
-            e.preventDefault();
-            equal(element, $('#CustomSelectFilterChangeDatalist')[0])
-            equal(hiddenElement, $('#CustomSelectFilterChange')[0]);
+            equal(hiddenElement, hiddenInput[0]);
+            equal(element, input[0]);
             equal(data, null);
-
-            element.value = 'Test';
-            hiddenElement.value = 'Test';
+            ok(e);
         }
     });
+    
+    input.val(1);
+    hiddenInput.val(1);
+    filters[0].change();
+    equal(input.val(), '');
+    equal(hiddenInput.val(), '');
 
-    $('#CustomSelectFilterChangeDatalist').val(1);
-    $('#CustomSelectFilterChange').val(1);
+    input.val(1);
+    hiddenInput.val(1);
+    filters[1].change();
+    equal(input.val(), '');
+    equal(hiddenInput.val(), '');
+});
+test('Custom filter for filter change', 2, function() {
+    var hiddenInput = $('#CustomFilterChange');
+    var input = $('#CustomFilterChangeDatalist')
+        .attr('data-datalist-filters', 'CustomFilter')
+        .datalist({
+            filterChange: function (e, element, hiddenElement, fitler) {
+                hiddenElement.value = 'Test';
+                element.value = 'Test';
+                e.preventDefault();
+            },
+            select: function (e, element, hiddenElement, data) {
+                ok(false);
+            }
+        });
+
+    input.val(1);
+    hiddenInput.val(1);
+    $('#CustomFilter').change();
+    equal(hiddenInput.val(), 'Test');
+    equal(input.val(), 'Test');
+});
+test('Custom select for filter change', 2, function () {
+    var hiddenInput = $('#CustomSelectFilterChange');
+    var input = $('#CustomSelectFilterChangeDatalist')
+        .attr('data-datalist-filters', 'CustomSelectFilter')
+        .datalist({
+            select: function (e, element, hiddenElement, data) {
+                hiddenElement.value = 'Test';
+                element.value = 'Test';
+                e.preventDefault();
+            }
+        });
+
+    input.val(1);
+    hiddenInput.val(1);
     $('#CustomSelectFilter').change();
 
-    equal($('#CustomSelectFilterChangeDatalist').val(), 'Test');
-    equal($('#CustomSelectFilterChange').val(), 'Test');
-});
-test('Default filter change', 2, function () {
-    $('#DefaultFilterChangeDatalist').attr('data-datalist-filters', 'DefaultFilter');
-    $('#DefaultFilterChangeDatalist').datalist({
-        select: function () { },
-        filterChange: function () { }
-    });
-
-    $('#DefaultFilterChangeDatalist').val(1);
-    $('#DefaultFilterChange').val(1);
-    $('#DefaultFilter').change();
-
-    equal($('#DefaultFilterChangeDatalist').val(), '');
-    equal($('#DefaultFilterChange').val(), '');
+    equal(input.val(), 'Test');
+    equal(hiddenInput.val(), 'Test');
 });
 // TODO: Somehow test autocomplete source method
 test('Creates autocomplete', 2, function () {
@@ -121,17 +112,18 @@ test('Creates autocomplete', 2, function () {
     equal($('#AutocompleteDatalist').autocomplete('option', 'minLength'), 1)
 });
 test('Autocomplete select', 7, function () {
-    $('#AutocompleteSelectDatalist').datalist({
+    var hiddenInput = $('#AutocompleteSelect');
+    var input = $('#AutocompleteSelectDatalist').datalist({
         select: function (e, element, hiddenElement, data) {
-            equal(element, $('#AutocompleteSelectDatalist')[0]);
-            equal(hiddenElement, $('#AutocompleteSelect')[0]);
+            equal(hiddenElement, hiddenInput[0]);
             equal(data.DatalistIdKey, 'Test2');
             equal(data.DatalistAcKey, 'Test3');
+            equal(element, input[0]);
             ok(e);
         }
     });
 
-    $('#AutocompleteSelectDatalist').data('ui-autocomplete')
+    input.data('ui-autocomplete')
         ._trigger('select', 'autocompleteselect', {
             item: {
                 label: 'Test0',
@@ -143,19 +135,19 @@ test('Autocomplete select', 7, function () {
             }
         });
 
-    equal($('#AutocompleteSelect').val(), 'Test2');
-    equal($('#AutocompleteSelectDatalist').val(), 'Test3');
+    equal(hiddenInput.val(), 'Test2');
+    equal(input.val(), 'Test3');
 });
 test('Autocomplete select prevented', 2, function () {
-    $('#AutocompleteSelectPreventDatalist').datalist({
+    var input = $('#AutocompleteSelectPreventDatalist').datalist({
         select: function (e, element, hiddenElement, data) {
-            hiddenElement.value = 2;
+            hiddenElement.value = 22;
             element.value = 11;
             e.preventDefault();
         }
     });
 
-    $('#AutocompleteSelectPreventDatalist').data('ui-autocomplete')
+    input.data('ui-autocomplete')
         ._trigger('select', 'autocompleteselect', {
             item: {
                 label: 'Test0',
@@ -167,29 +159,28 @@ test('Autocomplete select prevented', 2, function () {
             }
         });
 
-    equal($('#AutocompleteSelectPreventDatalist').val(), 11);
-    equal($('#AutocompleteSelectPrevent').val(), 2);
+    equal(input.val(), 11);
+    equal($('#AutocompleteSelectPrevent').val(), 22);
 });
-test('Binds key up on autocomplete', 6, function () {
-    $('#AutocompleteKeyup').val('Test1');
-
-    $('#AutocompleteKeyupDatalist').datalist({
+test('Bind key up on autocomplete', 6, function () {
+    var hiddenInput = $('#AutocompleteKeyup');
+    var input = $('#AutocompleteKeyupDatalist').datalist({
         select: function (e, element, hiddenElement, data) {
-            equal(element, $('#AutocompleteKeyupDatalist')[0]);
-            equal(hiddenElement, $('#AutocompleteKeyup')[0]);
+            equal(hiddenElement, hiddenInput[0]);
+            equal(element, input[0]);
             equal(data, null);
             ok(e);
         }
     });
 
-    $('#AutocompleteKeyupDatalist').keyup();
-    equal($('#AutocompleteKeyup').val(), '');
-    equal($('#AutocompleteKeyupDatalist').val(), '');
+    hiddenInput.val('Test1');
+    input.keyup();
+    equal(input.val(), '');
+    equal(hiddenInput.val(), '');
 });
-test('Bind key up on autocomplete prevents select', 2, function () {
-    $('#AutocompleteKeyupPrevent').val('Test1');
-
-    $('#AutocompleteKeyupPreventDatalist').datalist({
+test('Bind key up on autocomplete select prevented', 2, function () {
+    var hiddenInput = $('#AutocompleteKeyupPrevent');
+    var input = $('#AutocompleteKeyupPreventDatalist').datalist({
         select: function (e, element, hiddenElement, data) {
             hiddenElement.value = 'Test2';
             element.value = 'Test3';
@@ -197,30 +188,32 @@ test('Bind key up on autocomplete prevents select', 2, function () {
         }
     });
 
-    $('#AutocompleteKeyupPreventDatalist').keyup();
-    equal($('#AutocompleteKeyupPrevent').val(), 'Test2');
-    equal($('#AutocompleteKeyupPreventDatalist').val(), 'Test3');
+    input.keyup();
+    equal(input.val(), 'Test3');
+    equal(hiddenInput.val(), 'Test2');
 });
 test('Removes all preceding elements', 1, function () {
     equal($('#AutocompleteRemoveDatalist').datalist().prevAll().length, 0);
 });
 
 test('Forms autocomplete url', 1, function () {
-    $('#AutocompleteUrlDatalist').datalist();
-    var expected = $('#AutocompleteUrlDatalist').datalist('option', 'url') +
+    var input= $('#AutocompleteUrlDatalist').datalist();
+    var expected = input.datalist('option', 'url') +
         '?SearchTerm=test' +
         '&RecordsPerPage=20' +
         '&SortOrder=Asc' +
         '&Page=0';
 
-    equal($('#AutocompleteUrlDatalist').data('mvc-datalist')._formAutocompleteUrl('test'), expected);
+    equal(input.data('mvc-datalist')._formAutocompleteUrl('test'), expected);
 });
 test('Forms autocomplete url with filters', 1, function () {
-    $('#AutocompleteUrlWithFiltersDatalist').attr('data-datalist-filters', 'AutocompleteUrlFilter1,AutocompleteUrlFilter2');
-    $('#AutocompleteUrlWithFiltersDatalist').datalist();
+    var input = $('#AutocompleteUrlWithFiltersDatalist')
+        .attr('data-datalist-filters', 'AutocompleteUrlFilter1,AutocompleteUrlFilter2')
+        .datalist();
+
     $('#AutocompleteUrlFilter1').val('Filter1');
     $('#AutocompleteUrlFilter2').val('Filter2');
-    var expected = $('#AutocompleteUrlWithFiltersDatalist').datalist('option', 'url') +
+    var expected = input.datalist('option', 'url') +
         '?SearchTerm=test' +
         '&RecordsPerPage=20' +
         '&SortOrder=Asc' +
@@ -228,7 +221,7 @@ test('Forms autocomplete url with filters', 1, function () {
         '&AutocompleteUrlFilter1=Filter1' +
         '&AutocompleteUrlFilter2=Filter2';
 
-    equal($('#AutocompleteUrlWithFiltersDatalist').data('mvc-datalist')._formAutocompleteUrl('test'), expected);
+    equal(input.data('mvc-datalist')._formAutocompleteUrl('test'), expected);
 });
 
 asyncTest('Does not call select on load', 0, function () {
@@ -255,33 +248,33 @@ asyncTest('Calls select on load', 1, function () {
 });
 
 test('Cleans up datalist input', 7, function () {
-    var datalistInput = $('#CleanUpDatalist').datalist();
-    equal(datalistInput.attr('data-datalist-records-per-page'), null);
-    equal(datalistInput.attr('data-datalist-dialog-title'), null);
-    equal(datalistInput.attr('data-datalist-hidden-input'), null);
-    equal(datalistInput.attr('data-datalist-sort-column'), null);
-    equal(datalistInput.attr('data-datalist-sort-order'), null);
-    equal(datalistInput.attr('data-datalist-filters'), null);
-    equal(datalistInput.attr('data-datalist-url'), null);
+    var input = $('#CleanUpDatalist').datalist();
+    equal(input.attr('data-datalist-records-per-page'), null);
+    equal(input.attr('data-datalist-dialog-title'), null);
+    equal(input.attr('data-datalist-hidden-input'), null);
+    equal(input.attr('data-datalist-sort-column'), null);
+    equal(input.attr('data-datalist-sort-order'), null);
+    equal(input.attr('data-datalist-filters'), null);
+    equal(input.attr('data-datalist-url'), null);
 });
 
 test('Destroys datalist', function () {
-    var datalistInput = $('#DestroyDatalist');
-    datalistInput.attr('data-datalist-url', 'http://localhost:9140/Test');
-    datalistInput.attr('data-datalist-dialog-title', 'TestTitle');
-    datalistInput.attr('data-datalist-sort-column', 'TestColumn');
-    datalistInput.attr('data-datalist-hidden-input', 'InitOptions');
-    datalistInput.attr('data-datalist-records-per-page', 30);
-    datalistInput.attr('data-datalist-sort-order', 'Desc');
-    datalistInput.attr('data-datalist-filters', 'A,B,C');
+    var input = $('#DestroyDatalist')
+        .attr('data-datalist-url', 'http://localhost:9140/Test')
+        .attr('data-datalist-hidden-input', 'InitOptions')
+        .attr('data-datalist-dialog-title', 'TestTitle')
+        .attr('data-datalist-sort-column', 'TestColumn')
+        .attr('data-datalist-records-per-page', 30)
+        .attr('data-datalist-sort-order', 'Desc')
+        .attr('data-datalist-filters', 'A,B,C');
 
-    datalistInput.datalist();
-    datalistInput.datalist('destroy');
-    equal(datalistInput.attr('data-datalist-filters'), 'A,B,C');
-    equal(datalistInput.attr('data-datalist-sort-order'), 'Desc');
-    equal(datalistInput.attr('data-datalist-records-per-page'), 30);
-    equal(datalistInput.attr('data-datalist-sort-column'), 'TestColumn');
-    equal(datalistInput.attr('data-datalist-dialog-title'), 'TestTitle');
-    equal(datalistInput.attr('data-datalist-hidden-input'), 'InitOptions');
-    equal(datalistInput.attr('data-datalist-url'), 'http://localhost:9140/Test');
+    input.datalist();
+    input.datalist('destroy');
+    equal(input.attr('data-datalist-filters'), 'A,B,C');
+    equal(input.attr('data-datalist-sort-order'), 'Desc');
+    equal(input.attr('data-datalist-records-per-page'), 30);
+    equal(input.attr('data-datalist-sort-column'), 'TestColumn');
+    equal(input.attr('data-datalist-dialog-title'), 'TestTitle');
+    equal(input.attr('data-datalist-hidden-input'), 'InitOptions');
+    equal(input.attr('data-datalist-url'), 'http://localhost:9140/Test');
 });

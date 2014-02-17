@@ -13,16 +13,13 @@
 
             @Html.Hidden("Filter1")
             @Html.Hidden("Filter2")
-            @Html.Datalist("Filters", null, new ExampleDatalist())
-
-            @Html.Hidden("DefaultFilter")
-            @Html.Datalist("DefaultFilterChange", null, new ExampleDatalist())
+            @Html.Datalist("DefaultFilter", null, new ExampleDatalist())
+            
+            @Html.Hidden("CustomFilter")
+            @Html.Datalist("CustomFilterChange", null, new ExampleDatalist())
 
             @Html.Hidden("CustomSelectFilter")
             @Html.Datalist("CustomSelectFilterChange", null, new ExampleDatalist())
-
-            @Html.Hidden("CustomFilter")
-            @Html.Datalist("CustomFilterChange", null, new ExampleDatalist())
 
             @Html.Datalist("Autocomplete", null, new DefaultDatalist())
             @Html.Datalist("AutocompleteSelect", null, new DefaultDatalist())
