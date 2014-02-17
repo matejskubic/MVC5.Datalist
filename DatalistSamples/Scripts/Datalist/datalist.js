@@ -26,9 +26,9 @@
             this.options.sortColumn = this.element.attr('data-datalist-sort-column');
             this.options.sortOrder = this.element.attr('data-datalist-sort-order');
             this.options.title = this.element.attr('data-datalist-dialog-title');
+            this.options.term = this.element.attr('data-datalist-term');
+            this.options.page = this.element.attr('data-datalist-page');
             this.options.url = this.element.attr('data-datalist-url');
-            this.options.term = '';
-            this.options.page = 0;
         },
         _initAdditionalFilters: function () {
             var that = this;

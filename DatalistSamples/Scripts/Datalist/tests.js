@@ -1,6 +1,7 @@
-﻿var hiddenInput, testInput, filter1, filter2;
-
+﻿var testInput, hiddenInput, openSpan, filter1, filter2;
+var c = 1;
 QUnit.testStart(function (details) {
+    openSpan = $('#test-data > .input-group > .datalist-open-span');
     testInput = $('#TestDatalist');
     hiddenInput = $('#Test');
     filter1 = $('#Filter1');
@@ -13,14 +14,19 @@ QUnit.testStart(function (details) {
         .attr('data-datalist-sort-column', 'TestColumn')
         .attr('data-datalist-records-per-page', 30)
         .attr('data-datalist-hidden-input', 'Test')
-        .attr('data-datalist-sort-order', 'Desc');
+        .attr('data-datalist-sort-order', 'Desc')
+        .attr('data-datalist-term', 'test')
+        .attr('data-datalist-page', '1');
 });
 QUnit.testDone(function (details) {
-    testInput.val('').clone().insertBefore('.datalist-open-span');
+    testInput.val('').clone().appendTo('#test-data > .input-group');
     testInput.remove();
 
-    hiddenInput.val('').clone().insertBefore('.datalist-open-span');
+    hiddenInput.val('').clone().appendTo('#test-data > .input-group');
     hiddenInput.remove();
+    
+    openSpan.clone().appendTo('#test-data > .input-group');
+    openSpan.remove();
     
     filter1.val('').clone().appendTo('#test-data');
     filter1.remove();
@@ -32,8 +38,8 @@ QUnit.testDone(function (details) {
 test('Init options', 11, function () {
     testInput.datalist();
 
-    equal(testInput.datalist('option', 'page'), 0);
-    equal(testInput.datalist('option', 'term'), '');
+    equal(testInput.datalist('option', 'page'), 1);
+    equal(testInput.datalist('option', 'term'), 'test');
     equal(testInput.datalist('option', 'select'), null);
     equal(testInput.datalist('option', 'sortOrder'), 'Desc');
     equal(testInput.datalist('option', 'title'), 'TestTitle');
