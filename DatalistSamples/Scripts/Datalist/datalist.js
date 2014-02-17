@@ -115,13 +115,12 @@
                 '&Page=' + this.options.page +
                 this._formAdditionalFiltersQuery();
         },
-        _formAdditionalFiltersQuery: function() {
-            var filters = $.grep(this.options.filters, function (item) { return (item != null && item != ''); });
-
+        _formAdditionalFiltersQuery: function () {
             var additionaFilter = '';
-            for (index = 0; index < filters.length; index++) {
-                var value = $('#' + filters[index]).val();
-                additionaFilter += '&' + filters[index] + '=' + (value != null ? value : '');
+            for (i = 0; i < this.options.filters.length; i++) {
+                var filter = $('#' + this.options.filters[i]);
+                if (filter.length == 1)
+                    additionaFilter += '&' + this.options.filters[i] + '=' + filter.val();
             }
 
             return additionaFilter;
@@ -129,7 +128,7 @@
         _loadSelected: function () {
             var that = this;
             var id = $(this.options.hiddenElement).val();
-            if (id != '' && id != 0) {
+            if (id) {
                 $.ajax({
                     url: that.options.url + '?Id=' + id + '&RecordsPerPage=1',
                     cache: false,

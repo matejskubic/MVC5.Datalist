@@ -38,6 +38,11 @@
             @Html.Hidden("DatalistUrlFilter2")
             @Html.Datalist("DatalistUrlWithFilters", null, new DefaultDatalist())
 
+            @Html.Datalist("FormEmptyAdditionalFilter", null, new DefaultDatalist())
+            @Html.Hidden("FormAdditionalFilter1")
+            @Html.Hidden("FormAdditionalFilter2")
+            @Html.Datalist("FormAdditionalFilter", null, new DefaultDatalist())
+
             @Html.Datalist("OnLoadNoSelect", null, new DefaultDatalist())
             @Html.Datalist("OnLoadSelect", 1, new DefaultDatalist())
 

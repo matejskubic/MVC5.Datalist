@@ -254,6 +254,20 @@ test('Forms datalist url with filters', 1, function () {
     equal(input.data('mvc-datalist')._formDatalistUrl('test'), expected);
 });
 
+test('Forms empty additional filter query', 1, function () {
+    var input = $('#FormEmptyAdditionalFilterDatalist').datalist();
+    equal(input.data('mvc-datalist')._formAdditionalFiltersQuery(), '');
+});
+test('Forms additional filter query', 1, function () {
+    var input = $('#FormAdditionalFilterDatalist')
+        .attr('data-datalist-filters', 'FormAdditionalFilter1,FormAdditionalFilter2')
+        .datalist();
+
+    $('#FormAdditionalFilter1').val('Test1');
+    $('#FormAdditionalFilter2').val('Test2');
+    equal(input.data('mvc-datalist')._formAdditionalFiltersQuery(), '&FormAdditionalFilter1=Test1&FormAdditionalFilter2=Test2');
+});
+
 asyncTest('Does not call select on load', 0, function () {
     $('#OnLoadNoSelectDatalist').datalist({
         select: function (e, element, hiddenElement, data) {
