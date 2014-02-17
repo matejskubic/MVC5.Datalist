@@ -7,7 +7,7 @@
     <div class="panel-body">
         <div id="qunit"></div>
         <div id="qunit-fixture"></div>
-        <div id="test-data" style="display: block">
+        <div id="test-data" style="display: none">
             @Html.Datalist("InitOptions", null, new DefaultDatalist())
             @Html.Datalist("InitOptionsLimit", null, new DefaultDatalist())
 
@@ -25,7 +25,10 @@
             @Html.Datalist("CustomFilterChange", null, new ExampleDatalist())
 
             @Html.Datalist("Autocomplete", null, new DefaultDatalist())
+            @Html.Datalist("AutocompleteSelect", null, new DefaultDatalist())
+            @Html.Datalist("AutocompleteSelectPrevent", null, new DefaultDatalist())
             @Html.Datalist("AutocompleteKeyup", null, new DefaultDatalist())
+            @Html.Datalist("AutocompleteKeyupPrevent", null, new DefaultDatalist())
             @Html.Datalist("AutocompleteRemoveClass", null, new DefaultDatalist())
 
             @Html.Datalist("OnLoadNoSelect", null, new DefaultDatalist())

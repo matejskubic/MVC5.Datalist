@@ -1,5 +1,11 @@
-﻿/*
- * Datalist v3.0.0 beta
+﻿/*!
+ * Datalist 3.0.0 beta
+ * https://github.com/Muchiachio/MVC.Datalist
+ *
+ * Copyright (c) 2014 Aldis Rameika
+ *
+ * Licensed under the terms of the MIT License
+ * http://www.opensource.org/licenses/mit-license.php
  */
 (function ($) {
     $.widget("nonfactors.datalist", {
