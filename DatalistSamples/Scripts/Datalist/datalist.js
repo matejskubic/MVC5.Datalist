@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 (function ($) {
-    $.widget("nonfactors.datalist", {
+    $.widget("mvc.datalist", {
         _create: function () {
             if (!this.element.hasClass('datalist-input')) return;
             
@@ -99,7 +99,6 @@
             this.element.prevAll('.ui-helper-hidden-accessible').remove();
         },
         _formAutocompleteUrl: function (term) {
-            term = term != null ? term : '';
             return this.options.url +
                 '?SearchTerm=' + term +
                 '&RecordsPerPage=20' +

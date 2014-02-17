@@ -1,9 +1,9 @@
 ﻿test('Init options', 11, function() {
     var datalistInput = $('#InitOptionsDatalist');
     datalistInput.attr('data-datalist-url', 'http://localhost:9140/Test');
+    datalistInput.attr('data-datalist-hidden-input', 'InitOptions');
     datalistInput.attr('data-datalist-dialog-title', 'TestTitle');
     datalistInput.attr('data-datalist-sort-column', 'TestColumn');
-    datalistInput.attr('data-datalist-hidden-input', 'InitOptions');
     datalistInput.attr('data-datalist-records-per-page', 30);
     datalistInput.attr('data-datalist-sort-order', 'Desc');
     datalistInput.attr('data-datalist-filters', 'A,B,C');
@@ -203,6 +203,32 @@ test('Bind key up on autocomplete prevents select', 2, function () {
 });
 test('Removes all preceding elements', 1, function () {
     equal($('#AutocompleteRemoveDatalist').datalist().prevAll().length, 0);
+});
+
+test('Forms autocomplete url', 1, function () {
+    $('#AutocompleteUrlDatalist').datalist();
+    var expected = $('#AutocompleteUrlDatalist').datalist('option', 'url') +
+        '?SearchTerm=test' +
+        '&RecordsPerPage=20' +
+        '&SortOrder=Asc' +
+        '&Page=0';
+
+    equal($('#AutocompleteUrlDatalist').data('mvc-datalist')._formAutocompleteUrl('test'), expected);
+});
+test('Forms autocomplete url with filters', 1, function () {
+    $('#AutocompleteUrlWithFiltersDatalist').attr('data-datalist-filters', 'AutocompleteUrlFilter1,AutocompleteUrlFilter2');
+    $('#AutocompleteUrlWithFiltersDatalist').datalist();
+    $('#AutocompleteUrlFilter1').val('Filter1');
+    $('#AutocompleteUrlFilter2').val('Filter2');
+    var expected = $('#AutocompleteUrlWithFiltersDatalist').datalist('option', 'url') +
+        '?SearchTerm=test' +
+        '&RecordsPerPage=20' +
+        '&SortOrder=Asc' +
+        '&Page=0' +
+        '&AutocompleteUrlFilter1=Filter1' +
+        '&AutocompleteUrlFilter2=Filter2';
+
+    equal($('#AutocompleteUrlWithFiltersDatalist').data('mvc-datalist')._formAutocompleteUrl('test'), expected);
 });
 
 asyncTest('Does not call select on load', 0, function () {

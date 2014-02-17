@@ -30,6 +30,11 @@
             @Html.Datalist("AutocompleteKeyup", null, new DefaultDatalist())
             @Html.Datalist("AutocompleteKeyupPrevent", null, new DefaultDatalist())
             @Html.Datalist("AutocompleteRemove", null, new DefaultDatalist())
+            
+            @Html.Datalist("AutocompleteUrl", null, new DefaultDatalist())
+            @Html.Hidden("AutocompleteUrlFilter1")
+            @Html.Hidden("AutocompleteUrlFilter2")
+            @Html.Datalist("AutocompleteUrlWithFilters", null, new DefaultDatalist())
 
             @Html.Datalist("OnLoadNoSelect", null, new DefaultDatalist())
             @Html.Datalist("OnLoadSelect", 1, new DefaultDatalist())
