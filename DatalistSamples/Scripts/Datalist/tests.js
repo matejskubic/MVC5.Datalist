@@ -279,15 +279,35 @@ asyncTest('Does not call select on load', 0, function () {
         start();
     }, 100);
 });
-asyncTest('Calls select on load', 1, function () {
+asyncTest('Calls select on load', 5, function () {
     $('#OnLoadSelectDatalist').datalist({
         select: function (e, element, hiddenElement, data) {
-            ok(true);
+            equal(element, $('#OnLoadSelectDatalist')[0]);
+            equal(hiddenElement, $('#OnLoadSelect')[0]);
+            equal(data.DatalistAcKey, 'Tom');
+            equal(data.DatalistIdKey, '1');
+            ok(e);
         }
     });
 
     setTimeout(function () {
         start();
+    }, 100);
+});
+asyncTest('Select on load prevented', 2, function () {
+    var hiddenInput = $('#OnLoadSelectPrevented');
+    var input = $('#OnLoadSelectPreventedDatalist').datalist({
+        select: function (e, element, hiddenElement, data) {
+            hiddenElement.value = 'Test1';
+            element.value = 'Test2';
+            e.preventDefault();
+        }
+    });
+
+    setTimeout(function () {
+        start();
+        equal(input.val(), 'Test2');
+        equal(hiddenInput.val(), 'Test1');
     }, 100);
 });
 
