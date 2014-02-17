@@ -189,6 +189,8 @@
             this.element.removeAttr('data-datalist-sort-column');
             this.element.removeAttr('data-datalist-sort-order');
             this.element.removeAttr('data-datalist-filters');
+            this.element.removeAttr('data-datalist-term');
+            this.element.removeAttr('data-datalist-page');
             this.element.removeAttr('data-datalist-url');
         },
 
@@ -348,6 +350,8 @@
             this.element.attr('data-datalist-sort-column', this.options.sortColumn);
             this.element.attr('data-datalist-sort-order', this.options.sortOrder);
             this.element.attr('data-datalist-dialog-title', this.options.title);
+            this.element.attr('data-datalist-term', this.options.term);
+            this.element.attr('data-datalist-page', this.options.page);
             this.element.attr('data-datalist-url', this.options.url);
             // TODO: unbind everything
             return this._super();

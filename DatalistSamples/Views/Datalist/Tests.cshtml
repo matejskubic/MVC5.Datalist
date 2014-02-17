@@ -8,48 +8,9 @@
         <div id="qunit"></div>
         <div id="qunit-fixture"></div>
         <div id="test-data" style="display: none">
-            @Html.Datalist("InitOptions", null, new DefaultDatalist())
-            @Html.Datalist("InitOptionsLimit", null, new DefaultDatalist())
-
             @Html.Hidden("Filter1")
             @Html.Hidden("Filter2")
-            @Html.Datalist("DefaultFilter", null, new ExampleDatalist())
-            
-            @Html.Hidden("CustomFilter")
-            @Html.Datalist("CustomFilterChange", null, new ExampleDatalist())
-
-            @Html.Hidden("CustomSelectFilter")
-            @Html.Datalist("CustomSelectFilterChange", null, new ExampleDatalist())
-
-            @Html.Datalist("Autocomplete", null, new DefaultDatalist())
-            @Html.Datalist("AutocompleteSelect", null, new DefaultDatalist())
-            @Html.Datalist("AutocompleteSelectPrevent", null, new DefaultDatalist())
-            @Html.Datalist("AutocompleteKeyup", null, new DefaultDatalist())
-            @Html.Datalist("AutocompleteKeyupPrevent", null, new DefaultDatalist())
-            @Html.Datalist("AutocompleteRemove", null, new DefaultDatalist())
-            
-            @Html.Datalist("AutocompleteUrl", null, new DefaultDatalist())
-            @Html.Hidden("AutocompleteUrlFilter1")
-            @Html.Hidden("AutocompleteUrlFilter2")
-            @Html.Datalist("AutocompleteUrlWithFilters", null, new DefaultDatalist())
-
-            @Html.Datalist("DatalistUrl", null, new DefaultDatalist())
-            @Html.Hidden("DatalistUrlFilter1")
-            @Html.Hidden("DatalistUrlFilter2")
-            @Html.Datalist("DatalistUrlWithFilters", null, new DefaultDatalist())
-
-            @Html.Datalist("FormEmptyAdditionalFilter", null, new DefaultDatalist())
-            @Html.Hidden("FormAdditionalFilter1")
-            @Html.Hidden("FormAdditionalFilter2")
-            @Html.Datalist("FormAdditionalFilter", null, new DefaultDatalist())
-
-            @Html.Datalist("OnLoadNoSelect", null, new DefaultDatalist())
-            @Html.Datalist("OnLoadSelect", 1, new DefaultDatalist())
-            @Html.Datalist("OnLoadSelectPrevented", 1, new DefaultDatalist())
-
-            @Html.Datalist("CleanUp", 1, new DefaultDatalist())
-
-            @Html.Datalist("Destroy", 1, new DefaultDatalist())
+            @Html.Datalist("Test", null, new DefaultDatalist())
         </div>
     </div>
 </div>
