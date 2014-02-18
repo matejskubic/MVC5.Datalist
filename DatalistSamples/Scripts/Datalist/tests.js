@@ -1,5 +1,5 @@
 ﻿var testInput, hiddenInput, openSpan, filter1, filter2;
-var c = 1;
+
 QUnit.testStart(function (details) {
     openSpan = $('#test-data > .input-group > .datalist-open-span');
     testInput = $('#TestDatalist');
@@ -11,7 +11,7 @@ QUnit.testStart(function (details) {
         .attr('data-datalist-url', 'http://localhost:9140/Datalist/Default')
         .attr('data-datalist-filters', 'Filter1,Filter2')
         .attr('data-datalist-dialog-title', 'TestTitle')
-        .attr('data-datalist-sort-column', 'TestColumn')
+        .attr('data-datalist-sort-column', 'FirstName')
         .attr('data-datalist-records-per-page', 30)
         .attr('data-datalist-hidden-input', 'Test')
         .attr('data-datalist-sort-order', 'Desc')
@@ -35,9 +35,10 @@ QUnit.testDone(function (details) {
     filter2.remove();
 });
 
-test('Init options', 11, function () {
+test('Init options', 12, function () {
     testInput.datalist();
 
+    ok(testInput.hasClass('mvc-datalist'));
     equal(testInput.datalist('option', 'page'), 1);
     equal(testInput.datalist('option', 'term'), 'test');
     equal(testInput.datalist('option', 'select'), null);
@@ -45,7 +46,7 @@ test('Init options', 11, function () {
     equal(testInput.datalist('option', 'title'), 'TestTitle');
     equal(testInput.datalist('option', 'filterChange'), null);
     equal(testInput.datalist('option', 'recordsPerPage'), 30);
-    equal(testInput.datalist('option', 'sortColumn'), 'TestColumn');
+    equal(testInput.datalist('option', 'sortColumn'), 'FirstName');
     equal(testInput.datalist('option', 'hiddenElement'), hiddenInput[0]);
     equal(testInput.datalist('option', 'url'), 'http://localhost:9140/Datalist/Default');
     equal(testInput.datalist('option', 'filters').join(), ['Filter1', 'Filter2'].join());
@@ -290,7 +291,7 @@ asyncTest('Does not call select on load', 0, function () {
 
     setTimeout(function () {
         start();
-    }, 100);
+    }, 200);
 });
 asyncTest('Calls select on load', 5, function () {
     hiddenInput.val(1);
@@ -306,7 +307,7 @@ asyncTest('Calls select on load', 5, function () {
 
     setTimeout(function () {
         start();
-    }, 50);
+    }, 200);
 });
 asyncTest('Select on load prevented', 2, function () {
     hiddenInput.val(1);
@@ -322,11 +323,40 @@ asyncTest('Select on load prevented', 2, function () {
         start();
         equal(testInput.val(), 'Test2');
         equal(hiddenInput.val(), 'Test1');
-    }, 100);
+    }, 200);
 });
 
-test('Binds datalist open span', 1, function () {
-    ok(true);
+test('Binds datalist', 7, function () {
+    testInput.datalist();
+    openSpan.click();
+    $('#Datalist').dialog('close');
+    
+    $('.datalist-items-per-page').val(2).data('ui-spinner')._trigger('change', 'spinnerchange');
+    equal($('#Datalist').dialog('option', 'title'), testInput.datalist('option', 'title'));
+    equal($('.datalist-search-input').attr('placeholder'), $.fn.datalist.lang.Search);
+    equal($('.datalist-error-span').html(), $.fn.datalist.lang.Error);
+    equal(testInput.datalist('option', 'recordsPerPage'), 2);
+    equal(testInput.datalist('option', 'page'), 0);
+
+    $('.datalist-search-input').val('test2').keyup();
+    stop();
+    setTimeout(function () {
+        start();
+        equal(testInput.datalist('option', 'term'), 'test2');
+        equal(testInput.datalist('option', 'page'), 0);
+    }, 500);
+});
+
+test('Limits value', 6, function () {
+    testInput.datalist();
+    var datalist = testInput.data('mvc-datalist');
+
+    equal(datalist._limitTo('NotNumber', 1, 99), 20);
+    equal(datalist._limitTo(-1, 1, 99), 1);
+    equal(datalist._limitTo(1, 1, 99), 1);
+    equal(datalist._limitTo(100, 1, 99), 99);
+    equal(datalist._limitTo(99, 1, 99), 99);
+    equal(datalist._limitTo(60, 1, 99), 60);
 });
 
 test('Cleans up datalist input', 18, function () {
@@ -353,13 +383,37 @@ test('Cleans up datalist input', 18, function () {
     equal(testInput.attr('data-datalist-url'), null);
 });
 
-test('Destroys datalist', function () {
+test('Destroys datalist', 8, function () {
     testInput.datalist().datalist('destroy');
+    equal(testInput.hasClass('mvc-datalist'), false);
     equal(testInput.attr('data-datalist-sort-order'), 'Desc');
     equal(testInput.attr('data-datalist-hidden-input'), 'Test');
     equal(testInput.attr('data-datalist-records-per-page'), 30);
-    equal(testInput.attr('data-datalist-sort-column'), 'TestColumn');
+    equal(testInput.attr('data-datalist-sort-column'), 'FirstName');
     equal(testInput.attr('data-datalist-dialog-title'), 'TestTitle');
     equal(testInput.attr('data-datalist-filters'), 'Filter1,Filter2');
     equal(testInput.attr('data-datalist-url'), 'http://localhost:9140/Datalist/Default');
+});
+
+test('Datalist language init', 3, function () {
+    equal($.fn.datalist.lang.Error, 'Error while retrieving records');
+    equal($.fn.datalist.lang.NoDataFound, 'No data found');
+    equal($.fn.datalist.lang.Search, 'Search...');
+});
+test('Datalist spinner init', 4, function () {
+    var datalistSpinner = $('.datalist-items-per-page');
+    ok(datalistSpinner.hasClass('ui-spinner-input'));
+    equal(datalistSpinner.spinner('option', 'min'), 1);
+    equal(datalistSpinner.spinner('option', 'max'), 99);
+    ok(datalistSpinner.parent().hasClass('input-group-addon'));
+});
+test('Datalist dialog init', 7, function () {
+    var datalist = $('#Datalist');
+    ok(datalist.hasClass('ui-dialog-content'));
+    equal(datalist.dialog('option', 'autoOpen'), false);
+    equal(datalist.dialog('option', 'minHeight'), 210);
+    equal(datalist.dialog('option', 'height'), 'auto');
+    equal(datalist.dialog('option', 'minWidth'), 455);
+    equal(datalist.dialog('option', 'width'), 'auto');
+    equal(datalist.dialog('option', 'modal'), true);
 });

@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 (function ($) {
-    $.widget("mvc.datalist", {
+    $.widget('mvc.datalist', {
         _create: function () {
             if (!this.element.hasClass('datalist-input')) return;
             
@@ -18,6 +18,7 @@
             this._loadSelected();
             this._bindDatalist(); // TODO: Fix null values in javascript html code
             this._cleanUp(); // TODO: Fix resizing on different datalists.
+            this.element.addClass('mvc-datalist');
         },
         _initOptions: function () {
             this.options.recordsPerPage = this._limitTo(this.element.attr('data-datalist-records-per-page'), 1, 99);
@@ -165,9 +166,9 @@
                             .find('.datalist-items-per-page')
                             .spinner({
                                 change: function () {
-                                    that.options.page = 0;
                                     this.value = that._limitTo(this.value, 1, 99);
                                     that.options.recordsPerPage = this.value;
+                                    that.options.page = 0;
                                     that._update(datalist);
                                 }
                             })
@@ -181,6 +182,17 @@
                     }
                 });
             }
+        },
+        _limitTo: function (value, min, max) {
+            value = parseInt(value);
+            if (isNaN(value))
+                return 20;
+            if (value < 1)
+                return 1;
+            if (value > 99)
+                return 99;
+
+            return value;
         },
         _cleanUp: function () {
             this.element.removeAttr('data-datalist-records-per-page')
@@ -299,19 +311,19 @@
                         that._update(datalist);
                     },
                     tooltipTitles: function (type, page, current) {
-                        return "";
+                        return '';
                     },
                     itemTexts: function (type, page, current) {
                         switch (type) {
-                            case "first":
-                                return "&laquo;";
-                            case "prev":
-                                return "&lsaquo;";
-                            case "next":
-                                return "&rsaquo;";
-                            case "last":
-                                return "&raquo;";
-                            case "page":
+                            case 'first':
+                                return '&laquo;';
+                            case 'prev':
+                                return '&lsaquo;';
+                            case 'next':
+                                return '&rsaquo;';
+                            case 'last':
+                                return '&raquo;';
+                            case 'page':
                                 return page;
                         }
                     }
@@ -331,18 +343,6 @@
             });
         },
 
-        _limitTo: function(value, min, max) {
-            value = parseInt(value);
-            if (isNaN(value))
-                return 20;
-            if (value < 1)
-                return 1;
-            if (value > 99)
-                return 99;
-
-            return value;
-        },
-
         _destroy: function () {
             this.element.attr('data-datalist-records-per-page', this.options.recordsPerPage);
             this.element.attr('data-datalist-hidden-input', this.options.hiddenElement.id);
@@ -353,6 +353,7 @@
             this.element.attr('data-datalist-term', this.options.term);
             this.element.attr('data-datalist-page', this.options.page);
             this.element.attr('data-datalist-url', this.options.url);
+            this.element.removeClass('mvc-datalist');
             // TODO: unbind everything
             return this._super();
         }
@@ -361,9 +362,9 @@
 
 (function ($) {
     $.fn.datalist.lang = {
-        Error: "Error while retrieving records",
-        NoDataFound: "No data found",
-        Search: "Search..."
+        Error: 'Error while retrieving records',
+        NoDataFound: 'No data found',
+        Search: 'Search...'
     };
 
     var datalist = $('#Datalist');
