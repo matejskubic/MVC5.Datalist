@@ -385,7 +385,13 @@ test('Cleans up datalist input', 18, function () {
 });
 
 test('Destroys datalist', 9, function () {
-    testInput.datalist().datalist('destroy');
+    testInput.datalist({
+        filterChange: function () {
+            ok(false);
+        }
+    });
+
+    testInput.datalist('destroy');
     equal(testInput.attr('data-datalist-sort-order'), 'Desc');
     equal(testInput.attr('data-datalist-hidden-input'), 'Test');
     equal(testInput.attr('data-datalist-records-per-page'), 30);
@@ -396,6 +402,8 @@ test('Destroys datalist', 9, function () {
 
     equal(testInput.hasClass('ui-autocomplete-input'), false);
     equal(testInput.hasClass('mvc-datalist'), false);
+    filter1.change();
+    filter2.change();
 });
 
 test('Datalist language init', 3, function () {

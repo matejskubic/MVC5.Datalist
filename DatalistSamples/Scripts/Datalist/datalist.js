@@ -32,19 +32,23 @@
             this.options.url = this.element.attr('data-datalist-url');
         },
         _initAdditionalFilters: function () {
-            var that = this;
-            for (i = 0; i < that.options.filters.length; i++) {
-                var filter = $('#' + that.options.filters[i]);
-                if (filter.length == 1) {
-                    filter.change(function () {
-                        var event = $.Event(that._defaultFilterChange);
-                        if (that.options.filterChange)
-                            that.options.filterChange(event, that.element[0], that.options.hiddenElement, this);
-                        if (!event.isDefaultPrevented())
-                            that._defaultFilterChange(this);
-                    });
-                }
+            for (i = 0; i < this.options.filters.length; i++) {
+                var filter = $('#' + this.options.filters[i]);
+                if (filter.length == 1)
+                    this._bindFilter(filter);
             }
+        },
+        _bindFilter: function (filter) {
+            var that = this;
+            that._on(filter, {
+                change: function () {
+                    var event = $.Event(that._defaultFilterChange);
+                    if (that.options.filterChange)
+                        that.options.filterChange(event, that.element[0], that.options.hiddenElement, filter[0]);
+                    if (!event.isDefaultPrevented())
+                        that._defaultFilterChange(filter[0]);
+                }
+            });
         },
         _defaultSelect: function(element, data) {
             if (data) {
@@ -290,9 +294,8 @@
 
             datalist.find('.datalist-table-body').html(tableData);
             var selectCells = datalist.find('td.datalist-select-cell');
-            for (var i = 0; i < selectCells.length; i++) {
+            for (var i = 0; i < selectCells.length; i++)
                 this._bindSelect(datalist, selectCells[i], data.Rows[i]);
-            }
         },
         _updateNavigationBar: function (datalist, data) {
             var that = this;
@@ -333,7 +336,7 @@
         },
         _bindSelect: function (datalist, selectCell, data) {
             var that = this;
-            this._on(selectCell, {
+            that._on(selectCell, {
                 'click': function () {
                     datalist.dialog('close');
                     var event = $.Event(that._defaultSelect);
@@ -357,7 +360,7 @@
             this.element.attr('data-datalist-url', this.options.url);
             this.element.removeClass('mvc-datalist');
             this.element.autocomplete('destroy');
-            // TODO: unbind everything
+            
             return this._super();
         }
     });
