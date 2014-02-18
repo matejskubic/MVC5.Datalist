@@ -33,15 +33,17 @@
         },
         _initAdditionalFilters: function () {
             var that = this;
-            var filters = $.grep(this.options.filters, function (item) { return (item != null && item != ''); });
-            for (i = 0; i < filters.length; i++) {
-                $('#' + filters[i]).change(function () {
-                    var event = $.Event(that._defaultFilterChange);
-                    if (that.options.filterChange)
-                        that.options.filterChange(event, that.element[0], that.options.hiddenElement, this);
-                    if (!event.isDefaultPrevented())
-                        that._defaultFilterChange(this);
-                });
+            for (i = 0; i < that.options.filters.length; i++) {
+                var filter = $('#' + that.options.filters[i]);
+                if (filter.length == 1) {
+                    filter.change(function () {
+                        var event = $.Event(that._defaultFilterChange);
+                        if (that.options.filterChange)
+                            that.options.filterChange(event, that.element[0], that.options.hiddenElement, this);
+                        if (!event.isDefaultPrevented())
+                            that._defaultFilterChange(this);
+                    });
+                }
             }
         },
         _defaultSelect: function(element, data) {
@@ -176,7 +178,7 @@
 
                         datalist.find('.datalist-search-input').attr('placeholder', $.fn.datalist.lang.Search);
                         datalist.find('.datalist-error-span').html($.fn.datalist.lang.Error);
-                        datalist.dialog('option', 'title', this.options.title);
+                        datalist.dialog('option', 'title', that.options.title);
                         datalist.dialog('open');
                         that._update(datalist);
                     }
@@ -354,6 +356,7 @@
             this.element.attr('data-datalist-page', this.options.page);
             this.element.attr('data-datalist-url', this.options.url);
             this.element.removeClass('mvc-datalist');
+            this.element.autocomplete('destroy');
             // TODO: unbind everything
             return this._super();
         }

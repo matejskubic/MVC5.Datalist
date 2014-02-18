@@ -12,6 +12,7 @@ QUnit.testStart(function (details) {
         .attr('data-datalist-filters', 'Filter1,Filter2')
         .attr('data-datalist-dialog-title', 'TestTitle')
         .attr('data-datalist-sort-column', 'FirstName')
+        .attr('class', 'form-control datalist-input')
         .attr('data-datalist-records-per-page', 30)
         .attr('data-datalist-hidden-input', 'Test')
         .attr('data-datalist-sort-order', 'Desc')
@@ -383,9 +384,8 @@ test('Cleans up datalist input', 18, function () {
     equal(testInput.attr('data-datalist-url'), null);
 });
 
-test('Destroys datalist', 8, function () {
+test('Destroys datalist', 9, function () {
     testInput.datalist().datalist('destroy');
-    equal(testInput.hasClass('mvc-datalist'), false);
     equal(testInput.attr('data-datalist-sort-order'), 'Desc');
     equal(testInput.attr('data-datalist-hidden-input'), 'Test');
     equal(testInput.attr('data-datalist-records-per-page'), 30);
@@ -393,6 +393,9 @@ test('Destroys datalist', 8, function () {
     equal(testInput.attr('data-datalist-dialog-title'), 'TestTitle');
     equal(testInput.attr('data-datalist-filters'), 'Filter1,Filter2');
     equal(testInput.attr('data-datalist-url'), 'http://localhost:9140/Datalist/Default');
+
+    equal(testInput.hasClass('ui-autocomplete-input'), false);
+    equal(testInput.hasClass('mvc-datalist'), false);
 });
 
 test('Datalist language init', 3, function () {
