@@ -9,14 +9,12 @@ using System.IO;
 using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
-using System.Linq;
 
-namespace DatalistTests
+namespace DatalistTests.Tests
 {
     [TestFixture]
     public class DatalistExtensionsTests
     {
-        private Mock<TestDatalistStub> datalistMock;
         private HtmlHelper<TestModel> html;
         private TestDatalistStub datalist;
         private TestModel testModel;
@@ -28,8 +26,7 @@ namespace DatalistTests
                 new HttpRequest(null, "http://localhost:7013/", null),
                 new HttpResponse(new StringWriter()));
 
-            datalistMock = new Mock<TestDatalistStub>() { CallBase = true };
-            datalist = datalistMock.Object;
+            datalist = new TestDatalistStub();
             html = MockHtmlHelper();
         }
 
@@ -210,14 +207,12 @@ namespace DatalistTests
         [Test]
         public void AutoCompleteFor_WithoutModel_AddsDialogTitleAttribute()
         {
-            datalist = new TestDatalistStub();
             AddsDialogTitleAttribute(html.AutoCompleteFor(model => model.ParentId));
         }
 
         [Test]
         public void AutoCompleteFor_WithoutModel_AddsUrlAttribute()
         {
-            datalist = new TestDatalistStub();
             AddsUrlAttribute(html.AutoCompleteFor(model => model.ParentId));
         }
 
@@ -362,6 +357,363 @@ namespace DatalistTests
 
         #endregion
 
+        #region Extension method: Datalist<TModel>(this HtmlHelper<TModel> html, String name, Object value, AbstractDatalist model, Object htmlAttributes = null)
+
+        [Test]
+        public void Datalist_WrapsAutocompleteInInputGroup()
+        {
+            WrapsAutocompleteInInputGroup(html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_CreatesAutocompleteAndHiddenInput()
+        {
+            CreatesAutocompleteAndHiddenInput("TestId", html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_AddsIdAttribute()
+        {
+            AddsIdAttribute("TestId", html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_AddsDatalistClasses()
+        {
+            AddsDatalistClassesForDatalistInput(html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_AddsSpecifiedClass()
+        {
+            AddsSpecifiedClass("TestClass", html.Datalist("TestId", String.Empty, datalist, new { @class = "TestClass" }));
+        }
+
+        [Test]
+        public void Datalist_AddsHiddenInputAttribute()
+        {
+            AddsHiddenInputAttribute("TestId", html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_AddsFiltersAttribute()
+        {
+            datalist.AdditionalFilters.Add("Test1");
+            datalist.AdditionalFilters.Add("Test2");
+            AddsFiltersAttribute(html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_AddsRecordsPerPageAttribute()
+        {
+            AddsRecordsPerPageAttribute(html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_AddsSortColumnAttribute()
+        {
+            AddsSortColumnAttribute(html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_AddsSortOrderAttribute()
+        {
+            AddsSortOrderAttribute(html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_AddsDialogTitleAttribute()
+        {
+            AddsDialogTitleAttribute(html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_AddsUrlAttribute()
+        {
+            AddsUrlAttribute(html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_AddsTermAttribute()
+        {
+            AddsTermAttribute(html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_AddsPageAttribute()
+        {
+            AddsPageAttribute(html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_AddsIdForHiddenInput()
+        {
+            AddsIdForHiddenInput("TestId", html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_AddsValueForHiddenInput()
+        {
+            AddsValueForHiddenInput("TestValue", html.Datalist("TestId", "TestValue", datalist));
+        }
+
+        [Test]
+        public void Datalist_AddsDatalistClassesForHiddenInput()
+        {
+            AddsDatalistClassesForHiddenInput(html.Datalist("Id", String.Empty, datalist));
+        }
+
+        [Test]
+        public void Datalist_CreatesOpenSpan()
+        {
+            CreatesOpenSpan(html.Datalist("TestId", String.Empty, datalist));
+        }
+
+        #endregion
+
+        #region Extension method: DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, Object htmlAttributes = null)
+
+        [Test]
+        public void DatalistFor_WithoutModel_WrapsAutocompleteInInputGroup()
+        {
+            WrapsAutocompleteInInputGroup(html.DatalistFor(model => model.ParentId));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_MissingAttributeThrows()
+        {
+            Expression<Func<TestModel, String>> expression = (model) => model.Id;
+            Assert.Throws<DatalistException>(() => CreatesAutocompleteAndHiddenInputFromExpression(expression, html.DatalistFor(expression)));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_CreatesAutocompleteAndHiddenInputFromExpression()
+        {
+            Expression<Func<TestModel, String>> expression = (model) => model.ParentId;
+            CreatesAutocompleteAndHiddenInputFromExpression(expression, html.DatalistFor(expression));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsIdAttributeFromExpression()
+        {
+            Expression<Func<TestModel, String>> expression = (model) => model.ParentId;
+            AddsIdAttributeFromExpression(expression, html.DatalistFor(expression));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsDatalistClasses()
+        {
+            AddsDatalistClassesForDatalistInput(html.DatalistFor(model => model.ParentId));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsSpecifiedClass()
+        {
+            AddsSpecifiedClass("TestClass", html.DatalistFor(model => model.ParentId, new { @class = "TestClass" }));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsHiddenInputAttributeFromExpression()
+        {
+            Expression<Func<TestModel, String>> expression = (model) => model.ParentId;
+            AddsHiddenInputAttributeFromExpression(expression, html.DatalistFor(expression));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsFiltersAttribute()
+        {
+            AddsFiltersAttribute(html.DatalistFor(model => model.ParentId));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsRecordsPerPageAttribute()
+        {
+            AddsRecordsPerPageAttribute(html.DatalistFor(model => model.ParentId));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsSortColumnAttribute()
+        {
+            AddsSortColumnAttribute(html.DatalistFor(model => model.ParentId));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsSortOrderAttribute()
+        {
+            AddsSortOrderAttribute(html.DatalistFor(model => model.ParentId));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsDialogTitleAttribute()
+        {
+            AddsDialogTitleAttribute(html.DatalistFor(model => model.ParentId));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsUrlAttribute()
+        {
+            AddsUrlAttribute(html.DatalistFor(model => model.ParentId));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsTermAttribute()
+        {
+            AddsTermAttribute(html.DatalistFor(model => model.ParentId));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsPageAttribute()
+        {
+            AddsPageAttribute(html.DatalistFor(model => model.ParentId));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsIdForHiddenInputFromExpression()
+        {
+            Expression<Func<TestModel, String>> expression = (model) => model.ParentId;
+            AddsIdForHiddenInputFromExpression(expression, html.DatalistFor(expression));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsValueForHiddenInput()
+        {
+            testModel.ParentId = "TestValue";
+            AddsValueForHiddenInput(testModel.ParentId, html.DatalistFor(model => model.ParentId));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_AddsDatalistClassesForHiddenInput()
+        {
+            AddsDatalistClassesForHiddenInput(html.DatalistFor(model => model.ParentId));
+        }
+
+        [Test]
+        public void DatalistFor_WithoutModel_CreatesOpenSpan()
+        {
+            CreatesOpenSpan(html.DatalistFor(model => model.ParentId));
+        }
+
+        #endregion
+
+        #region Extension method: DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, AbstractDatalist model, Object htmlAttributes = null)
+
+        [Test]
+        public void DatalistFor_WrapsAutocompleteInInputGroup()
+        {
+            WrapsAutocompleteInInputGroup(html.DatalistFor(model => model.ParentId));
+        }
+
+        [Test]
+        public void DatalistFor_CreatesAutocompleteAndHiddenInputFromExpression()
+        {
+            Expression<Func<TestModel, String>> expression = (model) => model.FirstRelationModel.Value;
+            CreatesAutocompleteAndHiddenInputFromExpression(expression, html.DatalistFor(expression, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_AddsIdAttributeFromExpression()
+        {
+            Expression<Func<TestModel, String>> expression = (model) => model.FirstRelationModel.Value;
+            AddsIdAttributeFromExpression(expression, html.DatalistFor(expression, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_AddsDatalistClasses()
+        {
+            AddsDatalistClassesForDatalistInput(html.DatalistFor(model => model.Id, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_AddsSpecifiedClass()
+        {
+            AddsSpecifiedClass("TestClass", html.DatalistFor(model => model.Id, datalist, new { @class = "TestClass" }));
+        }
+
+        [Test]
+        public void DatalistFor_AddsHiddenInputAttributeFromExpression()
+        {
+            Expression<Func<TestModel, String>> expression = (model) => model.FirstRelationModel.Value;
+            AddsHiddenInputAttributeFromExpression(expression, html.DatalistFor(expression, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_AddsFiltersAttribute()
+        {
+            datalist.AdditionalFilters.Add("Test1");
+            datalist.AdditionalFilters.Add("Test2");
+            AddsFiltersAttribute(html.DatalistFor(model => model.Id, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_AddsRecordsPerPageAttribute()
+        {
+            AddsRecordsPerPageAttribute(html.DatalistFor(model => model.Id, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_AddsSortColumnAttribute()
+        {
+            AddsSortColumnAttribute(html.DatalistFor(model => model.Id, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_AddsSortOrderAttribute()
+        {
+            AddsSortOrderAttribute(html.DatalistFor(model => model.Id, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_AddsDialogTitleAttribute()
+        {
+            AddsDialogTitleAttribute(html.DatalistFor(model => model.Id, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_AddsUrlAttribute()
+        {
+            AddsUrlAttribute(html.DatalistFor(model => model.Id, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_AddsTermAttribute()
+        {
+            AddsTermAttribute(html.DatalistFor(model => model.Id, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_AddsPageAttribute()
+        {
+            AddsPageAttribute(html.DatalistFor(model => model.Id, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_AddsIdForHiddenInputFromExpression()
+        {
+            Expression<Func<TestModel, String>> expression = (model) => model.FirstRelationModel.Value;
+            AddsIdForHiddenInputFromExpression(expression, html.DatalistFor(expression, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_AddsValueForHiddenInput()
+        {
+            testModel.Id = "TestValue";
+            AddsValueForHiddenInput(testModel.Id, html.DatalistFor(model => model.Id, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_AddsDatalistClassesForHiddenInput()
+        {
+            AddsDatalistClassesForHiddenInput(html.DatalistFor(model => model.Id, datalist));
+        }
+
+        [Test]
+        public void DatalistFor_CreatesOpenSpan()
+        {
+            CreatesOpenSpan(html.DatalistFor(model => model.ParentId, datalist));
+        }
+
+        #endregion
+
         #region Test helpers
 
         private HtmlHelper<TestModel> MockHtmlHelper()
@@ -382,7 +734,7 @@ namespace DatalistTests
 
         private void CreatesAutocompleteAndHiddenInput(String id, Object actual)
         {
-            String pattern = String.Format(@"<input(.*) id=""{0}{1}""(.*) /><input(.*) id=""{0}""(.*) />$", id, AbstractDatalist.Prefix);
+            String pattern = String.Format(@"<input(.*) id=""{0}{1}""(.*) /><input(.*) id=""{0}""(.*) />", id, AbstractDatalist.Prefix);
             StringAssert.IsMatch(pattern, actual.ToString());
         }
         private void AddsIdAttribute(String id, Object actual)
@@ -480,6 +832,17 @@ namespace DatalistTests
         {
             String expressionId = TagBuilder.CreateSanitizedId(ExpressionHelper.GetExpressionText(expression));
             AddsIdForHiddenInput(expressionId, actual);
+        }
+
+        private void WrapsAutocompleteInInputGroup(Object actual)
+        {
+            String pattern = @"<div class=""input-group"">(.*)</div>";
+            StringAssert.IsMatch(pattern, actual.ToString());
+        }
+        private void CreatesOpenSpan(Object actual)
+        {
+            String pattern = @"<span class=""datalist-open-span input-group-addon glyphicon glyphicon-search"">";
+            StringAssert.IsMatch(pattern, actual.ToString());
         }
 
         #endregion
