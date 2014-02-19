@@ -2,7 +2,7 @@
  * Datalist 3.0.0 beta
  * https://github.com/Muchiachio/MVC.Datalist
  *
- * Copyright (c) 2014 Aldis Rameika
+ * Copyright (c) 2014 Muchiachio
  *
  * Licensed under the terms of the MIT License
  * http://www.opensource.org/licenses/mit-license.php
@@ -13,10 +13,11 @@
             if (!this.element.hasClass('datalist-input')) return;
             
             this._initOptions();
-            this._initAdditionalFilters();
-            this._createAutocomplete();
-            this._loadSelected();
-            this._bindDatalist(); // TODO: Fix null values in javascript html code
+            this._initFilters();
+            this._initAutocomplete();
+            this._initDatalistOpenSpan();
+
+            this._loadSelected(); // TODO: Fix null values in javascript html code
             this._cleanUp(); // TODO: Fix resizing on different datalists.
             this.element.addClass('mvc-datalist');
         },
@@ -31,43 +32,23 @@
             this.options.page = this.element.attr('data-datalist-page');
             this.options.url = this.element.attr('data-datalist-url');
         },
-        _initAdditionalFilters: function () {
-            for (i = 0; i < this.options.filters.length; i++) {
-                var filter = $('#' + this.options.filters[i]);
-                if (filter.length == 1)
-                    this._bindFilter(filter);
-            }
+        _initFilters: function () {
+            for (i = 0; i < this.options.filters.length; i++)
+                this._initFilter($('#' + this.options.filters[i]));
         },
-        _bindFilter: function (filter) {
+        _initFilter: function (filter) {
             var that = this;
             that._on(filter, {
                 change: function () {
-                    var event = $.Event(that._defaultFilterChange);
+                    var event = $.Event(that._select);
                     if (that.options.filterChange)
                         that.options.filterChange(event, that.element[0], that.options.hiddenElement, filter[0]);
                     if (!event.isDefaultPrevented())
-                        that._defaultFilterChange(filter[0]);
+                        that._select(null);
                 }
             });
         },
-        _defaultSelect: function(element, data) {
-            if (data) {
-                $(this.options.hiddenElement).val(data.DatalistIdKey).change();
-                $(element).val(data.DatalistAcKey).change();
-            }
-            else {
-                $(element).val(null).change();
-                $(this.options.hiddenElement).val(null).change();
-            }
-        },
-        _defaultFilterChange: function (filter) {
-            var event = $.Event(this._defaultSelect);
-            if (this.options.select)
-                this.options.select(event, this.element[0], this.options.hiddenElement, null);
-            if (!event.isDefaultPrevented())
-                this._defaultSelect(this.element[0], null);
-        },
-        _createAutocomplete: function () {
+        _initAutocomplete: function () {
             var that = this;
             this.element.autocomplete({
                 source: function (request, response) {
@@ -85,73 +66,18 @@
                     });
                 },
                 select: function (e, selection) {
-                    var event = $.Event(that._defaultSelect);
-                    if (that.options.select)
-                        that.options.select(event, that.element[0], that.options.hiddenElement, selection.item.item);
-                    if (!event.isDefaultPrevented())
-                        that._defaultSelect(that.element[0], selection.item.item);
+                    that._select(selection.item.item);
                 },
                 minLength: 1
             });
 
             this.element.bind('keyup.datalist', function () {
-                if (this.value.length == 0) {
-                    var event = $.Event(that._defaultSelect);
-                    if (that.options.select)
-                        that.options.select(event, this, that.options.hiddenElement, null);
-                    if (!event.isDefaultPrevented())
-                        that._defaultSelect(this, null);
-                }
+                if (this.value.length == 0)
+                    that._select(null);
             });
             this.element.prevAll('.ui-helper-hidden-accessible').remove();
         },
-        _formAutocompleteUrl: function (term) {
-            return this.options.url +
-                '?SearchTerm=' + term +
-                '&RecordsPerPage=20' +
-                '&SortOrder=Asc' +
-                '&Page=0' +
-                this._formAdditionalFiltersQuery();
-        },
-        _formDatalistUrl: function (term) {
-            return this.options.url +
-                '?SearchTerm=' + term +
-                '&RecordsPerPage=' + this.options.recordsPerPage +
-                '&SortColumn=' + this.options.sortColumn +
-                '&SortOrder=' + this.options.sortOrder +
-                '&Page=' + this.options.page +
-                this._formAdditionalFiltersQuery();
-        },
-        _formAdditionalFiltersQuery: function () {
-            var additionaFilter = '';
-            for (i = 0; i < this.options.filters.length; i++) {
-                var filter = $('#' + this.options.filters[i]);
-                if (filter.length == 1)
-                    additionaFilter += '&' + this.options.filters[i] + '=' + filter.val();
-            }
-
-            return additionaFilter;
-        },
-        _loadSelected: function () {
-            var that = this;
-            var id = $(this.options.hiddenElement).val();
-            if (id) {
-                $.ajax({
-                    url: that.options.url + '?Id=' + id + '&RecordsPerPage=1',
-                    cache: false,
-                    success: function (data) {
-                        if (data.Rows.length > 0) {
-                            var event = $.Event(that._defaultSelect);
-                            if (that.options.select)
-                                that.options.select(event, that.element[0], that.options.hiddenElement, data.Rows[0]);
-                            if (!event.isDefaultPrevented())
-                                that._defaultSelect(that.element[0], data.Rows[0]);
-                        }
-                    }
-                });
-            }
-        },
-        _bindDatalist: function () {
+        _initDatalistOpenSpan: function () {
             var datalistAddon = this.element.nextAll('.datalist-open-span:first');
             if (datalistAddon.length != 0) {
                 var datalist = $('#Datalist');
@@ -189,6 +115,67 @@
                 });
             }
         },
+
+        _formAutocompleteUrl: function (term) {
+            return this.options.url +
+                '?SearchTerm=' + term +
+                '&RecordsPerPage=20' +
+                '&SortOrder=Asc' +
+                '&Page=0' +
+                this._formFiltersQuery();
+        },
+        _formDatalistUrl: function (term) {
+            return this.options.url +
+                '?SearchTerm=' + term +
+                '&RecordsPerPage=' + this.options.recordsPerPage +
+                '&SortColumn=' + this.options.sortColumn +
+                '&SortOrder=' + this.options.sortOrder +
+                '&Page=' + this.options.page +
+                this._formFiltersQuery();
+        },
+        _formFiltersQuery: function () {
+            var additionaFilter = '';
+            for (i = 0; i < this.options.filters.length; i++) {
+                var filter = $('#' + this.options.filters[i]);
+                if (filter.length == 1)
+                    additionaFilter += '&' + this.options.filters[i] + '=' + filter.val();
+            }
+
+            return additionaFilter;
+        },
+
+        _defaultSelect: function (element, data) {
+            if (data) {
+                $(this.options.hiddenElement).val(data.DatalistIdKey).change();
+                $(element).val(data.DatalistAcKey).change();
+            }
+            else {
+                $(element).val(null).change();
+                $(this.options.hiddenElement).val(null).change();
+            }
+        },
+        _loadSelected: function () {
+            var that = this;
+            var id = $(that.options.hiddenElement).val();
+            if (id) {
+                $.ajax({
+                    url: that.options.url + '?Id=' + id + '&RecordsPerPage=1',
+                    cache: false,
+                    success: function (data) {
+                        if (data.Rows.length > 0)
+                            that._select(data.Rows[0]);
+                    }
+                });
+            }
+        },
+        _select: function(data) {
+            var event = $.Event(this._defaultSelect);
+            if (this.options.select)
+                this.options.select(event, this.element[0], this.options.hiddenElement, data);
+            if (!event.isDefaultPrevented())
+                this._defaultSelect(this.element[0], data);
+        },
+
         _limitTo: function (value, min, max) {
             value = parseInt(value);
             if (isNaN(value))
@@ -226,7 +213,9 @@
                 url: that._formDatalistUrl(term),
                 cache: false,
                 success: function (data) {
-                    that._updateTable(datalist, data);
+                    that._updateHeader(datalist, data.Columns);
+                    that._updateData(datalist, data);
+                    that._updateNavbar(datalist, data);
 
                     clearTimeout(timeOut);
                     datalist.find('.datalist-processing').fadeOut(300);
@@ -242,12 +231,7 @@
                 }
             });
         },
-        _updateTable: function (datalist, data) {
-            this._updateTableHeader(datalist, data.Columns);
-            this._updateTableData(datalist, data);
-            this._updateNavigationBar(datalist, data);
-        },
-        _updateTableHeader: function (datalist, columns) {
+        _updateHeader: function (datalist, columns) {
             var that = this;
             var header = '';
             var columnCount = 0;
@@ -275,7 +259,7 @@
                 that._update(datalist);
             });
         },
-        _updateTableData: function (datalist, data) {
+        _updateData: function (datalist, data) {
             if (data.Rows.length == 0) {
                 datalist.find('.datalist-table-body').html('<tr><td colspan="0" style="text-align: center">' + $.fn.datalist.lang.NoDataFound + '</tr>');
                 return;
@@ -297,7 +281,7 @@
             for (var i = 0; i < selectCells.length; i++)
                 this._bindSelect(datalist, selectCells[i], data.Rows[i]);
         },
-        _updateNavigationBar: function (datalist, data) {
+        _updateNavbar: function (datalist, data) {
             var that = this;
             var pageLength = datalist.find('.datalist-items-per-page').val();
             var totalPages = parseInt(data.FilteredRecords / pageLength) + 1;
@@ -337,13 +321,9 @@
         _bindSelect: function (datalist, selectCell, data) {
             var that = this;
             that._on(selectCell, {
-                'click': function () {
+                click: function () {
                     datalist.dialog('close');
-                    var event = $.Event(that._defaultSelect);
-                    if (that.options.select)
-                        that.options.select(event, that.element[0], that.options.hiddenElement, data);
-                    if (!event.isDefaultPrevented())
-                        that._defaultSelect(that.element[0], data);
+                    that._select(data);
                 }
             });
         },

@@ -274,13 +274,13 @@ test('Forms datalist url with filters', 1, function () {
 
 test('Forms empty additional filter query', 1, function () {
     testInput.attr('data-datalist-filters', '').datalist();
-    equal(testInput.data('mvc-datalist')._formAdditionalFiltersQuery(), '');
+    equal(testInput.data('mvc-datalist')._formFiltersQuery(), '');
 });
 test('Forms additional filter query', 1, function () {
     testInput.datalist();
     filter1.val('Test1');
     filter2.val('Test2');
-    equal(testInput.data('mvc-datalist')._formAdditionalFiltersQuery(), '&Filter1=Test1&Filter2=Test2');
+    equal(testInput.data('mvc-datalist')._formFiltersQuery(), '&Filter1=Test1&Filter2=Test2');
 });
 
 asyncTest('Does not call select on load', 0, function () {
