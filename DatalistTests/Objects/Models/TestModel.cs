@@ -1,4 +1,5 @@
 ﻿using Datalist;
+using DatalistTests.Objects.Stubs;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,6 +13,9 @@ namespace DatalistTests.Objects.Models
         [DatalistColumn]
         [Display(Name = "TestDisplay")]
         public Int32 Number { get; set; }
+
+        [Datalist(typeof(TestDatalistStub))]
+        public String ParentId { get; set; }
 
         [DatalistColumn(-5)]
         public DateTime CreationDate { get; set; }

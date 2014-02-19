@@ -1,11 +1,5 @@
-Datalist/bin/
-Datalist/obj/
-DatalistContent/bin/
-DatalistContent/obj/
-DatalistSamples/bin/
-DatalistSamples/obj/
-DatalistTests/bin/
-DatalistTests/obj/
 TestResults/
 packages/
+bin
+obj
 *.suo

@@ -51,6 +51,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -61,6 +62,10 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Migrations\201402191330397_2.cs" />
+    <Compile Include="Migrations\201402191330397_2.Designer.cs">
+      <DependentUpon>201402191330397_2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tests\AbstractDatalistTests.cs" />
     <Compile Include="Tests\GenericDatalistTests.cs" />
     <Compile Include="Tests\DatalistAttributeTests.cs" />
@@ -98,6 +103,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\201402191330397_2.resx">
+      <DependentUpon>201402191330397_2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Objects\Data\Migrations\201402151934543_1.resx">
       <DependentUpon>201402151934543_1.cs</DependentUpon>
     </EmbeddedResource>

@@ -28,6 +28,7 @@ namespace DatalistTests.Objects.Data.Migrations
                     context.TestModels.Add(new TestModel()
                     {
                         Id = id,
+                        ParentId = id,
                         Sum = index + index,
                         Number = (index % 2 == 0) ? index : -index,
                         CreationDate = DateTime.Now.AddDays(index),

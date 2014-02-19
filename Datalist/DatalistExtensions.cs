@@ -9,28 +9,27 @@ using System.Web.Routing;
 
 namespace Datalist
 {
-    [ExcludeFromCodeCoverage]
     public static class DatalistExtensions
     {
         public static IHtmlString AutoComplete<TModel>(this HtmlHelper<TModel> html,
             String name, Object value, AbstractDatalist model, Object htmlAttributes = null)
         {
             String autoComplete = FormAutoComplete(html, model, name, htmlAttributes);
-            String hiddenInput = FormHiddenInput(html, model, name, value);
+            String hiddenInput = FormHiddenInput(html, name, value);
 
             return new MvcHtmlString(autoComplete + hiddenInput);
-        }
-        public static IHtmlString AutoCompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html,
-            Expression<Func<TModel, TProperty>> expression, AbstractDatalist model, Object htmlAttributes = null)
-        {
-            return html.AutoComplete(ExpressionHelper.GetExpressionText(expression), ModelMetadata.FromLambdaExpression(expression, html.ViewData).Model, model, htmlAttributes);
         }
         public static IHtmlString AutoCompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html,
             Expression<Func<TModel, TProperty>> expression, Object htmlAttributes = null)
         {
             return html.AutoCompleteFor(expression, GetModelFromExpression(expression), htmlAttributes);
         }
-
+        public static IHtmlString AutoCompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html,
+            Expression<Func<TModel, TProperty>> expression, AbstractDatalist model, Object htmlAttributes = null)
+        {
+            return html.AutoComplete(ExpressionHelper.GetExpressionText(expression), ModelMetadata.FromLambdaExpression(expression, html.ViewData).Model, model, htmlAttributes);
+        }
+        
         public static IHtmlString Datalist<TModel>(this HtmlHelper<TModel> html,
             String name, Object value, AbstractDatalist model, Object htmlAttributes = null)
         {
@@ -41,14 +40,14 @@ namespace Datalist
             return new MvcHtmlString(inputGroup.ToString());
         }
         public static IHtmlString DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html,
-            Expression<Func<TModel, TProperty>> expression, AbstractDatalist model, Object htmlAttributes = null)
-        {
-            return html.Datalist(ExpressionHelper.GetExpressionText(expression), ModelMetadata.FromLambdaExpression(expression, html.ViewData).Model, model, htmlAttributes);
-        }
-        public static IHtmlString DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html,
             Expression<Func<TModel, TProperty>> expression, Object htmlAttributes = null)
         {
             return html.DatalistFor(expression, GetModelFromExpression(expression), htmlAttributes);
+        }
+        public static IHtmlString DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html,
+            Expression<Func<TModel, TProperty>> expression, AbstractDatalist model, Object htmlAttributes = null)
+        {
+            return html.Datalist(ExpressionHelper.GetExpressionText(expression), ModelMetadata.FromLambdaExpression(expression, html.ViewData).Model, model, htmlAttributes);
         }
 
         private static AbstractDatalist GetModelFromExpression<TModel, TProperty>(Expression<Func<TModel, TProperty>> expression)
@@ -66,19 +65,19 @@ namespace Datalist
         {
             var attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
             attributes["class"] = String.Format("{0} {1}", attributes["class"], "form-control datalist-input").Trim();
+            attributes.Add("data-datalist-hidden-input", TagBuilder.CreateSanitizedId(hiddenInput));
             attributes.Add("data-datalist-filters", String.Join(",", model.AdditionalFilters));
             attributes.Add("data-datalist-records-per-page", model.DefaultRecordsPerPage);
             attributes.Add("data-datalist-sort-column", model.DefaultSortColumn);
             attributes.Add("data-datalist-sort-order", model.DefaultSortOrder);
             attributes.Add("data-datalist-dialog-title", model.DialogTitle);
-            attributes.Add("data-datalist-hidden-input", hiddenInput);
             attributes.Add("data-datalist-url", model.DatalistUrl);
             attributes.Add("data-datalist-term", String.Empty);
             attributes.Add("data-datalist-page", 0);
 
             return html.TextBox(hiddenInput + AbstractDatalist.Prefix, null, attributes).ToString();
         }
-        private static String FormHiddenInput<TModel>(HtmlHelper<TModel> html, AbstractDatalist model, String name, Object value)
+        private static String FormHiddenInput<TModel>(HtmlHelper<TModel> html, String name, Object value)
         {
             var attributes = new RouteValueDictionary();
             attributes.Add("class", "datalist-hidden-input");
