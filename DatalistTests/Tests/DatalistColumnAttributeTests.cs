@@ -9,13 +9,13 @@ namespace DatalistTests.Tests
         #region Constructor: DatalistColumnAttribute()
 
         [Test]
-        public void ParameterlessPosition()
+        public void DatalistColumnAttribute_NullPosition()
         {
             Assert.IsNull(new DatalistColumnAttribute().Position);
         }
 
         [Test]
-        public void ParameterlessRelation()
+        public void DatalistColumnAttribute_NullRelation()
         {
             Assert.IsNull(new DatalistColumnAttribute().Relation);
         }
@@ -25,7 +25,7 @@ namespace DatalistTests.Tests
         #region Constructor: DatalistColumnAttribute(Int32 position)
 
         [Test]
-        public void Position()
+        public void DatalistColumnAttribute_SetsPosition()
         {
             Assert.AreEqual(-5, new DatalistColumnAttribute(-5).Position);
         }

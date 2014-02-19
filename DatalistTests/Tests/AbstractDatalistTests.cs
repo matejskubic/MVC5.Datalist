@@ -32,19 +32,19 @@ namespace DatalistTests.Tests
         #region Constants
 
         [Test]
-        public void Prefix()
+        public void Prefix_IsConstant()
         {
             Assert.AreEqual("Datalist", AbstractDatalist.Prefix);
         }
 
         [Test]
-        public void IdKey()
+        public void IdKey_IsConstant()
         {
             Assert.AreEqual("DatalistIdKey", AbstractDatalist.IdKey);
         }
 
         [Test]
-        public void AcKey()
+        public void AcKey_IsConstant()
         {
             Assert.AreEqual("DatalistAcKey", AbstractDatalist.AcKey);
         }
@@ -54,51 +54,51 @@ namespace DatalistTests.Tests
         #region Constructor: AbstractDatalist()
 
         [Test]
-        public void DialogTitle()
+        public void AbstractDatalist_DefaultDialogTitle()
         {
             String expected = datalist.GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty);
             Assert.AreEqual(expected, datalist.DialogTitle);
         }
 
         [Test]
-        public void DatalistUrl()
+        public void AbstractDatalist_DefaultDatalistUrl()
         {
             String expected = String.Format("{0}{1}/{2}", baseUrl, AbstractDatalist.Prefix, datalist.GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty));
             Assert.AreEqual(expected, datalist.DatalistUrl);
         }
 
         [Test]
-        public void DefaultSortColumn()
+        public void AbstractDatalist_NullDefaultSortColumn()
         {
             Assert.IsNull(datalist.DefaultSortColumn);
         }
 
         [Test]
-        public void DefaultRecordsPerPage()
+        public void AbstractDatalist_DefaultDefaultRecordsPerPage()
         {
             Assert.AreEqual((UInt32)20, datalist.DefaultRecordsPerPage);
         }
 
         [Test]
-        public void AdditionalFilters()
+        public void AbstractDatalist_EmptyAdditionalFilters()
         {
-            Assert.AreEqual(0, datalist.AdditionalFilters.Count);
+            CollectionAssert.IsEmpty(datalist.AdditionalFilters);
         }
 
         [Test]
-        public void DefaultSortOrder()
+        public void AbstractDatalist_AscDefaultSortOrder()
         {
             Assert.AreEqual(DatalistSortOrder.Asc, datalist.DefaultSortOrder);
         }
 
         [Test]
-        public void Columns()
+        public void AbstractDatalist_EmptyColumns()
         {
-            Assert.AreEqual(0, datalist.Columns.Count);
+            CollectionAssert.IsEmpty(datalist.Columns);
         }
 
         [Test]
-        public void CurrentFilter()
+        public void AbstractDatalist_NotNullCurrentFilter()
         {
             Assert.IsNotNull(datalist.CurrentFilter);
         }

@@ -10,21 +10,19 @@ namespace DatalistTests.Tests
         #region Constructor: DatalistAttribute(Type type)
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Null()
+        public void DatalistAttribute_NullThrows()
         {
-            new DatalistAttribute(null);
+            Assert.Throws<ArgumentNullException>(() => new DatalistAttribute(null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Type()
+        public void DatalistAttribute_UnassignableTypeThrows()
         {
-            new DatalistAttribute(typeof(Object));
+            Assert.Throws<ArgumentException>(() => new DatalistAttribute(typeof(Object)));
         }
 
         [Test]
-        public void Getter()
+        public void DatalistAttribute_SetsType()
         {
             var expected = typeof(AbstractDatalist);
             Assert.AreEqual(expected, new DatalistAttribute(expected).Type);

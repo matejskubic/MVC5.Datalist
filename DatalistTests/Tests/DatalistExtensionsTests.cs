@@ -1,5 +1,4 @@
-﻿using Datalist;
-using DatalistTests.Objects.Models;
+﻿using DatalistTests.Objects.Models;
 using DatalistTests.Objects.Stubs;
 using Moq;
 using NUnit.Framework;
@@ -13,29 +12,20 @@ namespace DatalistTests
     [TestFixture]
     public class DatalistExtensionsTests
     {
+        private Mock<TestDatalistStub> datalistMock;
         private HtmlHelper<TestModel> html;
-
-        protected Mock<TestDatalistStub> DatalistMock
-        {
-            get;
-            private set;
-        }
-
-        protected TestDatalistStub Datalist
-        {
-            get;
-            private set;
-        }
+        private TestDatalistStub datalist;
 
         [SetUp]
         public virtual void SetUp()
         {
-            var request = new HttpRequest(null, "http://localhost:7013/", null);
-            var response = new HttpResponse(new StringWriter());
-            HttpContext.Current = new HttpContext(request, response);
-            DatalistMock = new Mock<TestDatalistStub>() { CallBase = true };
-            Datalist = DatalistMock.Object;
-            html = GetFormHelper();
+            HttpContext.Current = new HttpContext(
+                new HttpRequest(null, "http://localhost:7013/", null),
+                new HttpResponse(new StringWriter()));
+
+            datalistMock = new Mock<TestDatalistStub>() { CallBase = true };
+            datalist = datalistMock.Object;
+            html = MockHtmlHelper();
         }
 
         [TearDown]
@@ -43,15 +33,10 @@ namespace DatalistTests
         {
             HttpContext.Current = null;
         }
+        
+        #region Test helpers
 
-        [Test]
-        public void ItShould()
-        {
-            var a = html.Datalist("222", 1, new TestDatalistStub());
-            Assert.AreEqual("a", a.ToString());
-        }
-
-        private static HtmlHelper<TestModel> GetFormHelper()
+        private static HtmlHelper<TestModel> MockHtmlHelper()
         {
             ViewDataDictionary<TestModel> viewData = new ViewDataDictionary<TestModel>();
             viewData.Model = new TestModel();
@@ -65,5 +50,7 @@ namespace DatalistTests
 
             return new HtmlHelper<TestModel>(mockViewContext.Object, mockContainer.Object);
         }
+
+        #endregion
     }
 }

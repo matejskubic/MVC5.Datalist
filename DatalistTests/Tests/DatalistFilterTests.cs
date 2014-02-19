@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace DatalistTests.Tests
 {
     [TestFixture]
-    public class DefaultsTests
+    public class DatalistFilterTests
     {
         private DatalistFilter filter;
 
@@ -17,45 +17,45 @@ namespace DatalistTests.Tests
         #region Constructor: DatalistFilter()
 
         [Test]
-        public void Id()
+        public void DatalistFilter_NullId()
         {
             Assert.IsNull(filter.Id);
         }
 
         [Test]
-        public void Page()
+        public void DatalistFilter_ZeroPage()
         {
             Assert.AreEqual(0, filter.Page);
         }
 
         [Test]
-        public void SearchTerm()
+        public void DatalistFilter_NullSearchTerm()
         {
             Assert.IsNull(filter.SearchTerm);
         }
 
         [Test]
-        public void SortColumn()
+        public void DatalistFilter_NullSortColumn()
         {
             Assert.IsNull(filter.SortColumn);
         }
 
         [Test]
-        public void SortOrder()
+        public void DatalistFilter_AscSortOrder()
         {
             Assert.AreEqual(DatalistSortOrder.Asc, filter.SortOrder);
         }
 
         [Test]
-        public void RecordsPerPage()
+        public void DatalistFilter_ZeroRecordsPerPage()
         {
             Assert.AreEqual(0, filter.RecordsPerPage);
         }
 
         [Test]
-        public void AdditionalFilters()
+        public void DatalistFilter_EmptyAdditionalFilters()
         {
-            Assert.AreEqual(0, filter.AdditionalFilters.Count);
+            CollectionAssert.IsEmpty(filter.AdditionalFilters);
         }
 
         #endregion

@@ -17,21 +17,21 @@ namespace DatalistTests.Tests
         #region Constructor: DatalistData()
 
         [Test]
-        public void FilteredRecords()
+        public void DatalistData_ZeroFilteredRecords()
         {
             Assert.AreEqual(0, data.FilteredRecords);
         }
 
         [Test]
-        public void Columns()
+        public void DatalistData_EmptyColumns()
         {
-            Assert.AreEqual(0, data.Columns.Count);
+            CollectionAssert.IsEmpty(data.Columns);
         }
 
         [Test]
-        public void Rows()
+        public void DatalistData_EmptyRows()
         {
-            Assert.AreEqual(0, data.Rows.Count);
+            CollectionAssert.IsEmpty(data.Rows);
         }
 
         #endregion

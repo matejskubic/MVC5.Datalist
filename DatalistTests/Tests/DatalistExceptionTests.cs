@@ -9,7 +9,7 @@ namespace DatalistTests.Tests
         #region Constructor: DatalistException(String message)
 
         [Test]
-        public void Message()
+        public void DatalistException_SetsMessage()
         {
             var expected = "Test message";
             var exception = new DatalistException(expected);
