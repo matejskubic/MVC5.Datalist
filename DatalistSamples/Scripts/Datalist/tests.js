@@ -36,7 +36,11 @@ QUnit.testDone(function (details) {
     filter2.remove();
 });
 
-test('Init options', 12, function () {
+test('Does not create mvc-datalist on non datalist input', 1, function () {
+    equal(filter1.datalist().hasClass('mvc-datalist'), false);
+});
+
+test('Initializes options', 12, function () {
     testInput.datalist();
 
     ok(testInput.hasClass('mvc-datalist'));
@@ -52,18 +56,16 @@ test('Init options', 12, function () {
     equal(testInput.datalist('option', 'url'), 'http://localhost:9140/Datalist/Default');
     equal(testInput.datalist('option', 'filters').join(), ['Filter1', 'Filter2'].join());
 });
-test('Init options limit records per page', 3, function () {
-    testInput.attr('data-datalist-records-per-page', 'NaN').datalist();
-    equal(testInput.datalist('option', 'recordsPerPage'), 20);
 
-    testInput.datalist('destroy').attr('data-datalist-records-per-page', -1).datalist();
-    equal(testInput.datalist('option', 'recordsPerPage'), 1);
+test('Initializes filters', 2, function () {
+    testInput.datalist().data('mvc-datalist')._select = function (data) {
+        equal(data, null);
+    };
 
-    testInput.datalist('destroy').attr('data-datalist-records-per-page', 100).datalist();
-    equal(testInput.datalist('option', 'recordsPerPage'), 99);
+    filter1.change();
+    filter2.change();
 });
-
-test('Default filters binding', 20, function () {
+test('Initializes filters with events', 10, function () {
     var filters = [filter1, filter2];
     var iteration = 0;
 
@@ -73,151 +75,100 @@ test('Default filters binding', 20, function () {
             equal(hiddenElement, hiddenInput[0]);
             equal(element, testInput[0]);
             ok(e);
-        },
-        select: function (e, element, hiddenElement, data) {
-            equal(hiddenElement, hiddenInput[0]);
-            equal(element, testInput[0]);
-            equal(data, null);
-            ok(e);
         }
     });
-    
-    testInput.val(1);
-    hiddenInput.val(1);
-    filters[0].change();
-    equal(testInput.val(), '');
-    equal(hiddenInput.val(), '');
 
-    testInput.val(1);
-    hiddenInput.val(1);
+    testInput.data('mvc-datalist')._select = function (data) {
+        equal(data, null);
+    };
+
+    filters[0].change();
     filters[1].change();
-    equal(testInput.val(), '');
-    equal(hiddenInput.val(), '');
 });
-test('Custom filter for filter change', 2, function() {
+test('Initializes custom filter change', 0, function () {
     testInput.datalist({
         filterChange: function (e, element, hiddenElement, fitler) {
-            hiddenElement.value = 'Test';
-            element.value = 'Test';
-            e.preventDefault();
-        },
-        select: function (e, element, hiddenElement, data) {
-            ok(false);
-        }
-    });
-
-    testInput.val(1);
-    hiddenInput.val(1);
-    filter1.change();
-    equal(hiddenInput.val(), 'Test');
-    equal(testInput.val(), 'Test');
-});
-test('Custom select for filter change', 2, function () {
-    testInput.datalist({
-        select: function (e, element, hiddenElement, data) {
-            hiddenElement.value = 'Test';
-            element.value = 'Test';
             e.preventDefault();
         }
     });
 
-    testInput.val(1);
-    hiddenInput.val(1);
+    testInput.data('mvc-datalist')._select = function (data) {
+        ok(false);
+    };
+
     filter1.change();
-    equal(testInput.val(), 'Test');
-    equal(hiddenInput.val(), 'Test');
+    filter2.change();
 });
 // TODO: Somehow test autocomplete source method
-test('Creates autocomplete', 2, function () {
+test('Initializes autocomplete', 2, function () {
     ok(testInput.datalist().hasClass('ui-autocomplete-input'));
     equal(testInput.autocomplete('option', 'minLength'), 1);
 });
-test('Autocomplete select', 7, function () {
-    testInput.datalist({
-        select: function (e, element, hiddenElement, data) {
-            equal(hiddenElement, hiddenInput[0]);
-            equal(data.DatalistIdKey, 'Test2');
-            equal(data.DatalistAcKey, 'Test3');
-            equal(element, testInput[0]);
-            ok(e);
-        }
-    });
-
-    testInput.data('ui-autocomplete')
-        ._trigger('select', 'autocompleteselect', {
+test('Initializes autocomplete select', 2, function () {
+    testInput.datalist().data('mvc-datalist')._select = function (data) {
+        equal(data.DatalistIdKey, 'Test2');
+        equal(data.DatalistAcKey, 'Test3');
+    };
+    
+    testInput.data('ui-autocomplete')._trigger('select', 'autocompleteselect', {
             item: {
-                label: 'Test0',
-                value: 'Test1',
                 item: {
-                    'DatalistIdKey': 'Test2',
-                    'DatalistAcKey': 'Test3'
+                    DatalistIdKey: 'Test2',
+                    DatalistAcKey: 'Test3'
                 }
             }
         });
-
-    equal(hiddenInput.val(), 'Test2');
-    equal(testInput.val(), 'Test3');
 });
-test('Autocomplete select prevented', 2, function () {
-    testInput.datalist({
-        select: function (e, element, hiddenElement, data) {
-            hiddenElement.value = 22;
-            element.value = 11;
-            e.preventDefault();
-        }
-    });
-
-    testInput.data('ui-autocomplete')
-        ._trigger('select', 'autocompleteselect', {
-            item: {
-                label: 'Test0',
-                value: 'Test1',
-                item: {
-                    'DatalistIdKey': 'Test2',
-                    'DatalistAcKey': 'Test3'
-                }
-            }
-        });
-
-    equal(testInput.val(), 11);
-    equal(hiddenInput.val(), 22);
-});
-test('Bind key up on autocomplete', 6, function () {
-    testInput.datalist({
-        select: function (e, element, hiddenElement, data) {
-            equal(hiddenElement, hiddenInput[0]);
-            equal(element, testInput[0]);
-            equal(data, null);
-            ok(e);
-        }
-    });
-
-    hiddenInput.val('Test1');
-    testInput.keyup();
-    equal(testInput.val(), '');
-    equal(hiddenInput.val(), '');
-});
-test('Bind key up on autocomplete select prevented', 2, function () {
-    testInput.datalist({
-        select: function (e, element, hiddenElement, data) {
-            hiddenElement.value = 'Test2';
-            element.value = 'Test3';
-            e.preventDefault();
-        }
-    });
+test('Initializes keyup on autocomplete', 1, function () {
+    testInput.datalist().data('mvc-datalist')._select = function (data) {
+        equal(data, null);
+    };
 
     testInput.keyup();
-    equal(testInput.val(), 'Test3');
-    equal(hiddenInput.val(), 'Test2');
 });
 test('Removes all preceding elements', 1, function () {
     equal(testInput.datalist().prevAll().length, 0);
 });
 
+test('Initializes datalist open span', 16, function () {
+    testInput.datalist().data('mvc-datalist')._update = function (datalist) {
+        equal(datalist[0], $('#Datalist')[0]);
+    };
+    testInput.data('mvc-datalist')._limitTo = function (value, min, max) {
+        equal(value, 30);
+        equal(max, 99);
+        equal(min, 1);
+        return value;
+    };
+
+    openSpan.click();
+    $('#Datalist').dialog('close');
+
+    testInput.data('mvc-datalist')._limitTo = function (value, min, max) {
+        equal(value, 2);
+        equal(max, 99);
+        equal(min, 1);
+        return value;
+    };
+
+    $('.datalist-items-per-page').val(2).data('ui-spinner')._trigger('change', 'spinnerchange');
+    equal($('#Datalist').dialog('option', 'title'), testInput.datalist('option', 'title'));
+    equal($('.datalist-search-input').attr('placeholder'), $.fn.datalist.lang.Search);
+    equal($('.datalist-error-span').html(), $.fn.datalist.lang.Error);
+    equal(testInput.datalist('option', 'recordsPerPage'), 2);
+    equal(testInput.datalist('option', 'page'), 0);
+
+    $('.datalist-search-input').val('test2').keyup();
+    stop();
+    setTimeout(function () {
+        start();
+        equal(testInput.datalist('option', 'term'), 'test2');
+        equal(testInput.datalist('option', 'page'), 0);
+    }, 500);
+});
+
 test('Forms autocomplete url', 1, function () {
-    testInput
-        .attr('data-datalist-filters', '')
-        .datalist();
+    testInput.attr('data-datalist-filters', '').datalist();
     var expected = testInput.datalist('option', 'url') +
         '?SearchTerm=test' +
         '&RecordsPerPage=20' +
@@ -227,10 +178,10 @@ test('Forms autocomplete url', 1, function () {
     equal(testInput.data('mvc-datalist')._formAutocompleteUrl('test'), expected);
 });
 test('Forms autocomplete url with filters', 1, function () {
-    testInput.datalist();
-
     filter1.val('Filter1');
     filter2.val('Filter2');
+    testInput.datalist();
+
     var expected = testInput.datalist('option', 'url') +
         '?SearchTerm=test' +
         '&RecordsPerPage=20' +
@@ -243,9 +194,7 @@ test('Forms autocomplete url with filters', 1, function () {
 });
 
 test('Forms datalist url', 1, function () {
-    testInput
-        .attr('data-datalist-filters', '')
-        .datalist();
+    testInput.attr('data-datalist-filters', '').datalist();
     var expected = testInput.datalist('option', 'url') +
         '?SearchTerm=test' +
         '&RecordsPerPage=' + testInput.datalist('option', 'recordsPerPage') +
@@ -256,10 +205,10 @@ test('Forms datalist url', 1, function () {
     equal(testInput.data('mvc-datalist')._formDatalistUrl('test'), expected);
 });
 test('Forms datalist url with filters', 1, function () {
-    testInput.datalist();
-
     filter1.val('Filter1');
     filter2.val('Filter2');
+    testInput.datalist();
+
     var expected = testInput.datalist('option', 'url') +
         '?SearchTerm=test' +
         '&RecordsPerPage=' + testInput.datalist('option', 'recordsPerPage') +
@@ -277,15 +226,47 @@ test('Forms empty additional filter query', 1, function () {
     equal(testInput.data('mvc-datalist')._formFiltersQuery(), '');
 });
 test('Forms additional filter query', 1, function () {
-    testInput.datalist();
     filter1.val('Test1');
     filter2.val('Test2');
+    testInput.datalist();
     equal(testInput.data('mvc-datalist')._formFiltersQuery(), '&Filter1=Test1&Filter2=Test2');
+});
+
+test('Default selects', 2, function () {
+    data = { DatalistIdKey: 'Test1', DatalistAcKey: 'Test2' };
+    testInput.datalist().data('mvc-datalist')._defaultSelect(data);
+
+    equal(hiddenInput.val(), data.DatalistIdKey);
+    equal(testInput.val(), data.DatalistAcKey);
+});
+test('Default select clears values', 2, function () {
+    testInput.datalist();
+    hiddenInput.val(1);
+    testInput.val(1);
+
+    testInput.datalist().data('mvc-datalist')._defaultSelect(null);
+
+    equal(hiddenInput.val(), '');
+    equal(testInput.val(), '');
 });
 
 asyncTest('Does not call select on load', 0, function () {
     testInput.datalist({
-        select: function (e, element, hiddenElement, data) {
+        select: function () {
+            ok(false);
+        }
+    });
+
+    setTimeout(function () {
+        start();
+    }, 200);
+
+    testInput.datalist('destroy');
+
+    stop();
+    hiddenInput.val(0);
+    testInput.datalist({
+        select: function () {
             ok(false);
         }
     });
@@ -294,58 +275,55 @@ asyncTest('Does not call select on load', 0, function () {
         start();
     }, 200);
 });
-asyncTest('Calls select on load', 5, function () {
+asyncTest('Calls select on load', 1, function () {
     hiddenInput.val(1);
     testInput.datalist({
+        select: function () {
+            ok(true);
+        }
+    });
+
+    setTimeout(function () {
+        start();
+    }, 200);
+});
+
+test('Calls select and default select', 6, function () {
+    var selectedData = { DatalistIdKey: 'Test' };
+    testInput.datalist({
         select: function (e, element, hiddenElement, data) {
-            equal(element, testInput[0]);
             equal(hiddenElement, hiddenInput[0]);
-            equal(data.DatalistAcKey, 'Tom');
-            equal(data.DatalistIdKey, '1');
+            equal(element, testInput[0]);
+            equal(data, selectedData);
             ok(e);
         }
     });
 
-    setTimeout(function () {
-        start();
-    }, 200);
+    testInput.data('mvc-datalist')._defaultSelect = function (data) {
+        equal(data, selectedData);
+    };
+
+    testInput.data('mvc-datalist')._select(selectedData);
+
+    testInput.datalist('destroy').datalist();
+    testInput.data('mvc-datalist')._defaultSelect = function (data) {
+        equal(data, selectedData);
+    };
+
+    testInput.data('mvc-datalist')._select(selectedData);
 });
-asyncTest('Select on load prevented', 2, function () {
-    hiddenInput.val(1);
+test('Default select prevented', 0, function () {
     testInput.datalist({
-        select: function (e, element, hiddenElement, data) {
-            hiddenElement.value = 'Test1';
-            element.value = 'Test2';
+        select: function (e) {
             e.preventDefault();
         }
     });
 
-    setTimeout(function () {
-        start();
-        equal(testInput.val(), 'Test2');
-        equal(hiddenInput.val(), 'Test1');
-    }, 200);
-});
+    testInput.data('mvc-datalist')._defaultSelect = function () {
+        ok(false);
+    };
 
-test('Binds datalist', 7, function () {
-    testInput.datalist();
-    openSpan.click();
-    $('#Datalist').dialog('close');
-    
-    $('.datalist-items-per-page').val(2).data('ui-spinner')._trigger('change', 'spinnerchange');
-    equal($('#Datalist').dialog('option', 'title'), testInput.datalist('option', 'title'));
-    equal($('.datalist-search-input').attr('placeholder'), $.fn.datalist.lang.Search);
-    equal($('.datalist-error-span').html(), $.fn.datalist.lang.Error);
-    equal(testInput.datalist('option', 'recordsPerPage'), 2);
-    equal(testInput.datalist('option', 'page'), 0);
-
-    $('.datalist-search-input').val('test2').keyup();
-    stop();
-    setTimeout(function () {
-        start();
-        equal(testInput.datalist('option', 'term'), 'test2');
-        equal(testInput.datalist('option', 'page'), 0);
-    }, 500);
+    testInput.data('mvc-datalist')._select();
 });
 
 test('Limits value', 6, function () {
@@ -360,19 +338,8 @@ test('Limits value', 6, function () {
     equal(datalist._limitTo(60, 1, 99), 60);
 });
 
-test('Cleans up datalist input', 18, function () {
+test('Cleans up', 9, function () {
     testInput.datalist();
-    equal(testInput.attr('data-datalist-records-per-page'), null);
-    equal(testInput.attr('data-datalist-dialog-title'), null);
-    equal(testInput.attr('data-datalist-hidden-input'), null);
-    equal(testInput.attr('data-datalist-sort-column'), null);
-    equal(testInput.attr('data-datalist-sort-order'), null);
-    equal(testInput.attr('data-datalist-filters'), null);
-    equal(testInput.attr('data-datalist-term'), null);
-    equal(testInput.attr('data-datalist-page'), null);
-    equal(testInput.attr('data-datalist-url'), null);
-
-    testInput.datalist('destroy').datalist();
     equal(testInput.attr('data-datalist-records-per-page'), null);
     equal(testInput.attr('data-datalist-dialog-title'), null);
     equal(testInput.attr('data-datalist-hidden-input'), null);
@@ -384,7 +351,7 @@ test('Cleans up datalist input', 18, function () {
     equal(testInput.attr('data-datalist-url'), null);
 });
 
-test('Destroys datalist', 9, function () {
+test('Destroys datalist', 10, function () {
     testInput.datalist({
         filterChange: function () {
             ok(false);
@@ -400,8 +367,9 @@ test('Destroys datalist', 9, function () {
     equal(testInput.attr('data-datalist-filters'), 'Filter1,Filter2');
     equal(testInput.attr('data-datalist-url'), 'http://localhost:9140/Datalist/Default');
 
-    equal(testInput.hasClass('ui-autocomplete-input'), false);
     equal(testInput.hasClass('mvc-datalist'), false);
+    equal(testInput.data('ui-autocomplete'), null);
+    equal(testInput.data('mvc-datalist'), null);
     filter1.change();
     filter2.change();
 });

@@ -19,11 +19,10 @@
 
             this._loadSelected(); // TODO: Fix null values in javascript html code
             this._cleanUp(); // TODO: Fix resizing on different datalists.
-            this.element.addClass('mvc-datalist');
         },
         _initOptions: function () {
-            this.options.recordsPerPage = this._limitTo(this.element.attr('data-datalist-records-per-page'), 1, 99);
             this.options.hiddenElement = $('#' + this.element.attr('data-datalist-hidden-input'))[0];
+            this.options.recordsPerPage = this.element.attr('data-datalist-records-per-page');
             this.options.filters = this.element.attr('data-datalist-filters').split(',');
             this.options.sortColumn = this.element.attr('data-datalist-sort-column');
             this.options.sortOrder = this.element.attr('data-datalist-sort-order');
@@ -31,6 +30,7 @@
             this.options.term = this.element.attr('data-datalist-term');
             this.options.page = this.element.attr('data-datalist-page');
             this.options.url = this.element.attr('data-datalist-url');
+            this.element.addClass('mvc-datalist');
         },
         _initFilters: function () {
             for (i = 0; i < this.options.filters.length; i++)
@@ -144,13 +144,13 @@
             return additionaFilter;
         },
 
-        _defaultSelect: function (element, data) {
+        _defaultSelect: function (data) {
             if (data) {
                 $(this.options.hiddenElement).val(data.DatalistIdKey).change();
-                $(element).val(data.DatalistAcKey).change();
+                $(this.element).val(data.DatalistAcKey).change();
             }
             else {
-                $(element).val(null).change();
+                $(this.element).val(null).change();
                 $(this.options.hiddenElement).val(null).change();
             }
         },
@@ -173,7 +173,7 @@
             if (this.options.select)
                 this.options.select(event, this.element[0], this.options.hiddenElement, data);
             if (!event.isDefaultPrevented())
-                this._defaultSelect(this.element[0], data);
+                this._defaultSelect(data);
         },
 
         _limitTo: function (value, min, max) {
