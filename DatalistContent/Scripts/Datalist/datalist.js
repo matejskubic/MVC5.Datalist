@@ -1,310 +1,372 @@
-﻿/*
- * Datalist v3.0.0 alpha
+﻿/*!
+ * Datalist 3.0.0 beta
+ * https://github.com/Muchiachio/MVC.Datalist
+ *
+ * Copyright © 2014 Muchiachio
+ *
+ * Licensed under the terms of the MIT License
+ * http://www.opensource.org/licenses/mit-license.php
  */
 (function ($) {
-    $.fn.datalist = function () {
-        if (this.length == 0) return false;
-        var datalists = $('.datalist[data-identifier="' + this.attr('data-identifier') + '"]');
-        removeDuplicates(datalists);
+    $.widget('mvc.datalist', {
+        _create: function () {
+            if (!this.element.hasClass('datalist-input')) return;
+            
+            this._initOptions();
+            this._initFilters();
+            this._initAutocomplete();
+            this._initDatalistOpenSpan();
 
-        var datalist = $(datalists[0]).attr('id', 'Datalist' + this.attr('data-identifier'));
-        createAutocomplete(this, datalist);
-        bindOpenSpan(this, datalist);
-        bindEvents(this);
+            this._loadSelected();
+            this._cleanUp(); // TODO: Fix resizing on different datalists.
+        },
+        _initOptions: function () {
+            var e = this.element;
+            var o = this.options;
 
-        addTextSpans(datalist);
-        createDialog(datalist);
-        bindInputs(datalist);
+            o.hiddenElement = $('#' + e.attr('data-datalist-hidden-input'))[0];
+            o.recordsPerPage = e.attr('data-datalist-records-per-page');
+            o.filters = e.attr('data-datalist-filters').split(',');
+            o.sortColumn = e.attr('data-datalist-sort-column');
+            o.sortOrder = e.attr('data-datalist-sort-order');
+            o.title = e.attr('data-datalist-dialog-title');
+            o.term = e.attr('data-datalist-term');
+            o.page = parseInt(e.attr('data-datalist-page'));
+            o.url = e.attr('data-datalist-url');
+            e.addClass('mvc-datalist');
+        },
+        _initFilters: function () {
+            for (i = 0; i < this.options.filters.length; i++)
+                this._initFilter($('#' + this.options.filters[i]));
+        },
+        _initFilter: function (filter) {
+            var that = this;
+            that._on(filter, {
+                change: function () {
+                    var event = $.Event(that._select);
+                    if (that.options.filterChange)
+                        that.options.filterChange(event, that.element[0], that.options.hiddenElement, filter[0]);
+                    if (!event.isDefaultPrevented())
+                        that._select(null);
+                }
+            });
+        },
+        _initAutocomplete: function () {
+            var that = this;
+            this.element.autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: that._formAutocompleteUrl(request.term),
+                        success: function (data) {
+                            response($.map(data.Rows, function (item) {
+                                return {
+                                    label: item.DatalistAcKey,
+                                    value: item.DatalistAcKey,
+                                    item: item
+                                }
+                            }));
+                        }
+                    });
+                },
+                select: function (e, selection) {
+                    that._select(selection.item.item);
+                },
+                minLength: 1
+            });
 
-        loadSelected();
-        bindFilters(this, datalist);
-    };
-    enableSorting();
-    setLanguage();
+            this.element.bind('keyup.datalist', function () {
+                if (this.value.length == 0)
+                    that._select(null);
+            });
+            this.element.prevAll('.ui-helper-hidden-accessible').remove();
+        },
+        _initDatalistOpenSpan: function () {
+            var datalistAddon = this.element.nextAll('.datalist-open-span:first');
+            if (datalistAddon.length != 0) {
+                var datalist = $('#Datalist');
+                var that = this;
 
-    function removeDuplicates(datalists) {
-        $.each(datalists, function (index, element) {
-            if (index > 0)
-                $(element).remove();
-        });
-    }
-    
-    function createAutocomplete(datalistInput, datalist) {
-        datalistInput.autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: datalist.attr('data-datalist-url') + '?SearchTerm=' + request.term + getAutoCompleteFilters(datalist),
-                    dataType: 'json',
-                    success: function (data) {
-                        response($.map(data.Rows, function (item) {
-                            return {
-                                label: item['DatalistAcKey'],
-                                value: item['DatalistAcKey'],
-                                item: item
-                            }
-                        }));
+                this._on(datalistAddon, {
+                    click: function () {
+                        datalist
+                            .find('.datalist-search-input')
+                            .unbind('keyup.datalist')
+                            .bindWithDelay('keyup.datalist', function () {
+                                that.options.term = this.value;
+                                that.options.page = 0;
+                                that._update(datalist);
+                            }, 500, false)
+                            .val(that.options.term);
+                        datalist
+                            .find('.datalist-items-per-page')
+                            .spinner({
+                                change: function () {
+                                    this.value = that._limitTo(this.value, 1, 99);
+                                    that.options.recordsPerPage = this.value;
+                                    that.options.page = 0;
+                                    that._update(datalist);
+                                }
+                            })
+                            .val(that._limitTo(that.options.recordsPerPage, 1, 99));
+
+                        datalist.find('.datalist-search-input').attr('placeholder', $.fn.datalist.lang.Search);
+                        datalist.find('.datalist-error-span').html($.fn.datalist.lang.Error);
+                        datalist.dialog('option', 'title', that.options.title);
+                        datalist.dialog('open');
+                        that._update(datalist);
                     }
                 });
-            },
-            minLength: 1,
-            select: function (event, selectedItem) {
-                select($('#' + datalistInput.data('hidden-input')), datalistInput,
-                    selectedItem.item.item['DatalistIdKey'], selectedItem.item.item['DatalistAcKey']);
             }
-        });
-        datalistInput.prevAll('.ui-helper-hidden-accessible').remove();
-    }
-    function getAutoCompleteFilters(datalist) {
-        return '&RecordsPerPage=20&SortOrder=Asc&Page=0' + getAdditionalFilterQuery(datalist);
-    }
-    function getAdditionalFilterQuery(datalist) {
-        var filters = datalist.attr('data-filters').split(',');
-        filters = $.grep(filters, function (item) { return (item != null && item != ''); });
-        var filtersCount = filters.length;
+        },
 
-        var additionaFilter = '';
-        for (index = 0; index < filtersCount; index++) {
-            var value = $('#' + filters[index]).val();
-            additionaFilter += '&' + filters[index] + '=' + (value != null ? value : '');
-        }
+        _formAutocompleteUrl: function (term) {
+            return this.options.url +
+                '?SearchTerm=' + term +
+                '&RecordsPerPage=20' +
+                '&SortOrder=Asc' +
+                '&Page=0' +
+                this._formFiltersQuery();
+        },
+        _formDatalistUrl: function (term) {
+            return this.options.url +
+                '?SearchTerm=' + term +
+                '&RecordsPerPage=' + this.options.recordsPerPage +
+                '&SortColumn=' + this.options.sortColumn +
+                '&SortOrder=' + this.options.sortOrder +
+                '&Page=' + this.options.page +
+                this._formFiltersQuery();
+        },
+        _formFiltersQuery: function () {
+            var additionaFilter = '';
+            for (i = 0; i < this.options.filters.length; i++) {
+                var filter = $('#' + this.options.filters[i]);
+                if (filter.length == 1)
+                    additionaFilter += '&' + this.options.filters[i] + '=' + filter.val();
+            }
 
-        return additionaFilter;
-    }
-    function bindOpenSpan(datalistInput, datalist) {
-        var openSpan = datalistInput.nextAll('.datalist-open-span:first');
-        openSpan.click(function () {
-            datalist.attr('data-id-input', datalistInput.data('hidden-input'));
-            datalist.attr('data-value-input', datalistInput.attr('id'));
-            datalist.dialog('open').parent().css('top', '130px');
-            update(datalist);
-        });
-    }
-    function bindEvents(datalistInput) {
-        datalistInput.keyup(function () {
-            if ($(this).val().length == 0)
-                $('#' + $(this).data('hidden-input')).val('').change();
-        });
-    }
-    
-    function update(datalist) {
-        var term = datalist.find('.datalist-search-input').val();
-        var timeOut = setTimeout(function () {
-            datalist.find('.datalist-processing').fadeIn(300);
-        }, 500);
-        datalist.find('.datalist-error').fadeOut(300);
-        datalist.find('.datalist-data').fadeIn(300);
+            return additionaFilter;
+        },
 
-        $.ajax({
-            'url': datalist.attr('data-datalist-url') + formQuery(datalist, term == null ? '' : term),
-            'async': true,
-            'cache': false,
-            'dataType': 'json',
-            'success': function (data) {
-                updateTable(datalist, data);
-                updateNavigationBar(datalist, data);
+        _defaultSelect: function (data) {
+            if (data) {
+                $(this.options.hiddenElement).val(data.DatalistIdKey).change();
+                $(this.element).val(data.DatalistAcKey).change();
+            }
+            else {
+                $(this.element).val(null).change();
+                $(this.options.hiddenElement).val(null).change();
+            }
+        },
+        _loadSelected: function () {
+            var that = this;
+            var id = $(that.options.hiddenElement).val();
+            if (id) {
+                $.ajax({
+                    url: that.options.url + '?Id=' + id + '&RecordsPerPage=1',
+                    cache: false,
+                    success: function (data) {
+                        if (data.Rows.length > 0)
+                            that._select(data.Rows[0]);
+                    }
+                });
+            }
+        },
+        _select: function(data) {
+            var event = $.Event(this._defaultSelect);
+            if (this.options.select)
+                this.options.select(event, this.element[0], this.options.hiddenElement, data);
+            if (!event.isDefaultPrevented())
+                this._defaultSelect(data);
+        },
 
-                clearTimeout(timeOut);
-                datalist.find('.datalist-processing').fadeOut(300);
-                datalist.find('.datalist-pager').fadeIn(300);
-            },
-            'error': function () {
-                clearTimeout(timeOut);
-                datalist.find('.datalist-pager').fadeOut(300);
-                datalist.find('.datalist-processing').fadeOut(300);
+        _limitTo: function (value, min, max) {
+            value = parseInt(value);
+            if (isNaN(value))
+                return 20;
+            if (value < 1)
+                return 1;
+            if (value > 99)
+                return 99;
+
+            return value;
+        },
+        _cleanUp: function () {
+            this.element.removeAttr('data-datalist-records-per-page')
+            this.element.removeAttr('data-datalist-dialog-title');
+            this.element.removeAttr('data-datalist-hidden-input');
+            this.element.removeAttr('data-datalist-sort-column');
+            this.element.removeAttr('data-datalist-sort-order');
+            this.element.removeAttr('data-datalist-filters');
+            this.element.removeAttr('data-datalist-term');
+            this.element.removeAttr('data-datalist-page');
+            this.element.removeAttr('data-datalist-url');
+        },
+
+        _update: function (datalist) {
+            var that = this;
+            var term = datalist.find('.datalist-search-input').val();
+
+            datalist.find('.datalist-error').fadeOut(300);
+            var timeOut = setTimeout(function () {
+                datalist.find('.datalist-processing').fadeIn(300);
                 datalist.find('.datalist-data').fadeOut(300);
-                datalist.find('.datalist-error').fadeIn(300);
+            }, 500);
+
+            $.ajax({
+                url: that._formDatalistUrl(term),
+                cache: false,
+                success: function (data) {
+                    that._updateHeader(datalist, data.Columns);
+                    that._updateData(datalist, data);
+                    that._updateNavbar(datalist, data.FilteredRecords);
+
+                    clearTimeout(timeOut);
+                    datalist.find('.datalist-processing').fadeOut(300);
+                    datalist.find('.datalist-pager').fadeIn(300);
+                    datalist.find('.datalist-data').fadeIn(300);
+                },
+                error: function () {
+                    clearTimeout(timeOut);
+                    datalist.find('.datalist-processing').fadeOut(300);
+                    datalist.find('.datalist-pager').fadeOut(300);
+                    datalist.find('.datalist-data').fadeOut(300);
+                    datalist.find('.datalist-error').fadeIn(300);
+                }
+            });
+        },
+        _updateHeader: function (datalist, columns) {
+            var that = this;
+            var header = '';
+            var columnCount = 0;
+            for (var key in columns) {
+                header += '<th data-column="' + key + '">' + (columns[key] != null ? columns[key] : '');
+                if (that.options.sortColumn == key || (that.options.sortColumn == '' && columnCount == 0)) {
+                    header += '<span class="datalist-sort-arrow glyphicon glyphicon-arrow-' + (that.options.sortOrder == 'Asc' ? 'down' : 'up') + '"></span>';
+                    that.options.sortColumn = key;
+                }
+
+                header += '</th>';
+                columnCount++;
             }
-        });
-    }
-    function formQuery(datalist, term) {
-        var datalistLength = datalist.find('.datalist-items-per-page').val();
-        var datalistSortCol = datalist.attr('data-sort-column');
-        var datalistSortOrder = datalist.attr('data-sort-order');
-        var datalistPage = datalist.attr('data-page');
 
-        return '?SearchTerm=' + term + '&RecordsPerPage=' + datalistLength + '&SortColumn=' + datalistSortCol + '&SortOrder=' + datalistSortOrder + '&Page=' + datalistPage + getAdditionalFilterQuery(datalist);
-    }
-    function updateTable(datalist, data) {
-        var tableHeaderRow = '<tr>';
-        var columnCount = 1;
-        var tableData = '';
+            datalist.find('.datalist-table-head').html('<tr>' + header + '<th class="datalist-select-header"></th></tr>');
+            datalist.find('.datalist-table-head th').click(function () {
+                var header = $(this);
+                if (!header.attr('data-column')) return false;
+                if (that.options.sortColumn == header.attr('data-column'))
+                    that.options.sortOrder = that.options.sortOrder == 'Asc' ? 'Desc' : 'Asc';
+                else
+                    that.options.sortOrder = 'Asc';
 
-        for (var key in data.Columns) {
-            var sortArrow = '';
-            var sortOrder = datalist.attr('data-sort-order');
-            if (datalist.attr('data-sort-column') == key)
-                sortArrow += '<span class="datalist-sort-arrow glyphicon glyphicon-arrow-' + (sortOrder == 'Asc' ? 'down' : 'up') + '"></span>';
+                that.options.sortColumn = header.attr('data-column');
+                that._update(datalist);
+            });
+        },
+        _updateData: function (datalist, data) {
+            if (data.Rows.length == 0) {
+                datalist.find('.datalist-table-body').html('<tr><td colspan="0" style="text-align: center">' + $.fn.datalist.lang.NoDataFound + '</td></tr>');
+                return;
+            }
 
-            tableHeaderRow += '<th data-column="' + key + '">' + data.Columns[key] + sortArrow + '</th>';
-
-            columnCount++;
-        }
-
-        if (data.Rows.length > 0) {
-            for (var index in data.Rows) {
+            var tableData = '';
+            for (var i = 0; i < data.Rows.length; i++) {
                 var tableRow = '<tr>'
-                var row = data.Rows[index];
+                var row = data.Rows[i];
                 for (var key in data.Columns)
-                    tableRow += '<td>' + row[key] + '</th>';
+                    tableRow += '<td>' + (row[key] != null ? row[key] : '') + '</td>';
 
-                tableRow +=
-                    '<td class="datalist-select-cell" data-id="' + row['DatalistIdKey'] + '" data-value="' + row['DatalistAcKey'] + '">' +
-                    '<div class="datalist-select-container"><i class="glyphicon glyphicon-ok"></div></i></th>';
-                tableRow += '</tr>';
+                tableRow += '<td class="datalist-select-cell"><div class="datalist-select-container"><i class="glyphicon glyphicon-ok"></i></div></td></tr>';
                 tableData += tableRow;
             }
 
-            tableHeaderRow += '<th class="datalist-select-cell"></th>';
-        } else {
-            tableData += '<tr><td colspan="' + (columnCount - 1) + '" style="text-align: center">' + $.fn.datalist.lang.NoDataFound + '</tr>';
-        }
+            datalist.find('.datalist-table-body').html(tableData);
+            var selectCells = datalist.find('td.datalist-select-cell');
+            for (var i = 0; i < selectCells.length; i++)
+                this._bindSelect(datalist, selectCells[i], data.Rows[i]);
+        },
+        _updateNavbar: function (datalist, filteredRecords) {
+            var that = this;
+            var pageLength = datalist.find('.datalist-items-per-page').val();
+            var totalPages = parseInt(filteredRecords / pageLength) + 1;
+            if (filteredRecords % pageLength == 0)
+                totalPages--;
 
-        tableHeaderRow += "</tr>";
-
-        datalist.find('.datalist-table-head').html(tableHeaderRow);
-        datalist.find('.datalist-table-body').html(tableData);
-        datalist.find('td.datalist-select-cell').click(function () {
-            select($('#' + datalist.attr('data-id-input')), $('#' + datalist.attr('data-value-input')), $(this).data('id'), $(this).data('value'));
-            datalist.find('.datalist-pager').hide();
-            datalist.dialog('close');
-        });
-    }
-    function updateNavigationBar(datalist, data) {
-        var pageLength = datalist.find('.datalist-items-per-page').val();
-        var currentPage = parseInt(datalist.attr('data-page')) + 1;
-        var totalPages = parseInt(data.Rows.length / pageLength) + 1;
-        if (data.Rows.length % pageLength == 0 || data.Rows.length <= pageLength)
-            totalPages--;
-        
-        if (totalPages == 0)
-            datalist.find('.datalist-pager > .pagination').empty();
-        else
-            datalist.find('.datalist-pager > .pagination').bootstrapPaginator({
-                bootstrapMajorVersion: 3,
-                currentPage: currentPage,
-                totalPages: totalPages,
-                onPageChanged: function(e, oldPage, newPage) {
-                    datalist.attr('data-page', newPage - 1);
-                    update(datalist);
-                },
-                tooltipTitles: function (type, page, current) {
-                    return "";
-                },
-                itemTexts: function (type, page, current) {
-                    switch (type) {
-                        case "first":
-                            return "&laquo;";
-                        case "prev":
-                            return "&lsaquo;";
-                        case "next":
-                            return "&rsaquo;";
-                        case "last":
-                            return "&raquo;";
-                        case "page":
-                            return page;
-                    }
-                }
-            });
-    }
-    function select(input, datalistInput, id, value) {
-        input.attr('value', id != null ? id : '');
-        input.val(id != null ? id : '').change();
-        datalistInput.attr('value', value != null ? value : '');
-        datalistInput.val(value != null ? value : '').change();
-    }
-
-    function addTextSpans(datalist) {
-        datalist.find('.datalist-search-input').attr('placeholder', $.fn.datalist.lang.Search);
-        datalist.find('.datalist-error-span').html($.fn.datalist.lang.Error);
-    }
-    function createDialog(datalist) {
-        datalist.dialog({
-            title: datalist.attr('data-dialog-title'),
-            resizable: true,
-            autoOpen: false,
-            minHeight: 210,
-            height: 'auto',
-            minWidth: 455,
-            width: 'auto',
-            modal: true
-        });
-    }
-    function bindInputs(datalist) {
-        datalist.find('.datalist-search-input').bindWithDelay('keyup', function () {
-            datalist.attr('data-page', 0);
-            update(datalist);
-        }, 500, false);
-
-        datalist.find('.datalist-items-per-page').spinner({
-            change: function () {
-                var newValue = parseInt($(this).val());
-                if (isNaN(newValue))
-                    newValue = 20;
-                if (newValue < 1)
-                    newValue = 1;
-                if (newValue > 99)
-                    newValue = 99;
-
-                $(this).val(newValue);
-                datalist.attr('data-page', 0);
-                update(datalist);
-            },
-            max: 99,
-            min: 1
-        }).val(20).parent().addClass('input-group-addon');
-    }
-
-    function loadSelected() {
-        $('.datalist-hidden-input').each(function () {
-            var input = $(this);
-            var id = input.val();
-            var datalist = $('#Datalist' + $('#' + input.data('datalist-input')).data('identifier'));
-            if (id != '' && id != 0) {
-                $.ajax({
-                    'url': datalist.data('datalist-url') + '?Id=' + id + '&RecordsPerPage=1&SortOrder=Asc&Page=0',
-                    'async': true,
-                    'cache': false,
-                    'dataType': 'json',
-                    'success': function (data) {
-                        if (data.Rows.length > 0) {
-                            select(input, $('#' + input.data('datalist-input')), data.Rows[0]['DatalistIdKey'], data.Rows[0]['DatalistAcKey']);
+            if (totalPages == 0)
+                datalist.find('.datalist-pager > .pagination').empty();
+            else
+                datalist.find('.datalist-pager > .pagination').bootstrapPaginator({
+                    currentPage: that.options.page + 1,
+                    bootstrapMajorVersion: 3,
+                    totalPages: totalPages,
+                    onPageChanged: function (e, oldPage, newPage) {
+                        that.options.page = newPage - 1;
+                        that._update(datalist);
+                    },
+                    tooltipTitles: function (type, page, current) {
+                        return '';
+                    },
+                    itemTexts: function (type, page, current) {
+                        switch (type) {
+                            case 'first':
+                                return '&laquo;';
+                            case 'prev':
+                                return '&lsaquo;';
+                            case 'next':
+                                return '&rsaquo;';
+                            case 'last':
+                                return '&raquo;';
+                            case 'page':
+                                return page;
                         }
                     }
                 });
-            }
-        });
-    }
-    function bindFilters(datalistInput, datalist) {
-        var filters = datalist.attr('data-filters').split(',');
-        filters = $.grep(filters, function (item) { return (item != null && item != ''); });
-        for (i = 0; i < filters.length; i++) {
-            $('#' + filters[i]).change(function () {
-                datalistInput.val('').keyup();
+        },
+        _bindSelect: function (datalist, selectCell, data) {
+            var that = this;
+            that._on(selectCell, {
+                click: function () {
+                    datalist.dialog('close');
+                    that._select(data);
+                }
             });
-        }
-    }
+        },
 
-    function enableSorting() {
-        $(document).on('click', '.datalist-table-head th', function () {
-            var header = $(this);
-            if (!header.attr('data-column')) return false;
-            var datalist = header.parents('.datalist:first');
-            if (datalist.attr('data-sort-column') == header.attr('data-column'))
-                datalist.attr('data-sort-order', datalist.attr('data-sort-order') == 'Asc' ? 'Desc' : 'Asc');
-            else
-                datalist.attr('data-sort-order', 'Asc');
+        _destroy: function () {
+            var e = this.element;
+            var o = this.options;
+
+            e.attr('data-datalist-records-per-page', o.recordsPerPage);
+            e.attr('data-datalist-hidden-input', o.hiddenElement.id);
+            e.attr('data-datalist-filters', o.filters.join());
+            e.attr('data-datalist-sort-column', o.sortColumn);
+            e.attr('data-datalist-sort-order', o.sortOrder);
+            e.attr('data-datalist-dialog-title', o.title);
+            e.attr('data-datalist-term', o.term);
+            e.attr('data-datalist-page', o.page);
+            e.attr('data-datalist-url', o.url);
+            e.removeClass('mvc-datalist');
+            e.autocomplete('destroy');
             
-            datalist.attr('data-sort-column', header.attr('data-column'));
-            update(datalist);
-        });
-    }
-    function setLanguage() {
-        if ($.fn.datalist.lang == null) {
-            $.fn.datalist.lang = {
-                Error: "Error while retrieving records",
-                NoDataFound: "No data found",
-                Search: "Search..."
-            };
+            return this._super();
         }
-    }
+    });
+})(jQuery);
+
+(function ($) {
+    $.fn.datalist.lang = {
+        Error: 'Error while retrieving records',
+        NoDataFound: 'No data found',
+        Search: 'Search...'
+    };
+
+    var datalist = $('#Datalist');
+    datalist.find('.datalist-items-per-page').spinner({ min: 1, max: 99 }).parent().addClass('input-group-addon');
+    datalist.dialog({
+        autoOpen: false,
+        minHeight: 210,
+        height: 'auto',
+        minWidth: 455,
+        width: 'auto',
+        modal: true
+    });
 }(jQuery));

@@ -6,16 +6,13 @@
     width: 100%;
 }
 
-.datalist {
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
-}
-
 .ui-button-icon-only .ui-icon {
     margin-left: -8.3px;
 }
 
 .datalist {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
     display: none;
 }
 
@@ -101,19 +98,18 @@
     padding: 15px;
     display: none;
     width: 320px;
-    left: 45%;
+    left: 15%;
     top: 50%;
 }
 
 .datalist-data {
-    margin: 5px 5px 5px;
     height: auto;
     clear: both;
+    margin: 5px;
 }
 
 .datalist-table {
     margin-bottom: 0;
-    width: 100%;
 }
 
     .datalist-table thead > tr > th > .datalist-sort-arrow {
@@ -122,24 +118,22 @@
     }
 
     .datalist-table thead > tr > th {
+        vertical-align: middle;
         text-align: center;
-        line-height: 20px;
-        font-size: 0.9em;
         cursor: pointer;
-        color: #428BCA;
-        padding: 3px;
     }
 
     .datalist-table thead > tr > th,
     .datalist-table tbody > tr > td {
         font-size: 0.9em;
-        padding: 3px;
+        padding: 4px 8px;
     }
 
+.datalist-select-header,
 .datalist-select-cell {
     text-align: center;
     cursor: pointer;
-    width: 20px;
+    width: 35px;
 }
 
 .datalist-select-container {
@@ -165,12 +159,11 @@
     }
 
 .datalist-pager {
-    display: none;
     clear: both;
 }
 
     .datalist-pager .pagination {
-        margin: 5px 4px 0 0;
+        margin: 5px 5px 0 0;
         float: right;
     }
 
