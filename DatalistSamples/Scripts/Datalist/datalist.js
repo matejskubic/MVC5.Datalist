@@ -2,7 +2,7 @@
  * Datalist 3.0.0 beta
  * https://github.com/Muchiachio/MVC.Datalist
  *
- * Copyright (c) 2014 Muchiachio
+ * Copyright © 2014 Muchiachio
  *
  * Licensed under the terms of the MIT License
  * http://www.opensource.org/licenses/mit-license.php
@@ -17,20 +17,23 @@
             this._initAutocomplete();
             this._initDatalistOpenSpan();
 
-            this._loadSelected(); // TODO: Fix null values in javascript html code
+            this._loadSelected();
             this._cleanUp(); // TODO: Fix resizing on different datalists.
         },
         _initOptions: function () {
-            this.options.hiddenElement = $('#' + this.element.attr('data-datalist-hidden-input'))[0];
-            this.options.recordsPerPage = this.element.attr('data-datalist-records-per-page');
-            this.options.filters = this.element.attr('data-datalist-filters').split(',');
-            this.options.sortColumn = this.element.attr('data-datalist-sort-column');
-            this.options.sortOrder = this.element.attr('data-datalist-sort-order');
-            this.options.title = this.element.attr('data-datalist-dialog-title');
-            this.options.term = this.element.attr('data-datalist-term');
-            this.options.page = this.element.attr('data-datalist-page');
-            this.options.url = this.element.attr('data-datalist-url');
-            this.element.addClass('mvc-datalist');
+            var e = this.element;
+            var o = this.options;
+
+            o.hiddenElement = $('#' + e.attr('data-datalist-hidden-input'))[0];
+            o.recordsPerPage = e.attr('data-datalist-records-per-page');
+            o.filters = e.attr('data-datalist-filters').split(',');
+            o.sortColumn = e.attr('data-datalist-sort-column');
+            o.sortOrder = e.attr('data-datalist-sort-order');
+            o.title = e.attr('data-datalist-dialog-title');
+            o.term = e.attr('data-datalist-term');
+            o.page = parseInt(e.attr('data-datalist-page'));
+            o.url = e.attr('data-datalist-url');
+            e.addClass('mvc-datalist');
         },
         _initFilters: function () {
             for (i = 0; i < this.options.filters.length; i++)
@@ -215,7 +218,7 @@
                 success: function (data) {
                     that._updateHeader(datalist, data.Columns);
                     that._updateData(datalist, data);
-                    that._updateNavbar(datalist, data);
+                    that._updateNavbar(datalist, data.FilteredRecords);
 
                     clearTimeout(timeOut);
                     datalist.find('.datalist-processing').fadeOut(300);
@@ -236,7 +239,7 @@
             var header = '';
             var columnCount = 0;
             for (var key in columns) {
-                header += '<th data-column="' + key + '">' + columns[key];
+                header += '<th data-column="' + key + '">' + (columns[key] != null ? columns[key] : '');
                 if (that.options.sortColumn == key || (that.options.sortColumn == '' && columnCount == 0)) {
                     header += '<span class="datalist-sort-arrow glyphicon glyphicon-arrow-' + (that.options.sortOrder == 'Asc' ? 'down' : 'up') + '"></span>';
                     that.options.sortColumn = key;
@@ -270,7 +273,7 @@
                 var tableRow = '<tr>'
                 var row = data.Rows[i];
                 for (var key in data.Columns)
-                    tableRow += '<td>' + row[key] + '</td>';
+                    tableRow += '<td>' + (row[key] != null ? row[key] : '') + '</td>';
 
                 tableRow += '<td class="datalist-select-cell"><div class="datalist-select-container"><i class="glyphicon glyphicon-ok"></i></div></td></tr>';
                 tableData += tableRow;
@@ -281,11 +284,11 @@
             for (var i = 0; i < selectCells.length; i++)
                 this._bindSelect(datalist, selectCells[i], data.Rows[i]);
         },
-        _updateNavbar: function (datalist, data) {
+        _updateNavbar: function (datalist, filteredRecords) {
             var that = this;
             var pageLength = datalist.find('.datalist-items-per-page').val();
-            var totalPages = parseInt(data.FilteredRecords / pageLength) + 1;
-            if (data.FilteredRecords % pageLength == 0)
+            var totalPages = parseInt(filteredRecords / pageLength) + 1;
+            if (filteredRecords % pageLength == 0)
                 totalPages--;
 
             if (totalPages == 0)
@@ -329,17 +332,20 @@
         },
 
         _destroy: function () {
-            this.element.attr('data-datalist-records-per-page', this.options.recordsPerPage);
-            this.element.attr('data-datalist-hidden-input', this.options.hiddenElement.id);
-            this.element.attr('data-datalist-filters', this.options.filters.join());
-            this.element.attr('data-datalist-sort-column', this.options.sortColumn);
-            this.element.attr('data-datalist-sort-order', this.options.sortOrder);
-            this.element.attr('data-datalist-dialog-title', this.options.title);
-            this.element.attr('data-datalist-term', this.options.term);
-            this.element.attr('data-datalist-page', this.options.page);
-            this.element.attr('data-datalist-url', this.options.url);
-            this.element.removeClass('mvc-datalist');
-            this.element.autocomplete('destroy');
+            var e = this.element;
+            var o = this.options;
+
+            e.attr('data-datalist-records-per-page', o.recordsPerPage);
+            e.attr('data-datalist-hidden-input', o.hiddenElement.id);
+            e.attr('data-datalist-filters', o.filters.join());
+            e.attr('data-datalist-sort-column', o.sortColumn);
+            e.attr('data-datalist-sort-order', o.sortOrder);
+            e.attr('data-datalist-dialog-title', o.title);
+            e.attr('data-datalist-term', o.term);
+            e.attr('data-datalist-page', o.page);
+            e.attr('data-datalist-url', o.url);
+            e.removeClass('mvc-datalist');
+            e.autocomplete('destroy');
             
             return this._super();
         }

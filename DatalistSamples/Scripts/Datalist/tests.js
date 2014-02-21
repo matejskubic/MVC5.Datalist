@@ -1,27 +1,27 @@
 ﻿var testDatalist, testInput, hiddenInput, openSpan, filter1, filter2;
 var testData = {
     Columns: {
-        "Account.LoginName": "Login name",
-        "DateOfBirth": "DateOfBirth",
-        "FirstName": "FirstName",
-        "LastName": "LastName"
+        'Account.LoginName': 'Login name',
+        'DateOfBirth': 'DateOfBirth',
+        'FirstName': 'FirstName',
+        'LastName': 'LastName'
     },
     Rows: [
         {
-            "DatalistIdKey": "1",
-            "DatalistAcKey": "Tom",
-            "FirstName": "Tom",
-            "LastName": "Jecks",
-            "DateOfBirth": "10/10/1998 12:00:00 AM",
-            "Account.LoginName": "Tommy"
+            'DatalistIdKey': '1',
+            'DatalistAcKey': 'Tom',
+            'FirstName': 'Tom',
+            'LastName': 'Jecks',
+            'DateOfBirth': '10/10/1998 00:00:00',
+            'Account.LoginName': 'Tommy'
         },
         {
-            "DatalistIdKey": "5",
-            "DatalistAcKey": "Pet",
-            "FirstName": "Pet",
-            "LastName": "Quacks",
-            "DateOfBirth": "9/18/2000 12:00:00 AM",
-            "Account.LoginName": ""
+            'DatalistIdKey': '5',
+            'DatalistAcKey': 'Pet',
+            'FirstName': 'Pet',
+            'LastName': 'Quacks',
+            'DateOfBirth': '18/09/2000 00:00:00',
+            'Account.LoginName': ''
         }],
     FilteredRecords: 5
 };
@@ -353,7 +353,7 @@ test('Default select prevented', 0, function () {
     testInput.data('mvc-datalist')._select();
 });
 
-test('Update calls', 46, function () {
+test('Update calls', 28, function () {
     testInput
         .attr('data-datalist-records-per-page', 2)
         .attr('data-datalist-term', '')
@@ -376,20 +376,13 @@ test('Update calls', 46, function () {
         equal(datalist[0], testDatalist[0]);
         for (i = 0; i < testData.Rows.length; i++)
             for (var key in testData.Rows[i])
-                equal(data.Rows[i][key], testData.Rows[i][key]);
+                equal(data.Rows[i][key] != null ? data.Rows[i][key] : '', testData.Rows[i][key]);
         for (var key in testData.Columns)
             equal(data.Columns[key], testData.Columns[key]);
     };
-    mvcDatalist._updateNavbar = function (datalist, data) {
-        equal(data.FilteredRecords, testData.FilteredRecords);
-        equal(data.Columns.length, testData.Columns.length);
-        equal(data.Rows.length, testData.Rows.length);
+    mvcDatalist._updateNavbar = function (datalist, filteredRecords) {
+        equal(filteredRecords, testData.FilteredRecords);
         equal(datalist[0], testDatalist[0]);
-        for (i = 0; i < testData.Rows.length; i++)
-            for (var key in testData.Rows[i])
-                equal(data.Rows[i][key], testData.Rows[i][key]);
-        for (var key in testData.Columns)
-            equal(data.Columns[key], testData.Columns[key]);
     };
 
     openSpan.click();
@@ -417,7 +410,7 @@ test('Updates header', function () {
     mvcDatalist._updateHeader(testDatalist, testData.Columns);
 
     var columnCount = 0;
-    var expectedHeader = '';
+    var expectedHeader = '<tr>';
     for (var key in testData.Columns) {
         expectedHeader += '<th data-column="' + key + '">' + testData.Columns[key];
         if (testInput.datalist('option', 'sortColumn') == key || (testInput.datalist('option', 'sortColumn') == '' && columnCount == 0))
@@ -427,33 +420,19 @@ test('Updates header', function () {
         columnCount++;
     }
 
-    expectedHeader = '<tr>' + expectedHeader + '<th class="datalist-select-header"></th></tr>';
+    expectedHeader += '<th class="datalist-select-header"></th></tr>';
 
     equal(testDatalist.find('.datalist-table-head').html(), expectedHeader);
 });
 test('Update header, sets sort column if not specified', 2, function () {
-    var columns = {
-        "Account.LoginName": "Login name",
-        "DateOfBirth": "DateOfBirth",
-        "FirstName": "FirstName",
-        "LastName": "LastName"
-    };
-
     testInput.attr('data-datalist-sort-column', '').datalist();
     equal(testInput.datalist('option', 'sortColumn'), '');
 
-    testInput.data('mvc-datalist')._updateHeader(testDatalist, columns);
+    testInput.data('mvc-datalist')._updateHeader(testDatalist, testData.Columns);
     equal(testInput.datalist('option', 'sortColumn'), 'Account.LoginName');
 });
 test('Update header, binds header click', 12, function () {
-    var columns = {
-        "Account.LoginName": "Login name",
-        "DateOfBirth": "DateOfBirth",
-        "FirstName": "FirstName",
-        "LastName": "LastName"
-    };
-
-    testInput.datalist().data('mvc-datalist')._updateHeader(testDatalist, columns);
+    testInput.datalist().data('mvc-datalist')._updateHeader(testDatalist, testData.Columns);
 
     var headers = testDatalist.find('.datalist-table-head th');
     var previousSortColumn = $(headers[0]).attr('data-column');
@@ -528,6 +507,50 @@ test('Update data, binds select spans', 6, function () {
     };
     
     mvcDatalist._updateData(testDatalist, testData);
+});
+
+test('Updates navigation bar to empty', 1, function () {
+    var pagination = testDatalist.find('.datalist-pager > .pagination');
+    var mvcDatalist = testInput.datalist().data('mvc-datalist');
+    pagination.html('Test');
+
+    mvcDatalist._updateNavbar(testDatalist, 0);
+    equal(pagination.html(), '');
+});
+test('Updates navigation with paginator', 9, function () {
+    var pagination = testDatalist.find('.datalist-pager > .pagination');
+    var mvcDatalist = testInput.attr('data-datalist-page', 1).datalist().data('mvc-datalist');
+    testDatalist.find('.datalist-items-per-page').val(1);
+    mvcDatalist._updateNavbar(testDatalist, 2);
+    var pages = pagination.bootstrapPaginator('getPages');
+
+    equal(pages[0], 1);
+    equal(pages[1], 2);
+    equal(pages.prev, 1);
+    equal(pages.next, 2);
+    equal(pages.last, 2);
+    equal(pages.first, 1);
+    equal(pages.total, 2);
+    equal(pages.current, 2);
+    equal(pages.numberOfPages, 5);
+});
+
+test('Binds datalist table select', 4, function () {
+    var iteration = 0;
+    var mvcDatalist = testInput.datalist().data('mvc-datalist');
+    mvcDatalist._select = function (data) {
+        equal(data, testData.Rows[iteration++]);
+    };
+    mvcDatalist._updateData(testDatalist, testData);
+
+    var dialogClose = testDatalist.data('ui-dialog').close;
+    testDatalist.data('ui-dialog').close = function () {
+        dialogClose();
+        ok(true);
+    };
+    $.each(testDatalist.find('td.datalist-select-cell'), function (index, element) {
+        $(element).click();
+    });
 });
 
 test('Limits value', 6, function () {
