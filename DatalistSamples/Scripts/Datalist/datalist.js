@@ -238,8 +238,8 @@
             for (var key in columns) {
                 header += '<th data-column="' + key + '">' + columns[key];
                 if (that.options.sortColumn == key || (that.options.sortColumn == '' && columnCount == 0)) {
-                    that.options.sortColumn = key;
                     header += '<span class="datalist-sort-arrow glyphicon glyphicon-arrow-' + (that.options.sortOrder == 'Asc' ? 'down' : 'up') + '"></span>';
+                    that.options.sortColumn = key;
                 }
 
                 header += '</th>';
@@ -261,7 +261,7 @@
         },
         _updateData: function (datalist, data) {
             if (data.Rows.length == 0) {
-                datalist.find('.datalist-table-body').html('<tr><td colspan="0" style="text-align: center">' + $.fn.datalist.lang.NoDataFound + '</tr>');
+                datalist.find('.datalist-table-body').html('<tr><td colspan="0" style="text-align: center">' + $.fn.datalist.lang.NoDataFound + '</td></tr>');
                 return;
             }
 
@@ -272,7 +272,7 @@
                 for (var key in data.Columns)
                     tableRow += '<td>' + row[key] + '</td>';
 
-                tableRow += '<td class="datalist-select-cell"><div class="datalist-select-container"><i class="glyphicon glyphicon-ok"></div></i></td></tr>';
+                tableRow += '<td class="datalist-select-cell"><div class="datalist-select-container"><i class="glyphicon glyphicon-ok"></i></div></td></tr>';
                 tableData += tableRow;
             }
 

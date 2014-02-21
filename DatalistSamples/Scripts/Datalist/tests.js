@@ -1,8 +1,35 @@
-﻿var testInput, hiddenInput, openSpan, filter1, filter2;
+﻿var testDatalist, testInput, hiddenInput, openSpan, filter1, filter2;
+var testData = {
+    Columns: {
+        "Account.LoginName": "Login name",
+        "DateOfBirth": "DateOfBirth",
+        "FirstName": "FirstName",
+        "LastName": "LastName"
+    },
+    Rows: [
+        {
+            "DatalistIdKey": "1",
+            "DatalistAcKey": "Tom",
+            "FirstName": "Tom",
+            "LastName": "Jecks",
+            "DateOfBirth": "10/10/1998 12:00:00 AM",
+            "Account.LoginName": "Tommy"
+        },
+        {
+            "DatalistIdKey": "5",
+            "DatalistAcKey": "Pet",
+            "FirstName": "Pet",
+            "LastName": "Quacks",
+            "DateOfBirth": "9/18/2000 12:00:00 AM",
+            "Account.LoginName": ""
+        }],
+    FilteredRecords: 5
+};
 
 QUnit.testStart(function (details) {
     openSpan = $('#test-data > .input-group > .datalist-open-span');
     testInput = $('#TestDatalist');
+    testDatalist = $('#Datalist');
     hiddenInput = $('#Test');
     filter1 = $('#Filter1');
     filter2 = $('#Filter2');
@@ -17,7 +44,7 @@ QUnit.testStart(function (details) {
         .attr('data-datalist-hidden-input', 'Test')
         .attr('data-datalist-sort-order', 'Desc')
         .attr('data-datalist-term', 'test')
-        .attr('data-datalist-page', '1');
+        .attr('data-datalist-page', '0');
 });
 QUnit.testDone(function (details) {
     testInput.val('').clone().appendTo('#test-data > .input-group');
@@ -44,7 +71,7 @@ test('Initializes options', 12, function () {
     testInput.datalist();
 
     ok(testInput.hasClass('mvc-datalist'));
-    equal(testInput.datalist('option', 'page'), 1);
+    equal(testInput.datalist('option', 'page'), 0);
     equal(testInput.datalist('option', 'term'), 'test');
     equal(testInput.datalist('option', 'select'), null);
     equal(testInput.datalist('option', 'sortOrder'), 'Desc');
@@ -132,7 +159,7 @@ test('Removes all preceding elements', 1, function () {
 
 test('Initializes datalist open span', 16, function () {
     testInput.datalist().data('mvc-datalist')._update = function (datalist) {
-        equal(datalist[0], $('#Datalist')[0]);
+        equal(datalist[0], testDatalist[0]);
     };
     testInput.data('mvc-datalist')._limitTo = function (value, min, max) {
         equal(value, 30);
@@ -142,7 +169,7 @@ test('Initializes datalist open span', 16, function () {
     };
 
     openSpan.click();
-    $('#Datalist').dialog('close');
+    testDatalist.dialog('close');
 
     testInput.data('mvc-datalist')._limitTo = function (value, min, max) {
         equal(value, 2);
@@ -152,7 +179,7 @@ test('Initializes datalist open span', 16, function () {
     };
 
     $('.datalist-items-per-page').val(2).data('ui-spinner')._trigger('change', 'spinnerchange');
-    equal($('#Datalist').dialog('option', 'title'), testInput.datalist('option', 'title'));
+    equal(testDatalist.dialog('option', 'title'), testInput.datalist('option', 'title'));
     equal($('.datalist-search-input').attr('placeholder'), $.fn.datalist.lang.Search);
     equal($('.datalist-error-span').html(), $.fn.datalist.lang.Error);
     equal(testInput.datalist('option', 'recordsPerPage'), 2);
@@ -326,6 +353,183 @@ test('Default select prevented', 0, function () {
     testInput.data('mvc-datalist')._select();
 });
 
+test('Update calls', 46, function () {
+    testInput
+        .attr('data-datalist-records-per-page', 2)
+        .attr('data-datalist-term', '')
+        .datalist();
+
+    var mvcDatalist = testInput.data('mvc-datalist');
+    var formDatalistUrl = mvcDatalist._formDatalistUrl;
+
+    mvcDatalist._updateHeader = function (datalist, columns) {
+        for (var key in testData.Columns)
+            equal(columns[key], testData.Columns[key]);
+
+        equal(columns.length, testData.Columns.length);
+        equal(datalist[0], testDatalist[0]);
+    };
+    mvcDatalist._updateData = function (datalist, data) {
+        equal(data.FilteredRecords, testData.FilteredRecords);
+        equal(data.Columns.length, testData.Columns.length);
+        equal(data.Rows.length, testData.Rows.length);
+        equal(datalist[0], testDatalist[0]);
+        for (i = 0; i < testData.Rows.length; i++)
+            for (var key in testData.Rows[i])
+                equal(data.Rows[i][key], testData.Rows[i][key]);
+        for (var key in testData.Columns)
+            equal(data.Columns[key], testData.Columns[key]);
+    };
+    mvcDatalist._updateNavbar = function (datalist, data) {
+        equal(data.FilteredRecords, testData.FilteredRecords);
+        equal(data.Columns.length, testData.Columns.length);
+        equal(data.Rows.length, testData.Rows.length);
+        equal(datalist[0], testDatalist[0]);
+        for (i = 0; i < testData.Rows.length; i++)
+            for (var key in testData.Rows[i])
+                equal(data.Rows[i][key], testData.Rows[i][key]);
+        for (var key in testData.Columns)
+            equal(data.Columns[key], testData.Columns[key]);
+    };
+
+    openSpan.click();
+    testDatalist.dialog('close');
+    stop();
+    setTimeout(function () {
+        start();
+    }, 1000);
+});
+test('Update fades in and out it\'s elements', 3, function () {
+    testInput.datalist();
+    testInput.data('mvc-datalist')._update(testDatalist);
+    
+    stop();
+    setTimeout(function () {
+        start();
+        equal(testDatalist.find('.datalist-processing').css('display'), 'none');
+        equal(testDatalist.find('.datalist-data').fadeIn(300).css('display'), 'block');
+        equal(testDatalist.find('.datalist-pager').fadeIn(300).css('display'), 'block');
+    }, 1000);
+});
+
+test('Updates header', function () {
+    var mvcDatalist = testInput.datalist().data('mvc-datalist');
+    mvcDatalist._updateHeader(testDatalist, testData.Columns);
+
+    var columnCount = 0;
+    var expectedHeader = '';
+    for (var key in testData.Columns) {
+        expectedHeader += '<th data-column="' + key + '">' + testData.Columns[key];
+        if (testInput.datalist('option', 'sortColumn') == key || (testInput.datalist('option', 'sortColumn') == '' && columnCount == 0))
+            expectedHeader += '<span class="datalist-sort-arrow glyphicon glyphicon-arrow-' + (testInput.datalist('option', 'sortOrder') == 'Asc' ? 'down' : 'up') + '"></span>';
+
+        expectedHeader += '</th>';
+        columnCount++;
+    }
+
+    expectedHeader = '<tr>' + expectedHeader + '<th class="datalist-select-header"></th></tr>';
+
+    equal(testDatalist.find('.datalist-table-head').html(), expectedHeader);
+});
+test('Update header, sets sort column if not specified', 2, function () {
+    var columns = {
+        "Account.LoginName": "Login name",
+        "DateOfBirth": "DateOfBirth",
+        "FirstName": "FirstName",
+        "LastName": "LastName"
+    };
+
+    testInput.attr('data-datalist-sort-column', '').datalist();
+    equal(testInput.datalist('option', 'sortColumn'), '');
+
+    testInput.data('mvc-datalist')._updateHeader(testDatalist, columns);
+    equal(testInput.datalist('option', 'sortColumn'), 'Account.LoginName');
+});
+test('Update header, binds header click', 12, function () {
+    var columns = {
+        "Account.LoginName": "Login name",
+        "DateOfBirth": "DateOfBirth",
+        "FirstName": "FirstName",
+        "LastName": "LastName"
+    };
+
+    testInput.datalist().data('mvc-datalist')._updateHeader(testDatalist, columns);
+
+    var headers = testDatalist.find('.datalist-table-head th');
+    var previousSortColumn = $(headers[0]).attr('data-column');
+    $.each(headers, function (index, header) {
+        var jHeader = $(header);
+        testInput.data('mvc-datalist')._update = function (datalist) {
+            if (jHeader.hasClass('datalist-select-header'))
+                equal(testInput.datalist('option', 'sortColumn'), previousSortColumn);
+            else
+                equal(testInput.datalist('option', 'sortColumn'), jHeader.attr('data-column'));
+        };
+
+        jHeader.click();
+
+        var currentSortOrder = testInput.datalist('option', 'sortOrder');
+        testInput.data('mvc-datalist')._update = function (datalist) {
+            if (jHeader.hasClass('datalist-select-header'))
+                equal(testInput.datalist('option', 'sortOrder'), currentSortOrder);
+            else
+                equal(testInput.datalist('option', 'sortOrder'), (currentSortOrder == 'Asc') ? 'Desc' : 'Asc');
+        };
+
+        jHeader.click();
+
+        var currentSortOrder = testInput.datalist('option', 'sortOrder');
+        testInput.data('mvc-datalist')._update = function (datalist) {
+            if (jHeader.hasClass('datalist-select-header'))
+                equal(testInput.datalist('option', 'sortOrder'), currentSortOrder);
+            else
+                equal(testInput.datalist('option', 'sortOrder'), (currentSortOrder == 'Asc') ? 'Desc' : 'Asc');
+        };
+
+        jHeader.click();
+
+        previousSortColumn = $(headers[0]).attr('data-column');
+    });
+});
+
+test('Update data, returns no data found', 1, function () {
+    var datalistTableBody = testDatalist.find('.datalist-table-body');
+    datalistTableBody.html('Test');
+
+    testInput.datalist().data('mvc-datalist')._updateData(testDatalist, { Rows: [] });
+    equal(datalistTableBody.html(), '<tr><td colspan="0" style="text-align: center">' + $.fn.datalist.lang.NoDataFound + '</td></tr>');
+});
+test('Update data, updates table data', 1, function () {
+    var datalistTableBody = testDatalist.find('.datalist-table-body');
+    datalistTableBody.html('Test');
+
+    testInput.datalist().data('mvc-datalist')._updateData(testDatalist, testData);
+
+    var expectedData = '';
+    for (var i = 0; i < testData.Rows.length; i++) {
+        var tableRow = '<tr>'
+        var row = testData.Rows[i];
+        for (var key in testData.Columns)
+            tableRow += '<td>' + row[key] + '</td>';
+
+        tableRow += '<td class="datalist-select-cell"><div class="datalist-select-container"><i class="glyphicon glyphicon-ok"></i></div></td></tr>';
+        expectedData += tableRow;
+    }
+
+    equal(datalistTableBody.html(), expectedData);
+});
+test('Update data, binds select spans', 6, function () {
+    var iteration = 0;
+    var mvcDatalist = testInput.datalist().data('mvc-datalist');
+    mvcDatalist._bindSelect = function (datalist, selectCell, dataRow) {
+        equal(selectCell, datalist.find('td.datalist-select-cell')[iteration]);
+        equal(dataRow, testData.Rows[iteration++]);
+        equal(datalist[0], testDatalist[0]);
+    };
+    
+    mvcDatalist._updateData(testDatalist, testData);
+});
+
 test('Limits value', 6, function () {
     testInput.datalist();
     var datalist = testInput.data('mvc-datalist');
@@ -387,12 +591,11 @@ test('Datalist spinner init', 4, function () {
     ok(datalistSpinner.parent().hasClass('input-group-addon'));
 });
 test('Datalist dialog init', 7, function () {
-    var datalist = $('#Datalist');
-    ok(datalist.hasClass('ui-dialog-content'));
-    equal(datalist.dialog('option', 'autoOpen'), false);
-    equal(datalist.dialog('option', 'minHeight'), 210);
-    equal(datalist.dialog('option', 'height'), 'auto');
-    equal(datalist.dialog('option', 'minWidth'), 455);
-    equal(datalist.dialog('option', 'width'), 'auto');
-    equal(datalist.dialog('option', 'modal'), true);
+    ok(testDatalist.hasClass('ui-dialog-content'));
+    equal(testDatalist.dialog('option', 'autoOpen'), false);
+    equal(testDatalist.dialog('option', 'minHeight'), 210);
+    equal(testDatalist.dialog('option', 'height'), 'auto');
+    equal(testDatalist.dialog('option', 'minWidth'), 455);
+    equal(testDatalist.dialog('option', 'width'), 'auto');
+    equal(testDatalist.dialog('option', 'modal'), true);
 });
