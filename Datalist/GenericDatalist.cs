@@ -219,12 +219,15 @@ namespace Datalist
             if (property == null)
                 throw new DatalistException(String.Format("Type {0} does not have property named {1}.", type.Name, properties[0]));
 
-            if (properties.Length == 1)
-                value = property.GetValue(model);
-            else
-                value = GetValue(property.GetValue(model), String.Join(".", properties.Skip(1)));
+            if (properties.Length > 1)
+                return GetValue(property.GetValue(model), String.Join(".", properties.Skip(1)));
 
-            return value != null ? value.ToString() : String.Empty;
+            value = property.GetValue(model) ?? String.Empty;
+            var datalistColumn = property.GetCustomAttribute<DatalistColumnAttribute>(false);
+            if (datalistColumn != null && datalistColumn.Format != null)
+                value = String.Format(datalistColumn.Format, value);
+
+            return value.ToString();
         }
         private Type GetType(String fullPropertyName)
         {

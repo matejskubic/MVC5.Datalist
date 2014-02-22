@@ -1,17 +1,16 @@
 ﻿@{
-    ViewBag.Title = "DatalistColumnAttribute.Position";
+    ViewBag.Title = "DatalistColumnAttribute.Format";
 }
 
 <div class="panel panel-default">
-    <div class="panel-heading">Position</div>
+    <div class="panel-heading">Format</div>
     <div class="panel-body">
         <strong>Description</strong>
-        <pre>Specified column position in datalist table.</pre>
+        <pre>Specified column value format.</pre>
         <strong>Defaults</strong>
         <pre><span class="kwrd">null</span></pre>
         <strong>Remarks</strong>
-        <pre>Default <a href="/Datalist/API/GenericDatalist">GenericDatalist</a> implementation orders columns in Ascending order, which keeps <span class="kwrd">null</span> positions in front.
-If every column does not have a position, they will be ordered in the same order they appear in model type's <a href="http://msdn.microsoft.com/en-us/library/aky14axb(v=vs.110).aspx">GetProperties</a> method.</pre>
+        <pre>Default <a href="/Datalist/API/GenericDatalist">GenericDatalist</a> implementation formats column values using this format in <span class="cls">String</span>.Format(<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>.Format, value)</pre>
         <strong>Examples</strong>
         <pre>
 <span class="kwrd">public class</span> <span class="cls">UserModel</span>
@@ -23,7 +22,7 @@ If every column does not have a position, they will be ordered in the same order
 
     [<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>]
     <span class="kwrd">public</span> <span class="cls">String</span> LastName { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
-
+    
     [<a href="/Datalist/API/DatalistColumnAttribute">DatalistColumn</a>(4, Format = <span class="str">"{0:d}"</span>)]
     <span class="kwrd">public</span> <span class="cls">DateTime</span> DateOfBirth { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
 
@@ -31,7 +30,7 @@ If every column does not have a position, they will be ordered in the same order
     <span class="kwrd">public</span> <span class="cls">AccountModel</span> Account { <span class="kwrd">get</span>; <span class="kwrd">set</span>; }
 }
 
-After ordering these column, column order will be: <span class="str">"FirstName"</span>, <span class="str">"LastName"</span>, <span class="str">"DateOfBirth"</span>, <span class="str">"Account.LoginName"</span>.</pre>
-    @Html.Datalist("Position1", null, new DefaultDatalist())
+DateOfBirth will be formatted as <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">date</a>.</pre>
+    @Html.Datalist("Format1", null, new DefaultDatalist())
     </div>
 </div>

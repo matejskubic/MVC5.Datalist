@@ -7,6 +7,12 @@ namespace DatalistSamples.Controllers.API
         #region Properties
 
         [HttpGet]
+        public ActionResult Format()
+        {
+            return View();
+        }
+
+        [HttpGet]
         public ActionResult Position()
         {
             return View();

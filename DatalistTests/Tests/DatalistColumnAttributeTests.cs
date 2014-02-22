@@ -20,6 +20,12 @@ namespace DatalistTests.Tests
             Assert.IsNull(new DatalistColumnAttribute().Relation);
         }
 
+        [Test]
+        public void DatalistColumnAttribute_NullFormat()
+        {
+            Assert.IsNull(new DatalistColumnAttribute().Format);
+        }
+
         #endregion
 
         #region Constructor: DatalistColumnAttribute(Int32 position)

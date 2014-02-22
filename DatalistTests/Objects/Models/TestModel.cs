@@ -17,7 +17,7 @@ namespace DatalistTests.Objects.Models
         [Datalist(typeof(TestDatalistStub))]
         public String ParentId { get; set; }
 
-        [DatalistColumn(-5)]
+        [DatalistColumn(-5, Format = "{0:d}")]
         public DateTime CreationDate { get; set; }
 
         public Decimal Sum { get; set; }

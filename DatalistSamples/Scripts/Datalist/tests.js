@@ -1,30 +1,4 @@
-﻿var testDatalist, testInput, hiddenInput, openSpan, filter1, filter2;
-var testData = {
-    Columns: {
-        'Account.LoginName': 'Login name',
-        'DateOfBirth': 'DateOfBirth',
-        'FirstName': 'FirstName',
-        'LastName': 'LastName'
-    },
-    Rows: [
-        {
-            'DatalistIdKey': '1',
-            'DatalistAcKey': 'Tom',
-            'FirstName': 'Tom',
-            'LastName': 'Jecks',
-            'DateOfBirth': '10/10/1998 00:00:00',
-            'Account.LoginName': 'Tommy'
-        },
-        {
-            'DatalistIdKey': '5',
-            'DatalistAcKey': 'Pet',
-            'FirstName': 'Pet',
-            'LastName': 'Quacks',
-            'DateOfBirth': '18/09/2000 00:00:00',
-            'Account.LoginName': ''
-        }],
-    FilteredRecords: 5
-};
+﻿var testData, testDatalist, testInput, hiddenInput, openSpan, filter1, filter2;
 
 QUnit.testStart(function (details) {
     openSpan = $('#test-data > .input-group > .datalist-open-span');
@@ -45,6 +19,33 @@ QUnit.testStart(function (details) {
         .attr('data-datalist-sort-order', 'Desc')
         .attr('data-datalist-term', 'test')
         .attr('data-datalist-page', '0');
+
+    testData = {
+        Columns: {
+            'Account.LoginName': 'Login name',
+            'DateOfBirth': 'DateOfBirth',
+            'FirstName': 'FirstName',
+            'LastName': 'LastName'
+        },
+        Rows: [
+            {
+                'DatalistIdKey': '1',
+                'DatalistAcKey': 'Tom',
+                'FirstName': 'Tom',
+                'LastName': 'Jecks',
+                'DateOfBirth': '10/10/1998',
+                'Account.LoginName': 'Tommy'
+            },
+            {
+                'DatalistIdKey': '5',
+                'DatalistAcKey': 'Pet',
+                'FirstName': 'Pet',
+                'LastName': 'Quacks',
+                'DateOfBirth': '18/09/2000',
+                'Account.LoginName': ''
+            }],
+        FilteredRecords: 5
+    };
 });
 QUnit.testDone(function (details) {
     testInput.val('').clone().appendTo('#test-data > .input-group');
@@ -126,7 +127,7 @@ test('Initializes custom filter change', 0, function () {
     filter1.change();
     filter2.change();
 });
-// TODO: Somehow test autocomplete source method
+
 test('Initializes autocomplete', 2, function () {
     ok(testInput.datalist().hasClass('ui-autocomplete-input'));
     equal(testInput.autocomplete('option', 'minLength'), 1);

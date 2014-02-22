@@ -15,7 +15,7 @@ namespace DatalistSamples.Models
         [DatalistColumn]
         public String LastName { get; set; }
 
-        [DatalistColumn(4)]
+        [DatalistColumn(4, Format = "{0:d}")]
         public DateTime DateOfBirth { get; set; }
 
         [DatalistColumn(7, Relation = "LoginName")]

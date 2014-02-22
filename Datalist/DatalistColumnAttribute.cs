@@ -14,6 +14,11 @@ namespace Datalist
             get;
             set;
         }
+        public String Format
+        {
+            get;
+            set;
+        }
 
         public DatalistColumnAttribute()
         {

@@ -54,7 +54,22 @@ namespace DatalistTests.Tests
         #endregion
 
         #region Constructor: GenericDatalist()
-        
+
+        [Test]
+        public void GenericDatalist_AddsColumns()
+        {
+            var properties = datalist.BaseAttributedProperties;
+            var callCount = datalist.BaseAttributedProperties.Count();
+            datalistMock.Protected().Verify("GetColumnKey", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
+            datalistMock.Protected().Verify("GetColumnHeader", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
+
+            var columns = new Dictionary<String, String>();
+            foreach (PropertyInfo property in datalist.BaseAttributedProperties)
+                columns.Add(datalist.BaseGetColumnKey(property), datalist.BaseGetColumnHeader(property));
+
+            CollectionAssert.AreEqual(columns, datalist.Columns);
+        }
+
         #endregion
 
         #region Method: GetColumnKey(PropertyInfo property)
@@ -709,12 +724,15 @@ namespace DatalistTests.Tests
             String[] properties = fullPropertyName.Split('.');
             var property = type.GetProperty(properties[0]);
 
-            if (properties.Length == 1)
-                value = property.GetValue(model);
-            else
-                value = GetValue(property.GetValue(model), String.Join(".", properties.Skip(1)));
+            if (properties.Length > 1)
+                return GetValue(property.GetValue(model), String.Join(".", properties.Skip(1)));
 
-            return value != null ? value.ToString() : String.Empty;
+            value = property.GetValue(model) ?? String.Empty;
+            var datalistColumn = property.GetCustomAttribute<DatalistColumnAttribute>(false);
+            if (datalistColumn != null && datalistColumn.Format != null)
+                value = String.Format(datalistColumn.Format, value);
+
+            return value.ToString();
         }
 
         #endregion
