@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "DatalistColumn.CssClass";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">CssClass</div>
+    <div class="panel-body">
+        <strong>Description</strong>
+        <pre>Specifies column css class.</pre>
+        <strong>Defaults</strong>
+        <pre><span class="kwrd">null</span></pre>
+        <strong>Remarks</strong>
+        <pre>Specified class will be applied for column header and all it's data rows.</pre>
+        <strong>Examples</strong>
+        <pre>
+Center aligns all <span class="cls">String</span> properties.
+
+<span class="kwrd">protected</span> <span class="kwrd">override</span> <span class="cls">String</span> GetColumnCssClass(PropertyInfo property)
+{
+    <span class="kwrd">if</span> (property.PropertyType == <span class="kwrd">typeof</span>(<span class="cls">String</span>))
+        <span class="kwrd">return</span> <span class="str">"text-cell"</span>;
+
+    <span class="kwrd">return</span> <span class="cls">String</span>.Empty;
+}
+
+<span style="color: #C7254E">.text-cell</span> {
+    <span style="color: #FF0000">text-align</span><span style="color: #0000FF">: center</span>;
+}</pre>
+        @Html.Datalist("GetColumnCssClass1", null, new ExampleDatalist())
+    </div>
+</div>

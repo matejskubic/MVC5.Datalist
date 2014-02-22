@@ -2,4 +2,5 @@ MVC.Datalist
 ============
 
 Autocomplete plus datatables like plugin for MVC projects.
-Built on Bootstrap and MVC4.
+
+Built on MVC4, Bootstrap and jQuery.

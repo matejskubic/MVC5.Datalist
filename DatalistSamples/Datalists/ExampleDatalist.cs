@@ -1,5 +1,6 @@
 ﻿using Datalist;
 using System;
+using System.Reflection;
 using System.Web;
 
 namespace DatalistSamples.Datalists
@@ -9,8 +10,8 @@ namespace DatalistSamples.Datalists
         public ExampleDatalist()
         {
             Columns.Clear();
-            Columns.Add("FirstName", "First name");
-            Columns.Add("LastName", "Last name");
+            Columns.Add(new DatalistColumn("FirstName", "First name", "text-cell"));
+            Columns.Add(new DatalistColumn("LastName", "Last name", "text-cell"));
             AdditionalFilters.Add("AdditionalFilterId");
 
             DefaultSortColumn = "LastName";
@@ -25,6 +26,13 @@ namespace DatalistSamples.Datalists
                 "DifferentUrlExample");
 
             DialogTitle = "Normal dialog title";
+        }
+        protected override String GetColumnCssClass(PropertyInfo property)
+        {
+            if (property.PropertyType == typeof(String))
+                return "text-cell";
+
+            return String.Empty;
         }
     }
 }

@@ -67,6 +67,8 @@
       <DependentUpon>201402191330397_2.cs</DependentUpon>
     </Compile>
     <Compile Include="Tests\AbstractDatalistTests.cs" />
+    <Compile Include="Tests\DatalistColumnsTests.cs" />
+    <Compile Include="Tests\DatalistColumnTests.cs" />
     <Compile Include="Tests\GenericDatalistTests.cs" />
     <Compile Include="Tests\DatalistAttributeTests.cs" />
     <Compile Include="Tests\DatalistColumnAttributeTests.cs" />

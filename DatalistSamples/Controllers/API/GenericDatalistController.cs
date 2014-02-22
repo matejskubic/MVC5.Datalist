@@ -63,6 +63,12 @@ namespace DatalistSamples.Controllers.API
         }
 
         [HttpGet]
+        public ActionResult GetColumnCssClass()
+        {
+            return View();
+        }
+
+        [HttpGet]
         public ActionResult GetData()
         {
             return View();

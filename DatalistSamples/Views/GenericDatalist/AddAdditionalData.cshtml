@@ -14,7 +14,7 @@ It will be accessible from javascript code.</pre>
         <pre>row.Add(<span class="str">"AdditionalData"</span>, <span class="str">"Additional data"</span>);
 
 $(<span class="str">'.datalist-input'</span>).datalist({
-    select: <span class="kwrd">function</span> (e, element, data) {
+    select: <span class="kwrd">function</span> (event, element, hiddenElement, data) {
         console.log(data.AdditionalData);
     }
 });</pre>
@@ -23,7 +23,7 @@ $(<span class="str">'.datalist-input'</span>).datalist({
     @section scripts {
         <script>
             $('.datalist-input').datalist({
-                select: function (e, element, data) {
+                select: function (event, element, hiddenElement, data) {
                     console.log(data.AdditionalData);
                 }
             });

@@ -51,5 +51,17 @@ namespace DatalistSamples.Controllers.API
         {
             return View();
         }
+
+        [HttpGet]
+        public ActionResult DatalistColumn()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult DatalistColumns()
+        {
+            return View();
+        }
     }
 }

@@ -56,18 +56,45 @@ namespace DatalistTests.Tests
         #region Constructor: GenericDatalist()
 
         [Test]
-        public void GenericDatalist_AddsColumns()
+        public void GenericDatalist_CallsGetColumnKey()
         {
             var properties = datalist.BaseAttributedProperties;
             var callCount = datalist.BaseAttributedProperties.Count();
             datalistMock.Protected().Verify("GetColumnKey", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
+        }
+
+        [Test]
+        public void GenericDatalist_CallsGetColumnHeader()
+        {
+            var properties = datalist.BaseAttributedProperties;
+            var callCount = datalist.BaseAttributedProperties.Count();
             datalistMock.Protected().Verify("GetColumnHeader", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
+        }
 
-            var columns = new Dictionary<String, String>();
+        [Test]
+        public void GenericDatalist_CallsGetColumnCssClass()
+        {
+            var properties = datalist.BaseAttributedProperties;
+            var callCount = datalist.BaseAttributedProperties.Count();
+            datalistMock.Protected().Verify("GetColumnCssClass", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
+        }
+
+        [Test]
+        public void GenericDatalist_AddsColumns()
+        {
+            var columns = new DatalistColumns();
             foreach (PropertyInfo property in datalist.BaseAttributedProperties)
-                columns.Add(datalist.BaseGetColumnKey(property), datalist.BaseGetColumnHeader(property));
+                columns.Add(new DatalistColumn(datalist.BaseGetColumnKey(property), datalist.BaseGetColumnHeader(property)));
 
-            CollectionAssert.AreEqual(columns, datalist.Columns);
+            var expected = columns.GetEnumerator();
+            var actual = datalist.Columns.GetEnumerator();
+
+            while (expected.MoveNext() | actual.MoveNext())
+            {
+                Assert.AreEqual(expected.Current.Key, actual.Current.Key);
+                Assert.AreEqual(expected.Current.Header, actual.Current.Header);
+                Assert.AreEqual(expected.Current.CssClass, actual.Current.CssClass);
+            }
         }
 
         #endregion
@@ -162,6 +189,16 @@ namespace DatalistTests.Tests
             String actual = datalist.BaseGetColumnHeader(property);
 
             Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
+
+        #region Method: GetColumnCssClass(PropertyInfo property)
+
+        [Test]
+        public void GetColumnCssClass_AlwaysEmptyString()
+        {
+            Assert.AreEqual(String.Empty, datalist.BaseGetColumnCssClass(null));
         }
 
         #endregion
@@ -379,7 +416,7 @@ namespace DatalistTests.Tests
         public void FilterBySearchTerm_OnMissingPropertyThrows()
         {
             datalist.CurrentFilter.SearchTerm = "Test";
-            datalist.Columns.Add("TestProperty", String.Empty);
+            datalist.Columns.Add(new DatalistColumn("TestProperty", String.Empty));
             Assert.Throws<DatalistException>(() => datalist.BaseFilterBySearchTerm(datalist.BaseGetModels()));
         }
 
@@ -413,7 +450,7 @@ namespace DatalistTests.Tests
         public void FilterBySearchTerm_NotFiltersNonStringProperties()
         {
             datalist.Columns.Clear();
-            datalist.Columns.Add("Number", String.Empty);
+            datalist.Columns.Add(new DatalistColumn("Number", String.Empty));
             datalist.CurrentFilter.SearchTerm = "Test";
 
             var expected = datalist.BaseGetModels().ToList();
@@ -610,7 +647,7 @@ namespace DatalistTests.Tests
         public void AddAutocomplete_OnMissingPropertyThrows()
         {
             datalist.Columns.Clear();
-            datalist.Columns.Add("TestProperty", String.Empty);
+            datalist.Columns.Add(new DatalistColumn("TestProperty", String.Empty));
             Assert.Throws<DatalistException>(() => datalist.BaseAddAutocomplete(new Dictionary<String, String>(), new TestModel()));
         }
 
@@ -638,7 +675,7 @@ namespace DatalistTests.Tests
         public void AddAutocomplete_AddsRelationValue()
         {
             datalist.Columns.Clear();
-            datalist.Columns.Add("FirstRelationModel.Value", String.Empty);
+            datalist.Columns.Add(new DatalistColumn("FirstRelationModel.Value", String.Empty));
             var model = new TestModel() { FirstRelationModel = new TestRelationModel() { Value = "Test" } };
             var firstProperty = typeof(TestRelationModel).GetProperty("Value");
             var row = new Dictionary<String, String>();
@@ -671,7 +708,7 @@ namespace DatalistTests.Tests
         public void AddColumns_OnMissingPropertyThrows()
         {
             datalist.Columns.Clear();
-            datalist.Columns.Add("TestProperty", String.Empty);
+            datalist.Columns.Add(new DatalistColumn("TestProperty", String.Empty));
             Assert.Throws<DatalistException>(() => datalist.BaseAddColumns(new Dictionary<String, String>(), new TestModel()));
         }
 
@@ -690,7 +727,7 @@ namespace DatalistTests.Tests
             var expected = new List<String>();
             var row = new Dictionary<String, String>();
             var model = new TestModel() { FirstRelationModel = new TestRelationModel() { Value = "Test" } };
-            foreach (KeyValuePair<String, String> column in datalist.Columns)
+            foreach (var column in datalist.Columns)
                 expected.Add(GetValue(model, column.Key));
 
             datalist.BaseAddColumns(row, model);

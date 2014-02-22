@@ -10,7 +10,7 @@ namespace Datalist
             get;
             set;
         }
-        public Dictionary<String, String> Columns
+        public DatalistColumns Columns
         {
             get;
             set;
@@ -24,7 +24,7 @@ namespace Datalist
         public DatalistData()
         {
             FilteredRecords = 0;
-            Columns = new Dictionary<String, String>();
+            Columns = new DatalistColumns();
             Rows = new List<Dictionary<String, String>>();
         }
     }

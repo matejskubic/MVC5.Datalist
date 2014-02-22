@@ -30,8 +30,8 @@ Which will map to datalist model properties named <span class="str">"FirstName"<
 <span class="kwrd">public</span> ExampleDatalist()
 {
     Columns.Clear();
-    Columns.Add(<span class="str">"FirstName"</span>, <span class="str">"First name"</span>);
-    Columns.Add(<span class="str">"LastName"</span>, <span class="str">"Last name"</span>);
+    Columns.Add(<span class="kwrd">new</span> <a href="/Datalist/API/DatalistColumn">DatalistColumn</a>(<span class="str">"FirstName"</span>, <span class="str">"First name"</span>));
+    Columns.Add(<span class="kwrd">new</span> <a href="/Datalist/API/DatalistColumn">DatalistColumn</a>(<span class="str">"LastName"</span>, <span class="str">"Last name"</span>));
 }</pre>
         @Html.Datalist("Columns2", null, new ExampleDatalist())
     </div>

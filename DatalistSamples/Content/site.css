@@ -5,6 +5,7 @@
 
 body {
     font-family: "klavika-web", "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif !important;
+    position: relative;
     padding-top: 60px;
 }
 
@@ -93,4 +94,8 @@ pre {
     display: block;
     overflow: auto;
     padding: 15px;
+}
+
+.text-cell {
+    text-align: center;
 }

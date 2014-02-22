@@ -168,6 +168,8 @@
     <Compile Include="Context\UserRepository.cs" />
     <Compile Include="Controllers\API\AbstractDatalistController.cs" />
     <Compile Include="Controllers\API\APIController.cs" />
+    <Compile Include="Controllers\API\DatalistColumnsController.cs" />
+    <Compile Include="Controllers\API\DatalistColumnController.cs" />
     <Compile Include="Controllers\API\DatalistAttributeController.cs" />
     <Compile Include="Controllers\API\DatalistColumnAttributeController.cs" />
     <Compile Include="Controllers\API\DatalistDataController.cs" />
@@ -260,6 +262,16 @@
     <Content Include="Scripts\jquery-2.1.0.min.map" />
     <Content Include="Views\Datalist\Tests.cshtml" />
     <Content Include="Views\DatalistColumnAttribute\Format.cshtml" />
+    <Content Include="Views\GenericDatalist\GetColumnCssClass.cshtml" />
+    <Content Include="Views\API\DatalistColumns.cshtml" />
+    <Content Include="Views\API\DatalistColumn.cshtml" />
+    <Content Include="Views\DatalistColumn\Key.cshtml" />
+    <Content Include="Views\DatalistColumn\CssClass.cshtml" />
+    <Content Include="Views\DatalistColumn\Header.cshtml" />
+    <Content Include="Views\DatalistColumns\Keys.cshtml" />
+    <Content Include="Views\DatalistColumns\Remove.cshtml" />
+    <Content Include="Views\DatalistColumns\Add.cshtml" />
+    <Content Include="Views\DatalistColumns\Clear.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

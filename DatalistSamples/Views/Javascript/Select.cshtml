@@ -18,8 +18,8 @@ $(<span class="str">'.datalist-input'</span>).datalist({
     select: <span class="kwrd">function</span> (e, element, hiddenElement, data) {
         <span class="kwrd">if</span> (data) {
             e.preventDefault();
-            hiddenElement.value = data.DatalistIdKey;
             element.value = <span class="str">"My own value"</span>;
+            hiddenElement.value = data.DatalistIdKey;
         } <span class="kwrd">else</span> { <span class="com">// autocomplete is cleared, clearing values</span>
             hiddenElement.value = <span class="kwrd">null</span>;
             element.value = <span class="kwrd">null</span>;
@@ -34,8 +34,8 @@ $(<span class="str">'.datalist-input'</span>).datalist({
                 select: function (event, element, hiddenElement, data) {
                     if (data) {
                         event.preventDefault();
-                        hiddenElement.value = data.DatalistIdKey;
                         element.value = "My own value";
+                        hiddenElement.value = data.DatalistIdKey;
                     } else { // autocomplete is cleared, clearing values
                         hiddenElement.value = null;
                         element.value = null;

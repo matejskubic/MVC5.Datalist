@@ -23,7 +23,7 @@ namespace Datalist
         public GenericDatalist()
         {
             foreach (PropertyInfo property in AttributedProperties)
-                Columns.Add(GetColumnKey(property), GetColumnHeader(property));
+                Columns.Add(new DatalistColumn(GetColumnKey(property), GetColumnHeader(property), GetColumnCssClass(property)));
         }
         protected virtual String GetColumnKey(PropertyInfo property)
         {
@@ -46,6 +46,10 @@ namespace Datalist
             var header = property.GetCustomAttribute<DisplayAttribute>(false);
             if (header != null) return header.GetName();
             return property.Name;
+        }
+        protected virtual String GetColumnCssClass(PropertyInfo property)
+        {
+            return String.Empty;
         }
         private PropertyInfo GetRelationProperty(PropertyInfo property, String relation)
         {
@@ -121,12 +125,12 @@ namespace Datalist
         {
             String sortColumn = CurrentFilter.SortColumn ?? DefaultSortColumn;
             if (sortColumn != null)
-                if (Columns.ContainsKey(sortColumn))
+                if (Columns.Keys.Contains(sortColumn))
                     return models.OrderBy(String.Format("{0} {1}", sortColumn, CurrentFilter.SortOrder));
                 else
                     throw new DatalistException(String.Format("Datalist does not contain sort column named \"{0}\"", sortColumn));
             
-            if (Columns.Count > 0)
+            if (Columns.Count() > 0)
                 return models.OrderBy(String.Format("{0} {1}", Columns.First().Key, CurrentFilter.SortOrder));
             
             throw new DatalistException("Datalist columns can not be empty.");
@@ -161,14 +165,14 @@ namespace Datalist
         }
         protected virtual void AddAutocomplete(Dictionary<String, String> row, T model)
         {
-            if (Columns.Count == 0)
+            if (Columns.Count() == 0)
                 throw new DatalistException("Datalist columns can not be empty.");
 
             row.Add(AcKey, GetValue(model, Columns.Keys.First()));
         }
         protected virtual void AddColumns(Dictionary<String, String> row, T model)
         {
-            if (Columns.Count == 0)
+            if (Columns.Count() == 0)
                 throw new DatalistException("Datalist columns can not be empty.");
 
             foreach (String column in Columns.Keys)

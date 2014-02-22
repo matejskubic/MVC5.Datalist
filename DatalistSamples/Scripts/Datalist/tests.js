@@ -21,29 +21,40 @@ QUnit.testStart(function (details) {
         .attr('data-datalist-page', '0');
 
     testData = {
-        Columns: {
-            'Account.LoginName': 'Login name',
-            'DateOfBirth': 'DateOfBirth',
-            'FirstName': 'FirstName',
-            'LastName': 'LastName'
-        },
-        Rows: [
-            {
-                'DatalistIdKey': '1',
-                'DatalistAcKey': 'Tom',
-                'FirstName': 'Tom',
-                'LastName': 'Jecks',
-                'DateOfBirth': '10/10/1998',
-                'Account.LoginName': 'Tommy'
-            },
-            {
-                'DatalistIdKey': '5',
-                'DatalistAcKey': 'Pet',
-                'FirstName': 'Pet',
-                'LastName': 'Quacks',
-                'DateOfBirth': '18/09/2000',
-                'Account.LoginName': ''
-            }],
+        Columns:
+            [
+                {
+                    Key: 'FirstName', Header: 'FirstName', CssClass: ''
+                },
+                {
+                    Key: 'LastName', Header: 'LastName', CssClass: ''
+                },
+                {
+                    Key: 'DateOfBirth', Header: 'DateOfBirth', CssClass: ''
+                },
+                {
+                    Key: 'Account.LoginName', Header: 'Login name', CssClass: ''
+                }
+            ],
+        Rows:
+            [
+                {
+                    'DatalistIdKey': '1',
+                    'DatalistAcKey': 'Tom',
+                    'FirstName': 'Tom',
+                    'LastName': 'Jecks',
+                    'DateOfBirth': '10/10/1998',
+                    'Account.LoginName': 'Tommy'
+                },
+                {
+                    'DatalistIdKey': '5',
+                    'DatalistAcKey': 'Pet',
+                    'FirstName': 'Pet',
+                    'LastName': 'Quacks',
+                    'DateOfBirth': '18/09/2000',
+                    'Account.LoginName': ''
+                }
+            ],
         FilteredRecords: 5
     };
 });
@@ -364,8 +375,9 @@ test('Update calls', 28, function () {
     var formDatalistUrl = mvcDatalist._formDatalistUrl;
 
     mvcDatalist._updateHeader = function (datalist, columns) {
-        for (var key in testData.Columns)
-            equal(columns[key], testData.Columns[key]);
+        $.each(columns, function (index, column) {
+            equal(column.Key, testData.Columns[index].Key);
+        });
 
         equal(columns.length, testData.Columns.length);
         equal(datalist[0], testDatalist[0]);
@@ -378,8 +390,9 @@ test('Update calls', 28, function () {
         for (i = 0; i < testData.Rows.length; i++)
             for (var key in testData.Rows[i])
                 equal(data.Rows[i][key] != null ? data.Rows[i][key] : '', testData.Rows[i][key]);
-        for (var key in testData.Columns)
-            equal(data.Columns[key], testData.Columns[key]);
+        $.each(testData.Columns, function (index, column) {
+            equal(data.Columns[index].Key, testData.Columns[index].Key);
+        });
     };
     mvcDatalist._updateNavbar = function (datalist, filteredRecords) {
         equal(filteredRecords, testData.FilteredRecords);
@@ -412,14 +425,14 @@ test('Updates header', function () {
 
     var columnCount = 0;
     var expectedHeader = '<tr>';
-    for (var key in testData.Columns) {
-        expectedHeader += '<th data-column="' + key + '">' + testData.Columns[key];
-        if (testInput.datalist('option', 'sortColumn') == key || (testInput.datalist('option', 'sortColumn') == '' && columnCount == 0))
+    $.each(testData.Columns, function (index, column) {
+        expectedHeader += '<th class="' + (column.CssClass != null ? column.CssClass : '') + '" data-column="' + column.Key + '">' + column.Header;
+        if (testInput.datalist('option', 'sortColumn') == column.Key || (testInput.datalist('option', 'sortColumn') == '' && columnCount == 0))
             expectedHeader += '<span class="datalist-sort-arrow glyphicon glyphicon-arrow-' + (testInput.datalist('option', 'sortOrder') == 'Asc' ? 'down' : 'up') + '"></span>';
 
         expectedHeader += '</th>';
         columnCount++;
-    }
+    });
 
     expectedHeader += '<th class="datalist-select-header"></th></tr>';
 
@@ -430,7 +443,7 @@ test('Update header, sets sort column if not specified', 2, function () {
     equal(testInput.datalist('option', 'sortColumn'), '');
 
     testInput.data('mvc-datalist')._updateHeader(testDatalist, testData.Columns);
-    equal(testInput.datalist('option', 'sortColumn'), 'Account.LoginName');
+    equal(testInput.datalist('option', 'sortColumn'), 'FirstName');
 });
 test('Update header, binds header click', 12, function () {
     testInput.datalist().data('mvc-datalist')._updateHeader(testDatalist, testData.Columns);
@@ -489,8 +502,9 @@ test('Update data, updates table data', 1, function () {
     for (var i = 0; i < testData.Rows.length; i++) {
         var tableRow = '<tr>'
         var row = testData.Rows[i];
-        for (var key in testData.Columns)
-            tableRow += '<td>' + row[key] + '</td>';
+        $.each(testData.Columns, function (index, column) {
+            tableRow += '<td class="' + (column.CssClass != null ? column.CssClass : '') + '">' + (row[column.Key] != null ? row[column.Key] : '') + '</td>';
+        });
 
         tableRow += '<td class="datalist-select-cell"><div class="datalist-select-container"><i class="glyphicon glyphicon-ok"></i></div></td></tr>';
         expectedData += tableRow;

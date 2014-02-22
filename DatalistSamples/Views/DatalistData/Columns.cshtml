@@ -8,9 +8,9 @@
         <strong>Description</strong>
         <pre>Dictionary for keeping visible datalist column key and header values.</pre>
         <strong>Defaults</strong>
-        <pre>Empty dictionary.</pre>
+        <pre><span class="kwrd">new</span> <a href="/Datalist/API/DatalistColumns">DatalistColumns</a>() instance.</pre>
         <strong>Remarks</strong>
-        <pre>The idea is to have these columns equal to <a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a>.<a href="/Datalist/API/AbstractDatalist/Columns">Columns</a>, unless less columns are to be rendered, <strong>but no more</strong>.</pre>
+        <pre>The idea is to have these columns equal to <a href="/Datalist/API/AbstractDatalist">AbstractDatalist</a>.<a href="/Datalist/API/AbstractDatalist/Columns">Columns</a>, unless less columns are to be rendered, <strong>but not more</strong>.</pre>
         <strong>Examples</strong>
         <pre>This is how <a href="/Datalist/API/DatalistData">DatalistData</a>.Columns could be filled with data.
 There will be two visible columns with keys <span class="str">"FirstName"</span> and <span class="str">"LastName"</span>,
@@ -20,8 +20,8 @@ which will have headers <span class="str">"First name"</span> and <span class="s
 {
     <span class="kwrd">var</span> data = <span class="kwrd">new</span> <a href="/Datalist/API/DatalistData">DatalistData</a>();
     data.FilteredRecords = models.Count();
-    data.Columns.Add(<span class="str">"FirstName"</span>, <span class="str">"First name"</span>);
-    data.Columns.Add(<span class="str">"LastName"</span>, <span class="str">"Last name"</span>);
+    data.Columns.Add(<span class="kwrd">new</span> <a href="/Datalist/API/DatalistColumn">DatalistColumn</a>(<span class="str">"FirstName"</span>, <span class="str">"First name"</span>));
+    data.Columns.Add(<span class="kwrd">new</span> <a href="/Datalist/API/DatalistColumn">DatalistColumn</a>(<span class="str">"LastName"</span>, <span class="str">"Last name"</span>));
 
     <span class="kwrd">var</span> pagedModels = models
         .Skip(CurrentFilter.Page * CurrentFilter.RecordsPerPage)

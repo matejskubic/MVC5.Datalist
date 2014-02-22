@@ -44,6 +44,10 @@ namespace DatalistTests.Objects.Stubs
         {
             return GetColumnHeader(property);
         }
+        public String BaseGetColumnCssClass(PropertyInfo property)
+        {
+            return GetColumnCssClass(property);
+        }
 
         public IQueryable<T> BaseFilterById(IQueryable<T> models)
         {

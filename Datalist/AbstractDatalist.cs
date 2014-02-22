@@ -40,7 +40,7 @@ namespace Datalist
             get;
             protected set;
         }
-        public Dictionary<String, String> Columns
+        public DatalistColumns Columns
         {
             get;
             protected set;
@@ -55,9 +55,9 @@ namespace Datalist
         protected AbstractDatalist()
         {
             String sanitizedName = GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty);
-            Columns = new Dictionary<String, String>();
             AdditionalFilters = new List<String>();
             CurrentFilter = new DatalistFilter();
+            Columns = new DatalistColumns();
             DialogTitle = sanitizedName;
             DefaultRecordsPerPage = 20;
 
