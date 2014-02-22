@@ -7,29 +7,25 @@ namespace DatalistTests.Tests
     [TestFixture]
     public class DatalistColumnTests
     {
-        #region Constructor: DatalistColumn()
-        
+        #region Constructor: DatalistColumn(String key, String header, String cssClass = "")
+
         [Test]
-        public void DatalistColumn_NullKey()
+        public void Add_OnNullKeyThrows()
         {
-            Assert.IsNull(new DatalistColumn().Key);
+            Assert.Throws<ArgumentNullException>(() => new DatalistColumn(null, String.Empty));
         }
 
         [Test]
-        public void DatalistColumn_NullHeader()
+        public void Add_OnNullHeaderThrows()
         {
-            Assert.IsNull(new DatalistColumn().Header);
+            Assert.Throws<ArgumentNullException>(() => new DatalistColumn(String.Empty, null));
         }
 
         [Test]
-        public void DatalistColumn_NullCssClass()
+        public void Add_OnNullCssClass()
         {
-            Assert.IsNull(new DatalistColumn().CssClass);
+            Assert.Throws<ArgumentNullException>(() => new DatalistColumn(String.Empty, String.Empty, null));
         }
-
-        #endregion
-
-        #region Constructor: DatalistColumn(String key, String header, String cssClass = null)
 
         [Test]
         public void DatalistColumn_SetsKey()

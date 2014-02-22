@@ -12,8 +12,8 @@ namespace DatalistSamples.Datalists
         {
             var data = new DatalistData();
             data.FilteredRecords = models.Count();
-            data.Columns.Add(new DatalistColumn("FirstName", "First name"));
-            data.Columns.Add(new DatalistColumn("LastName", "Last name"));
+            data.Columns.Add("FirstName", "First name");
+            data.Columns.Add("LastName", "Last name");
 
             var pagedModels = models
                 .Skip(CurrentFilter.Page * CurrentFilter.RecordsPerPage)

@@ -21,7 +21,7 @@ namespace DatalistTests.Tests
         private TestDatalistStub datalist;
 
         [SetUp]
-        public virtual void SetUp()
+        public void SetUp()
         {
             HttpContext.Current = new HttpContext(
                 new HttpRequest(null, "http://localhost:7013/", null),
@@ -32,7 +32,7 @@ namespace DatalistTests.Tests
         }
 
         [TearDown]
-        public virtual void TearDown()
+        public void TearDown()
         {
             HttpContext.Current = null;
         }

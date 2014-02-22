@@ -7,24 +7,28 @@ namespace Datalist
         public String Key
         {
             get;
-            set;
+            private set;
         }
         public String Header
         {
             get;
-            set;
+            private set;
         }
         public String CssClass
         {
             get;
-            set;
+            private set;
         }
 
-        public DatalistColumn()
-        {
-        }
         public DatalistColumn(String key, String header, String cssClass = "")
         {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (header == null)
+                throw new ArgumentNullException("header");
+            if (cssClass == null)
+                throw new ArgumentNullException("cssClass");
+
             Key = key;
             Header = header;
             CssClass = cssClass;

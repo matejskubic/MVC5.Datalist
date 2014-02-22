@@ -23,7 +23,7 @@ namespace Datalist
         public GenericDatalist()
         {
             foreach (PropertyInfo property in AttributedProperties)
-                Columns.Add(new DatalistColumn(GetColumnKey(property), GetColumnHeader(property), GetColumnCssClass(property)));
+                Columns.Add(GetColumnKey(property), GetColumnHeader(property), GetColumnCssClass(property));
         }
         protected virtual String GetColumnKey(PropertyInfo property)
         {

@@ -10,8 +10,8 @@ namespace DatalistSamples.Datalists
         public ExampleDatalist()
         {
             Columns.Clear();
-            Columns.Add(new DatalistColumn("FirstName", "First name", "text-cell"));
-            Columns.Add(new DatalistColumn("LastName", "Last name", "text-cell"));
+            Columns.Add("FirstName", "First name", "text-cell");
+            Columns.Add("LastName", "Last name", "text-cell");
             AdditionalFilters.Add("AdditionalFilterId");
 
             DefaultSortColumn = "LastName";
