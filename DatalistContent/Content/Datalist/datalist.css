@@ -1,4 +1,11 @@
-﻿.ui-dialog,
+﻿/*!
+ * Datalist 3.0.0
+ * Copyright © 2014 Muchiachio
+ * Licensed under the terms of the MIT License
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+
+.ui-dialog,
 .ui-dialog:after,
 .ui-dialog:before {
     -moz-box-sizing: content-box;

@@ -18,7 +18,7 @@
             this._initDatalistOpenSpan();
 
             this._loadSelected();
-            this._cleanUp(); // TODO: Fix resizing on different datalists.
+            this._cleanUp();
         },
         _initOptions: function () {
             var e = this.element;
@@ -112,6 +112,7 @@
                         datalist.find('.datalist-search-input').attr('placeholder', $.fn.datalist.lang.Search);
                         datalist.find('.datalist-error-span').html($.fn.datalist.lang.Error);
                         datalist.dialog('option', 'title', that.options.title);
+                        datalist.find('.datalist-table-body').empty();
                         datalist.dialog('open');
                         that._update(datalist);
                     }

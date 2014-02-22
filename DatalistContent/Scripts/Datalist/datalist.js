@@ -1,5 +1,5 @@
 ﻿/*!
- * Datalist 3.0.0 beta
+ * Datalist 3.0.0
  * https://github.com/Muchiachio/MVC.Datalist
  *
  * Copyright © 2014 Muchiachio
@@ -11,14 +11,14 @@
     $.widget('mvc.datalist', {
         _create: function () {
             if (!this.element.hasClass('datalist-input')) return;
-            
+
             this._initOptions();
             this._initFilters();
             this._initAutocomplete();
             this._initDatalistOpenSpan();
 
             this._loadSelected();
-            this._cleanUp(); // TODO: Fix resizing on different datalists.
+            this._cleanUp();
         },
         _initOptions: function () {
             var e = this.element;
@@ -112,6 +112,7 @@
                         datalist.find('.datalist-search-input').attr('placeholder', $.fn.datalist.lang.Search);
                         datalist.find('.datalist-error-span').html($.fn.datalist.lang.Error);
                         datalist.dialog('option', 'title', that.options.title);
+                        datalist.find('.datalist-table-body').empty();
                         datalist.dialog('open');
                         that._update(datalist);
                     }
@@ -171,7 +172,7 @@
                 });
             }
         },
-        _select: function(data) {
+        _select: function (data) {
             var event = $.Event(this._defaultSelect);
             if (this.options.select)
                 this.options.select(event, this.element[0], this.options.hiddenElement, data);
@@ -238,16 +239,16 @@
             var that = this;
             var header = '';
             var columnCount = 0;
-            for (var key in columns) {
-                header += '<th data-column="' + key + '">' + (columns[key] != null ? columns[key] : '');
-                if (that.options.sortColumn == key || (that.options.sortColumn == '' && columnCount == 0)) {
+            $.each(columns, function (index, column) {
+                header += '<th class="' + (column.CssClass != null ? column.CssClass : '') + '" data-column="' + column.Key + '">' + (column.Header != null ? column.Header : '');
+                if (that.options.sortColumn == column.Key || (that.options.sortColumn == '' && columnCount == 0)) {
                     header += '<span class="datalist-sort-arrow glyphicon glyphicon-arrow-' + (that.options.sortOrder == 'Asc' ? 'down' : 'up') + '"></span>';
-                    that.options.sortColumn = key;
+                    that.options.sortColumn = column.Key;
                 }
 
                 header += '</th>';
                 columnCount++;
-            }
+            });
 
             datalist.find('.datalist-table-head').html('<tr>' + header + '<th class="datalist-select-header"></th></tr>');
             datalist.find('.datalist-table-head th').click(function () {
@@ -272,8 +273,9 @@
             for (var i = 0; i < data.Rows.length; i++) {
                 var tableRow = '<tr>'
                 var row = data.Rows[i];
-                for (var key in data.Columns)
-                    tableRow += '<td>' + (row[key] != null ? row[key] : '') + '</td>';
+                $.each(data.Columns, function (index, column) {
+                    tableRow += '<td class="' + (column.CssClass != null ? column.CssClass : '') + '">' + (row[column.Key] != null ? row[column.Key] : '') + '</td>';
+                });
 
                 tableRow += '<td class="datalist-select-cell"><div class="datalist-select-container"><i class="glyphicon glyphicon-ok"></i></div></td></tr>';
                 tableData += tableRow;
@@ -346,7 +348,7 @@
             e.attr('data-datalist-url', o.url);
             e.removeClass('mvc-datalist');
             e.autocomplete('destroy');
-            
+
             return this._super();
         }
     });
