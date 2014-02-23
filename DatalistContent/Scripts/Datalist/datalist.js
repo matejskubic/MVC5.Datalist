@@ -1,8 +1,8 @@
 ﻿/*!
  * Datalist 3.0.0
- * https://github.com/Muchiachio/MVC.Datalist
+ * https://github.com/NonFactors/MVC.Datalist
  *
- * Copyright © 2014 Muchiachio
+ * Copyright © 2014 NonFactors
  *
  * Licensed under the terms of the MIT License
  * http://www.opensource.org/licenses/mit-license.php
