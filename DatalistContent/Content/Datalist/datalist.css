@@ -70,6 +70,7 @@
     }
 
 .datalist-processing {
+    background: url(../../Images/Datalist/loading.gif) no-repeat center;
     border: 1px solid #DDDDDD;
     background-color: #FFFFFF;
     position: absolute;
@@ -81,32 +82,19 @@
     top: 37%;
 }
 
-    .datalist-processing > .datalist-processing-span {
-        position: absolute;
-        display: block;
-        height: 100%;
-        width: 100%;
-    }
-
-        .datalist-processing > .datalist-processing-span > img {
-            margin-top: 17px;
-        }
-
 .datalist-error {
     background-color: #F2DEDE;
-    border-color: #EBCCD1;
-    margin-bottom: 20px;
     position: absolute;
     text-align: center;
-    border-radius: 4px;
-    margin-top: -15px;
-    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid;
+    font-size: 13px;
     color: #A94442;
     padding: 15px;
     display: none;
     width: 320px;
     left: 15%;
-    top: 50%;
+    top: 45%;
 }
 
 .datalist-data {
