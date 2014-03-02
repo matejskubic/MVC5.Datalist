@@ -30,6 +30,10 @@ Include scripts
 <script src="~/Scripts/Datalist/bootstrap-paginator.js" />
 <script src="~/Scripts/Datalist/datalist.js" />
 ```
+Render your datalist inputs
+```
+@Html.Datalist("SampleId", new SampleDatalist())
+```
 Initialize datalist instances
 ```js
 $('.datalist-input').datalist();
