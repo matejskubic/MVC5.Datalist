@@ -41,5 +41,4 @@ $('.datalist-input').datalist();
 
 Examples and API documentation
 --
-Until Datalist website is up,
-usage examples and API can be found in [DatalistSamples] (https://github.com/Muchiachio/MVC.Datalist/tree/master/DatalistSamples) project.
+Usage examples and API can be found at [Datalist] (http://non-factors.com/Datalist) website.
