@@ -265,6 +265,7 @@
     <Content Include="Views\DatalistColumns\Remove.cshtml" />
     <Content Include="Views\DatalistColumns\Add.cshtml" />
     <Content Include="Views\DatalistColumns\Clear.cshtml" />
+    <None Include="Properties\PublishProfiles\SmartAsp.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
