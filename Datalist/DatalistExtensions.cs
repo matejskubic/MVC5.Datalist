@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Web;
@@ -86,10 +85,14 @@ namespace Datalist
         }
         private static String FormDatalistOpenSpan(AbstractDatalist model)
         {
-            TagBuilder span = new TagBuilder("span");
-            span.AddCssClass("datalist-open-span input-group-addon glyphicon glyphicon-search");
+            var outerSpan = new TagBuilder("span");
+            var innerSpan = new TagBuilder("span");
 
-            return span.ToString();
+            innerSpan.AddCssClass("glyphicon glyphicon-search");
+            outerSpan.AddCssClass("datalist-open-span input-group-addon");
+            outerSpan.InnerHtml = innerSpan.ToString();
+
+            return outerSpan.ToString();
         }
     }
 }
