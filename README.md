@@ -30,6 +30,13 @@ Include scripts
 <script src="~/Scripts/Datalist/bootstrap-paginator.js" />
 <script src="~/Scripts/Datalist/datalist.js" />
 ```
+Implement data source method in DatalistController
+```cs
+public JsonResult Sample(DatalistFilter filter)
+{
+    return GetData(new SampleDatalist(), filter);
+}
+```
 Render your datalist inputs
 ```
 @Html.Datalist("SampleId", new SampleDatalist())
