@@ -1,5 +1,5 @@
 ﻿/*!
- * Datalist 3.0.2
+ * Datalist 3.0.3
  * https://github.com/NonFactors/MVC.Datalist
  *
  * Copyright © 2014 NonFactors
@@ -11,7 +11,7 @@
     $.widget('mvc.datalist', {
         _create: function () {
             if (!this.element.hasClass('datalist-input')) return;
-            
+
             this._initOptions();
             this._initFilters();
             this._initAutocomplete();
@@ -173,7 +173,7 @@
                 });
             }
         },
-        _select: function(data) {
+        _select: function (data) {
             var event = $.Event(this._defaultSelect);
             if (this.options.select)
                 this.options.select(event, this.element[0], this.options.hiddenElement, data);
@@ -243,7 +243,7 @@
             $.each(columns, function (index, column) {
                 header += '<th class="' + (column.CssClass != null ? column.CssClass : '') + '" data-column="' + column.Key + '">' + (column.Header != null ? column.Header : '');
                 if (that.options.sortColumn == column.Key || (that.options.sortColumn == '' && columnCount == 0)) {
-                    header += '<span class="datalist-sort-arrow glyphicon glyphicon-arrow-' + (that.options.sortOrder == 'Asc' ? 'down' : 'up') + '"></span>';
+                    header += '<span class="datalist-sort-arrow glyphicon glyphicon-arrow-' + (that.options.sortOrder == 'Asc' ? 'up' : 'down') + '"></span>';
                     that.options.sortColumn = column.Key;
                 }
 
@@ -277,7 +277,7 @@
                 $.each(data.Columns, function (index, column) {
                     tableRow += '<td class="' + (column.CssClass != null ? column.CssClass : '') + '">' + (row[column.Key] != null ? row[column.Key] : '') + '</td>';
                 });
-                
+
                 tableRow += '<td class="datalist-select-cell"><div class="datalist-select-container"><i class="glyphicon glyphicon-ok"></i></div></td></tr>';
                 tableData += tableRow;
             }
@@ -349,7 +349,7 @@
             e.attr('data-datalist-url', o.url);
             e.removeClass('mvc-datalist');
             e.autocomplete('destroy');
-            
+
             return this._super();
         }
     });

@@ -428,7 +428,7 @@ test('Updates header', function () {
     $.each(testData.Columns, function (index, column) {
         expectedHeader += '<th class="' + (column.CssClass != null ? column.CssClass : '') + '" data-column="' + column.Key + '">' + column.Header;
         if (testInput.datalist('option', 'sortColumn') == column.Key || (testInput.datalist('option', 'sortColumn') == '' && columnCount == 0))
-            expectedHeader += '<span class="datalist-sort-arrow glyphicon glyphicon-arrow-' + (testInput.datalist('option', 'sortOrder') == 'Asc' ? 'down' : 'up') + '"></span>';
+            expectedHeader += '<span class="datalist-sort-arrow glyphicon glyphicon-arrow-' + (testInput.datalist('option', 'sortOrder') == 'Asc' ? 'up' : 'down') + '"></span>';
 
         expectedHeader += '</th>';
         columnCount++;
