@@ -10,18 +10,18 @@ namespace DatalistSamples.Datalists
     {
         protected override DatalistData FormDatalistData(IQueryable<UserModel> models)
         {
-            var data = new DatalistData();
+            DatalistData data = new DatalistData();
             data.FilteredRecords = models.Count();
             data.Columns.Add("FirstName", "First name");
             data.Columns.Add("LastName", "Last name");
 
-            var pagedModels = models
+            IQueryable<UserModel> pagedModels = models
                 .Skip(CurrentFilter.Page * CurrentFilter.RecordsPerPage)
                 .Take(CurrentFilter.RecordsPerPage);
 
             foreach (UserModel model in pagedModels)
             {
-                var row = new Dictionary<String, String>();
+                Dictionary<String, String> row = new Dictionary<String, String>();
                 row.Add(IdKey, model.Id);
                 row.Add(AcKey, String.Format("{0} {1}", model.FirstName, model.LastName));
                 row.Add("FirstName", model.FirstName);

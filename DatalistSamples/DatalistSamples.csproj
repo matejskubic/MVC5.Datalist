@@ -135,25 +135,25 @@
     <Content Include="Fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Images\Datalist\loading.gif" />
+    <Content Include="Fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Datalist\bind-with-delay.js" />
     <Content Include="Scripts\Datalist\bind-with-delay.min.js">
       <DependentUpon>bind-with-delay.js</DependentUpon>
     </Content>
     <Content Include="Scripts\Datalist\bootstrap-paginator.js" />
-    <Content Include="Scripts\Datalist\bind-with-delay.js" />
     <Content Include="Scripts\Datalist\bootstrap-paginator.min.js">
       <DependentUpon>bootstrap-paginator.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\Datalist\datalist.min.js">
-      <DependentUpon>datalist.js</DependentUpon>
     </Content>
     <Content Include="Scripts\Datalist\Cultures\datalist.culture.en-GB.js" />
     <Content Include="Scripts\Datalist\Cultures\datalist.culture.lt-LT.js" />
     <Content Include="Scripts\Datalist\datalist.js" />
-    <Content Include="Fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Scripts\Datalist\datalist.min.js">
+      <DependentUpon>datalist.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\Datalist\tests.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />

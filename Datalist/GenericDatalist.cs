@@ -29,7 +29,7 @@ namespace Datalist
         {
             if (property == null) throw new ArgumentNullException("property");
 
-            var column = property.GetCustomAttribute<DatalistColumnAttribute>(false);
+            DatalistColumnAttribute column = property.GetCustomAttribute<DatalistColumnAttribute>(false);
             if (column != null && column.Relation != null)
                 return property.Name + "." + GetColumnKey(GetRelationProperty(property, column.Relation));
 
@@ -39,11 +39,11 @@ namespace Datalist
         {
             if (property == null) throw new ArgumentNullException("property");
 
-            var column = property.GetCustomAttribute<DatalistColumnAttribute>(false);
+            DatalistColumnAttribute column = property.GetCustomAttribute<DatalistColumnAttribute>(false);
             if (column != null && column.Relation != null)
                 return GetColumnHeader(GetRelationProperty(property, column.Relation));
 
-            var header = property.GetCustomAttribute<DisplayAttribute>(false);
+            DisplayAttribute header = property.GetCustomAttribute<DisplayAttribute>(false);
             if (header != null) return header.GetName();
             return property.Name;
         }
@@ -53,7 +53,7 @@ namespace Datalist
         }
         private PropertyInfo GetRelationProperty(PropertyInfo property, String relation)
         {
-            var relationProperty = property.PropertyType.GetProperty(relation);
+            PropertyInfo relationProperty = property.PropertyType.GetProperty(relation);
             if (relationProperty != null)
                 return relationProperty;
 
@@ -65,7 +65,7 @@ namespace Datalist
 
         public override DatalistData GetData()
         {
-            var models = GetModels();
+            IQueryable<T> models = GetModels();
             models = Filter(models);
             models = Sort(models);
 
@@ -85,7 +85,7 @@ namespace Datalist
         }
         protected virtual IQueryable<T> FilterById(IQueryable<T> models)
         {
-            var idProperty = typeof(T).GetProperty("Id");
+            PropertyInfo idProperty = typeof(T).GetProperty("Id");
             if (idProperty == null)
                 throw new DatalistException(String.Format("Type {0} does not have property named \"Id\".", typeof(T).Name));
 
@@ -100,8 +100,8 @@ namespace Datalist
         }
         protected virtual IQueryable<T> FilterByAdditionalFilters(IQueryable<T> models)
         {
-            var queries = new List<String>();
-            foreach (var filter in CurrentFilter.AdditionalFilters.Where(item => item.Value != null))
+            List<String> queries = new List<String>();
+            foreach (KeyValuePair<String, Object> filter in CurrentFilter.AdditionalFilters.Where(item => item.Value != null))
                 queries.Add(FormEqualsQuery(GetType(filter.Key), filter.Key, filter.Value));
 
             if (queries.Count == 0) return models;
@@ -112,13 +112,13 @@ namespace Datalist
             if (CurrentFilter.SearchTerm == null) return models;
 
             String term = CurrentFilter.SearchTerm.ToLower();
-            var queries = new List<String>();
+            List<String> queries = new List<String>();
 
-            foreach (var propertyName in Columns.Keys)
+            foreach (String propertyName in Columns.Keys)
                 if (GetType(propertyName) == typeof(String))
                     queries.Add(FormContainsQuery(propertyName, term));
 
-            if (queries.Count == 0) return models; 
+            if (queries.Count == 0) return models;
             return models.Where(String.Join(" || ", queries));
         }
         protected virtual IQueryable<T> Sort(IQueryable<T> models)
@@ -138,17 +138,17 @@ namespace Datalist
 
         protected virtual DatalistData FormDatalistData(IQueryable<T> models)
         {
-            var data = new DatalistData();
+            DatalistData data = new DatalistData();
             data.FilteredRecords = models.Count();
             data.Columns = Columns;
 
-            var pagedModels = models
+            IQueryable<T> pagedModels = models
                 .Skip(CurrentFilter.Page * CurrentFilter.RecordsPerPage)
                 .Take(CurrentFilter.RecordsPerPage);
 
             foreach (T model in pagedModels)
             {
-                var row = new Dictionary<String, String>();
+                Dictionary<String, String> row = new Dictionary<String, String>();
                 AddId(row, model);
                 AddAutocomplete(row, model);
                 AddColumns(row, model);
@@ -199,8 +199,8 @@ namespace Datalist
         }
         private String FormNotNullQuery(String propertyName)
         {
-            var queries = new List<String>();
-            var properties = propertyName.Split('.');
+            List<String> queries = new List<String>();
+            String[] properties = propertyName.Split('.');
 
             for (Int32 i = 0; i < properties.Length; ++i)
                 queries.Add(String.Join(".", properties.Take(i + 1)) + " != null");
@@ -227,7 +227,7 @@ namespace Datalist
                 return GetValue(property.GetValue(model), String.Join(".", properties.Skip(1)));
 
             value = property.GetValue(model) ?? String.Empty;
-            var datalistColumn = property.GetCustomAttribute<DatalistColumnAttribute>(false);
+            DatalistColumnAttribute datalistColumn = property.GetCustomAttribute<DatalistColumnAttribute>(false);
             if (datalistColumn != null && datalistColumn.Format != null)
                 value = String.Format(datalistColumn.Format, value);
 
@@ -236,10 +236,10 @@ namespace Datalist
         private Type GetType(String fullPropertyName)
         {
             Type type = typeof(T);
-            var properties = fullPropertyName.Split('.');
+            String[] properties = fullPropertyName.Split('.');
             foreach (String propertyName in properties)
             {
-                var property = type.GetProperty(propertyName);
+                PropertyInfo property = type.GetProperty(propertyName);
                 if (property == null)
                     throw new DatalistException(String.Format("Type {0} does not have property named {1}.",
                         type.Name, propertyName));

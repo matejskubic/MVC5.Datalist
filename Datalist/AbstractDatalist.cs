@@ -54,14 +54,14 @@ namespace Datalist
 
         protected AbstractDatalist()
         {
-            var sanitizedName = GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty);
+            String sanitizedName = GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty);
             AdditionalFilters = new List<String>();
             CurrentFilter = new DatalistFilter();
             Columns = new DatalistColumns();
             DialogTitle = sanitizedName;
             DefaultRecordsPerPage = 20;
 
-            var applicationPath = HttpContext.Current.Request.ApplicationPath ?? "/";
+            String applicationPath = HttpContext.Current.Request.ApplicationPath ?? "/";
             if (!applicationPath.EndsWith("/"))
                 applicationPath += "/";
 

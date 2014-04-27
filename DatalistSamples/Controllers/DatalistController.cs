@@ -25,7 +25,7 @@ namespace DatalistSamples.Controllers
         }
         public JsonResult DifferentUrlExample(DatalistFilter filter, String AdditionalFilterId)
         {
-            var additionalFilters = new Dictionary<String, Object>();
+            Dictionary<String, Object> additionalFilters = new Dictionary<String, Object>();
             additionalFilters.Add("Id", AdditionalFilterId);
 
             return GetData(new ExampleDatalist(), filter, additionalFilters);

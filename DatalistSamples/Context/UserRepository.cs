@@ -9,7 +9,7 @@ namespace DatalistSamples.Context
     {
         public IQueryable<UserModel> Users()
         {
-            var users = new List<UserModel>();
+            List<UserModel> users = new List<UserModel>();
             users.Add(new UserModel()
             {
                 Id = "1",

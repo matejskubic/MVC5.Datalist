@@ -45,7 +45,7 @@ namespace Datalist
         }
         public void Clear()
         {
-            foreach (var column in this)
+            foreach (DatalistColumn column in this)
                 Remove(column);
         }
 

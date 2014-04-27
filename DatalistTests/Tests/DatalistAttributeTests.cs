@@ -24,7 +24,7 @@ namespace DatalistTests.Tests
         [Test]
         public void DatalistAttribute_SetsType()
         {
-            var expected = typeof(AbstractDatalist);
+            Type expected = typeof(AbstractDatalist);
             Assert.AreEqual(expected, new DatalistAttribute(expected).Type);
         }
 

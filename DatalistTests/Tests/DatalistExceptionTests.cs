@@ -1,5 +1,6 @@
 ﻿using Datalist;
 using NUnit.Framework;
+using System;
 
 namespace DatalistTests.Tests
 {
@@ -11,8 +12,8 @@ namespace DatalistTests.Tests
         [Test]
         public void DatalistException_SetsMessage()
         {
-            var expected = "Test message";
-            var exception = new DatalistException(expected);
+            String expected = "Test message";
+            DatalistException exception = new DatalistException(expected);
 
             Assert.AreEqual(expected, exception.Message);
         }

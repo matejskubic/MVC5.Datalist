@@ -29,7 +29,7 @@ namespace DatalistTests.Tests
         [Test]
         public void Keys_EqualsToColumKeys()
         {
-            foreach (var column in testColumns)
+            foreach (DatalistColumn column in testColumns)
                 columns.Add(column);
 
             CollectionAssert.AreEqual(testColumns.Select(column => column.Key), columns.Keys);
@@ -58,7 +58,7 @@ namespace DatalistTests.Tests
         [Test]
         public void Add_OnSameColumnKeyThrows()
         {
-            var column = new DatalistColumn("TestKey", String.Empty);
+            DatalistColumn column = new DatalistColumn("TestKey", String.Empty);
             columns.Add(column);
 
             Assert.Throws<DatalistException>(() => columns.Add(column));
@@ -67,7 +67,7 @@ namespace DatalistTests.Tests
         [Test]
         public void Add_AddsColumn()
         {
-            foreach (var column in testColumns)
+            foreach (DatalistColumn column in testColumns)
                 columns.Add(column);
 
             CollectionAssert.AreEqual(testColumns, columns);
@@ -108,12 +108,11 @@ namespace DatalistTests.Tests
         [Test]
         public void Add_AddsColumnByValues()
         {
-            foreach (var column in testColumns)
+            foreach (DatalistColumn column in testColumns)
                 columns.Add(column.Key, column.Header, column.CssClass);
 
-
-            var expected = testColumns.GetEnumerator();
-            var actual = columns.GetEnumerator();
+            IEnumerator<DatalistColumn> expected = testColumns.GetEnumerator();
+            IEnumerator<DatalistColumn> actual = columns.GetEnumerator();
 
             while (expected.MoveNext() | actual.MoveNext())
             {
@@ -130,7 +129,7 @@ namespace DatalistTests.Tests
         [Test]
         public void Remove_RemovesColumn()
         {
-            foreach (var column in testColumns)
+            foreach (DatalistColumn column in testColumns)
                 columns.Add(column);
 
             Assert.IsTrue(columns.Remove(testColumns[0]));
@@ -142,7 +141,7 @@ namespace DatalistTests.Tests
         [Test]
         public void Remove_DoesNotRemoveColumn()
         {
-            foreach (var column in testColumns)
+            foreach (DatalistColumn column in testColumns)
                 columns.Add(column);
 
             Assert.IsFalse(columns.Remove(new DatalistColumn("Test1", String.Empty)));
@@ -152,10 +151,10 @@ namespace DatalistTests.Tests
         [Test]
         public void Remove_RemovesItSelf()
         {
-            foreach (var column in testColumns)
+            foreach (DatalistColumn column in testColumns)
                 columns.Add(column);
-            foreach (var column in columns as IEnumerable)
-                Assert.IsTrue(columns.Remove(column as DatalistColumn));
+            foreach (DatalistColumn column in columns as IEnumerable)
+                Assert.IsTrue(columns.Remove(column));
 
             CollectionAssert.IsEmpty(columns);
         }
@@ -167,10 +166,10 @@ namespace DatalistTests.Tests
         [Test]
         public void Remove_RemovesByKey()
         {
-            foreach (var column in testColumns)
+            foreach (DatalistColumn column in testColumns)
                 columns.Add(column);
 
-            foreach (var column in columns)
+            foreach (DatalistColumn column in columns)
                 Assert.IsTrue(columns.Remove(column.Key));
 
             CollectionAssert.IsEmpty(columns);
@@ -179,10 +178,10 @@ namespace DatalistTests.Tests
         [Test]
         public void Remove_DoesNotRemoveByKey()
         {
-            foreach (var column in testColumns)
+            foreach (DatalistColumn column in testColumns)
                 columns.Add(column);
 
-            foreach (var column in columns)
+            foreach (DatalistColumn column in columns)
                 Assert.IsFalse(columns.Remove(column.Key + column.Key));
 
             CollectionAssert.AreEqual(testColumns, columns);

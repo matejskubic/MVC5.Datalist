@@ -17,8 +17,8 @@ namespace DatalistTests.Tests
         public void SetUp()
         {
             baseUrl = "http://localhost:7013/";
-            var request = new HttpRequest(null, baseUrl, null);
-            var response = new HttpResponse(new StringWriter());
+            HttpRequest request = new HttpRequest(null, baseUrl, null);
+            HttpResponse response = new HttpResponse(new StringWriter());
             HttpContext.Current = new HttpContext(request, response);
             datalist = new Mock<AbstractDatalist>().Object;
         }

@@ -718,14 +718,14 @@ namespace DatalistTests.Tests
 
         private HtmlHelper<TestModel> MockHtmlHelper()
         {
-            var viewData = new ViewDataDictionary<TestModel>();
+            ViewDataDictionary<TestModel> viewData = new ViewDataDictionary<TestModel>();
             viewData.Model = new TestModel();
             testModel = viewData.Model;
 
-            var containerMock = new Mock<IViewDataContainer>();
+            Mock<IViewDataContainer> containerMock = new Mock<IViewDataContainer>();
             containerMock.Setup(c => c.ViewData).Returns(viewData);
 
-            var viewContextMock = new Mock<ViewContext>() { CallBase = true };
+            Mock<ViewContext> viewContextMock = new Mock<ViewContext>() { CallBase = true };
             viewContextMock.Setup(c => c.ViewData).Returns(viewData);
             viewContextMock.Setup(c => c.HttpContext.Items).Returns(new Hashtable());
 

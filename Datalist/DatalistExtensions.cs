@@ -32,7 +32,7 @@ namespace Datalist
         public static IHtmlString Datalist<TModel>(this HtmlHelper<TModel> html,
             String name, Object value, AbstractDatalist model, Object htmlAttributes = null)
         {
-            var inputGroup = new TagBuilder("div");
+            TagBuilder inputGroup = new TagBuilder("div");
             inputGroup.AddCssClass("input-group");
             inputGroup.InnerHtml = html.AutoComplete(name, value, model, htmlAttributes).ToString() + FormDatalistOpenSpan(model);
 
@@ -62,7 +62,7 @@ namespace Datalist
         }
         private static String FormAutoComplete<TModel>(HtmlHelper<TModel> html, AbstractDatalist model, String hiddenInput, Object htmlAttributes)
         {
-            var attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
+            RouteValueDictionary attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
             attributes["class"] = String.Format("{0} {1}", attributes["class"], "form-control datalist-input").Trim();
             attributes.Add("data-datalist-hidden-input", TagBuilder.CreateSanitizedId(hiddenInput));
             attributes.Add("data-datalist-filters", String.Join(",", model.AdditionalFilters));
@@ -78,15 +78,15 @@ namespace Datalist
         }
         private static String FormHiddenInput<TModel>(HtmlHelper<TModel> html, String name, Object value)
         {
-            var attributes = new RouteValueDictionary();
+            RouteValueDictionary attributes = new RouteValueDictionary();
             attributes.Add("class", "datalist-hidden-input");
 
             return html.Hidden(name, value, attributes).ToString();
         }
         private static String FormDatalistOpenSpan(AbstractDatalist model)
         {
-            var outerSpan = new TagBuilder("span");
-            var innerSpan = new TagBuilder("span");
+            TagBuilder outerSpan = new TagBuilder("span");
+            TagBuilder innerSpan = new TagBuilder("span");
 
             innerSpan.AddCssClass("glyphicon glyphicon-search");
             outerSpan.AddCssClass("datalist-open-span input-group-addon");
