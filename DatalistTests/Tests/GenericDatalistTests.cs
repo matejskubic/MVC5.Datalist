@@ -529,7 +529,7 @@ namespace DatalistTests.Tests
         public void FormDatalistData_SetsFilteredRecords()
         {
             Int32 expected = datalist.BaseGetModels().Count();
-            Int64 actual = datalist.BaseFormDatalistData(datalist.BaseGetModels()).FilteredRecords;
+            Int32 actual = datalist.BaseFormDatalistData(datalist.BaseGetModels()).FilteredRecords;
 
             Assert.AreEqual(expected, actual);
         }
