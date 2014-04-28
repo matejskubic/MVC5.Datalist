@@ -5,7 +5,7 @@ namespace Datalist
 {
     public class DatalistData
     {
-        public Int64 FilteredRecords
+        public Int32 FilteredRecords
         {
             get;
             set;
