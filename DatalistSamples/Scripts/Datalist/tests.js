@@ -621,12 +621,11 @@ test('Datalist language init', 3, function () {
     equal($.fn.datalist.lang.NoDataFound, 'No data found');
     equal($.fn.datalist.lang.Search, 'Search...');
 });
-test('Datalist spinner init', 4, function () {
+test('Datalist spinner init', 3, function () {
     var datalistSpinner = $('.datalist-items-per-page');
     ok(datalistSpinner.hasClass('ui-spinner-input'));
     equal(datalistSpinner.spinner('option', 'min'), 1);
     equal(datalistSpinner.spinner('option', 'max'), 99);
-    ok(datalistSpinner.parent().hasClass('input-group-addon'));
 });
 test('Datalist dialog init', 7, function () {
     ok(testDatalist.hasClass('ui-dialog-content'));
