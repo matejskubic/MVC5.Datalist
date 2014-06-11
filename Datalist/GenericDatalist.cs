@@ -129,10 +129,10 @@ namespace Datalist
                     return models.OrderBy(String.Format("{0} {1}", sortColumn, CurrentFilter.SortOrder));
                 else
                     throw new DatalistException(String.Format("Datalist does not contain sort column named \"{0}\"", sortColumn));
-            
+
             if (Columns.Count() > 0)
                 return models.OrderBy(String.Format("{0} {1}", Columns.First().Key, CurrentFilter.SortOrder));
-            
+
             throw new DatalistException("Datalist columns can not be empty.");
         }
 
@@ -214,7 +214,7 @@ namespace Datalist
         }
         private String GetValue(Object model, String fullPropertyName)
         {
-            if (model == null) return String.Empty; 
+            if (model == null) return String.Empty;
 
             Object value = null;
             Type type = model.GetType();

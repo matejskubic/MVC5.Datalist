@@ -740,12 +740,12 @@ namespace DatalistTests.Tests
         private void AddsIdAttribute(String id, Object actual)
         {
             String pattern = String.Format(@"<input(.*) id=""{0}{1}""(.*) />", id, AbstractDatalist.Prefix);
-            StringAssert.IsMatch(pattern, actual.ToString()); 
+            StringAssert.IsMatch(pattern, actual.ToString());
         }
         private void AddsDatalistClassesForDatalistInput(Object actual)
         {
             String pattern = @"<input(.*) class=""(.*)(form-control datalist-input|datalist-input form-control)(.*)""(.*) />";
-            StringAssert.IsMatch(pattern, actual.ToString()); 
+            StringAssert.IsMatch(pattern, actual.ToString());
         }
         private void AddsSpecifiedClass(String classAttribute, Object actual)
         {

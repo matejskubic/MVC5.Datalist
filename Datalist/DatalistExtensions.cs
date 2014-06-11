@@ -28,7 +28,7 @@ namespace Datalist
         {
             return html.AutoComplete(ExpressionHelper.GetExpressionText(expression), ModelMetadata.FromLambdaExpression(expression, html.ViewData).Model, model, htmlAttributes);
         }
-        
+
         public static IHtmlString Datalist<TModel>(this HtmlHelper<TModel> html,
             String name, Object value, AbstractDatalist model, Object htmlAttributes = null)
         {

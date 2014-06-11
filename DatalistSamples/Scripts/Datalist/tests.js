@@ -64,10 +64,10 @@ QUnit.testDone(function (details) {
 
     hiddenInput.val('').clone().appendTo('#test-data > .input-group');
     hiddenInput.remove();
-    
+
     openSpan.clone().appendTo('#test-data > .input-group');
     openSpan.remove();
-    
+
     filter1.val('').clone().appendTo('#test-data');
     filter1.remove();
 
@@ -148,7 +148,7 @@ test('Initializes autocomplete select', 2, function () {
         equal(data.DatalistIdKey, 'Test2');
         equal(data.DatalistAcKey, 'Test3');
     };
-    
+
     testInput.data('ui-autocomplete')._trigger('select', 'autocompleteselect', {
             item: {
                 item: {
@@ -409,7 +409,7 @@ test('Update calls', 28, function () {
 test('Update fades in and out it\'s elements', 3, function () {
     testInput.datalist();
     testInput.data('mvc-datalist')._update(testDatalist);
-    
+
     stop();
     setTimeout(function () {
         start();
@@ -520,7 +520,7 @@ test('Update data, binds select spans', 6, function () {
         equal(dataRow, testData.Rows[iteration++]);
         equal(datalist[0], testDatalist[0]);
     };
-    
+
     mvcDatalist._updateData(testDatalist, testData);
 });
 

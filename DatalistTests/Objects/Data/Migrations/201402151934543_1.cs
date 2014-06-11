@@ -2,7 +2,7 @@ namespace DatalistTests.Objects.Data.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _1 : DbMigration
     {
         public override void Up()
@@ -24,7 +24,7 @@ namespace DatalistTests.Objects.Data.Migrations
                 .ForeignKey("dbo.TestRelationModels", t => t.SecondRelationModelId)
                 .Index(t => t.FirstRelationModelId)
                 .Index(t => t.SecondRelationModelId);
-            
+
             CreateTable(
                 "dbo.TestRelationModels",
                 c => new
@@ -34,9 +34,9 @@ namespace DatalistTests.Objects.Data.Migrations
                         NoValue = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
-            
+
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.TestModels", "SecondRelationModelId", "dbo.TestRelationModels");

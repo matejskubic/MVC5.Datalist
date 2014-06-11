@@ -25,7 +25,7 @@ namespace DatalistSamples.Controllers.API
         }
 
         #endregion
-        
+
         #region Properties
 
         [HttpGet]
