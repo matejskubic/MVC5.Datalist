@@ -88,14 +88,19 @@
 
                 this._on(datalistAddon, {
                     click: function () {
+                        var timeout;
                         datalist
                             .find('.datalist-search-input')
                             .unbind('keyup.datalist')
-                            .bindWithDelay('keyup.datalist', function () {
-                                that.options.term = this.value;
-                                that.options.page = 0;
-                                that._update(datalist);
-                            }, 500, false)
+                            .bind('keyup.datalist', null, function () {
+                                var input = this;
+                                clearTimeout(timeout);
+                                timeout = setTimeout(function () {
+                                    that.options.term = input.value;
+                                    that.options.page = 0;
+                                    that._update(datalist);
+                                }, 500);
+                            })
                             .val(that.options.term);
                         datalist
                             .find('.datalist-items-per-page')
@@ -209,7 +214,7 @@
             var term = datalist.find('.datalist-search-input').val();
 
             datalist.find('.datalist-error').fadeOut(300);
-            var timeOut = setTimeout(function () {
+            var timeout = setTimeout(function () {
                 datalist.find('.datalist-processing').fadeIn(300);
                 datalist.find('.datalist-data').fadeOut(300);
             }, 500);
@@ -222,13 +227,13 @@
                     that._updateData(datalist, data);
                     that._updateNavbar(datalist, data.FilteredRecords);
 
-                    clearTimeout(timeOut);
+                    clearTimeout(timeout);
                     datalist.find('.datalist-processing').fadeOut(300);
                     datalist.find('.datalist-pager').fadeIn(300);
                     datalist.find('.datalist-data').fadeIn(300);
                 },
                 error: function () {
-                    clearTimeout(timeOut);
+                    clearTimeout(timeout);
                     datalist.find('.datalist-processing').fadeOut(300);
                     datalist.find('.datalist-pager').fadeOut(300);
                     datalist.find('.datalist-data').fadeOut(300);
@@ -353,9 +358,7 @@
             return this._super();
         }
     });
-})(jQuery);
 
-(function ($) {
     $.fn.datalist.lang = {
         Error: 'Error while retrieving records',
         NoDataFound: 'No data found',
@@ -372,4 +375,4 @@
         width: 'auto',
         modal: true
     });
-}(jQuery));
+})(jQuery);
