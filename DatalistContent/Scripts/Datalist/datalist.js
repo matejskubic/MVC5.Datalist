@@ -216,6 +216,7 @@
             datalist.find('.datalist-error').fadeOut(300);
             var timeout = setTimeout(function () {
                 datalist.find('.datalist-processing').fadeIn(300);
+                datalist.find('.datalist-pager').fadeOut(300);
                 datalist.find('.datalist-data').fadeOut(300);
             }, 500);
 
@@ -325,7 +326,6 @@
                 pagination += '<li><a data-page="' + (currentPage + 1) + '">&rsaquo;</a></li><li><a data-page="' + (totalPages - 1) + '">&raquo;</a></li>';
 
             datalist.find('.datalist-pager > .pagination').html(pagination).find('li:not(.active) > a').click(function () {
-                datalist.find('.datalist-pager > .pagination').empty();
                 that.options.page = parseInt($(this).data('page'));
                 that._update(datalist);
             });
