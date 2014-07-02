@@ -532,22 +532,34 @@ test('Updates navigation bar to empty', 1, function () {
     mvcDatalist._updateNavbar(testDatalist, 0);
     equal(pagination.html(), '');
 });
-test('Updates navigation with paginator', 9, function () {
-    var pagination = testDatalist.find('.datalist-pager > .pagination');
+test('Updates navigation with paginator', 18, function () {
     var mvcDatalist = testInput.attr('data-datalist-page', 1).datalist().data('mvc-datalist');
+    var pagination = testDatalist.find('.datalist-pager > .pagination');
     testDatalist.find('.datalist-items-per-page').val(1);
-    mvcDatalist._updateNavbar(testDatalist, 2);
-    var pages = pagination.bootstrapPaginator('getPages');
+    mvcDatalist._updateNavbar(testDatalist, 6);
+    var elements = pagination.find('li');
+    var links = pagination.find('a');
 
-    equal(pages[0], 1);
-    equal(pages[1], 2);
-    equal(pages.prev, 1);
-    equal(pages.next, 2);
-    equal(pages.last, 2);
-    equal(pages.first, 1);
-    equal(pages.total, 2);
-    equal(pages.current, 2);
-    equal(pages.numberOfPages, 5);
+    equal($(elements[0]).hasClass('active'), false);
+    equal($(elements[1]).hasClass('active'), false);
+    equal($(elements[2]).hasClass('active'), false);
+    equal($(elements[3]).hasClass('active'), true);
+    equal($(elements[4]).hasClass('active'), false);
+    equal($(elements[5]).hasClass('active'), false);
+    equal($(elements[6]).hasClass('active'), false);
+    equal($(elements[7]).hasClass('active'), false);
+    equal($(elements[8]).hasClass('active'), false);
+
+
+    equal($(links[0]).data('page'), 0);
+    equal($(links[1]).data('page'), 0);
+    equal($(links[2]).data('page'), 0);
+    equal($(links[3]).data('page'), 1);
+    equal($(links[4]).data('page'), 2);
+    equal($(links[5]).data('page'), 3);
+    equal($(links[6]).data('page'), 4);
+    equal($(links[7]).data('page'), 2);
+    equal($(links[8]).data('page'), 5);
 });
 
 test('Binds datalist table select', 4, function () {

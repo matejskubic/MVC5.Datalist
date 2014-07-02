@@ -140,10 +140,6 @@
     <Content Include="Fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\Datalist\bootstrap-paginator.js" />
-    <Content Include="Scripts\Datalist\bootstrap-paginator.min.js">
-      <DependentUpon>bootstrap-paginator.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\Datalist\Cultures\datalist.culture.en-GB.js" />
     <Content Include="Scripts\Datalist\Cultures\datalist.culture.lt-LT.js" />
     <Content Include="Scripts\Datalist\datalist.js" />

@@ -29,9 +29,9 @@
             o.filters = e.attr('data-datalist-filters').split(',');
             o.sortColumn = e.attr('data-datalist-sort-column');
             o.sortOrder = e.attr('data-datalist-sort-order');
+            o.page = parseInt(e.attr('data-datalist-page'));
             o.title = e.attr('data-datalist-dialog-title');
             o.term = e.attr('data-datalist-term');
-            o.page = parseInt(e.attr('data-datalist-page'));
             o.url = e.attr('data-datalist-url');
             e.addClass('mvc-datalist');
         },
@@ -293,7 +293,6 @@
                 this._bindSelect(datalist, selectCells[i], data.Rows[i]);
         },
         _updateNavbar: function (datalist, filteredRecords) {
-            var that = this;
             var pageLength = datalist.find('.datalist-items-per-page').val();
             var totalPages = parseInt(filteredRecords / pageLength) + 1;
             if (filteredRecords % pageLength == 0)
@@ -302,32 +301,34 @@
             if (totalPages == 0)
                 datalist.find('.datalist-pager > .pagination').empty();
             else
-                datalist.find('.datalist-pager > .pagination').bootstrapPaginator({
-                    currentPage: that.options.page + 1,
-                    bootstrapMajorVersion: 3,
-                    totalPages: totalPages,
-                    onPageChanged: function (e, oldPage, newPage) {
-                        that.options.page = newPage - 1;
-                        that._update(datalist);
-                    },
-                    tooltipTitles: function (type, page, current) {
-                        return '';
-                    },
-                    itemTexts: function (type, page, current) {
-                        switch (type) {
-                            case 'first':
-                                return '&laquo;';
-                            case 'prev':
-                                return '&lsaquo;';
-                            case 'next':
-                                return '&rsaquo;';
-                            case 'last':
-                                return '&raquo;';
-                            case 'page':
-                                return page;
-                        }
-                    }
-                });
+                this._paginate(totalPages);
+        },
+        _paginate: function (totalPages) {
+            var startingPage = Math.floor(this.options.page / 5) * 5;
+            var currentPage = this.options.page;
+            var page = startingPage;
+            var pagination = '';
+            var that = this;
+
+            if (totalPages > 5 && currentPage > 0)
+                pagination = '<li><a data-page="0">&laquo;</a></li><li><a data-page="' + (currentPage - 1) + '">&lsaquo;</a></li>';
+
+            while (page < totalPages && page < startingPage + 5) {
+                var liClass = '';
+                if (page == this.options.page)
+                    liClass = ' class="active"';
+
+                pagination += '<li' + liClass + '><a data-page="' + page + '">' + (++page) + '</a></li>';
+            }
+
+            if (totalPages > 5 && currentPage < (totalPages - 1))
+                pagination += '<li><a data-page="' + (currentPage + 1) + '">&rsaquo;</a></li><li><a data-page="' + (totalPages - 1) + '">&raquo;</a></li>';
+
+            datalist.find('.datalist-pager > .pagination').html(pagination).find('li:not(.active) > a').click(function () {
+                datalist.find('.datalist-pager > .pagination').empty();
+                that.options.page = parseInt($(this).data('page'));
+                that._update(datalist);
+            });
         },
         _bindSelect: function (datalist, selectCell, data) {
             var that = this;

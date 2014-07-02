@@ -38,10 +38,6 @@
   <ItemGroup>
     <Content Include="Content\Datalist\datalist.css" />
     <Content Include="Images\Datalist\loading.gif" />
-    <Content Include="Scripts\Datalist\bootstrap-paginator.js" />
-    <Content Include="Scripts\Datalist\bootstrap-paginator.min.js">
-      <DependentUpon>bootstrap-paginator.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\Datalist\Cultures\datalist.culture.en-GB.js" />
     <Content Include="Scripts\Datalist\Cultures\datalist.culture.lt-LT.js" />
     <Content Include="Scripts\Datalist\datalist.js" />
