@@ -96,6 +96,12 @@ pre {
     padding: 15px;
 }
 
-.text-cell {
+td .text-cell {
+    text-align: left;
+}
+
+.datalist-table thead > tr > th {
+    vertical-align: middle;
     text-align: center;
+    cursor: pointer;
 }
