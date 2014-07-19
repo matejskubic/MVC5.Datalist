@@ -119,8 +119,16 @@
                         datalist.dialog('option', 'title', that.options.title);
                         datalist.find('.datalist-table-head').empty();
                         datalist.find('.datalist-table-body').empty();
-                        datalist.dialog('open');
                         that._update(datalist);
+
+                        setTimeout(function () {
+                            datalist.dialog('open')
+                                .parent().position({
+                                    my: "center",
+                                    at: "center",
+                                    of: window
+                                });
+                        }, 100);
                     }
                 });
             }
