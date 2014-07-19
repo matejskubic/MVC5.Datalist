@@ -280,7 +280,8 @@
         },
         _updateData: function (datalist, data) {
             if (data.Rows.length == 0) {
-                datalist.find('.datalist-table-body').html('<tr><td colspan="0" style="text-align: center">' + $.fn.datalist.lang.NoDataFound + '</td></tr>');
+                var columns = (data.Columns) ? data.Columns.length + 1 : 1;
+                datalist.find('.datalist-table-body').html('<tr><td colspan="' + columns + '" style="text-align: center">' + $.fn.datalist.lang.NoDataFound + '</td></tr>');
                 return;
             }
 

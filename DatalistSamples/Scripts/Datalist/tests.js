@@ -181,29 +181,34 @@ test('Initializes datalist open span', 16, function () {
     };
 
     openSpan.click();
-    testDatalist.dialog('close');
 
-    testInput.data('mvc-datalist')._limitTo = function (value, min, max) {
-        equal(value, 2);
-        equal(max, 99);
-        equal(min, 1);
-        return value;
-    };
-
-    $('.datalist-items-per-page').val(2).data('ui-spinner')._trigger('change', 'spinnerchange');
-    equal(testDatalist.dialog('option', 'title'), testInput.datalist('option', 'title'));
-    equal($('.datalist-search-input').attr('placeholder'), $.fn.datalist.lang.Search);
-    equal($('.datalist-error-span').html(), $.fn.datalist.lang.Error);
-    equal(testInput.datalist('option', 'recordsPerPage'), 2);
-    equal(testInput.datalist('option', 'page'), 0);
-
-    $('.datalist-search-input').val('test2').keyup();
     stop();
     setTimeout(function () {
         start();
-        equal(testInput.datalist('option', 'term'), 'test2');
+        testDatalist.dialog('close');
+
+        testInput.data('mvc-datalist')._limitTo = function (value, min, max) {
+            equal(value, 2);
+            equal(max, 99);
+            equal(min, 1);
+            return value;
+        };
+
+        $('.datalist-items-per-page').val(2).data('ui-spinner')._trigger('change', 'spinnerchange');
+        equal(testDatalist.dialog('option', 'title'), testInput.datalist('option', 'title'));
+        equal($('.datalist-search-input').attr('placeholder'), $.fn.datalist.lang.Search);
+        equal($('.datalist-error-span').html(), $.fn.datalist.lang.Error);
+        equal(testInput.datalist('option', 'recordsPerPage'), 2);
         equal(testInput.datalist('option', 'page'), 0);
-    }, 500);
+
+        $('.datalist-search-input').val('test2').keyup();
+        stop();
+        setTimeout(function () {
+            start();
+            equal(testInput.datalist('option', 'term'), 'test2');
+            equal(testInput.datalist('option', 'page'), 0);
+        }, 500);
+    }, 200);
 });
 
 test('Forms autocomplete url', 1, function () {
@@ -399,9 +404,9 @@ test('Update calls', 28, function () {
         equal(datalist[0], testDatalist[0]);
     };
 
-    openSpan.click();
-    testDatalist.dialog('close');
+    mvcDatalist._update(testDatalist);
     stop();
+
     setTimeout(function () {
         start();
     }, 1000);
@@ -490,7 +495,7 @@ test('Update data, returns no data found', 1, function () {
     datalistTableBody.html('Test');
 
     testInput.datalist().data('mvc-datalist')._updateData(testDatalist, { Rows: [] });
-    equal(datalistTableBody.html(), '<tr><td colspan="0" style="text-align: center">' + $.fn.datalist.lang.NoDataFound + '</td></tr>');
+    equal(datalistTableBody.html(), '<tr><td colspan="1" style="text-align: center">' + $.fn.datalist.lang.NoDataFound + '</td></tr>');
 });
 test('Update data, updates table data', 1, function () {
     var datalistTableBody = testDatalist.find('.datalist-table-body');
