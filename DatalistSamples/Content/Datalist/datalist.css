@@ -39,15 +39,21 @@
 }
 
     .datalist-search-group .datalist-search-box {
+        margin-right: -55px;
         height: 100%;
+        width: 100%;
         float: left;
-        width: 87%;
+    }
+
+    .datalist-search-group .datalist-search-box-content {
+        margin-right: 55px;
+        height: 100%;
     }
 
     .datalist-search-group .datalist-spinner-box {
         height: 100%;
         float: right;
-        width: 13%;
+        width: 55px;
     }
 
         .datalist-search-group .datalist-spinner-box > span {
@@ -57,6 +63,8 @@
     .datalist-search-group .datalist-search-input {
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
+        padding-top: 6px;
+        font-size: 15px;
         height: 100%;
     }
 
