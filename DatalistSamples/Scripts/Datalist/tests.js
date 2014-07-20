@@ -397,7 +397,7 @@ test('Update calls', 28, function () {
                 equal(data.Rows[i][key] != null ? data.Rows[i][key] : '', testData.Rows[i][key]);
             }
         }
-        
+
         $.each(testData.Columns, function (index, column) {
             equal(data.Columns[index].Key, testData.Columns[index].Key);
         });

@@ -135,6 +135,13 @@
                                 at: "center",
                                 of: window
                             });
+
+                            if (parseInt(dialog.css('left')) < 0) {
+                                dialog.css('left', 0);
+                            }
+                            if (parseInt(dialog.css('top')) < 0) {
+                                dialog.css('top', 0);
+                            }
                         }, 100);
                     }
                 });
@@ -329,7 +336,7 @@
             if (filteredRecords % pageLength == 0) {
                 totalPages--;
             }
-            
+
             if (totalPages == 0) {
                 datalist.find('.datalist-pager > .pagination').empty();
             } else {
@@ -346,7 +353,7 @@
             if (totalPages > 5 && currentPage > 0) {
                 pagination = '<li><a data-page="0">&laquo;</a></li><li><a data-page="' + (currentPage - 1) + '">&lsaquo;</a></li>';
             }
-            
+
             while (page < totalPages && page < startingPage + 5) {
                 var liClass = '';
                 if (page == this.options.page) {
@@ -359,7 +366,7 @@
             if (totalPages > 5 && currentPage < (totalPages - 1)) {
                 pagination += '<li><a data-page="' + (currentPage + 1) + '">&rsaquo;</a></li><li><a data-page="' + (totalPages - 1) + '">&raquo;</a></li>';
             }
-            
+
             datalist.find('.datalist-pager > .pagination').html(pagination).find('li:not(.active) > a').click(function () {
                 that.options.page = parseInt($(this).data('page'));
                 that._update(datalist);

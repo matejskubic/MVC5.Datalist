@@ -135,6 +135,13 @@
                                 at: "center",
                                 of: window
                             });
+
+                            if (parseInt(dialog.css('left')) < 0) {
+                                dialog.css('left', 0);
+                            }
+                            if (parseInt(dialog.css('top')) < 0) {
+                                dialog.css('top', 0);
+                            }
                         }, 100);
                     }
                 });
