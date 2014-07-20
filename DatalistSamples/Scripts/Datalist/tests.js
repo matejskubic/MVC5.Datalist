@@ -392,9 +392,12 @@ test('Update calls', 28, function () {
         equal(data.Columns.length, testData.Columns.length);
         equal(data.Rows.length, testData.Rows.length);
         equal(datalist[0], testDatalist[0]);
-        for (i = 0; i < testData.Rows.length; i++)
-            for (var key in testData.Rows[i])
+        for (i = 0; i < testData.Rows.length; i++) {
+            for (var key in testData.Rows[i]) {
                 equal(data.Rows[i][key] != null ? data.Rows[i][key] : '', testData.Rows[i][key]);
+            }
+        }
+        
         $.each(testData.Columns, function (index, column) {
             equal(data.Columns[index].Key, testData.Columns[index].Key);
         });
@@ -555,7 +558,6 @@ test('Updates navigation with paginator', 18, function () {
     equal($(elements[7]).hasClass('active'), false);
     equal($(elements[8]).hasClass('active'), false);
 
-
     equal($(links[0]).data('page'), 0);
     equal($(links[1]).data('page'), 0);
     equal($(links[2]).data('page'), 0);
@@ -592,7 +594,7 @@ test('Limits value', 6, function () {
     equal(datalist._limitTo('NotNumber', 1, 99), 20);
     equal(datalist._limitTo(-1, 1, 99), 1);
     equal(datalist._limitTo(1, 1, 99), 1);
-    equal(datalist._limitTo(100, 1, 99), 99);
+    equal(datalist._limitTo(100, 1, 50), 50);
     equal(datalist._limitTo(99, 1, 99), 99);
     equal(datalist._limitTo(60, 1, 99), 60);
 });
