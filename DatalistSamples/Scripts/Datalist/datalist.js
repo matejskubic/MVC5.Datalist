@@ -244,8 +244,8 @@
             var that = this;
             var term = datalist.find('.datalist-search-input').val();
 
-            datalist.find('.datalist-error').fadeOut(300);
             var timeout = setTimeout(function () {
+                datalist.find('.datalist-error-container').fadeOut(300);
                 datalist.find('.datalist-processing').fadeIn(300);
                 datalist.find('.datalist-pager').fadeOut(300);
                 datalist.find('.datalist-data').fadeOut(300);
@@ -261,15 +261,16 @@
 
                     clearTimeout(timeout);
                     datalist.find('.datalist-processing').fadeOut(300);
+                    datalist.find('.datalist-error-container').hide();
                     datalist.find('.datalist-pager').fadeIn(300);
                     datalist.find('.datalist-data').fadeIn(300);
                 },
                 error: function () {
                     clearTimeout(timeout);
-                    datalist.find('.datalist-processing').fadeOut(300);
-                    datalist.find('.datalist-pager').fadeOut(300);
-                    datalist.find('.datalist-data').fadeOut(300);
-                    datalist.find('.datalist-error').fadeIn(300);
+                    datalist.find('.datalist-error-container').fadeIn(300);
+                    datalist.find('.datalist-processing').hide();
+                    datalist.find('.datalist-pager').hide();
+                    datalist.find('.datalist-data').hide();
                 }
             });
         },
