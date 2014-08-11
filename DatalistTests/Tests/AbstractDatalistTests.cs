@@ -10,8 +10,8 @@ namespace DatalistTests.Tests
     [TestFixture]
     public class AbstractDatalistTests
     {
-        private String baseUrl;
         private AbstractDatalist datalist;
+        private String baseUrl;
 
         [SetUp]
         public void SetUp()
@@ -57,14 +57,18 @@ namespace DatalistTests.Tests
         public void AbstractDatalist_DefaultDialogTitle()
         {
             String expected = datalist.GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty);
-            Assert.AreEqual(expected, datalist.DialogTitle);
+            String actual = datalist.DialogTitle;
+
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]
         public void AbstractDatalist_DefaultDatalistUrl()
         {
             String expected = String.Format("{0}{1}/{2}", baseUrl, AbstractDatalist.Prefix, datalist.GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty));
-            Assert.AreEqual(expected, datalist.DatalistUrl);
+            String actual = datalist.DatalistUrl;
+
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]
@@ -76,7 +80,10 @@ namespace DatalistTests.Tests
         [Test]
         public void AbstractDatalist_DefaultDefaultRecordsPerPage()
         {
-            Assert.AreEqual((UInt32)20, datalist.DefaultRecordsPerPage);
+            UInt32 actual = datalist.DefaultRecordsPerPage;
+            UInt32 expected = 20;
+
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]
@@ -88,7 +95,10 @@ namespace DatalistTests.Tests
         [Test]
         public void AbstractDatalist_AscDefaultSortOrder()
         {
-            Assert.AreEqual(DatalistSortOrder.Asc, datalist.DefaultSortOrder);
+            DatalistSortOrder actual = datalist.DefaultSortOrder;
+            DatalistSortOrder expected = DatalistSortOrder.Asc;
+
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]

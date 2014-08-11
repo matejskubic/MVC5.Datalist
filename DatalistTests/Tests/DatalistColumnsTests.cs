@@ -32,7 +32,10 @@ namespace DatalistTests.Tests
             foreach (DatalistColumn column in testColumns)
                 columns.Add(column);
 
-            CollectionAssert.AreEqual(testColumns.Select(column => column.Key), columns.Keys);
+            IEnumerable<String> expected = testColumns.Select(column => column.Key);
+            IEnumerable<String> actual = testColumns.Select(column => column.Key);
+
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         #endregion
@@ -69,6 +72,9 @@ namespace DatalistTests.Tests
         {
             foreach (DatalistColumn column in testColumns)
                 columns.Add(column);
+
+            IEnumerable<DatalistColumn> expected = testColumns;
+            IEnumerable<DatalistColumn> actual = columns;
 
             CollectionAssert.AreEqual(testColumns, columns);
         }
@@ -132,9 +138,10 @@ namespace DatalistTests.Tests
             foreach (DatalistColumn column in testColumns)
                 columns.Add(column);
 
-            Assert.IsTrue(columns.Remove(testColumns[0]));
-
+            DatalistColumn firstColumn = testColumns[0];
             testColumns.RemoveAt(0);
+
+            Assert.IsTrue(columns.Remove(firstColumn));
             CollectionAssert.AreEqual(testColumns, columns);
         }
 
@@ -153,6 +160,7 @@ namespace DatalistTests.Tests
         {
             foreach (DatalistColumn column in testColumns)
                 columns.Add(column);
+
             foreach (DatalistColumn column in columns as IEnumerable)
                 Assert.IsTrue(columns.Remove(column));
 

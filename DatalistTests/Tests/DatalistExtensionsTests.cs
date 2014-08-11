@@ -73,6 +73,7 @@ namespace DatalistTests.Tests
         {
             datalist.AdditionalFilters.Add("Test1");
             datalist.AdditionalFilters.Add("Test2");
+
             AddsFiltersAttribute(html.AutoComplete("TestId", String.Empty, datalist));
         }
 
@@ -143,22 +144,22 @@ namespace DatalistTests.Tests
         [Test]
         public void AutoCompleteFor_WithoutModel_MissingAttributeThrows()
         {
-            Expression<Func<TestModel, String>> expression = (model) => model.Id;
-            Assert.Throws<DatalistException>(() => CreatesAutocompleteAndHiddenInputFromExpression(expression, html.AutoCompleteFor(expression)));
+            Assert.Throws<DatalistException>(() =>
+                CreatesAutocompleteAndHiddenInputFromExpression(
+                    model => model.Id,
+                    html.AutoCompleteFor(model => model.Id)));
         }
 
         [Test]
         public void AutoCompleteFor_WithoutModel_CreatesAutocompleteAndHiddenInputFromExpression()
         {
-            Expression<Func<TestModel, String>> expression = (model) => model.ParentId;
-            CreatesAutocompleteAndHiddenInputFromExpression(expression, html.AutoCompleteFor(expression));
+            CreatesAutocompleteAndHiddenInputFromExpression(model => model.ParentId, html.AutoCompleteFor(model => model.ParentId));
         }
 
         [Test]
         public void AutoCompleteFor_WithoutModel_AddsIdAttributeFromExpression()
         {
-            Expression<Func<TestModel, String>> expression = (model) => model.ParentId;
-            AddsIdAttributeFromExpression(expression, html.AutoCompleteFor(expression));
+            AddsIdAttributeFromExpression(model => model.ParentId, html.AutoCompleteFor(model => model.ParentId));
         }
 
         [Test]
@@ -176,8 +177,7 @@ namespace DatalistTests.Tests
         [Test]
         public void AutoCompleteFor_WithoutModel_AddsHiddenInputAttributeFromExpression()
         {
-            Expression<Func<TestModel, String>> expression = (model) => model.ParentId;
-            AddsHiddenInputAttributeFromExpression(expression, html.AutoCompleteFor(expression));
+            AddsHiddenInputAttributeFromExpression(model => model.ParentId, html.AutoCompleteFor(model => model.ParentId));
         }
 
         [Test]
@@ -231,14 +231,14 @@ namespace DatalistTests.Tests
         [Test]
         public void AutoCompleteFor_WithoutModel_AddsIdForHiddenInputFromExpression()
         {
-            Expression<Func<TestModel, String>> expression = (model) => model.ParentId;
-            AddsIdForHiddenInputFromExpression(expression, html.AutoCompleteFor(expression));
+            AddsIdForHiddenInputFromExpression(model => model.ParentId, html.AutoCompleteFor(model => model.ParentId));
         }
 
         [Test]
         public void AutoCompleteFor_WithoutModel_AddsValueForHiddenInput()
         {
             testModel.ParentId = "TestValue";
+
             AddsValueForHiddenInput(testModel.ParentId, html.AutoCompleteFor(model => model.ParentId));
         }
 
@@ -256,6 +256,7 @@ namespace DatalistTests.Tests
         public void AutoCompleteFor_CreatesAutocompleteAndHiddenInputFromExpression()
         {
             Expression<Func<TestModel, String>> expression = (model) => model.FirstRelationModel.Value;
+
             CreatesAutocompleteAndHiddenInputFromExpression(expression, html.AutoCompleteFor(expression, datalist));
         }
 
@@ -263,6 +264,7 @@ namespace DatalistTests.Tests
         public void AutoCompleteFor_AddsIdAttributeFromExpression()
         {
             Expression<Func<TestModel, String>> expression = (model) => model.FirstRelationModel.Value;
+
             AddsIdAttributeFromExpression(expression, html.AutoCompleteFor(expression, datalist));
         }
 
@@ -282,6 +284,7 @@ namespace DatalistTests.Tests
         public void AutoCompleteFor_AddsHiddenInputAttributeFromExpression()
         {
             Expression<Func<TestModel, String>> expression = (model) => model.FirstRelationModel.Value;
+
             AddsHiddenInputAttributeFromExpression(expression, html.AutoCompleteFor(expression, datalist));
         }
 
@@ -290,6 +293,7 @@ namespace DatalistTests.Tests
         {
             datalist.AdditionalFilters.Add("Test1");
             datalist.AdditionalFilters.Add("Test2");
+
             AddsFiltersAttribute(html.AutoCompleteFor(model => model.Id, datalist));
         }
 
@@ -339,6 +343,7 @@ namespace DatalistTests.Tests
         public void AutoCompleteFor_AddsIdForHiddenInputFromExpression()
         {
             Expression<Func<TestModel, String>> expression = (model) => model.FirstRelationModel.Value;
+
             AddsIdForHiddenInputFromExpression(expression, html.AutoCompleteFor(expression, datalist));
         }
 
@@ -346,6 +351,7 @@ namespace DatalistTests.Tests
         public void AutoCompleteFor_AddsValueForHiddenInput()
         {
             testModel.Id = "TestValue";
+
             AddsValueForHiddenInput(testModel.Id, html.AutoCompleteFor(model => model.Id, datalist));
         }
 
@@ -400,6 +406,7 @@ namespace DatalistTests.Tests
         {
             datalist.AdditionalFilters.Add("Test1");
             datalist.AdditionalFilters.Add("Test2");
+
             AddsFiltersAttribute(html.Datalist("TestId", String.Empty, datalist));
         }
 
@@ -483,21 +490,23 @@ namespace DatalistTests.Tests
         public void DatalistFor_WithoutModel_MissingAttributeThrows()
         {
             Expression<Func<TestModel, String>> expression = (model) => model.Id;
-            Assert.Throws<DatalistException>(() => CreatesAutocompleteAndHiddenInputFromExpression(expression, html.DatalistFor(expression)));
+
+            Assert.Throws<DatalistException>(() =>
+                CreatesAutocompleteAndHiddenInputFromExpression(
+                    model => model.Id,
+                    html.DatalistFor(model => model.Id)));
         }
 
         [Test]
         public void DatalistFor_WithoutModel_CreatesAutocompleteAndHiddenInputFromExpression()
         {
-            Expression<Func<TestModel, String>> expression = (model) => model.ParentId;
-            CreatesAutocompleteAndHiddenInputFromExpression(expression, html.DatalistFor(expression));
+            CreatesAutocompleteAndHiddenInputFromExpression(model => model.ParentId, html.DatalistFor(model => model.ParentId));
         }
 
         [Test]
         public void DatalistFor_WithoutModel_AddsIdAttributeFromExpression()
         {
-            Expression<Func<TestModel, String>> expression = (model) => model.ParentId;
-            AddsIdAttributeFromExpression(expression, html.DatalistFor(expression));
+            AddsIdAttributeFromExpression(model => model.ParentId, html.DatalistFor(model => model.ParentId));
         }
 
         [Test]
@@ -515,8 +524,7 @@ namespace DatalistTests.Tests
         [Test]
         public void DatalistFor_WithoutModel_AddsHiddenInputAttributeFromExpression()
         {
-            Expression<Func<TestModel, String>> expression = (model) => model.ParentId;
-            AddsHiddenInputAttributeFromExpression(expression, html.DatalistFor(expression));
+            AddsHiddenInputAttributeFromExpression(model => model.ParentId, html.DatalistFor(model => model.ParentId));
         }
 
         [Test]
@@ -570,14 +578,14 @@ namespace DatalistTests.Tests
         [Test]
         public void DatalistFor_WithoutModel_AddsIdForHiddenInputFromExpression()
         {
-            Expression<Func<TestModel, String>> expression = (model) => model.ParentId;
-            AddsIdForHiddenInputFromExpression(expression, html.DatalistFor(expression));
+            AddsIdForHiddenInputFromExpression(model => model.ParentId, html.DatalistFor(model => model.ParentId));
         }
 
         [Test]
         public void DatalistFor_WithoutModel_AddsValueForHiddenInput()
         {
             testModel.ParentId = "TestValue";
+
             AddsValueForHiddenInput(testModel.ParentId, html.DatalistFor(model => model.ParentId));
         }
 
@@ -607,6 +615,7 @@ namespace DatalistTests.Tests
         public void DatalistFor_CreatesAutocompleteAndHiddenInputFromExpression()
         {
             Expression<Func<TestModel, String>> expression = (model) => model.FirstRelationModel.Value;
+
             CreatesAutocompleteAndHiddenInputFromExpression(expression, html.DatalistFor(expression, datalist));
         }
 
@@ -614,6 +623,7 @@ namespace DatalistTests.Tests
         public void DatalistFor_AddsIdAttributeFromExpression()
         {
             Expression<Func<TestModel, String>> expression = (model) => model.FirstRelationModel.Value;
+
             AddsIdAttributeFromExpression(expression, html.DatalistFor(expression, datalist));
         }
 
@@ -633,6 +643,7 @@ namespace DatalistTests.Tests
         public void DatalistFor_AddsHiddenInputAttributeFromExpression()
         {
             Expression<Func<TestModel, String>> expression = (model) => model.FirstRelationModel.Value;
+
             AddsHiddenInputAttributeFromExpression(expression, html.DatalistFor(expression, datalist));
         }
 
@@ -641,6 +652,7 @@ namespace DatalistTests.Tests
         {
             datalist.AdditionalFilters.Add("Test1");
             datalist.AdditionalFilters.Add("Test2");
+
             AddsFiltersAttribute(html.DatalistFor(model => model.Id, datalist));
         }
 
@@ -690,6 +702,7 @@ namespace DatalistTests.Tests
         public void DatalistFor_AddsIdForHiddenInputFromExpression()
         {
             Expression<Func<TestModel, String>> expression = (model) => model.FirstRelationModel.Value;
+
             AddsIdForHiddenInputFromExpression(expression, html.DatalistFor(expression, datalist));
         }
 
@@ -697,6 +710,7 @@ namespace DatalistTests.Tests
         public void DatalistFor_AddsValueForHiddenInput()
         {
             testModel.Id = "TestValue";
+
             AddsValueForHiddenInput(testModel.Id, html.DatalistFor(model => model.Id, datalist));
         }
 

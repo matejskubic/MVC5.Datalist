@@ -1,37 +1,33 @@
 ﻿using Datalist;
 using NUnit.Framework;
+using System;
 
 namespace DatalistTests.Tests
 {
     [TestFixture]
     public class DatalistDataTests
     {
-        private DatalistData data;
-
-        [SetUp]
-        public void SetUp()
-        {
-            data = new DatalistData();
-        }
-
         #region Constructor: DatalistData()
 
         [Test]
         public void DatalistData_ZeroFilteredRecords()
         {
-            Assert.AreEqual(0, data.FilteredRecords);
+            Int32 actual = new DatalistData().FilteredRecords;
+            Int32 expected = 0;
+
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]
         public void DatalistData_EmptyColumns()
         {
-            CollectionAssert.IsEmpty(data.Columns);
+            CollectionAssert.IsEmpty(new DatalistData().Columns);
         }
 
         [Test]
         public void DatalistData_EmptyRows()
         {
-            CollectionAssert.IsEmpty(data.Rows);
+            CollectionAssert.IsEmpty(new DatalistData().Rows);
         }
 
         #endregion

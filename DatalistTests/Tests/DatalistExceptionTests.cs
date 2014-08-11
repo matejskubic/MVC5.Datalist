@@ -12,10 +12,10 @@ namespace DatalistTests.Tests
         [Test]
         public void DatalistException_SetsMessage()
         {
-            String expected = "Test message";
-            DatalistException exception = new DatalistException(expected);
+            String actual = new DatalistException("T").Message;
+            String expected = "T";
 
-            Assert.AreEqual(expected, exception.Message);
+            Assert.AreEqual(expected, actual);
         }
 
         #endregion

@@ -30,19 +30,28 @@ namespace DatalistTests.Tests
         [Test]
         public void DatalistColumn_SetsKey()
         {
-            Assert.AreEqual("TestKey", new DatalistColumn("TestKey", String.Empty).Key);
+            String actual = new DatalistColumn("TestKey", String.Empty).Key;
+            String expected = "TestKey";
+
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]
         public void DatalistColumn_SetsHeader()
         {
-            Assert.AreEqual("TestHeader", new DatalistColumn(String.Empty, "TestHeader").Header);
+            String actual = new DatalistColumn(String.Empty, "TestHeader").Header;
+            String expected = "TestHeader";
+
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]
         public void DatalistColumn_SetsCssClass()
         {
-            Assert.AreEqual("TestCss", new DatalistColumn(String.Empty, String.Empty, "TestCss").CssClass);
+            String actual = new DatalistColumn(String.Empty, String.Empty, "TestCss").CssClass;
+            String expected = "TestCss";
+
+            Assert.AreEqual(expected, actual);
         }
 
         #endregion

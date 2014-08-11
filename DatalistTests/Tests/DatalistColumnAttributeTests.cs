@@ -1,5 +1,6 @@
 ﻿using Datalist;
 using NUnit.Framework;
+using System;
 
 namespace DatalistTests.Tests
 {
@@ -33,7 +34,10 @@ namespace DatalistTests.Tests
         [Test]
         public void DatalistColumnAttribute_SetsPosition()
         {
-            Assert.AreEqual(-5, new DatalistColumnAttribute(-5).Position);
+            Int32? actual = new DatalistColumnAttribute(-5).Position;
+            Int32? expected = -5;
+
+            Assert.AreEqual(expected, actual);
         }
 
         #endregion

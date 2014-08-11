@@ -188,6 +188,7 @@ namespace DatalistTests.Tests
         public void GetColumnHeader_ReturnsRelationDisplayName()
         {
             PropertyInfo property = typeof(TestModel).GetProperty("FirstRelationModel");
+
             String expected = property.PropertyType.GetProperty("Value").GetCustomAttribute<DisplayAttribute>().Name;
             String actual = datalist.BaseGetColumnHeader(property);
 
@@ -212,6 +213,7 @@ namespace DatalistTests.Tests
         public void GetData_CallsGetModels()
         {
             datalist.GetData();
+
             datalistMock.Protected().Verify("GetModels", Times.Once());
         }
 
@@ -221,6 +223,7 @@ namespace DatalistTests.Tests
             datalist.CurrentFilter.Id = "1";
 
             datalist.GetData();
+
             datalistMock.Protected().Verify("FilterById", Times.Once(), datalist.BaseGetModels());
         }
 
@@ -230,6 +233,7 @@ namespace DatalistTests.Tests
             datalist.CurrentFilter.Id = null;
 
             datalist.GetData();
+
             datalistMock.Protected().Verify("FilterById", Times.Never(), datalist.BaseGetModels());
         }
 
@@ -239,6 +243,7 @@ namespace DatalistTests.Tests
             datalist.CurrentFilter.AdditionalFilters.Add("Id", "1");
 
             datalist.GetData();
+
             datalistMock.Protected().Verify("FilterByAdditionalFilters", Times.Once(), datalist.BaseGetModels());
         }
 
@@ -248,6 +253,7 @@ namespace DatalistTests.Tests
             datalist.CurrentFilter.AdditionalFilters.Clear();
 
             datalist.GetData();
+
             datalistMock.Protected().Verify("FilterByAdditionalFilters", Times.Never(), datalist.BaseGetModels());
         }
 
@@ -266,6 +272,7 @@ namespace DatalistTests.Tests
             datalist.CurrentFilter.Id = null;
 
             datalist.GetData();
+
             datalistMock.Protected().Verify("FilterBySearchTerm", Times.Once(), datalist.BaseGetModels());
         }
 
@@ -276,6 +283,7 @@ namespace DatalistTests.Tests
             datalist.CurrentFilter.Id = null;
 
             datalist.GetData();
+
             datalistMock.Protected().Verify("FilterBySearchTerm", Times.Once(), datalist.BaseGetModels().Where(model => model.Id == "1"));
         }
 
@@ -285,6 +293,7 @@ namespace DatalistTests.Tests
             datalist.CurrentFilter.Id = "1";
 
             datalist.GetData();
+
             datalistMock.Protected().Verify("FilterBySearchTerm", Times.Never(), datalist.BaseGetModels());
         }
 
@@ -292,6 +301,7 @@ namespace DatalistTests.Tests
         public void GetData_CallsFormDatalistData()
         {
             datalist.GetData();
+
             datalistMock.Protected().Verify("FormDatalistData", Times.Never(), datalist.BaseGetModels());
         }
 
@@ -311,6 +321,7 @@ namespace DatalistTests.Tests
         public void FilterById_FiltersStringId()
         {
             datalist.CurrentFilter.Id = "9";
+
             IEnumerable<TestModel> expected = datalist.BaseGetModels().Where(model => model.Id == datalist.CurrentFilter.Id);
             IEnumerable<TestModel> actual = datalist.BaseFilterById(datalist.BaseGetModels());
 
@@ -380,6 +391,7 @@ namespace DatalistTests.Tests
             String stringFilter = "9";
             datalist.CurrentFilter.AdditionalFilters.Add("Id", stringFilter);
             datalist.CurrentFilter.AdditionalFilters.Add("Number", numberFilter);
+
             IQueryable<TestModel> actual = datalist.BaseFilterByAdditionalFilters(datalist.BaseGetModels());
             IQueryable<TestModel> expected = datalist.BaseGetModels().Where(model => model.Id == stringFilter && model.Number == numberFilter);
 
@@ -410,6 +422,7 @@ namespace DatalistTests.Tests
         public void FilterBySearchTerm_NotFiltersNull()
         {
             datalist.CurrentFilter.SearchTerm = null;
+
             IQueryable<TestModel> expected = datalist.BaseGetModels();
             IQueryable<TestModel> actual = datalist.BaseFilterBySearchTerm(datalist.BaseGetModels());
 
@@ -421,6 +434,7 @@ namespace DatalistTests.Tests
         {
             datalist.CurrentFilter.SearchTerm = "Test";
             datalist.Columns.Add(new DatalistColumn("TestProperty", String.Empty));
+
             Assert.Throws<DatalistException>(() => datalist.BaseFilterBySearchTerm(datalist.BaseGetModels()));
         }
 
@@ -518,6 +532,7 @@ namespace DatalistTests.Tests
         public void Sort_OnEmptyColumnsThrows()
         {
             datalist.Columns.Clear();
+
             Assert.Throws<DatalistException>(() => datalist.BaseSort(datalist.BaseGetModels()));
         }
 
@@ -647,6 +662,7 @@ namespace DatalistTests.Tests
         public void AddAutocomplete_OnEmptyColumnsThrows()
         {
             datalist.Columns.Clear();
+
             Assert.Throws<DatalistException>(() => datalist.BaseAddAutocomplete(null, new TestModel()));
         }
 
@@ -655,6 +671,7 @@ namespace DatalistTests.Tests
         {
             datalist.Columns.Clear();
             datalist.Columns.Add(new DatalistColumn("TestProperty", String.Empty));
+
             Assert.Throws<DatalistException>(() => datalist.BaseAddAutocomplete(new Dictionary<String, String>(), new TestModel()));
         }
 
@@ -708,6 +725,7 @@ namespace DatalistTests.Tests
         public void AddColumns_OnEmptyColumnsThrows()
         {
             datalist.Columns.Clear();
+
             Assert.Throws<DatalistException>(() => datalist.BaseAddColumns(null, new TestModel()));
         }
 
@@ -716,6 +734,7 @@ namespace DatalistTests.Tests
         {
             datalist.Columns.Clear();
             datalist.Columns.Add(new DatalistColumn("TestProperty", String.Empty));
+
             Assert.Throws<DatalistException>(() => datalist.BaseAddColumns(new Dictionary<String, String>(), new TestModel()));
         }
 
