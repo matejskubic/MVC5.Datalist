@@ -34,9 +34,13 @@ public JsonResult Sample(DatalistFilter filter)
     return GetData(new SampleDatalist(), filter);
 }
 ```
-Render your datalist inputs
+Render your datalist inputs using one of datalist's html helpers
 ```
+@Html.DatalistFor(model => model.SampleId)
+
 @Html.Datalist("SampleId", new SampleDatalist())
+
+@Html.DatalistFor(model => model.SampleId, new SampleDatalist())
 ```
 Initialize datalist instances
 ```js
