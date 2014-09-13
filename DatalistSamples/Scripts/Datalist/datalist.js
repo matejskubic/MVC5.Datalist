@@ -281,7 +281,7 @@
             $.each(columns, function (index, column) {
                 header += '<th class="' + (column.CssClass != null ? column.CssClass : '') + '" data-column="' + column.Key + '">' + (column.Header != null ? column.Header : '');
                 if (that.options.sortColumn == column.Key || (that.options.sortColumn == '' && columnCount == 0)) {
-                    header += '<span class="datalist-sort-arrow glyphicon glyphicon-arrow-' + (that.options.sortOrder == 'Asc' ? 'up' : 'down') + '"></span>';
+                    header += '<span class="datalist-sort-arrow glyphicon glyphicon-sort-by-attributes' + (that.options.sortOrder == 'Asc' ? '' : '-alt') + '"></span>';
                     that.options.sortColumn = column.Key;
                 }
 
