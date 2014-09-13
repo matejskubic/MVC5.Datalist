@@ -437,6 +437,8 @@ test('Updates header', function () {
         expectedHeader += '<th class="' + (column.CssClass != null ? column.CssClass : '') + '" data-column="' + column.Key + '">' + column.Header;
         if (testInput.datalist('option', 'sortColumn') == column.Key || (testInput.datalist('option', 'sortColumn') == '' && columnCount == 0))
             expectedHeader += '<span class="datalist-sort-arrow glyphicon glyphicon-sort-by-attributes' + (testInput.datalist('option', 'sortOrder') == 'Asc' ? '' : '-alt') + '"></span>';
+        else
+            expectedHeader += '<span class=\"datalist-sort-arrow\"></span>';
 
         expectedHeader += '</th>';
         columnCount++;

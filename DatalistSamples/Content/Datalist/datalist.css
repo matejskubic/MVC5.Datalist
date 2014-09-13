@@ -135,8 +135,10 @@
 }
 
     .datalist-table thead > tr > th > .datalist-sort-arrow {
+        display: inline-block;
         margin-left: 2px;
         font-size: 11px;
+        min-width: 11px;
     }
 
     .datalist-table thead > tr > th,
