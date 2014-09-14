@@ -134,6 +134,10 @@
     margin-bottom: 0;
 }
 
+    .datalist-table th {
+        cursor: pointer;
+    }
+
     .datalist-table thead > tr > th > .datalist-sort-arrow {
         display: inline-block;
         margin-left: 3px;
