@@ -48,6 +48,7 @@
   <ItemGroup>
     <None Include="Controllers\DatalistController.cs.pp" />
     <None Include="Views\Shared\_Datalist.cshtml" />
+    <None Include="web.config.transform" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

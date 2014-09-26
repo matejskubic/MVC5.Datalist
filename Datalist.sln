@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datalist", "Datalist\Datalist.csproj", "{B6B77EFD-C18A-4947-99C7-63A7AF09B606}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatalistContent", "DatalistContent\DatalistContent.csproj", "{26C12896-1718-4AA1-BF64-65A43AE85A3A}"
