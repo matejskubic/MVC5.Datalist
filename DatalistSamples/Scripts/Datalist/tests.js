@@ -8,6 +8,10 @@ QUnit.testStart(function (details) {
     filter1 = $('#Filter1');
     filter2 = $('#Filter2');
 
+    if (details.name == 'Datalist init on document ready') {
+        return;
+    }
+
     testInput
         .attr('data-datalist-url', 'http://localhost:9140/Datalist/Default')
         .attr('data-datalist-filters', 'Filter1,Filter2')
@@ -73,6 +77,30 @@ QUnit.testDone(function (details) {
 
     filter2.val('').clone().appendTo('#test-data');
     filter2.remove();
+});
+
+test('Datalist init on document ready', 1, function () {
+    ok(testInput.data('mvc-datalist'));
+});
+test('Datalist language init', 3, function () {
+    equal($.fn.datalist.lang.Error, 'Error while retrieving records');
+    equal($.fn.datalist.lang.NoDataFound, 'No data found');
+    equal($.fn.datalist.lang.Search, 'Search...');
+});
+test('Datalist spinner init', 3, function () {
+    var datalistSpinner = $('.datalist-items-per-page');
+    ok(datalistSpinner.hasClass('ui-spinner-input'));
+    equal(datalistSpinner.spinner('option', 'min'), 1);
+    equal(datalistSpinner.spinner('option', 'max'), 99);
+});
+test('Datalist dialog init', 7, function () {
+    ok(testDatalist.hasClass('ui-dialog-content'));
+    equal(testDatalist.dialog('option', 'autoOpen'), false);
+    equal(testDatalist.dialog('option', 'minHeight'), 210);
+    equal(testDatalist.dialog('option', 'height'), 'auto');
+    equal(testDatalist.dialog('option', 'minWidth'), 455);
+    equal(testDatalist.dialog('option', 'width'), 'auto');
+    equal(testDatalist.dialog('option', 'modal'), true);
 });
 
 test('Does not create mvc-datalist on non datalist input', 1, function () {
@@ -150,13 +178,13 @@ test('Initializes autocomplete select', 2, function () {
     };
 
     testInput.data('ui-autocomplete')._trigger('select', 'autocompleteselect', {
+        item: {
             item: {
-                item: {
-                    DatalistIdKey: 'Test2',
-                    DatalistAcKey: 'Test3'
-                }
+                DatalistIdKey: 'Test2',
+                DatalistAcKey: 'Test3'
             }
-        });
+        }
+    });
 });
 test('Initializes keyup on autocomplete', 1, function () {
     testInput.datalist().data('mvc-datalist')._select = function (data) {
@@ -635,25 +663,4 @@ test('Destroys datalist', 10, function () {
     equal(testInput.data('mvc-datalist'), null);
     filter1.change();
     filter2.change();
-});
-
-test('Datalist language init', 3, function () {
-    equal($.fn.datalist.lang.Error, 'Error while retrieving records');
-    equal($.fn.datalist.lang.NoDataFound, 'No data found');
-    equal($.fn.datalist.lang.Search, 'Search...');
-});
-test('Datalist spinner init', 3, function () {
-    var datalistSpinner = $('.datalist-items-per-page');
-    ok(datalistSpinner.hasClass('ui-spinner-input'));
-    equal(datalistSpinner.spinner('option', 'min'), 1);
-    equal(datalistSpinner.spinner('option', 'max'), 99);
-});
-test('Datalist dialog init', 7, function () {
-    ok(testDatalist.hasClass('ui-dialog-content'));
-    equal(testDatalist.dialog('option', 'autoOpen'), false);
-    equal(testDatalist.dialog('option', 'minHeight'), 210);
-    equal(testDatalist.dialog('option', 'height'), 'auto');
-    equal(testDatalist.dialog('option', 'minWidth'), 455);
-    equal(testDatalist.dialog('option', 'width'), 'auto');
-    equal(testDatalist.dialog('option', 'modal'), true);
 });

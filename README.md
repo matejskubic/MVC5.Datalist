@@ -1,6 +1,3 @@
-MVC.Datalist
-============
-
 Autocomplete plus datatables like plugin for MVC projects.
 
 Built on MVC4+, Bootstrap and jQuery.UI.
@@ -41,10 +38,6 @@ Render your datalist inputs using one of datalist's html helpers
 @Html.Datalist("SampleId", new SampleDatalist())
 
 @Html.DatalistFor(model => model.SampleId, new SampleDatalist())
-```
-Initialize datalist instances
-```js
-$('.datalist-input').datalist();
 ```
 
 Examples and API documentation

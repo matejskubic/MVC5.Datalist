@@ -412,13 +412,18 @@
     };
 
     var datalist = $('#Datalist');
-    datalist.find('.datalist-items-per-page').spinner({ min: 1, max: 99 });
-    datalist.dialog({
-        autoOpen: false,
-        minHeight: 210,
-        height: 'auto',
-        minWidth: 455,
-        width: 'auto',
-        modal: true
+
+    $(function () {
+        datalist.find('.datalist-items-per-page').spinner({ min: 1, max: 99 });
+        datalist.dialog({
+            autoOpen: false,
+            minHeight: 210,
+            height: 'auto',
+            minWidth: 455,
+            width: 'auto',
+            modal: true
+        });
+
+        $('.datalist-input').datalist();
     });
 })(jQuery);
