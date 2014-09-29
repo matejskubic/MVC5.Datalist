@@ -8,7 +8,8 @@
         <strong>Install Datalist from nuget</strong>
         <div class="nuget-install">
             <p>
-                <code>PM&gt; Install-Package Datalist
+                <code>
+                    PM&gt; Install-Package Datalist
                 </code>
             </p>
         </div>
@@ -24,6 +25,17 @@
             </p>
         </div>
         <div class="separator"></div>
+        <strong>Include scripts</strong>
+        <div class="html-code">
+            <p>
+                <code>
+                    <span style="color: #0000FF">&lt;</span>script <span style="color: #FF0000">src</span><span style="color: #0000FF">="~/Scripts/jquery.js"</span> <span style="color: #0000FF">/&gt;</span><br />
+                    <span style="color: #0000FF">&lt;</span>script <span style="color: #FF0000">src</span><span style="color: #0000FF">="~/Scripts/jquery-ui.js"</span> <span style="color: #0000FF">/&gt;</span><br />
+                    <span style="color: #0000FF">&lt;</span>script <span style="color: #FF0000">src</span><span style="color: #0000FF">="~/Scripts/Datalist/datalist.js"</span> <span style="color: #0000FF">/&gt;</span><br />
+                </code>
+            </p>
+        </div>
+        <div class="separator"></div>
         <strong>Render datalist partial view in Layout before RenderBody()</strong>
         <div class="html-code">
             <p>
@@ -33,13 +45,34 @@
             </p>
         </div>
         <div class="separator"></div>
-        <strong>Include scripts</strong>
+        <strong>Implement data source method in DatalistController</strong>
         <div class="html-code">
             <p>
                 <code>
-                    <span style="color: #0000FF">&lt;</span>script <span style="color: #FF0000">src</span><span style="color: #0000FF">="~/Scripts/jquery.js"</span> <span style="color: #0000FF">/&gt;</span><br />
-                    <span style="color: #0000FF">&lt;</span>script <span style="color: #FF0000">src</span><span style="color: #0000FF">="~/Scripts/jquery-ui.js"</span> <span style="color: #0000FF">/&gt;</span><br />
-                    <span style="color: #0000FF">&lt;</span>script <span style="color: #FF0000">src</span><span style="color: #0000FF">="~/Scripts/Datalist/datalist.js"</span> <span style="color: #0000FF">/&gt;</span><br />
+                    <span style="color: #000000">
+                        <span class="kwrd">private</span> <span class="cls">JsonResult</span> GetData(<span class="cls">AbstractDatalist</span> datalist, <span class="cls">DatalistFilter</span> filter, <span class="cls">Dictionary</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt; filters = <span class="kwrd">null</span>)</br>
+                        {</br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;datalist.CurrentFilter = filter;</br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;filter.AdditionalFilters = filters ?? filter.AdditionalFilters;</br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kwrd">return</span> Json(datalist.GetData(), <span class="cls">JsonRequestBehavior</span>.AllowGet);</br>
+                        }</br>
+                        </br>
+                        <span class="kwrd">public</span> <span class="cls">JsonResult</span> YourMethod(<span class="cls">DatalistFilter </span> filter)</br>
+                        {</br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kwrd">return</span> GetData(<span class="kwrd">new</span> <span class="cls">YourDatalist</span>(), filter);</br>
+                        }</br>
+                    </span>
+                </code>
+            </p>
+        </div>
+        <div class="separator"></div>
+        <strong>Render your datalist inputs using one of datalist's html helpers</strong>
+        <div class="html-code">
+            <p>
+                <code>
+                    <span class="esc" style="color: #000000">@@</span><span style="color: #000000">Html.DatalistFor(model => model.SampleId)</span></br>
+                    <span class="esc" style="color: #000000">@@</span><span style="color: #000000">Html.Datalist(</span><span class="str">"SampleId"</span><span style="color: #000000">, </span><span class="kwrd">new</span> <span class="cls">YourDatalist</span><span style="color: #000000">())</span></br>
+                    <span class="esc" style="color: #000000">@@</span><span style="color: #000000">Html.DatalistFor(model => model.SampleId, </span><span class="kwrd">new</span> <span class="cls">YourDatalist</span><span style="color: #000000">())</span>
                 </code>
             </p>
         </div>

@@ -14,18 +14,24 @@ Include style sheets
 <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
 <link href="~/Content/Datalist/datalist.css" rel="stylesheet" />
 ```
-Render datalist partial before calling RenderBody in your _Layout.cshtml
-```cshtml
-@Html.Partial("_Datalist")
-```
 Include scripts
 ```html
 <script src="~/Scripts/jquery-2.1.0.js" />
 <script src="~/Scripts/jquery-ui-1.10.4.js" />
 <script src="~/Scripts/Datalist/datalist.js" />
 ```
+Render datalist partial before calling RenderBody in your _Layout.cshtml
+```cshtml
+@Html.Partial("_Datalist")
+```
 Implement data source method in DatalistController
 ```cs
+private JsonResult GetData(AbstractDatalist datalist, DatalistFilter filter, Dictionary<String, Object> filters = null)
+{
+	datalist.CurrentFilter = filter;
+	filter.AdditionalFilters = filters ?? filter.AdditionalFilters;
+	return Json(datalist.GetData(), JsonRequestBehavior.AllowGet);
+}
 public JsonResult Sample(DatalistFilter filter)
 {
     return GetData(new SampleDatalist(), filter);
@@ -34,9 +40,7 @@ public JsonResult Sample(DatalistFilter filter)
 Render your datalist inputs using one of datalist's html helpers
 ```
 @Html.DatalistFor(model => model.SampleId)
-
 @Html.Datalist("SampleId", new SampleDatalist())
-
 @Html.DatalistFor(model => model.SampleId, new SampleDatalist())
 ```
 
