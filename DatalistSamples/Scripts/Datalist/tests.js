@@ -47,7 +47,7 @@ QUnit.testStart(function (details) {
                     'DatalistAcKey': 'Tom',
                     'FirstName': 'Tom',
                     'LastName': 'Jecks',
-                    'DateOfBirth': '10/10/1998',
+                    'DateOfBirth': '1998-10-10',
                     'Account.LoginName': 'Tommy'
                 },
                 {
@@ -55,7 +55,31 @@ QUnit.testStart(function (details) {
                     'DatalistAcKey': 'Pet',
                     'FirstName': 'Pet',
                     'LastName': 'Quacks',
-                    'DateOfBirth': '18/09/2000',
+                    'DateOfBirth': '2000-09-18',
+                    'Account.LoginName': ''
+                },
+                {
+                    'DatalistIdKey': '2',
+                    'DatalistAcKey': 'Len',
+                    'FirstName': 'Len',
+                    'LastName': '',
+                    'DateOfBirth': '1990-01-01',
+                    'Account.LoginName': 'Lennox'
+                },
+                {
+                    'DatalistIdKey': '3',
+                    'DatalistAcKey': 'Kim',
+                    'FirstName': 'Kim',
+                    'LastName': '',
+                    'DateOfBirth': '1950-05-02',
+                    'Account.LoginName': ''
+                },
+                {
+                    'DatalistIdKey': '4',
+                    'DatalistAcKey': 'Dred',
+                    'FirstName': 'Dred',
+                    'LastName': 'Insky',
+                    'DateOfBirth': '0001-01-01',
                     'Account.LoginName': ''
                 }
             ],
@@ -77,6 +101,8 @@ QUnit.testDone(function (details) {
 
     filter2.val('').clone().appendTo('#test-data');
     filter2.remove();
+
+    testDatalist.find('.datalist-search-input').val('');
 });
 
 test('Datalist init on document ready', 1, function () {
@@ -398,9 +424,9 @@ test('Default select prevented', 0, function () {
     testInput.data('mvc-datalist')._select();
 });
 
-test('Update calls', 28, function () {
+test('Update calls', 46, function () {
     testInput
-        .attr('data-datalist-records-per-page', 2)
+        .attr('data-datalist-sort-column', 'FirstName')
         .attr('data-datalist-term', '')
         .datalist();
 
@@ -550,7 +576,7 @@ test('Update data, updates table data', 1, function () {
 
     equal(datalistTableBody.html(), expectedData);
 });
-test('Update data, binds select spans', 6, function () {
+test('Update data, binds select spans', 15, function () {
     var iteration = 0;
     var mvcDatalist = testInput.datalist().data('mvc-datalist');
     mvcDatalist._bindSelect = function (datalist, selectCell, dataRow) {
@@ -599,7 +625,7 @@ test('Updates navigation with paginator', 18, function () {
     equal($(links[8]).data('page'), 5);
 });
 
-test('Binds datalist table select', 4, function () {
+test('Binds datalist table select', 10, function () {
     var iteration = 0;
     var mvcDatalist = testInput.datalist().data('mvc-datalist');
     mvcDatalist._select = function (data) {
