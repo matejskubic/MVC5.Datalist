@@ -277,19 +277,17 @@
         _updateHeader: function (datalist, columns) {
             var that = this;
             var header = '';
-            var columnCount = 0;
-            $.each(columns, function (index, column) {
+
+            for (i = 0; i < columns.length; i++) {
+                var column = columns[i];
                 header += '<th class="' + (column.CssClass != null ? column.CssClass : '') + '" data-column="' + column.Key + '">' + (column.Header != null ? column.Header : '');
-                if (that.options.sortColumn == column.Key || (that.options.sortColumn == '' && columnCount == 0)) {
-                    header += '<span class="datalist-sort-arrow glyphicon glyphicon-sort-by-attributes' + (that.options.sortOrder == 'Asc' ? '' : '-alt') + '"></span>';
+                if (that.options.sortColumn == column.Key || (that.options.sortColumn == '' && i == 0)) {
+                    header += '<span class="datalist-sort-arrow glyphicon glyphicon-sort-by-attributes' + (that.options.sortOrder == 'Asc' ? '' : '-alt') + '"></span></th>';
                     that.options.sortColumn = column.Key;
                 } else {
-                    header += '<span class="datalist-sort-arrow"></span>';
+                    header += '<span class="datalist-sort-arrow"></span></th>';
                 }
-
-                header += '</th>';
-                columnCount++;
-            });
+            }
 
             datalist.find('.datalist-table-head').html('<tr>' + header + '<th class="datalist-select-header"></th></tr>');
             datalist.find('.datalist-table-head th').click(function () {
@@ -319,9 +317,11 @@
             for (var i = 0; i < data.Rows.length; i++) {
                 var tableRow = '<tr>';
                 var row = data.Rows[i];
-                $.each(data.Columns, function (index, column) {
+
+                for (j = 0; j < data.Columns.length; j++) {
+                    var column = data.Columns[j];
                     tableRow += '<td class="' + (column.CssClass != null ? column.CssClass : '') + '">' + (row[column.Key] != null ? row[column.Key] : '') + '</td>';
-                });
+                }
 
                 tableRow += '<td class="datalist-select-cell"><div class="datalist-select-container"><i class="glyphicon glyphicon-ok"></i></div></td></tr>';
                 tableData += tableRow;
