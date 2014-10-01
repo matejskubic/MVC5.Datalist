@@ -38,7 +38,7 @@
             e.addClass('mvc-datalist');
         },
         _initFilters: function () {
-            for (i = 0; i < this.options.filters.length; i++) {
+            for (var i = 0; i < this.options.filters.length; i++) {
                 this._initFilter($('#' + this.options.filters[i]));
             }
         },
@@ -167,7 +167,7 @@
         },
         _formFiltersQuery: function () {
             var additionaFilter = '';
-            for (i = 0; i < this.options.filters.length; i++) {
+            for (var i = 0; i < this.options.filters.length; i++) {
                 var filter = $('#' + this.options.filters[i]);
                 if (filter.length == 1) {
                     additionaFilter += '&' + this.options.filters[i] + '=' + filter.val();
@@ -278,7 +278,7 @@
             var that = this;
             var header = '';
 
-            for (i = 0; i < columns.length; i++) {
+            for (var i = 0; i < columns.length; i++) {
                 var column = columns[i];
                 header += '<th class="' + (column.CssClass != null ? column.CssClass : '') + '" data-column="' + column.Key + '">' + (column.Header != null ? column.Header : '');
                 if (that.options.sortColumn == column.Key || (that.options.sortColumn == '' && i == 0)) {
@@ -318,7 +318,7 @@
                 var tableRow = '<tr>';
                 var row = data.Rows[i];
 
-                for (j = 0; j < data.Columns.length; j++) {
+                for (var j = 0; j < data.Columns.length; j++) {
                     var column = data.Columns[j];
                     tableRow += '<td class="' + (column.CssClass != null ? column.CssClass : '') + '">' + (row[column.Key] != null ? row[column.Key] : '') + '</td>';
                 }
@@ -329,8 +329,8 @@
 
             datalist.find('.datalist-table-body').html(tableData);
             var selectCells = datalist.find('td.datalist-select-cell');
-            for (var i = 0; i < selectCells.length; i++) {
-                this._bindSelect(datalist, selectCells[i], data.Rows[i]);
+            for (var k = 0; k < selectCells.length; k++) {
+                this._bindSelect(datalist, selectCells[k], data.Rows[k]);
             }
         },
         _updateNavbar: function (datalist, filteredRecords) {
