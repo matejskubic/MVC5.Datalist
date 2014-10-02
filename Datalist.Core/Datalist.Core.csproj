@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{26C12896-1718-4AA1-BF64-65A43AE85A3A}</ProjectGuid>
+    <ProjectGuid>{B6B77EFD-C18A-4947-99C7-63A7AF09B606}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Datalist.Content</RootNamespace>
-    <AssemblyName>Datalist.Content</AssemblyName>
+    <RootNamespace>Datalist</RootNamespace>
+    <AssemblyName>Datalist</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,26 +31,32 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.2\lib\net40\System.Linq.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractDatalist.cs" />
+    <Compile Include="DatalistAttribute.cs" />
+    <Compile Include="DatalistColumn.cs" />
+    <Compile Include="DatalistColumnAttribute.cs" />
+    <Compile Include="DatalistColumns.cs" />
+    <Compile Include="DatalistData.cs" />
+    <Compile Include="DatalistException.cs" />
+    <Compile Include="DatalistExtensions.cs" />
+    <Compile Include="DatalistFilter.cs" />
+    <Compile Include="DatalistSortOrder.cs" />
+    <Compile Include="GenericDatalist.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Datalist\datalist.css" />
-    <Content Include="Images\Datalist\loading.gif" />
-    <Content Include="readme.txt" />
-    <Content Include="Scripts\Datalist\Cultures\datalist.culture.en-GB.js" />
-    <Content Include="Scripts\Datalist\Cultures\datalist.culture.lt-LT.js" />
-    <Content Include="Scripts\Datalist\datalist.js" />
-    <Content Include="Scripts\Datalist\datalist.min.js">
-      <DependentUpon>datalist.js</DependentUpon>
-    </Content>
+    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Views\Shared\_Datalist.cshtml" />
-    <None Include="web.config.transform" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

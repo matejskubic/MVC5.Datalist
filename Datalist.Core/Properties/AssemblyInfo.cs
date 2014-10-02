@@ -3,10 +3,10 @@ using System.Resources;
 using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
-[assembly: AssemblyTitle("DatalistContent")]
-[assembly: AssemblyProduct("DatalistContent")]
+[assembly: AssemblyTitle("Datalist")]
+[assembly: AssemblyProduct("Datalist")]
 [assembly: AssemblyCompany("NonFactors")]
 [assembly: AssemblyCopyright("Copyright © NonFactors 2014")]
 [assembly: NeutralResourcesLanguageAttribute("en")]
-[assembly: AssemblyFileVersion("3.1.3.0")]
-[assembly: AssemblyVersion("3.1.3.0")]
+[assembly: AssemblyFileVersion("3.1.1.0")]
+[assembly: AssemblyVersion("3.1.1.0")]
