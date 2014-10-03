@@ -3,8 +3,8 @@ using System.Resources;
 using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
-[assembly: AssemblyTitle("DatalistSamples")]
-[assembly: AssemblyProduct("DatalistSamples")]
+[assembly: AssemblyTitle("Datalist.Web")]
+[assembly: AssemblyProduct("Datalist.Web")]
 [assembly: AssemblyCompany("NonFactors")]
 [assembly: AssemblyCopyright("Copyright © NonFactors 2014")]
 [assembly: NeutralResourcesLanguageAttribute("en")]
