@@ -81,13 +81,13 @@
 
     .datalist-search-group span {
         border-bottom-color: #CCCCCC;
-        border-right: medium none;
+        border-bottom-left-radius: 0;
         border-top-color: #CCCCCC;
+        border-top-left-radius: 0;
+        border-right: medium none;
+        border-left: 0 none;
         padding-bottom: 0;
         padding-top: 0;
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
-        border-left: 0 none;
     }
 
         .datalist-search-group span a:first-of-type {
@@ -105,8 +105,8 @@
 
 .datalist-processing {
     background: url(../../Images/Datalist/loading.gif) no-repeat center;
-    border: 1px solid #DDDDDD;
     background-color: #FFFFFF;
+    border: 1px solid #DDDDDD;
     position: absolute;
     text-align: center;
     min-height: 50px;
@@ -117,8 +117,8 @@
 }
 
 .datalist-error-container {
-    margin: 30px 5px 0;
     text-align: center;
+    margin: 30px 5px 0;
 }
 
 .datalist-error {
@@ -174,9 +174,8 @@
     }
 
     .datalist-select-container > i {
-        font-size: 10px;
         color: #FFFFFF;
-        left: -0.5px;
+        font-size: 10px;
         top: -2.5px;
     }
 
