@@ -1,9 +1,0 @@
-﻿<configuration>
-    <system.web>
-        <pages>
-            <namespaces>
-                <add namespace ="Datalist" />
-            </namespaces>
-        </pages>
-    </system.web>
-</configuration>
