@@ -27,7 +27,7 @@ namespace Datalist.Tests.Unit
                 new HttpRequest(null, "http://localhost:7013/", null),
                 new HttpResponse(new StringWriter()));
 
-            datalistMock = new Mock<TestDatalistStub>() { CallBase = true };
+            datalistMock = new Mock<TestDatalistStub> { CallBase = true };
             datalist = datalistMock.Object;
         }
 
@@ -334,7 +334,7 @@ namespace Datalist.Tests.Unit
             List<NumericIdModel> models = new List<NumericIdModel>();
             GenericDatalistStub<NumericIdModel> datalist = new GenericDatalistStub<NumericIdModel>();
             for (Int32 i = 0; i < 100; i++)
-                models.Add(new NumericIdModel() { Id = i });
+                models.Add(new NumericIdModel { Id = i });
 
             Int32 id = 9;
             datalist.CurrentFilter.Id = id.ToString();
@@ -638,7 +638,7 @@ namespace Datalist.Tests.Unit
         public void AddId_AddsValue()
         {
             Dictionary<String, String> row = new Dictionary<String, String>();
-            TestModel model = new TestModel() { Id = "Test" };
+            TestModel model = new TestModel { Id = "Test" };
 
             datalist.BaseAddId(row, model);
 
@@ -700,7 +700,7 @@ namespace Datalist.Tests.Unit
         {
             datalist.Columns.Clear();
             datalist.Columns.Add(new DatalistColumn("FirstRelationModel.Value", String.Empty));
-            TestModel model = new TestModel() { FirstRelationModel = new TestRelationModel() { Value = "Test" } };
+            TestModel model = new TestModel { FirstRelationModel = new TestRelationModel { Value = "Test" } };
             PropertyInfo firstProperty = typeof(TestRelationModel).GetProperty("Value");
             Dictionary<String, String> row = new Dictionary<String, String>();
             datalist.BaseAddAutocomplete(row, model);
@@ -752,7 +752,7 @@ namespace Datalist.Tests.Unit
         {
             List<String> expected = new List<String>();
             Dictionary<String, String> row = new Dictionary<String, String>();
-            TestModel model = new TestModel() { FirstRelationModel = new TestRelationModel() { Value = "Test" } };
+            TestModel model = new TestModel { FirstRelationModel = new TestRelationModel { Value = "Test" } };
             foreach (DatalistColumn column in datalist.Columns)
                 expected.Add(GetValue(model, column.Key));
 

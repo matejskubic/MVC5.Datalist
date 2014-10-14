@@ -22,7 +22,7 @@ namespace Datalist.Web.Datalists
                 HttpContext.Current.Request.Url.Scheme,
                 HttpContext.Current.Request.Url.Authority,
                 HttpContext.Current.Request.ApplicationPath ?? "/",
-                AbstractDatalist.Prefix,
+                Prefix,
                 "DifferentUrlExample");
 
             DialogTitle = "Normal dialog title";

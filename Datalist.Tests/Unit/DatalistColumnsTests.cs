@@ -17,7 +17,7 @@ namespace Datalist.Tests.Unit
         public void SetUp()
         {
             columns = new DatalistColumns();
-            testColumns = new List<DatalistColumn>()
+            testColumns = new List<DatalistColumn>
             {
                 new DatalistColumn("Test1", String.Empty),
                 new DatalistColumn("Test2", String.Empty),

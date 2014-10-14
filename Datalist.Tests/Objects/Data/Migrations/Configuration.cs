@@ -24,9 +24,9 @@ namespace Datalist.Tests.Objects.Data.Migrations
                 String id = index.ToString();
                 if (!context.TestModels.Any(model => model.Id == id))
                 {
-                    context.TestRelationModels.Add(new TestRelationModel() { Id = id, Value = id + "." + id });
-                    context.TestRelationModels.Add(new TestRelationModel() { Id = "-" + id, Value = "-" + id + "." + id });
-                    context.TestModels.Add(new TestModel()
+                    context.TestRelationModels.Add(new TestRelationModel { Id = id, Value = id + "." + id });
+                    context.TestRelationModels.Add(new TestRelationModel { Id = "-" + id, Value = "-" + id + "." + id });
+                    context.TestModels.Add(new TestModel
                     {
                         Id = id,
                         ParentId = id,

@@ -34,7 +34,7 @@ namespace Datalist
         {
             TagBuilder inputGroup = new TagBuilder("div");
             inputGroup.AddCssClass("input-group");
-            inputGroup.InnerHtml = html.AutoComplete(name, value, model, htmlAttributes).ToString() + FormDatalistOpenSpan(model);
+            inputGroup.InnerHtml = html.AutoComplete(name, value, model, htmlAttributes) + FormDatalistOpenSpan(model);
 
             return new MvcHtmlString(inputGroup.ToString());
         }
