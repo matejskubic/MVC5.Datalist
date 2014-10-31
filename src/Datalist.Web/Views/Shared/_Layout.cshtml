@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <title>@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/all.css" rel="stylesheet" />
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <link href="~/Content/Datalist/datalist.css" rel="stylesheet" />
-    <link href="~/Content/qunit-1.14.0.css" rel="stylesheet" />
+    <link href="~/Content/qunit-1.15.0.css" rel="stylesheet" />
     <link href="~/Content/site.css" rel="stylesheet" />
 </head>
 
@@ -35,11 +35,11 @@
         @Html.Partial("_Datalist")
     </div>
     <script src="~/Scripts/jquery-2.1.1.js"></script>
-    <script src="~/Scripts/jquery-ui-1.10.4.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.1.js"></script>
     <script src="~/Scripts/Datalist/datalist.js"></script>
     @if (ViewContext.RouteData.Values["controller"].ToString() == "Datalist" && ViewContext.RouteData.Values["action"].ToString() == "Tests")
     {
-        <script src="/Scripts/qunit-1.14.0.js"></script>
+        <script src="/Scripts/qunit-1.15.0.js"></script>
         <script src="/Scripts/Datalist/tests.js"></script>
     }
 
