@@ -1,5 +1,4 @@
-﻿using Datalist;
-using Datalist.Tests.Objects.Models;
+﻿using Datalist.Tests.Objects.Models;
 using Datalist.Tests.Objects.Stubs;
 using Moq;
 using Moq.Protected;
