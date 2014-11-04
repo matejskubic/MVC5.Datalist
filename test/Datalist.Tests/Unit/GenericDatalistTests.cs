@@ -301,7 +301,7 @@ namespace Datalist.Tests.Unit
         {
             datalist.GetData();
 
-            datalistMock.Protected().Verify("FormDatalistData", Times.Never(), datalist.BaseGetModels());
+            datalistMock.Protected().Verify("FormDatalistData", Times.Once(), datalist.BaseGetModels());
         }
 
         #endregion
