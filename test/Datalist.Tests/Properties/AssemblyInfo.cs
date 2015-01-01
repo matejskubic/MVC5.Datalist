@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Datalist.Tests")]
 [assembly: AssemblyProduct("Datalist.Tests")]
 [assembly: AssemblyCompany("NonFactors")]
-[assembly: AssemblyCopyright("Copyright © NonFactors 2014")]
+[assembly: AssemblyCopyright("Copyright © NonFactors")]
 [assembly: NeutralResourcesLanguage("en")]
 [assembly: AssemblyFileVersion("3.1.1.0")]
 [assembly: AssemblyVersion("3.1.1.0")]

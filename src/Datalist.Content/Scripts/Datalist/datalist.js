@@ -2,7 +2,7 @@
  * Datalist 3.2.0
  * https://github.com/NonFactors/MVC.Datalist
  *
- * Copyright © 2014 NonFactors
+ * Copyright © NonFactors
  *
  * Licensed under the terms of the MIT License
  * http://www.opensource.org/licenses/mit-license.php
