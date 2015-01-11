@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datalist.Core", "src\Datalist.Core\Datalist.Core.csproj", "{B6B77EFD-C18A-4947-99C7-63A7AF09B606}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datalist.Content", "src\Datalist.Content\Datalist.Content.csproj", "{26C12896-1718-4AA1-BF64-65A43AE85A3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datalist", "src\Datalist\Datalist.csproj", "{26C12896-1718-4AA1-BF64-65A43AE85A3A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datalist.Tests", "test\Datalist.Tests\Datalist.Tests.csproj", "{2004CB46-BCB0-4B97-96F7-5FED50DBA4FE}"
 EndProject
