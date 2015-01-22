@@ -26,7 +26,12 @@ namespace Datalist
         public static IHtmlString AutoCompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html,
             Expression<Func<TModel, TProperty>> expression, AbstractDatalist model, Object htmlAttributes = null)
         {
-            return html.AutoComplete(ExpressionHelper.GetExpressionText(expression), ModelMetadata.FromLambdaExpression(expression, html.ViewData).Model, model, htmlAttributes);
+            String name = ExpressionHelper.GetExpressionText(expression);
+
+            String autoComplete = FormAutoComplete(html, model, name, htmlAttributes);
+            String hiddenInput = FormHiddenInputFor(html, expression);
+
+            return new MvcHtmlString(autoComplete + hiddenInput);
         }
 
         public static IHtmlString Datalist<TModel>(this HtmlHelper<TModel> html,
@@ -46,7 +51,11 @@ namespace Datalist
         public static IHtmlString DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html,
             Expression<Func<TModel, TProperty>> expression, AbstractDatalist model, Object htmlAttributes = null)
         {
-            return html.Datalist(ExpressionHelper.GetExpressionText(expression), ModelMetadata.FromLambdaExpression(expression, html.ViewData).Model, model, htmlAttributes);
+            TagBuilder inputGroup = new TagBuilder("div");
+            inputGroup.AddCssClass("input-group");
+            inputGroup.InnerHtml = html.AutoCompleteFor(expression, model, htmlAttributes) + FormDatalistOpenSpan(model);
+
+            return new MvcHtmlString(inputGroup.ToString());
         }
 
         private static AbstractDatalist GetModelFromExpression<TModel, TProperty>(Expression<Func<TModel, TProperty>> expression)
@@ -76,6 +85,14 @@ namespace Datalist
 
             return html.TextBox(hiddenInput + AbstractDatalist.Prefix, null, attributes).ToString();
         }
+
+        private static String FormHiddenInputFor<TModel, TProperty>(HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression)
+        {
+            RouteValueDictionary attributes = new RouteValueDictionary();
+            attributes.Add("class", "datalist-hidden-input");
+
+            return html.HiddenFor(expression, attributes).ToString();
+        }
         private static String FormHiddenInput<TModel>(HtmlHelper<TModel> html, String name, Object value)
         {
             RouteValueDictionary attributes = new RouteValueDictionary();
@@ -83,6 +100,7 @@ namespace Datalist
 
             return html.Hidden(name, value, attributes).ToString();
         }
+
         private static String FormDatalistOpenSpan(AbstractDatalist model)
         {
             TagBuilder outerSpan = new TagBuilder("span");
