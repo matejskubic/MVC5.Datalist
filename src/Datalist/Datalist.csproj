@@ -38,7 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Datalist\datalist.css" />
-    <Content Include="Images\Datalist\loading.gif" />
     <Content Include="readme.txt" />
     <Content Include="Scripts\Datalist\datalist.js" />
     <Content Include="Scripts\Datalist\datalist.min.js">
