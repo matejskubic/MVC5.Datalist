@@ -1,5 +1,4 @@
-﻿using Datalist;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -76,7 +75,7 @@ namespace Datalist.Tests.Unit
             IEnumerable<DatalistColumn> expected = testColumns;
             IEnumerable<DatalistColumn> actual = columns;
 
-            CollectionAssert.AreEqual(testColumns, columns);
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         #endregion

@@ -1,5 +1,4 @@
-﻿using Datalist;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Datalist.Tests.Unit
 {

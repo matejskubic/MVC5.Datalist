@@ -39,7 +39,7 @@ namespace Datalist
         {
             TagBuilder inputGroup = new TagBuilder("div");
             inputGroup.AddCssClass("input-group");
-            inputGroup.InnerHtml = html.AutoComplete(name, value, model, htmlAttributes) + FormDatalistOpenSpan(model);
+            inputGroup.InnerHtml = html.AutoComplete(name, value, model, htmlAttributes) + FormDatalistOpenSpan();
 
             return new MvcHtmlString(inputGroup.ToString());
         }
@@ -53,7 +53,7 @@ namespace Datalist
         {
             TagBuilder inputGroup = new TagBuilder("div");
             inputGroup.AddCssClass("input-group");
-            inputGroup.InnerHtml = html.AutoCompleteFor(expression, model, htmlAttributes) + FormDatalistOpenSpan(model);
+            inputGroup.InnerHtml = html.AutoCompleteFor(expression, model, htmlAttributes) + FormDatalistOpenSpan();
 
             return new MvcHtmlString(inputGroup.ToString());
         }
@@ -101,7 +101,7 @@ namespace Datalist
             return html.Hidden(name, value, attributes).ToString();
         }
 
-        private static String FormDatalistOpenSpan(AbstractDatalist model)
+        private static String FormDatalistOpenSpan()
         {
             TagBuilder outerSpan = new TagBuilder("span");
             TagBuilder innerSpan = new TagBuilder("span");

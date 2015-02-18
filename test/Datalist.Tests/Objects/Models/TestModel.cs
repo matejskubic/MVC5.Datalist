@@ -1,5 +1,4 @@
-﻿using Datalist;
-using Datalist.Tests.Objects.Stubs;
+﻿using Datalist.Tests.Objects.Stubs;
 using System;
 using System.ComponentModel.DataAnnotations;
 

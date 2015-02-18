@@ -1,6 +1,4 @@
-﻿using Datalist;
-
-namespace Datalist.Tests.Objects.Models
+﻿namespace Datalist.Tests.Objects.Models
 {
     public class EnumModel
     {

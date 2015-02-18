@@ -20,7 +20,7 @@ namespace Datalist
             }
         }
 
-        public GenericDatalist()
+        protected GenericDatalist()
         {
             foreach (PropertyInfo property in AttributedProperties)
                 Columns.Add(GetColumnKey(property), GetColumnHeader(property), GetColumnCssClass(property));
@@ -130,7 +130,7 @@ namespace Datalist
                 else
                     throw new DatalistException(String.Format("Datalist does not contain sort column named \"{0}\"", sortColumn));
 
-            if (Columns.Count() > 0)
+            if (Columns.Any())
                 return models.OrderBy(String.Format("{0} {1}", Columns.First().Key, CurrentFilter.SortOrder));
 
             throw new DatalistException("Datalist columns can not be empty.");
@@ -165,14 +165,14 @@ namespace Datalist
         }
         protected virtual void AddAutocomplete(Dictionary<String, String> row, T model)
         {
-            if (Columns.Count() == 0)
+            if (!Columns.Any())
                 throw new DatalistException("Datalist columns can not be empty.");
 
             row.Add(AcKey, GetValue(model, Columns.Keys.First()));
         }
         protected virtual void AddColumns(Dictionary<String, String> row, T model)
         {
-            if (Columns.Count() == 0)
+            if (!Columns.Any())
                 throw new DatalistException("Datalist columns can not be empty.");
 
             foreach (String column in Columns.Keys)
@@ -216,7 +216,6 @@ namespace Datalist
         {
             if (model == null) return String.Empty;
 
-            Object value = null;
             Type type = model.GetType();
             String[] properties = fullPropertyName.Split('.');
             PropertyInfo property = type.GetProperty(properties[0]);
@@ -226,7 +225,7 @@ namespace Datalist
             if (properties.Length > 1)
                 return GetValue(property.GetValue(model), String.Join(".", properties.Skip(1)));
 
-            value = property.GetValue(model) ?? String.Empty;
+            Object value = property.GetValue(model) ?? String.Empty;
             DatalistColumnAttribute datalistColumn = property.GetCustomAttribute<DatalistColumnAttribute>(false);
             if (datalistColumn != null && datalistColumn.Format != null)
                 value = String.Format(datalistColumn.Format, value);

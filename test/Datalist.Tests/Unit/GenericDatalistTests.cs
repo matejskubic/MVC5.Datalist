@@ -781,7 +781,6 @@ namespace Datalist.Tests.Unit
         {
             if (model == null) return String.Empty;
 
-            Object value = null;
             Type type = model.GetType();
             String[] properties = fullPropertyName.Split('.');
             PropertyInfo property = type.GetProperty(properties[0]);
@@ -789,7 +788,7 @@ namespace Datalist.Tests.Unit
             if (properties.Length > 1)
                 return GetValue(property.GetValue(model), String.Join(".", properties.Skip(1)));
 
-            value = property.GetValue(model) ?? String.Empty;
+            Object value = property.GetValue(model) ?? String.Empty;
             DatalistColumnAttribute datalistColumn = property.GetCustomAttribute<DatalistColumnAttribute>(false);
             if (datalistColumn != null && datalistColumn.Format != null)
                 value = String.Format(datalistColumn.Format, value);

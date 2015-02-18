@@ -1,5 +1,4 @@
-﻿using Datalist;
-using Datalist.Tests.Objects.Models;
+﻿using Datalist.Tests.Objects.Models;
 using Datalist.Tests.Objects.Stubs;
 using Moq;
 using NUnit.Framework;
@@ -489,8 +488,6 @@ namespace Datalist.Tests.Unit
         [Test]
         public void DatalistFor_WithoutModel_MissingAttributeThrows()
         {
-            Expression<Func<TestModel, String>> expression = model => model.Id;
-
             Assert.Throws<DatalistException>(() =>
                 CreatesAutocompleteAndHiddenInputFromExpression(
                     model => model.Id,
