@@ -1,6 +1,9 @@
 Autocomplete plus datatables like plugin for MVC projects.
 
-Built on MVC4+, Bootstrap and jQuery.UI.
+![Semantic](https://img.shields.io/badge/Sem-Ver-lightgrey.svg?style=plastic)
+![NuGet](https://img.shields.io/nuget/v/Datalist.svg?style=plastic)
+![Downloads](https://img.shields.io/nuget/dt/Datalist.svg?style=plastic)
+![License](https://img.shields.io/badge/license-MIT-green.svg?style=plastic)
 
 Installation
 -
