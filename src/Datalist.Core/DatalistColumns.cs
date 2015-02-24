@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Datalist
 {
-    public sealed class DatalistColumns : IEnumerable<DatalistColumn>
+    public class DatalistColumns : IEnumerable<DatalistColumn>
     {
         private List<DatalistColumn> columns;
 
@@ -45,8 +45,7 @@ namespace Datalist
         }
         public void Clear()
         {
-            foreach (DatalistColumn column in this)
-                Remove(column);
+            columns.Clear();
         }
 
         public IEnumerator<DatalistColumn> GetEnumerator()
