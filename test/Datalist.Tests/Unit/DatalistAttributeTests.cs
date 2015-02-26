@@ -1,32 +1,31 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
+using Xunit;
 
 namespace Datalist.Tests.Unit
 {
-    [TestFixture]
     public class DatalistAttributeTests
     {
         #region Constructor: DatalistAttribute(Type type)
 
-        [Test]
+        [Fact]
         public void DatalistAttribute_NullThrows()
         {
             Assert.Throws<ArgumentNullException>(() => new DatalistAttribute(null));
         }
 
-        [Test]
+        [Fact]
         public void DatalistAttribute_UnassignableTypeThrows()
         {
             Assert.Throws<ArgumentException>(() => new DatalistAttribute(typeof(Object)));
         }
 
-        [Test]
+        [Fact]
         public void DatalistAttribute_SetsType()
         {
             Type actual = new DatalistAttribute(typeof(AbstractDatalist)).Type;
             Type expected = typeof(AbstractDatalist);
 
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
         #endregion

@@ -1,19 +1,17 @@
 ﻿using Moq;
-using NUnit.Framework;
 using System;
 using System.IO;
 using System.Web;
+using Xunit;
 
 namespace Datalist.Tests.Unit
 {
-    [TestFixture]
-    public class AbstractDatalistTests
+    public class AbstractDatalistTests : IDisposable
     {
         private AbstractDatalist datalist;
         private String baseUrl;
 
-        [SetUp]
-        public void SetUp()
+        public AbstractDatalistTests()
         {
             baseUrl = "http://localhost:7013/";
             HttpRequest request = new HttpRequest(null, baseUrl, null);
@@ -21,95 +19,93 @@ namespace Datalist.Tests.Unit
             HttpContext.Current = new HttpContext(request, response);
             datalist = new Mock<AbstractDatalist>().Object;
         }
-
-        [TearDown]
-        public void TearDown()
+        public void Dispose()
         {
             HttpContext.Current = null;
         }
 
         #region Constants
 
-        [Test]
+        [Fact]
         public void Prefix_IsConstant()
         {
-            Assert.AreEqual("Datalist", AbstractDatalist.Prefix);
+            Assert.Equal("Datalist", AbstractDatalist.Prefix);
         }
 
-        [Test]
+        [Fact]
         public void IdKey_IsConstant()
         {
-            Assert.AreEqual("DatalistIdKey", AbstractDatalist.IdKey);
+            Assert.Equal("DatalistIdKey", AbstractDatalist.IdKey);
         }
 
-        [Test]
+        [Fact]
         public void AcKey_IsConstant()
         {
-            Assert.AreEqual("DatalistAcKey", AbstractDatalist.AcKey);
+            Assert.Equal("DatalistAcKey", AbstractDatalist.AcKey);
         }
 
         #endregion
 
         #region Constructor: AbstractDatalist()
 
-        [Test]
+        [Fact]
         public void AbstractDatalist_DefaultDialogTitle()
         {
             String expected = datalist.GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty);
             String actual = datalist.DialogTitle;
 
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
-        [Test]
+        [Fact]
         public void AbstractDatalist_DefaultDatalistUrl()
         {
             String expected = String.Format("{0}{1}/{2}", baseUrl, AbstractDatalist.Prefix, datalist.GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty));
             String actual = datalist.DatalistUrl;
 
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
-        [Test]
+        [Fact]
         public void AbstractDatalist_NullDefaultSortColumn()
         {
-            Assert.IsNull(datalist.DefaultSortColumn);
+            Assert.Null(datalist.DefaultSortColumn);
         }
 
-        [Test]
+        [Fact]
         public void AbstractDatalist_DefaultDefaultRecordsPerPage()
         {
             UInt32 actual = datalist.DefaultRecordsPerPage;
             UInt32 expected = 20;
 
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
-        [Test]
+        [Fact]
         public void AbstractDatalist_EmptyAdditionalFilters()
         {
-            CollectionAssert.IsEmpty(datalist.AdditionalFilters);
+            Assert.Empty(datalist.AdditionalFilters);
         }
 
-        [Test]
+        [Fact]
         public void AbstractDatalist_AscDefaultSortOrder()
         {
             DatalistSortOrder actual = datalist.DefaultSortOrder;
             DatalistSortOrder expected = DatalistSortOrder.Asc;
 
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
-        [Test]
+        [Fact]
         public void AbstractDatalist_EmptyColumns()
         {
-            CollectionAssert.IsEmpty(datalist.Columns);
+            Assert.Empty(datalist.Columns);
         }
 
-        [Test]
+        [Fact]
         public void AbstractDatalist_NotNullCurrentFilter()
         {
-            Assert.IsNotNull(datalist.CurrentFilter);
+            Assert.NotNull(datalist.CurrentFilter);
         }
 
         #endregion

@@ -1,60 +1,58 @@
-﻿using NUnit.Framework;
+﻿using Xunit;
 
 namespace Datalist.Tests.Unit
 {
-    [TestFixture]
     public class DatalistFilterTests
     {
         private DatalistFilter filter;
 
-        [SetUp]
-        public void SetUp()
+        public DatalistFilterTests()
         {
             filter = new DatalistFilter();
         }
 
         #region Constructor: DatalistFilter()
 
-        [Test]
+        [Fact]
         public void DatalistFilter_NullId()
         {
-            Assert.IsNull(filter.Id);
+            Assert.Null(filter.Id);
         }
 
-        [Test]
+        [Fact]
         public void DatalistFilter_ZeroPage()
         {
-            Assert.AreEqual(0, filter.Page);
+            Assert.Equal(0, filter.Page);
         }
 
-        [Test]
+        [Fact]
         public void DatalistFilter_NullSearchTerm()
         {
-            Assert.IsNull(filter.SearchTerm);
+            Assert.Null(filter.SearchTerm);
         }
 
-        [Test]
+        [Fact]
         public void DatalistFilter_NullSortColumn()
         {
-            Assert.IsNull(filter.SortColumn);
+            Assert.Null(filter.SortColumn);
         }
 
-        [Test]
+        [Fact]
         public void DatalistFilter_AscSortOrder()
         {
-            Assert.AreEqual(DatalistSortOrder.Asc, filter.SortOrder);
+            Assert.Equal(DatalistSortOrder.Asc, filter.SortOrder);
         }
 
-        [Test]
+        [Fact]
         public void DatalistFilter_ZeroRecordsPerPage()
         {
-            Assert.AreEqual(0, filter.RecordsPerPage);
+            Assert.Equal(0, filter.RecordsPerPage);
         }
 
-        [Test]
+        [Fact]
         public void DatalistFilter_EmptyAdditionalFilters()
         {
-            CollectionAssert.IsEmpty(filter.AdditionalFilters);
+            Assert.Empty(filter.AdditionalFilters);
         }
 
         #endregion
