@@ -207,5 +207,45 @@ namespace Datalist.Tests.Unit
         }
 
         #endregion
+
+        #region Method: GetEnumerator()
+
+        [Fact]
+        public void GetEnumerator_ReturnsColumnsCopy()
+        {
+            foreach (DatalistColumn column in testColumns)
+                columns.Add(column);
+
+            foreach (DatalistColumn column in columns)
+                columns.Remove(column);
+
+            Assert.Empty(columns);
+        }
+
+        [Fact]
+        public void GetEnumerator_ReturnsColumns()
+        {
+            foreach (DatalistColumn column in testColumns)
+                columns.Add(column);
+
+            IEnumerable<DatalistColumn> actual = columns.ToArray();
+            IEnumerable<DatalistColumn> expected = testColumns;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void GetEnumerator_ReturnsSameColumns()
+        {
+            foreach (DatalistColumn column in testColumns)
+                columns.Add(column);
+
+            IEnumerable<DatalistColumn> expected = columns.ToArray();
+            IEnumerable<DatalistColumn> actual = columns;
+
+            Assert.Equal(expected, actual);
+        }
+
+        #endregion
     }
 }
