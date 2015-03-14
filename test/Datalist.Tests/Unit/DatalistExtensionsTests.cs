@@ -37,31 +37,31 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AutoComplete_CreatesAutocompleteAndHiddenInput()
         {
-            CreatesAutocompleteAndHiddenInput("TestId", html.AutoComplete("TestId", String.Empty, datalist));
+            CreatesAutocompleteAndHiddenInput("TestId", html.AutoComplete("TestId", "", datalist));
         }
 
         [Fact]
         public void AutoComplete_AddsIdAttribute()
         {
-            AddsIdAttribute("TestId", html.AutoComplete("TestId", String.Empty, datalist));
+            AddsIdAttribute("TestId", html.AutoComplete("TestId", "", datalist));
         }
 
         [Fact]
         public void AutoComplete_AddsDatalistClasses()
         {
-            AddsDatalistClassesForDatalistInput(html.AutoComplete("TestId", String.Empty, datalist));
+            AddsDatalistClassesForDatalistInput(html.AutoComplete("TestId", "", datalist));
         }
 
         [Fact]
         public void AutoComplete_AddsSpecifiedClass()
         {
-            AddsSpecifiedClass("TestClass", html.AutoComplete("TestId", String.Empty, datalist, new { @class = "TestClass" }));
+            AddsSpecifiedClass("TestClass", html.AutoComplete("TestId", "", datalist, new { @class = "TestClass" }));
         }
 
         [Fact]
         public void AutoComplete_AddsHiddenInputAttribute()
         {
-            AddsHiddenInputAttribute("TestId", html.AutoComplete("TestId", String.Empty, datalist));
+            AddsHiddenInputAttribute("TestId", html.AutoComplete("TestId", "", datalist));
         }
 
         [Fact]
@@ -70,55 +70,55 @@ namespace Datalist.Tests.Unit
             datalist.AdditionalFilters.Add("Test1");
             datalist.AdditionalFilters.Add("Test2");
 
-            AddsFiltersAttribute(html.AutoComplete("TestId", String.Empty, datalist));
+            AddsFiltersAttribute(html.AutoComplete("TestId", "", datalist));
         }
 
         [Fact]
         public void AutoComplete_AddsRecordsPerPageAttribute()
         {
-            AddsRecordsPerPageAttribute(html.AutoComplete("TestId", String.Empty, datalist));
+            AddsRecordsPerPageAttribute(html.AutoComplete("TestId", "", datalist));
         }
 
         [Fact]
         public void AutoComplete_AddsSortColumnAttribute()
         {
-            AddsSortColumnAttribute(html.AutoComplete("TestId", String.Empty, datalist));
+            AddsSortColumnAttribute(html.AutoComplete("TestId", "", datalist));
         }
 
         [Fact]
         public void AutoComplete_AddsSortOrderAttribute()
         {
-            AddsSortOrderAttribute(html.AutoComplete("TestId", String.Empty, datalist));
+            AddsSortOrderAttribute(html.AutoComplete("TestId", "", datalist));
         }
 
         [Fact]
         public void AutoComplete_AddsDialogTitleAttribute()
         {
-            AddsDialogTitleAttribute(html.AutoComplete("TestId", String.Empty, datalist));
+            AddsDialogTitleAttribute(html.AutoComplete("TestId", "", datalist));
         }
 
         [Fact]
         public void AutoComplete_AddsUrlAttribute()
         {
-            AddsUrlAttribute(html.AutoComplete("TestId", String.Empty, datalist));
+            AddsUrlAttribute(html.AutoComplete("TestId", "", datalist));
         }
 
         [Fact]
         public void AutoComplete_AddsTermAttribute()
         {
-            AddsTermAttribute(html.AutoComplete("TestId", String.Empty, datalist));
+            AddsTermAttribute(html.AutoComplete("TestId", "", datalist));
         }
 
         [Fact]
         public void AutoComplete_AddsPageAttribute()
         {
-            AddsPageAttribute(html.AutoComplete("TestId", String.Empty, datalist));
+            AddsPageAttribute(html.AutoComplete("TestId", "", datalist));
         }
 
         [Fact]
         public void AutoComplete_AddsIdForHiddenInput()
         {
-            AddsIdForHiddenInput("TestId", html.AutoComplete("TestId", String.Empty, datalist));
+            AddsIdForHiddenInput("TestId", html.AutoComplete("TestId", "", datalist));
         }
 
         [Fact]
@@ -130,7 +130,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AutoComplete_AddsDatalistClassesForHiddenInput()
         {
-            AddsDatalistClassesForHiddenInput(html.AutoComplete("Id", String.Empty, datalist));
+            AddsDatalistClassesForHiddenInput(html.AutoComplete("Id", "", datalist));
         }
 
         #endregion
@@ -364,37 +364,37 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void Datalist_WrapsAutocompleteInInputGroup()
         {
-            WrapsAutocompleteInInputGroup(html.Datalist("TestId", String.Empty, datalist));
+            WrapsAutocompleteInInputGroup(html.Datalist("TestId", "", datalist));
         }
 
         [Fact]
         public void Datalist_CreatesAutocompleteAndHiddenInput()
         {
-            CreatesAutocompleteAndHiddenInput("TestId", html.Datalist("TestId", String.Empty, datalist));
+            CreatesAutocompleteAndHiddenInput("TestId", html.Datalist("TestId", "", datalist));
         }
 
         [Fact]
         public void Datalist_AddsIdAttribute()
         {
-            AddsIdAttribute("TestId", html.Datalist("TestId", String.Empty, datalist));
+            AddsIdAttribute("TestId", html.Datalist("TestId", "", datalist));
         }
 
         [Fact]
         public void Datalist_AddsDatalistClasses()
         {
-            AddsDatalistClassesForDatalistInput(html.Datalist("TestId", String.Empty, datalist));
+            AddsDatalistClassesForDatalistInput(html.Datalist("TestId", "", datalist));
         }
 
         [Fact]
         public void Datalist_AddsSpecifiedClass()
         {
-            AddsSpecifiedClass("TestClass", html.Datalist("TestId", String.Empty, datalist, new { @class = "TestClass" }));
+            AddsSpecifiedClass("TestClass", html.Datalist("TestId", "", datalist, new { @class = "TestClass" }));
         }
 
         [Fact]
         public void Datalist_AddsHiddenInputAttribute()
         {
-            AddsHiddenInputAttribute("TestId", html.Datalist("TestId", String.Empty, datalist));
+            AddsHiddenInputAttribute("TestId", html.Datalist("TestId", "", datalist));
         }
 
         [Fact]
@@ -403,55 +403,55 @@ namespace Datalist.Tests.Unit
             datalist.AdditionalFilters.Add("Test1");
             datalist.AdditionalFilters.Add("Test2");
 
-            AddsFiltersAttribute(html.Datalist("TestId", String.Empty, datalist));
+            AddsFiltersAttribute(html.Datalist("TestId", "", datalist));
         }
 
         [Fact]
         public void Datalist_AddsRecordsPerPageAttribute()
         {
-            AddsRecordsPerPageAttribute(html.Datalist("TestId", String.Empty, datalist));
+            AddsRecordsPerPageAttribute(html.Datalist("TestId", "", datalist));
         }
 
         [Fact]
         public void Datalist_AddsSortColumnAttribute()
         {
-            AddsSortColumnAttribute(html.Datalist("TestId", String.Empty, datalist));
+            AddsSortColumnAttribute(html.Datalist("TestId", "", datalist));
         }
 
         [Fact]
         public void Datalist_AddsSortOrderAttribute()
         {
-            AddsSortOrderAttribute(html.Datalist("TestId", String.Empty, datalist));
+            AddsSortOrderAttribute(html.Datalist("TestId", "", datalist));
         }
 
         [Fact]
         public void Datalist_AddsDialogTitleAttribute()
         {
-            AddsDialogTitleAttribute(html.Datalist("TestId", String.Empty, datalist));
+            AddsDialogTitleAttribute(html.Datalist("TestId", "", datalist));
         }
 
         [Fact]
         public void Datalist_AddsUrlAttribute()
         {
-            AddsUrlAttribute(html.Datalist("TestId", String.Empty, datalist));
+            AddsUrlAttribute(html.Datalist("TestId", "", datalist));
         }
 
         [Fact]
         public void Datalist_AddsTermAttribute()
         {
-            AddsTermAttribute(html.Datalist("TestId", String.Empty, datalist));
+            AddsTermAttribute(html.Datalist("TestId", "", datalist));
         }
 
         [Fact]
         public void Datalist_AddsPageAttribute()
         {
-            AddsPageAttribute(html.Datalist("TestId", String.Empty, datalist));
+            AddsPageAttribute(html.Datalist("TestId", "", datalist));
         }
 
         [Fact]
         public void Datalist_AddsIdForHiddenInput()
         {
-            AddsIdForHiddenInput("TestId", html.Datalist("TestId", String.Empty, datalist));
+            AddsIdForHiddenInput("TestId", html.Datalist("TestId", "", datalist));
         }
 
         [Fact]
@@ -463,13 +463,13 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void Datalist_AddsDatalistClassesForHiddenInput()
         {
-            AddsDatalistClassesForHiddenInput(html.Datalist("Id", String.Empty, datalist));
+            AddsDatalistClassesForHiddenInput(html.Datalist("Id", "", datalist));
         }
 
         [Fact]
         public void Datalist_CreatesOpenSpan()
         {
-            CreatesOpenSpan(html.Datalist("TestId", String.Empty, datalist));
+            CreatesOpenSpan(html.Datalist("TestId", "", datalist));
         }
 
         #endregion

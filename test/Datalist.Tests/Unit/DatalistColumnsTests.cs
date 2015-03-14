@@ -16,8 +16,8 @@ namespace Datalist.Tests.Unit
             columns = new DatalistColumns();
             testColumns = new List<DatalistColumn>
             {
-                new DatalistColumn("Test1", String.Empty),
-                new DatalistColumn("Test2", String.Empty),
+                new DatalistColumn("Test1", ""),
+                new DatalistColumn("Test2", ""),
             };
         }
 
@@ -58,7 +58,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void Add_OnSameColumnKeyThrows()
         {
-            DatalistColumn column = new DatalistColumn("TestKey", String.Empty);
+            DatalistColumn column = new DatalistColumn("TestKey", "");
             columns.Add(column);
 
             Assert.Throws<DatalistException>(() => columns.Add(column));
@@ -83,19 +83,19 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void Add_OnNullKeyThrows()
         {
-            Assert.Throws<ArgumentNullException>(() => columns.Add(null, String.Empty));
+            Assert.Throws<ArgumentNullException>(() => columns.Add(null, ""));
         }
 
         [Fact]
         public void Add_OnNullHeaderThrows()
         {
-            Assert.Throws<ArgumentNullException>(() => columns.Add(String.Empty, null));
+            Assert.Throws<ArgumentNullException>(() => columns.Add("", null));
         }
 
         [Fact]
         public void Add_OnNullCssClass()
         {
-            Assert.Throws<ArgumentNullException>(() => columns.Add(String.Empty, String.Empty, null));
+            Assert.Throws<ArgumentNullException>(() => columns.Add("", "", null));
         }
 
         [Fact]
@@ -103,8 +103,8 @@ namespace Datalist.Tests.Unit
         {
             Assert.Throws<DatalistException>(() =>
             {
-                columns.Add("TestKey", String.Empty);
-                columns.Add("TestKey", String.Empty);
+                columns.Add("TestKey", "");
+                columns.Add("TestKey", "");
             });
         }
 
@@ -148,7 +148,7 @@ namespace Datalist.Tests.Unit
             foreach (DatalistColumn column in testColumns)
                 columns.Add(column);
 
-            Assert.False(columns.Remove(new DatalistColumn("Test1", String.Empty)));
+            Assert.False(columns.Remove(new DatalistColumn("Test1", "")));
             Assert.Equal(testColumns, columns);
         }
 
@@ -199,8 +199,8 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void Clear_ClearsColumns()
         {
-            columns.Add("Test1", String.Empty);
-            columns.Add("Test2", String.Empty);
+            columns.Add("Test1", "");
+            columns.Add("Test2", "");
             columns.Clear();
 
             Assert.Empty(columns);

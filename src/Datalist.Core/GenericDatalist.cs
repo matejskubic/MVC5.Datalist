@@ -49,7 +49,7 @@ namespace Datalist
         }
         protected virtual String GetColumnCssClass(PropertyInfo property)
         {
-            return String.Empty;
+            return "";
         }
         private PropertyInfo GetRelationProperty(PropertyInfo property, String relation)
         {
@@ -214,7 +214,7 @@ namespace Datalist
         }
         private String GetValue(Object model, String fullPropertyName)
         {
-            if (model == null) return String.Empty;
+            if (model == null) return "";
 
             Type type = model.GetType();
             String[] properties = fullPropertyName.Split('.');
@@ -225,7 +225,7 @@ namespace Datalist
             if (properties.Length > 1)
                 return GetValue(property.GetValue(model), String.Join(".", properties.Skip(1)));
 
-            Object value = property.GetValue(model) ?? String.Empty;
+            Object value = property.GetValue(model) ?? "";
             DatalistColumnAttribute datalistColumn = property.GetCustomAttribute<DatalistColumnAttribute>(false);
             if (datalistColumn != null && datalistColumn.Format != null)
                 value = String.Format(datalistColumn.Format, value);

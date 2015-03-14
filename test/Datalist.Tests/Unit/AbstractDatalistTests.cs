@@ -51,7 +51,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AbstractDatalist_DefaultDialogTitle()
         {
-            String expected = datalist.GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty);
+            String expected = datalist.GetType().Name.Replace(AbstractDatalist.Prefix, "");
             String actual = datalist.DialogTitle;
 
             Assert.Equal(expected, actual);
@@ -60,7 +60,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AbstractDatalist_DefaultDatalistUrl()
         {
-            String expected = String.Format("{0}{1}/{2}", baseUrl, AbstractDatalist.Prefix, datalist.GetType().Name.Replace(AbstractDatalist.Prefix, String.Empty));
+            String expected = String.Format("{0}{1}/{2}", baseUrl, AbstractDatalist.Prefix, datalist.GetType().Name.Replace(AbstractDatalist.Prefix, ""));
             String actual = datalist.DatalistUrl;
 
             Assert.Equal(expected, actual);

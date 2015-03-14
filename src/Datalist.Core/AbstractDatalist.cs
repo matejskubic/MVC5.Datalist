@@ -54,7 +54,7 @@ namespace Datalist
 
         protected AbstractDatalist()
         {
-            String sanitizedName = GetType().Name.Replace(Prefix, String.Empty);
+            String sanitizedName = GetType().Name.Replace(Prefix, "");
             AdditionalFilters = new List<String>();
             CurrentFilter = new DatalistFilter();
             Columns = new DatalistColumns();

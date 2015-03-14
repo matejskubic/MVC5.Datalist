@@ -197,7 +197,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void GetColumnCssClass_AlwaysEmptyString()
         {
-            Assert.Equal(String.Empty, datalist.BaseGetColumnCssClass(null));
+            Assert.Equal("", datalist.BaseGetColumnCssClass(null));
         }
 
         #endregion
@@ -428,7 +428,7 @@ namespace Datalist.Tests.Unit
         public void FilterBySearchTerm_OnMissingPropertyThrows()
         {
             datalist.CurrentFilter.SearchTerm = "Test";
-            datalist.Columns.Add(new DatalistColumn("TestProperty", String.Empty));
+            datalist.Columns.Add(new DatalistColumn("TestProperty", ""));
 
             Assert.Throws<DatalistException>(() => datalist.BaseFilterBySearchTerm(datalist.BaseGetModels()));
         }
@@ -463,7 +463,7 @@ namespace Datalist.Tests.Unit
         public void FilterBySearchTerm_NotFiltersNonStringProperties()
         {
             datalist.Columns.Clear();
-            datalist.Columns.Add(new DatalistColumn("Number", String.Empty));
+            datalist.Columns.Add(new DatalistColumn("Number", ""));
             datalist.CurrentFilter.SearchTerm = "Test";
 
             IQueryable<TestModel> expected = datalist.BaseGetModels();
@@ -665,7 +665,7 @@ namespace Datalist.Tests.Unit
         public void AddAutocomplete_OnMissingPropertyThrows()
         {
             datalist.Columns.Clear();
-            datalist.Columns.Add(new DatalistColumn("TestProperty", String.Empty));
+            datalist.Columns.Add(new DatalistColumn("TestProperty", ""));
 
             Assert.Throws<DatalistException>(() => datalist.BaseAddAutocomplete(new Dictionary<String, String>(), new TestModel()));
         }
@@ -694,7 +694,7 @@ namespace Datalist.Tests.Unit
         public void AddAutocomplete_AddsRelationValue()
         {
             datalist.Columns.Clear();
-            datalist.Columns.Add(new DatalistColumn("FirstRelationModel.Value", String.Empty));
+            datalist.Columns.Add(new DatalistColumn("FirstRelationModel.Value", ""));
             TestModel model = new TestModel { FirstRelationModel = new TestRelationModel { Value = "Test" } };
             PropertyInfo firstProperty = typeof(TestRelationModel).GetProperty("Value");
             Dictionary<String, String> row = new Dictionary<String, String>();
@@ -728,7 +728,7 @@ namespace Datalist.Tests.Unit
         public void AddColumns_OnMissingPropertyThrows()
         {
             datalist.Columns.Clear();
-            datalist.Columns.Add(new DatalistColumn("TestProperty", String.Empty));
+            datalist.Columns.Add(new DatalistColumn("TestProperty", ""));
 
             Assert.Throws<DatalistException>(() => datalist.BaseAddColumns(new Dictionary<String, String>(), new TestModel()));
         }
@@ -775,7 +775,7 @@ namespace Datalist.Tests.Unit
 
         private String GetValue(Object model, String fullPropertyName)
         {
-            if (model == null) return String.Empty;
+            if (model == null) return "";
 
             Type type = model.GetType();
             String[] properties = fullPropertyName.Split('.');
@@ -784,7 +784,7 @@ namespace Datalist.Tests.Unit
             if (properties.Length > 1)
                 return GetValue(property.GetValue(model), String.Join(".", properties.Skip(1)));
 
-            Object value = property.GetValue(model) ?? String.Empty;
+            Object value = property.GetValue(model) ?? "";
             DatalistColumnAttribute datalistColumn = property.GetCustomAttribute<DatalistColumnAttribute>(false);
             if (datalistColumn != null && datalistColumn.Format != null)
                 value = String.Format(datalistColumn.Format, value);
