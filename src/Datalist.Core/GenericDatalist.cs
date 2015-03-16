@@ -45,6 +45,7 @@ namespace Datalist
 
             DisplayAttribute header = property.GetCustomAttribute<DisplayAttribute>(false);
             if (header != null) return header.GetName();
+
             return property.Name;
         }
         protected virtual String GetColumnCssClass(PropertyInfo property)
@@ -105,6 +106,7 @@ namespace Datalist
                 queries.Add(FormEqualsQuery(GetType(filter.Key), filter.Key, filter.Value));
 
             if (queries.Count == 0) return models;
+
             return models.Where(String.Join(" && ", queries));
         }
         protected virtual IQueryable<T> FilterBySearchTerm(IQueryable<T> models)
@@ -119,6 +121,7 @@ namespace Datalist
                     queries.Add(FormContainsQuery(propertyName, term));
 
             if (queries.Count == 0) return models;
+
             return models.Where(String.Join(" || ", queries));
         }
         protected virtual IQueryable<T> Sort(IQueryable<T> models)

@@ -23,6 +23,7 @@ Implement data source method in DatalistController
     {
         datalist.CurrentFilter = filter;
         filter.AdditionalFilters = filters ?? filter.AdditionalFilters;
+
         return Json(datalist.GetData(), JsonRequestBehavior.AllowGet);
     }
     public JsonResult YourMethod(DatalistFilter filter)

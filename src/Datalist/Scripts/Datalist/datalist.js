@@ -310,6 +310,7 @@
             if (data.Rows.length == 0) {
                 var columns = (data.Columns) ? data.Columns.length + 1 : 1;
                 datalist.find('.datalist-table-body').html('<tr><td colspan="' + columns + '" style="text-align: center">' + $.fn.datalist.lang.NoDataFound + '</td></tr>');
+
                 return;
             }
 
