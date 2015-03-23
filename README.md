@@ -49,7 +49,7 @@ Render your datalist inputs using one of datalist's html helpers
 
 Examples and API documentation
 --
-Usage examples and API can be found at [Datalist] (http://non-factors.com/Datalist) website.
+Usage examples and API can be found at [Datalist] (http://mvc-datalist.azurewebsites.net/) website.
 
 Contribution
 -
