@@ -151,32 +151,32 @@
         padding: 4px 8px;
     }
 
+    .datalist-table .datalist-select-cell {
+        padding: 0;
+    }
+
 .datalist-select-header,
 .datalist-select-cell {
     text-align: center;
-    cursor: pointer;
     width: 35px;
 }
 
 .datalist-select-container {
-    background-color: #5CB85C;
-    border-color: #4CAE4C;
-    border-radius: 4px;
-    margin-left: 2px;
-    margin-top: 2px;
-    height: 16px;
-    width: 16px;
+    font-weight: bold;
+    padding: 4px 8px;
+    cursor: pointer;
 }
 
-    .datalist-select-container:hover {
-        background-color: #47A447;
-        border-color: #398439;
+    .datalist-select-container i::after {
+        font-style: normal;
+        content: "\25CF";
+        color: #777777;
     }
 
-    .datalist-select-container > i {
-        color: #FFFFFF;
-        font-size: 10px;
-        top: -2.5px;
+    .datalist-select-container:hover i::after {
+        font-style: normal;
+        content: "\2714";
+        color: #5CB85C;
     }
 
 .datalist-pager .pagination {
