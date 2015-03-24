@@ -355,7 +355,7 @@
             var that = this;
 
             if (totalPages > 5 && currentPage > 0) {
-                pagination = '<li><a data-page="0">&laquo;</a></li><li><a data-page="' + (currentPage - 1) + '">&lsaquo;</a></li>';
+                pagination = '<li><a href="#" data-page="0">&laquo;</a></li><li><a data-page="' + (currentPage - 1) + '">&lsaquo;</a></li>';
             }
 
             while (page < totalPages && page < startingPage + 5) {
@@ -364,16 +364,17 @@
                     liClass = ' class="active"';
                 }
 
-                pagination += '<li' + liClass + '><a data-page="' + page + '">' + (++page) + '</a></li>';
+                pagination += '<li' + liClass + '><a href="#" data-page="' + page + '">' + (++page) + '</a></li>';
             }
 
             if (totalPages > 5 && currentPage < (totalPages - 1)) {
-                pagination += '<li><a data-page="' + (currentPage + 1) + '">&rsaquo;</a></li><li><a data-page="' + (totalPages - 1) + '">&raquo;</a></li>';
+                pagination += '<li><a href="#" data-page="' + (currentPage + 1) + '">&rsaquo;</a></li><li><a href="#" data-page="' + (totalPages - 1) + '">&raquo;</a></li>';
             }
 
-            datalist.find('.datalist-pager > .pagination').html(pagination).find('li:not(.active) > a').click(function () {
+            datalist.find('.datalist-pager > .pagination').html(pagination).find('li:not(.active) > a').click(function (e) {
                 that.options.page = parseInt($(this).data('page'));
                 that._update(datalist);
+                e.preventDefault();
             });
         },
         _bindSelect: function (datalist, selectCell, data) {

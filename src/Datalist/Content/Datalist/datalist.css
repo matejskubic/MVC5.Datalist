@@ -189,9 +189,5 @@
     }
 
         .datalist-pager .pagination > li > a {
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -webkit-user-select: none;
-            user-select: none;
-            padding: 2px 7px;
+            padding: 2px 8px;
         }
