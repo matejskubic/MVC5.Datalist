@@ -280,9 +280,9 @@
 
             for (var i = 0; i < columns.length; i++) {
                 var column = columns[i];
-                header += '<th class="' + (column.CssClass != null ? column.CssClass : '') + '" data-column="' + column.Key + '">' + (column.Header != null ? column.Header : '');
+                header += '<th class="' + (column.CssClass != null ? column.CssClass : '') + '" data-column="' + column.Key + '"><span class="datalist-header-title">' + (column.Header != null ? column.Header : '') + '</span>';
                 if (that.options.sortColumn == column.Key || (that.options.sortColumn == '' && i == 0)) {
-                    header += '<span class="datalist-sort-arrow glyphicon glyphicon-sort-by-attributes' + (that.options.sortOrder == 'Asc' ? '' : '-alt') + '"></span></th>';
+                    header += '<span class="datalist-sort-arrow ' + (that.options.sortOrder == 'Asc' ? 'asc' : 'desc') + '"></span></th>';
                     that.options.sortColumn = column.Key;
                 } else {
                     header += '<span class="datalist-sort-arrow"></span></th>';

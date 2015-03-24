@@ -138,11 +138,23 @@
         cursor: pointer;
     }
 
-    .datalist-table thead > tr > th > .datalist-sort-arrow {
+    .datalist-table .datalist-header-title {
+        vertical-align: sub;
+    }
+
+    .datalist-table .datalist-sort-arrow {
+        vertical-align: middle;
         display: inline-block;
-        margin-left: 3px;
-        font-size: 11px;
-        min-width: 11px;
+        text-align: end;
+        min-width: 10px;
+    }
+
+    .datalist-table .datalist-sort-arrow.asc::after {
+        content: "\2193";
+    }
+
+    .datalist-table .datalist-sort-arrow.desc::after {
+        content: "\2191";
     }
 
     .datalist-table thead > tr > th,
