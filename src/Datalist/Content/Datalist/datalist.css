@@ -134,7 +134,7 @@
     margin-bottom: 0;
 }
 
-    .datalist-table th {
+    .datalist-table tr {
         cursor: pointer;
     }
 
@@ -149,13 +149,13 @@
         min-width: 10px;
     }
 
-    .datalist-table .datalist-sort-arrow.asc::after {
-        content: "\2193";
-    }
+        .datalist-table .datalist-sort-arrow.asc::after {
+            content: "\2193";
+        }
 
-    .datalist-table .datalist-sort-arrow.desc::after {
-        content: "\2191";
-    }
+        .datalist-table .datalist-sort-arrow.desc::after {
+            content: "\2191";
+        }
 
     .datalist-table thead > tr > th,
     .datalist-table tbody > tr > td {
@@ -176,7 +176,6 @@
 .datalist-select-container {
     font-weight: bold;
     padding: 4px 8px;
-    cursor: pointer;
 }
 
     .datalist-select-container i::after {
@@ -185,11 +184,11 @@
         color: #777777;
     }
 
-    .datalist-select-container:hover i::after {
-        font-style: normal;
-        content: "\2714";
-        color: #5CB85C;
-    }
+.datalist-table-body tr:hover .datalist-select-container i::after {
+    font-style: normal;
+    content: "\2714";
+    color: #5CB85C;
+}
 
 .datalist-pager .pagination {
     margin: 5px 5px 0 0;

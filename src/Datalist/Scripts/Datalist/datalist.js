@@ -329,9 +329,9 @@
             }
 
             datalist.find('.datalist-table-body').html(tableData);
-            var selectCells = datalist.find('td.datalist-select-cell');
-            for (var k = 0; k < selectCells.length; k++) {
-                this._bindSelect(datalist, selectCells[k], data.Rows[k]);
+            var selectRows = datalist.find('.datalist-table-body tr');
+            for (var k = 0; k < selectRows.length; k++) {
+                this._bindSelect(datalist, selectRows[k], data.Rows[k]);
             }
         },
         _updateNavbar: function (datalist, filteredRecords) {
@@ -377,9 +377,9 @@
                 e.preventDefault();
             });
         },
-        _bindSelect: function (datalist, selectCell, data) {
+        _bindSelect: function (datalist, selectRow, data) {
             var that = this;
-            that._on(selectCell, {
+            that._on(selectRow, {
                 click: function () {
                     datalist.dialog('close');
                     that._select(data);
