@@ -81,7 +81,7 @@
             });
 
             this.element.bind('keyup.datalist', function () {
-                if (this.value.length == 0) {
+                if (e.which != 9 && this.value.length == 0) {
                     that._select(null);
                 }
             });
