@@ -1,5 +1,5 @@
 ﻿/*!
- * Datalist 3.3.1
+ * Datalist 3.3.2
  * https://github.com/NonFactors/MVC.Datalist
  *
  * Copyright © NonFactors
@@ -80,7 +80,7 @@
                 minLength: 1
             });
 
-            this.element.bind('keyup.datalist', function () {
+            this.element.bind('keyup.datalist', function (e) {
                 if (e.which != 9 && this.value.length == 0) {
                     that._select(null);
                 }
