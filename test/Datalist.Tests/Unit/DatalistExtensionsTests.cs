@@ -787,7 +787,7 @@ namespace Datalist.Tests.Unit
         }
         private void AddsHiddenInputAttribute(String id, Object actual)
         {
-            String pattern = String.Format(@"<input(.*) data-datalist-hidden-input=""{0}""(.*) />", id);
+            String pattern = String.Format(@"<input(.*) data-datalist-for=""{0}""(.*) />", id);
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsUrlAttribute(Object actual)
@@ -817,7 +817,7 @@ namespace Datalist.Tests.Unit
         }
         private void AddsDatalistClassesForHiddenInput(Object actual)
         {
-            String pattern = @"<input(.*) class=""datalist-hidden-input""(.*) />";
+            String pattern = @"<input(.*) class=""datalist-for""(.*) />";
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
 

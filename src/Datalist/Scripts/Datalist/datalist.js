@@ -26,8 +26,8 @@
             var e = this.element;
             var o = this.options;
 
-            o.hiddenElement = $('#' + e.attr('data-datalist-hidden-input'))[0];
             o.recordsPerPage = e.attr('data-datalist-records-per-page');
+            o.hiddenElement = $('#' + e.attr('data-datalist-for'))[0];
             o.filters = e.attr('data-datalist-filters').split(',');
             o.sortColumn = e.attr('data-datalist-sort-column');
             o.sortOrder = e.attr('data-datalist-sort-order');
@@ -231,7 +231,6 @@
         _cleanUp: function () {
             this.element.removeAttr('data-datalist-records-per-page');
             this.element.removeAttr('data-datalist-dialog-title');
-            this.element.removeAttr('data-datalist-hidden-input');
             this.element.removeAttr('data-datalist-sort-column');
             this.element.removeAttr('data-datalist-sort-order');
             this.element.removeAttr('data-datalist-filters');
@@ -392,7 +391,6 @@
             var o = this.options;
 
             e.attr('data-datalist-records-per-page', o.recordsPerPage);
-            e.attr('data-datalist-hidden-input', o.hiddenElement.id);
             e.attr('data-datalist-filters', o.filters.join());
             e.attr('data-datalist-sort-column', o.sortColumn);
             e.attr('data-datalist-sort-order', o.sortOrder);

@@ -73,8 +73,8 @@ namespace Datalist
         {
             RouteValueDictionary attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
             attributes["class"] = String.Format("{0} {1}", attributes["class"], "form-control datalist-input").Trim();
-            attributes.Add("data-datalist-hidden-input", TagBuilder.CreateSanitizedId(hiddenInput));
             attributes.Add("data-datalist-filters", String.Join(",", model.AdditionalFilters));
+            attributes.Add("data-datalist-for", TagBuilder.CreateSanitizedId(hiddenInput));
             attributes.Add("data-datalist-records-per-page", model.DefaultRecordsPerPage);
             attributes.Add("data-datalist-sort-column", model.DefaultSortColumn);
             attributes.Add("data-datalist-sort-order", model.DefaultSortOrder);
@@ -89,14 +89,14 @@ namespace Datalist
         private static String FormHiddenInputFor<TModel, TProperty>(HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression)
         {
             RouteValueDictionary attributes = new RouteValueDictionary();
-            attributes.Add("class", "datalist-hidden-input");
+            attributes.Add("class", "datalist-for");
 
             return html.HiddenFor(expression, attributes).ToString();
         }
         private static String FormHiddenInput<TModel>(HtmlHelper<TModel> html, String name, Object value)
         {
             RouteValueDictionary attributes = new RouteValueDictionary();
-            attributes.Add("class", "datalist-hidden-input");
+            attributes.Add("class", "datalist-for");
 
             return html.Hidden(name, value, attributes).ToString();
         }
