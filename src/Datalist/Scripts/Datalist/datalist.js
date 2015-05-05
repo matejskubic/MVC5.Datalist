@@ -76,6 +76,7 @@
                 },
                 select: function (e, selection) {
                     that._select(selection.item.item, false);
+                    e.preventDefault();
                 },
                 minLength: 1
             });
