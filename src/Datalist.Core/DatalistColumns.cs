@@ -7,29 +7,32 @@ namespace Datalist
 {
     public class DatalistColumns : IEnumerable<DatalistColumn>
     {
-        private List<DatalistColumn> columns;
-
+        private List<DatalistColumn> Columns
+        {
+            get;
+            set;
+        }
         public IEnumerable<String> Keys
         {
             get
             {
-                return columns.Select(column => column.Key);
+                return Columns.Select(column => column.Key);
             }
         }
 
         public DatalistColumns()
         {
-            columns = new List<DatalistColumn>();
+            Columns = new List<DatalistColumn>();
         }
 
         public void Add(DatalistColumn column)
         {
             if (column == null)
                 throw new ArgumentNullException("column");
-            if (columns.Any(col => col.Key == column.Key))
+            if (Columns.Any(col => col.Key == column.Key))
                 throw new DatalistException(String.Format(@"Can not add datalist column with the same key ""{0}""", column.Key));
 
-            columns.Add(column);
+            Columns.Add(column);
         }
         public void Add(String key, String header, String cssClass = "")
         {
@@ -37,20 +40,20 @@ namespace Datalist
         }
         public Boolean Remove(DatalistColumn column)
         {
-            return columns.Remove(column);
+            return Columns.Remove(column);
         }
         public Boolean Remove(String key)
         {
-            return columns.Remove(columns.FirstOrDefault(column => column.Key == key));
+            return Columns.Remove(Columns.FirstOrDefault(column => column.Key == key));
         }
         public void Clear()
         {
-            columns.Clear();
+            Columns.Clear();
         }
 
         public IEnumerator<DatalistColumn> GetEnumerator()
         {
-            return columns.ToList().GetEnumerator();
+            return Columns.ToList().GetEnumerator();
         }
         IEnumerator IEnumerable.GetEnumerator()
         {
