@@ -30,6 +30,9 @@ Implement data source method in DatalistController
         return GetData(new YourDatalist(), filter);
     }
 
+Optionally, add [SessionState(SessionStateBehavior.ReadOnly)] attribute to your datalist controller
+to avoid session locks in multiple ajax calls from mutliple datalists
+
 Render your datalist inputs using one of datalist's html helpers
 
     @Html.DatalistFor(model => model.SampleId)
