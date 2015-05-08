@@ -817,7 +817,7 @@ namespace Datalist.Tests.Unit
         }
         private void AddsDatalistClassesForHiddenInput(Object actual)
         {
-            String pattern = @"<input(.*) class=""datalist-for""(.*) />";
+            String pattern = @"<input(.*) class=""datalist-hidden-input""(.*) />";
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
 

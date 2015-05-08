@@ -89,14 +89,14 @@ namespace Datalist
         private static String FormHiddenInputFor<TModel, TProperty>(HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression)
         {
             RouteValueDictionary attributes = new RouteValueDictionary();
-            attributes.Add("class", "datalist-for");
+            attributes.Add("class", "datalist-hidden-input");
 
             return html.HiddenFor(expression, attributes).ToString();
         }
         private static String FormHiddenInput<TModel>(HtmlHelper<TModel> html, String name, Object value)
         {
             RouteValueDictionary attributes = new RouteValueDictionary();
-            attributes.Add("class", "datalist-for");
+            attributes.Add("class", "datalist-hidden-input");
 
             return html.Hidden(name, value, attributes).ToString();
         }
