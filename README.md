@@ -29,10 +29,10 @@ Render datalist partial before calling RenderBody in your _Layout.cshtml
 ```
 Implement data source method in DatalistController
 ```cs
-private JsonResult GetData(AbstractDatalist datalist, DatalistFilter filter, Dictionary<String, Object> filters = null)
+private JsonResult GetData(AbstractDatalist datalist, DatalistFilter filter)
 {
 	datalist.CurrentFilter = filter;
-	filter.AdditionalFilters = filters ?? filter.AdditionalFilters;
+
 	return Json(datalist.GetData(), JsonRequestBehavior.AllowGet);
 }
 public JsonResult Sample(DatalistFilter filter)
