@@ -849,7 +849,7 @@ namespace Datalist.Tests.Unit
         }
         private void CreatesOpenSpan(Object actual)
         {
-            String pattern = @"<span class=""datalist-open-span input-group-addon""><span class=""glyphicon glyphicon-search""></span></span>";
+            String pattern = @"<span class=""datalist-open-span input-group-addon""><span class=""datalist-open-icon glyphicon""></span></span>";
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
 

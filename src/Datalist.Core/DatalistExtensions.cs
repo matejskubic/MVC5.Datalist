@@ -106,8 +106,8 @@ namespace Datalist
             TagBuilder outerSpan = new TagBuilder("span");
             TagBuilder innerSpan = new TagBuilder("span");
 
-            innerSpan.AddCssClass("glyphicon glyphicon-search");
             outerSpan.AddCssClass("datalist-open-span input-group-addon");
+            innerSpan.AddCssClass("datalist-open-icon glyphicon");
             outerSpan.InnerHtml = innerSpan.ToString();
 
             return outerSpan.ToString();
