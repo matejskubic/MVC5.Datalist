@@ -1,5 +1,4 @@
-﻿using Datalist.Tests.Objects.Models;
-using Datalist.Tests.Objects.Stubs;
+﻿using Datalist.Tests.Objects;
 using Moq;
 using System;
 using System.Collections;
@@ -15,7 +14,7 @@ namespace Datalist.Tests.Unit
     public class DatalistExtensionsTests : IDisposable
     {
         private HtmlHelper<TestModel> html;
-        private TestDatalistStub datalist;
+        private TestDatalistProxy datalist;
         private TestModel testModel;
 
         public DatalistExtensionsTests()
@@ -24,7 +23,7 @@ namespace Datalist.Tests.Unit
                 new HttpRequest(null, "http://localhost:7013/", null),
                 new HttpResponse(new StringWriter()));
 
-            datalist = new TestDatalistStub();
+            datalist = new TestDatalistProxy();
             html = MockHtmlHelper();
         }
         public void Dispose()

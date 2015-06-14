@@ -1,5 +1,4 @@
-﻿using Datalist.Tests.Objects.Models;
-using Datalist.Tests.Objects.Stubs;
+﻿using Datalist.Tests.Objects;
 using Moq;
 using Moq.Protected;
 using System;
@@ -15,8 +14,8 @@ namespace Datalist.Tests.Unit
 {
     public class GenericDatalistTests : IDisposable
     {
-        private Mock<TestDatalistStub> datalistMock;
-        private TestDatalistStub datalist;
+        private Mock<TestDatalistProxy> datalistMock;
+        private TestDatalistProxy datalist;
 
         public GenericDatalistTests()
         {
@@ -24,7 +23,7 @@ namespace Datalist.Tests.Unit
                 new HttpRequest(null, "http://localhost:7013/", null),
                 new HttpResponse(new StringWriter()));
 
-            datalistMock = new Mock<TestDatalistStub> { CallBase = true };
+            datalistMock = new Mock<TestDatalistProxy> { CallBase = true };
             datalist = datalistMock.Object;
         }
         public void Dispose()
@@ -307,7 +306,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FilterById_OnMissingIdPropertyThrows()
         {
-            GenericDatalistStub<NoIdModel> datalist = new GenericDatalistStub<NoIdModel>();
+            GenericDatalistProxy<NoIdModel> datalist = new GenericDatalistProxy<NoIdModel>();
 
             Assert.Throws<DatalistException>(() => datalist.BaseFilterById(datalist.BaseGetModels()));
         }
@@ -327,7 +326,7 @@ namespace Datalist.Tests.Unit
         public void FilterById_FiltersNumericId()
         {
             List<NumericIdModel> models = new List<NumericIdModel>();
-            GenericDatalistStub<NumericIdModel> datalist = new GenericDatalistStub<NumericIdModel>();
+            GenericDatalistProxy<NumericIdModel> datalist = new GenericDatalistProxy<NumericIdModel>();
             for (Int32 i = 0; i < 100; i++)
                 models.Add(new NumericIdModel { Id = i });
 
@@ -343,7 +342,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FilterById_OnEnumIdPropertyThrows()
         {
-            GenericDatalistStub<EnumModel> datalist = new GenericDatalistStub<EnumModel>();
+            GenericDatalistProxy<EnumModel> datalist = new GenericDatalistProxy<EnumModel>();
             datalist.CurrentFilter.Id = IdEnum.Id.ToString();
 
             Assert.Throws<DatalistException>(() => datalist.BaseFilterById(datalist.BaseGetModels()));
@@ -352,7 +351,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FilterById_OnNonNumericIdThrows()
         {
-            GenericDatalistStub<NonNumericIdModel> datalist = new GenericDatalistStub<NonNumericIdModel>();
+            GenericDatalistProxy<NonNumericIdModel> datalist = new GenericDatalistProxy<NonNumericIdModel>();
             datalist.CurrentFilter.Id = "9";
 
             Assert.Throws<DatalistException>(() => datalist.BaseFilterById(datalist.BaseGetModels()));
@@ -403,7 +402,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FilterByAdditionalFilters_OnEnumThrows()
         {
-            GenericDatalistStub<EnumModel> datalist = new GenericDatalistStub<EnumModel>();
+            GenericDatalistProxy<EnumModel> datalist = new GenericDatalistProxy<EnumModel>();
             datalist.CurrentFilter.AdditionalFilters.Add("IdEnum", DateTime.Now);
 
             Assert.Throws<DatalistException>(() => datalist.BaseFilterByAdditionalFilters(datalist.BaseGetModels()));
@@ -617,7 +616,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AddId_OnMissingPropertyThrows()
         {
-            Assert.Throws<DatalistException>(() => new GenericDatalistStub<NoIdModel>().BaseAddId(new Dictionary<String, String>(), new NoIdModel()));
+            Assert.Throws<DatalistException>(() => new GenericDatalistProxy<NoIdModel>().BaseAddId(new Dictionary<String, String>(), new NoIdModel()));
         }
 
         [Fact]

@@ -1,14 +1,13 @@
 ﻿using Datalist.Tests.Objects.Data;
-using Datalist.Tests.Objects.Models;
 using System.Linq;
 
-namespace Datalist.Tests.Objects.Stubs
+namespace Datalist.Tests.Objects
 {
-    public class TestDatalistStub : GenericDatalistStub<TestModel>
+    public class TestDatalistProxy : GenericDatalistProxy<TestModel>
     {
         private IQueryable<TestModel> models;
 
-        public TestDatalistStub()
+        public TestDatalistProxy()
         {
             models = new Context().TestModels.OrderByDescending(model => model.Id);
         }

@@ -1,4 +1,3 @@
-using Datalist.Tests.Objects.Models;
 using System;
 using System.Data.Entity.Migrations;
 using System.Linq;

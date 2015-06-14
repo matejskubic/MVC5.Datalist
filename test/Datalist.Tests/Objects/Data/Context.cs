@@ -1,5 +1,4 @@
-﻿using Datalist.Tests.Objects.Models;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 
 namespace Datalist.Tests.Objects.Data
 {

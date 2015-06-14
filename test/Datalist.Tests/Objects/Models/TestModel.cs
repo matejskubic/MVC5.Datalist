@@ -1,8 +1,8 @@
-﻿using Datalist.Tests.Objects.Stubs;
+﻿using Datalist.Tests.Objects;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Datalist.Tests.Objects.Models
+namespace Datalist.Tests.Objects
 {
     public class TestModel
     {
@@ -13,7 +13,7 @@ namespace Datalist.Tests.Objects.Models
         [Display(Name = "TestDisplay")]
         public Int32 Number { get; set; }
 
-        [Datalist(typeof(TestDatalistStub))]
+        [Datalist(typeof(TestDatalistProxy))]
         public String ParentId { get; set; }
 
         [DatalistColumn(-5, Format = "{0:d}")]

@@ -60,14 +60,16 @@ namespace Datalist
 
         private static AbstractDatalist GetModelFromExpression<TModel, TProperty>(Expression<Func<TModel, TProperty>> expression)
         {
-            MemberExpression member = expression.Body as MemberExpression;
-            PropertyInfo propInfo = member.Member as PropertyInfo;
+            MemberExpression exp = expression.Body as MemberExpression;
+            DatalistAttribute datalist = exp.Member.GetCustomAttribute<DatalistAttribute>();
 
-            DatalistAttribute attr = propInfo.GetCustomAttribute<DatalistAttribute>();
-            if (attr == null)
-                throw new DatalistException(String.Format("Property {0} does not have DatalistAttribute specified", propInfo.Name));
+            if (datalist == null)
+                throw new DatalistException(
+                    String.Format(
+                        "'{0}' property does not have a '{1}' specified.",
+                        exp.Member.Name, typeof(DatalistAttribute).Name));
 
-            return (AbstractDatalist)Activator.CreateInstance(attr.Type);
+            return (AbstractDatalist)Activator.CreateInstance(datalist.Type);
         }
         private static String FormAutoComplete<TModel>(HtmlHelper<TModel> html, AbstractDatalist model, String hiddenInput, Object htmlAttributes)
         {

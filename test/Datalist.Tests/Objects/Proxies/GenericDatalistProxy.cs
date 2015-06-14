@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Datalist.Tests.Objects.Stubs
+namespace Datalist.Tests.Objects
 {
-    public class GenericDatalistStub<T> : GenericDatalist<T> where T : class
+    public class GenericDatalistProxy<T> : GenericDatalist<T> where T : class
     {
         public String BaseDefaultSortColumn
         {

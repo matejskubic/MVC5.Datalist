@@ -29,6 +29,7 @@ namespace Datalist
         {
             if (column == null)
                 throw new ArgumentNullException("column");
+
             if (Columns.Any(col => col.Key == column.Key))
                 throw new DatalistException(String.Format(@"Can not add datalist column with the same key ""{0}""", column.Key));
 
