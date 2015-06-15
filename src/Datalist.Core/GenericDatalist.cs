@@ -15,7 +15,7 @@ namespace Datalist
             {
                 return typeof(T)
                     .GetProperties()
-                    .Where(property => property.GetCustomAttribute<DatalistColumnAttribute>(false) != null)
+                    .Where(property => property.IsDefined(typeof(DatalistColumnAttribute), false))
                     .OrderBy(property => property.GetCustomAttribute<DatalistColumnAttribute>(false).Position);
             }
         }
