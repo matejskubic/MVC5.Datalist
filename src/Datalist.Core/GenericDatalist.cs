@@ -58,7 +58,7 @@ namespace Datalist
             if (relationProperty != null)
                 return relationProperty;
 
-            throw new DatalistException(String.Format("{0}.{1} does not have property named \"{2}\".",
+            throw new DatalistException(String.Format("{0}.{1} does not have property named '{2}'.",
                 property.DeclaringType.Name,
                 property.Name,
                 relation));
@@ -88,7 +88,7 @@ namespace Datalist
         {
             PropertyInfo idProperty = typeof(T).GetProperty("Id");
             if (idProperty == null)
-                throw new DatalistException(String.Format("Type {0} does not have property named \"Id\".", typeof(T).Name));
+                throw new DatalistException(String.Format("Type '{0}' does not have property named 'Id'.", typeof(T).Name));
 
             if (idProperty.PropertyType == typeof(String))
                 return models.Where("Id = \"" + CurrentFilter.Id + "\"");
@@ -97,7 +97,7 @@ namespace Datalist
             if (IsNumeric(idProperty.PropertyType) && Decimal.TryParse(CurrentFilter.Id, out temp))
                 return models.Where("Id = " + CurrentFilter.Id);
 
-            throw new DatalistException(String.Format("{0}.Id can not be filtered by \"{1}\", because of unconvertable types.", typeof(T).Name, CurrentFilter.Id));
+            throw new DatalistException(String.Format("{0}.Id can not be filtered by using '{1}' value, because it's not a string nor a number.", typeof(T).Name, CurrentFilter.Id));
         }
         protected virtual IQueryable<T> FilterByAdditionalFilters(IQueryable<T> models)
         {
@@ -131,12 +131,12 @@ namespace Datalist
                 if (Columns.Keys.Contains(sortColumn))
                     return models.OrderBy(String.Format("{0} {1}", sortColumn, CurrentFilter.SortOrder));
                 else
-                    throw new DatalistException(String.Format("Datalist does not contain sort column named \"{0}\"", sortColumn));
+                    throw new DatalistException(String.Format("Datalist does not contain sort column named '{0}'.", sortColumn));
 
             if (Columns.Any())
                 return models.OrderBy(String.Format("{0} {1}", Columns.First().Key, CurrentFilter.SortOrder));
 
-            throw new DatalistException("Datalist columns can not be empty.");
+            throw new DatalistException("Datalist should have at least one column.");
         }
 
         protected virtual DatalistData FormDatalistData(IQueryable<T> models)
@@ -169,14 +169,14 @@ namespace Datalist
         protected virtual void AddAutocomplete(Dictionary<String, String> row, T model)
         {
             if (!Columns.Any())
-                throw new DatalistException("Datalist columns can not be empty.");
+                throw new DatalistException("Datalist should have at least one column.");
 
             row.Add(AcKey, GetValue(model, Columns.Keys.First()));
         }
         protected virtual void AddColumns(Dictionary<String, String> row, T model)
         {
             if (!Columns.Any())
-                throw new DatalistException("Datalist columns can not be empty.");
+                throw new DatalistException("Datalist should have at least one column.");
 
             foreach (String column in Columns.Keys)
                 AddColumn(row, column, model);
@@ -198,7 +198,7 @@ namespace Datalist
             if (IsNumeric(type) && Decimal.TryParse(term.ToString(), out number))
                 return String.Format("({0} && {1} == {2})", FormNotNullQuery(propertyName), propertyName, number.ToString().Replace(',', '.'));
 
-            throw new DatalistException(String.Format("{0} type is not supported in dynamic filtering.", type.Name));
+            throw new DatalistException(String.Format("'{0}' type is not supported in dynamic filtering.", type.Name));
         }
         private String FormNotNullQuery(String propertyName)
         {
@@ -223,7 +223,7 @@ namespace Datalist
             String[] properties = fullPropertyName.Split('.');
             PropertyInfo property = type.GetProperty(properties[0]);
             if (property == null)
-                throw new DatalistException(String.Format("Type {0} does not have property named {1}.", type.Name, properties[0]));
+                throw new DatalistException(String.Format("'{0}' type does not have property named '{1}'.", type.Name, properties[0]));
 
             if (properties.Length > 1)
                 return GetValue(property.GetValue(model), String.Join(".", properties.Skip(1)));

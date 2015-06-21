@@ -13,10 +13,7 @@ namespace Datalist
 
             if (!typeof(AbstractDatalist).IsAssignableFrom(type))
                 throw new ArgumentException(
-                    String.Format(
-                        "Type {0} cannot be assigned from {1} type.",
-                        typeof(AbstractDatalist).Name,
-                        type.Name));
+                    String.Format("'{0}' type does not implement '{1}'.", type.Name, typeof(AbstractDatalist).Name));
 
             Type = type;
         }
