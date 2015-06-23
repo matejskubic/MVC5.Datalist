@@ -4,7 +4,7 @@ namespace Datalist
 {
     public class DatalistAttribute : Attribute
     {
-        public Type Type { get; private set; }
+        public Type Type { get; protected set; }
 
         public DatalistAttribute(Type type)
         {

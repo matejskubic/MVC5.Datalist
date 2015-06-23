@@ -4,9 +4,9 @@ namespace Datalist
 {
     public class DatalistColumn
     {
-        public String Key { get; private set; }
-        public String Header { get; private set; }
-        public String CssClass { get; private set; }
+        public String Key { get; protected set; }
+        public String Header { get; protected set; }
+        public String CssClass { get; protected set; }
 
         public DatalistColumn(String key, String header, String cssClass = "")
         {
