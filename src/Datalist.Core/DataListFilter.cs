@@ -12,7 +12,7 @@ namespace Datalist
         public Int32 RecordsPerPage { get; set; }
         public DatalistSortOrder SortOrder { get; set; }
 
-        public Dictionary<String, Object> AdditionalFilters { get; set; }
+        public IDictionary<String, Object> AdditionalFilters { get; set; }
 
         public DatalistFilter()
         {

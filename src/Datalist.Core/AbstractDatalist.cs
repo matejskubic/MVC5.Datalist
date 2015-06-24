@@ -15,7 +15,7 @@ namespace Datalist
 
         public DatalistFilter CurrentFilter { get; set; }
         public DatalistColumns Columns { get; protected set; }
-        public List<String> AdditionalFilters { get; protected set; }
+        public IList<String> AdditionalFilters { get; protected set; }
 
         public String DefaultSortColumn { get; protected set; }
         public UInt32 DefaultRecordsPerPage { get; protected set; }
