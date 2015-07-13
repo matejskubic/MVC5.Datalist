@@ -1,5 +1,4 @@
-﻿using Datalist.Tests.Objects;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Datalist.Tests.Objects

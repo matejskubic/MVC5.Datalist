@@ -71,7 +71,7 @@ namespace Datalist
 
             return (AbstractDatalist)Activator.CreateInstance(datalist.Type);
         }
-        private static String FormAutoComplete<TModel>(HtmlHelper<TModel> html, AbstractDatalist model, String hiddenInput, Object htmlAttributes)
+        private static String FormAutoComplete(HtmlHelper html, AbstractDatalist model, String hiddenInput, Object htmlAttributes)
         {
             RouteValueDictionary attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
             attributes["class"] = String.Format("{0} {1}", attributes["class"], "form-control datalist-input").Trim();
@@ -95,7 +95,7 @@ namespace Datalist
 
             return html.HiddenFor(expression, attributes).ToString();
         }
-        private static String FormHiddenInput<TModel>(HtmlHelper<TModel> html, String name, Object value)
+        private static String FormHiddenInput(HtmlHelper html, String name, Object value)
         {
             RouteValueDictionary attributes = new RouteValueDictionary();
             attributes.Add("class", "datalist-hidden-input");
