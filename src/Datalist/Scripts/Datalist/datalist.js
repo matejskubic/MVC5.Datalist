@@ -81,7 +81,7 @@
                 minLength: 1
             });
 
-            this.element.bind('keyup.datalist', function (e) {
+            this.element.on('keyup.datalist', function (e) {
                 if (e.which != 9 && this.value.length == 0) {
                     that._select(null, false);
                 }
@@ -99,8 +99,8 @@
                         var timeout;
                         datalist
                             .find('.datalist-search-input')
-                            .unbind('keyup.datalist')
-                            .bind('keyup.datalist', null, function () {
+                            .off('keyup.datalist')
+                            .on('keyup.datalist', null, function () {
                                 var input = this;
                                 clearTimeout(timeout);
                                 timeout = setTimeout(function () {
