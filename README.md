@@ -1,4 +1,4 @@
-Autocomplete plus datatables like plugin for MVC projects.
+Autocomplete plus datatables like controls for ASP.NET MVC 5 projects.
 
 ![Semantic](https://img.shields.io/badge/sem-ver-lightgrey.svg?style=plastic)
 ![Docs](https://img.shields.io/github/release/NonFactors/MVC.Datalist.Web.svg?style=plastic&label=docs)
