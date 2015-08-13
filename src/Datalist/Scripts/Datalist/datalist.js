@@ -1,5 +1,5 @@
 ﻿/*!
- * Datalist 3.4.0
+ * Datalist 3.5.0
  * https://github.com/NonFactors/MVC5.Datalist
  *
  * Copyright © NonFactors
@@ -197,7 +197,7 @@
             var id = $(that.options.hiddenElement).val();
             if (id) {
                 $.ajax({
-                    url: that.options.url + '?Id=' + id + '&RecordsPerPage=1',
+                    url: that.options.url + '?Id=' + id + '&RecordsPerPage=1' + this._formFiltersQuery(),
                     cache: false,
                     success: function (data) {
                         if (data.Rows.length > 0) {
