@@ -54,6 +54,6 @@ Usage examples and API can be found at [Datalist] (http://mvc-datalist.azurewebs
 
 Contribution
 -
-- Questions or anything conserning MVC.Datalist website/documentation should be reported at [MVC.Datalist.Web](https://github.com/NonFactors/MVC.Datalist.Web).
+- Questions or anything conserning MVC.Datalist web/docs should be reported at [Web repository](https://github.com/NonFactors/MVC5.Datalist.Web).
 - Before you start writing a pull request you should discuss it using GitHub issues.
 - Bugs, improvements or features should be reported using GitHub issues.
