@@ -6,8 +6,7 @@ Autocomplete plus datatables like controls for ASP.NET MVC 5 projects.
 ![Downloads](https://img.shields.io/nuget/dt/Datalist.svg?style=plastic&label=downloads)
 ![License](https://img.shields.io/badge/license-MIT-green.svg?style=plastic)
 
-Installation
--
+# Installation
 Install datalist package from [NuGet] (http://nuget.org)
 ```
 PM> Install-Package Datalist
@@ -48,12 +47,10 @@ Render your datalist inputs using one of datalist's html helpers
 @Html.DatalistFor(model => model.SampleId, new SampleDatalist())
 ```
 
-Examples and API documentation
---
+# Examples and API documentation
 Usage examples and API can be found at [Datalist] (http://mvc-datalist.azurewebsites.net/) website.
 
-Contribution
--
+# Contribution
 - Questions or anything conserning MVC.Datalist web/docs should be reported at [Web repository](https://github.com/NonFactors/MVC5.Datalist.Web).
 - Before you start writing a pull request you should discuss it using GitHub issues.
 - Bugs, improvements or features should be reported using GitHub issues.
