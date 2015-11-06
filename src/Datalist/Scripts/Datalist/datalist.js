@@ -82,7 +82,7 @@
             });
 
             this.element.on('keyup.datalist', function (e) {
-                if (e.which != 9 && this.value.length == 0) {
+                if (e.which != 9 && this.value.length == 0 && $(that.options.hiddenElement).val()) {
                     that._select(null, false);
                 }
             });
