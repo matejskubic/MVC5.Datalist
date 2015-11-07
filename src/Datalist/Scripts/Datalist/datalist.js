@@ -1,5 +1,5 @@
 ﻿/*!
- * Datalist 3.5.0
+ * Datalist 3.5.1
  * https://github.com/NonFactors/MVC5.Datalist
  *
  * Copyright © NonFactors
@@ -422,6 +422,7 @@
     $(function () {
         datalist.find('.datalist-items-per-page').spinner({ min: 1, max: 99 });
         datalist.dialog({
+            dialogClass: 'datalist-dialog',
             autoOpen: false,
             minHeight: 210,
             height: 'auto',
