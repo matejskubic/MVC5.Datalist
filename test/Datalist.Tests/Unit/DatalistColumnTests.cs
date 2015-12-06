@@ -8,28 +8,34 @@ namespace Datalist.Tests.Unit
         #region Constructor: DatalistColumn(String key, String header, String cssClass = "")
 
         [Fact]
-        public void Add_OnNullKeyThrows()
+        public void Add_NullKey_Throws()
         {
-            Assert.Throws<ArgumentNullException>(() => new DatalistColumn(null, ""));
+            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => new DatalistColumn(null, ""));
+
+            Assert.Equal("key", actual.ParamName);
         }
 
         [Fact]
-        public void Add_OnNullHeaderThrows()
+        public void Add_NullHeader_Throws()
         {
-            Assert.Throws<ArgumentNullException>(() => new DatalistColumn("", null));
+            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => new DatalistColumn("", null));
+
+            Assert.Equal("header", actual.ParamName);
         }
 
         [Fact]
-        public void Add_OnNullCssClass()
+        public void Add_NullCssClass_Throws()
         {
-            Assert.Throws<ArgumentNullException>(() => new DatalistColumn("", "", null));
+            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => new DatalistColumn("", "", null));
+
+            Assert.Equal("cssClass", actual.ParamName);
         }
 
         [Fact]
         public void DatalistColumn_SetsKey()
         {
-            String actual = new DatalistColumn("TestKey", "").Key;
-            String expected = "TestKey";
+            String actual = new DatalistColumn("Test", "").Key;
+            String expected = "Test";
 
             Assert.Equal(expected, actual);
         }
@@ -37,8 +43,8 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void DatalistColumn_SetsHeader()
         {
-            String actual = new DatalistColumn("", "TestHeader").Header;
-            String expected = "TestHeader";
+            String actual = new DatalistColumn("", "Test").Header;
+            String expected = "Test";
 
             Assert.Equal(expected, actual);
         }
@@ -46,8 +52,8 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void DatalistColumn_SetsCssClass()
         {
-            String actual = new DatalistColumn("", "", "TestCss").CssClass;
-            String expected = "TestCss";
+            String actual = new DatalistColumn("", "", "Test").CssClass;
+            String expected = "Test";
 
             Assert.Equal(expected, actual);
         }

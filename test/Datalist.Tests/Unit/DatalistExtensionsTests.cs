@@ -742,46 +742,55 @@ namespace Datalist.Tests.Unit
         private void CreatesAutocompleteAndHiddenInput(String id, Object actual)
         {
             String pattern = String.Format(@"<input(.*) id=""{0}{1}""(.*) /><input(.*) id=""{0}""(.*) />", id, AbstractDatalist.Prefix);
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsIdAttribute(String id, Object actual)
         {
             String pattern = String.Format(@"<input(.*) id=""{0}{1}""(.*) />", id, AbstractDatalist.Prefix);
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsDatalistClassesForDatalistInput(Object actual)
         {
             String pattern = @"<input(.*) class=""(.*)(form-control datalist-input|datalist-input form-control)(.*)""(.*) />";
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsSpecifiedClass(String classAttribute, Object actual)
         {
             String pattern = String.Format(@"<input(.*) class=""(.*){0}(.*)""(.*) />", classAttribute);
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsFiltersAttribute(Object actual)
         {
             String pattern = String.Format(@"<input(.*) data-datalist-filters=""{0}""(.*) />", String.Join(",", datalist.AdditionalFilters));
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsRecordsPerPageAttribute(Object actual)
         {
             String pattern = String.Format(@"<input(.*) data-datalist-records-per-page=""{0}""(.*) />", datalist.DefaultRecordsPerPage);
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsSortColumnAttribute(Object actual)
         {
             String pattern = String.Format(@"<input(.*) data-datalist-sort-column=""{0}""(.*) />", datalist.DefaultSortColumn);
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsSortOrderAttribute(Object actual)
         {
             String pattern = String.Format(@"<input(.*) data-datalist-sort-order=""{0}""(.*) />", datalist.DefaultSortOrder);
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsDialogTitleAttribute(Object actual)
         {
             String pattern = String.Format(@"<input(.*) data-datalist-dialog-title=""{0}""(.*) />", datalist.DialogTitle);
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsHiddenInputAttribute(String id, Object actual)
@@ -792,11 +801,13 @@ namespace Datalist.Tests.Unit
         private void AddsUrlAttribute(Object actual)
         {
             String pattern = String.Format(@"<input(.*) data-datalist-url=""{0}""(.*) />", datalist.DatalistUrl);
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsTermAttribute(Object actual)
         {
             String pattern = @"<input(.*) data-datalist-term=""""(.*) />";
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsPageAttribute(Object actual)
@@ -807,16 +818,19 @@ namespace Datalist.Tests.Unit
         private void AddsIdForHiddenInput(String id, Object actual)
         {
             String pattern = String.Format(@"<input(.*) id=""{0}""(.*) />", id);
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsValueForHiddenInput(String value, Object actual)
         {
             String pattern = String.Format(@"/><input(.*) value=""{0}""(.*) />", value);
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsDatalistClassesForHiddenInput(Object actual)
         {
             String pattern = @"<input(.*) class=""datalist-hidden-input""(.*) />";
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
 
@@ -844,11 +858,13 @@ namespace Datalist.Tests.Unit
         private void WrapsAutocompleteInInputGroup(Object actual)
         {
             String pattern = @"<div class=""input-group"">(.*)</div>";
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void CreatesOpenSpan(Object actual)
         {
             String pattern = @"<span class=""datalist-open-span input-group-addon""><span class=""datalist-open-icon glyphicon""></span></span>";
+
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
 

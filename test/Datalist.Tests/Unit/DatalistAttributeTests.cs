@@ -8,15 +8,23 @@ namespace Datalist.Tests.Unit
         #region Constructor: DatalistAttribute(Type type)
 
         [Fact]
-        public void DatalistAttribute_NullThrows()
+        public void DatalistAttribute_NullType_Throws()
         {
-            Assert.Throws<ArgumentNullException>(() => new DatalistAttribute(null));
+            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => new DatalistAttribute(null));
+
+            Assert.Equal("type", actual.ParamName);
         }
 
         [Fact]
-        public void DatalistAttribute_UnassignableTypeThrows()
+        public void DatalistAttribute_NotDatalistType_Throws()
         {
-            Assert.Throws<ArgumentException>(() => new DatalistAttribute(typeof(Object)));
+            ArgumentException exception = Assert.Throws<ArgumentException>(() => new DatalistAttribute(typeof(Object)));
+
+            String expected = String.Format("'{0}' type does not implement '{1}'.",
+                typeof(Object).Name, typeof(AbstractDatalist).Name);
+            String actual = exception.Message;
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]

@@ -10,8 +10,8 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void DatalistException_SetsMessage()
         {
-            String actual = new DatalistException("T").Message;
-            String expected = "T";
+            String actual = new DatalistException("Test").Message;
+            String expected = "Test";
 
             Assert.Equal(expected, actual);
         }

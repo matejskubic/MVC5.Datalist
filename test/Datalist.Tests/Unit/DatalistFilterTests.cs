@@ -14,43 +14,43 @@ namespace Datalist.Tests.Unit
         #region Constructor: DatalistFilter()
 
         [Fact]
-        public void DatalistFilter_NullId()
+        public void DatalistFilter_SetsId()
         {
             Assert.Null(filter.Id);
         }
 
         [Fact]
-        public void DatalistFilter_ZeroPage()
+        public void DatalistFilter_SetsPage()
         {
             Assert.Equal(0, filter.Page);
         }
 
         [Fact]
-        public void DatalistFilter_NullSearchTerm()
+        public void DatalistFilter_SetsSearchTerm()
         {
             Assert.Null(filter.SearchTerm);
         }
 
         [Fact]
-        public void DatalistFilter_NullSortColumn()
+        public void DatalistFilter_SetsSortColumn()
         {
             Assert.Null(filter.SortColumn);
         }
 
         [Fact]
-        public void DatalistFilter_AscSortOrder()
+        public void DatalistFilter_SetsSortOrder()
         {
             Assert.Equal(DatalistSortOrder.Asc, filter.SortOrder);
         }
 
         [Fact]
-        public void DatalistFilter_ZeroRecordsPerPage()
+        public void DatalistFilter_SetsRecordsPerPage()
         {
             Assert.Equal(0, filter.RecordsPerPage);
         }
 
         [Fact]
-        public void DatalistFilter_EmptyAdditionalFilters()
+        public void DatalistFilter_SetsAdditionalFilters()
         {
             Assert.Empty(filter.AdditionalFilters);
         }

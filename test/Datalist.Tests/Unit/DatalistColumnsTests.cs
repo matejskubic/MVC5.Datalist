@@ -8,40 +8,43 @@ namespace Datalist.Tests.Unit
 {
     public class DatalistColumnsTests
     {
-        private List<DatalistColumn> testColumns;
+        private List<DatalistColumn> allColumns;
         private DatalistColumns columns;
 
         public DatalistColumnsTests()
         {
-            columns = new DatalistColumns();
-            testColumns = new List<DatalistColumn>
+            allColumns = new List<DatalistColumn>
             {
-                new DatalistColumn("Test1", ""),
-                new DatalistColumn("Test2", ""),
+                new DatalistColumn("Test1", "Header1", "Class1"),
+                new DatalistColumn("Test2", "Header2", "Class2")
             };
+
+            columns = new DatalistColumns();
+
+            foreach (DatalistColumn column in allColumns)
+                columns.Add(column);
         }
 
         #region Property: Keys
 
         [Fact]
-        public void Keys_EqualsToColumKeys()
+        public void Keys_ReturnsColumnKeys()
         {
-            foreach (DatalistColumn column in testColumns)
-                columns.Add(column);
-
-            IEnumerable<String> expected = testColumns.Select(column => column.Key);
-            IEnumerable<String> actual = testColumns.Select(column => column.Key);
+            IEnumerable<String> expected = new[] { "Test1", "Test2" };
+            IEnumerable<String> actual = columns.Keys;
 
             Assert.Equal(expected, actual);
         }
 
         #endregion
 
-        #region Constructor: DatalistColumn()
+        #region Constructor: DatalistColumns()
 
         [Fact]
-        public void DatalistColumn_EmptyColumn()
+        public void DatalistColumns_AreEmpty()
         {
+            columns = new DatalistColumns();
+
             Assert.Empty(columns);
         }
 
@@ -50,27 +53,33 @@ namespace Datalist.Tests.Unit
         #region Method: Add(DatalistColumn column)
 
         [Fact]
-        public void Add_OnNullColumnThrows()
+        public void Add_NullColumn_Throws()
         {
-            Assert.Throws<ArgumentNullException>(() => columns.Add(null));
+            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => columns.Add(null));
+
+            Assert.Equal("column", actual.ParamName);
         }
 
         [Fact]
-        public void Add_OnSameColumnKeyThrows()
+        public void Add_SameColumnKey_Throws()
         {
-            DatalistColumn column = new DatalistColumn("TestKey", "");
+            DatalistException exception = Assert.Throws<DatalistException>(() => columns.Add(columns.First()));
+
+            String expected = String.Format("Can not add datalist column with the same key '{0}'.", columns.First().Key);
+            String actual = exception.Message;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Add_Column()
+        {
+            DatalistColumn column = new DatalistColumn("Test3", "3");
+            allColumns.Add(column);
+
             columns.Add(column);
 
-            Assert.Throws<DatalistException>(() => columns.Add(column));
-        }
-
-        [Fact]
-        public void Add_AddsColumn()
-        {
-            foreach (DatalistColumn column in testColumns)
-                columns.Add(column);
-
-            IEnumerable<DatalistColumn> expected = testColumns;
+            IEnumerable<DatalistColumn> expected = allColumns;
             IEnumerable<DatalistColumn> actual = columns;
 
             Assert.Equal(expected, actual);
@@ -81,40 +90,48 @@ namespace Datalist.Tests.Unit
         #region Method: Add(String key, String header, String cssClass = ")
 
         [Fact]
-        public void Add_OnNullKeyThrows()
+        public void Add_NullKey_Throws()
         {
-            Assert.Throws<ArgumentNullException>(() => columns.Add(null, ""));
+            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => columns.Add(null, ""));
+
+            Assert.Equal("key", actual.ParamName);
         }
 
         [Fact]
-        public void Add_OnNullHeaderThrows()
+        public void Add_NullHeader_Throws()
         {
-            Assert.Throws<ArgumentNullException>(() => columns.Add("", null));
+            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => columns.Add("", null));
+
+            Assert.Equal("header", actual.ParamName);
         }
 
         [Fact]
-        public void Add_OnNullCssClass()
+        public void Add_NullCssClass_Throws()
         {
-            Assert.Throws<ArgumentNullException>(() => columns.Add("", "", null));
+            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => columns.Add("", "", null));
+
+            Assert.Equal("cssClass", actual.ParamName);
         }
 
         [Fact]
-        public void Add_OnSameKeyThrows()
+        public void Add_SameKey_Throws()
         {
-            Assert.Throws<DatalistException>(() =>
-            {
-                columns.Add("TestKey", "");
-                columns.Add("TestKey", "");
-            });
+            DatalistException exception = Assert.Throws<DatalistException>(() => columns.Add(columns.First().Key, "1"));
+
+            String expected = String.Format("Can not add datalist column with the same key '{0}'.", columns.First().Key);
+            String actual = exception.Message;
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void Add_AddsColumnByValues()
+        public void Add_ColumnFromValues()
         {
-            foreach (DatalistColumn column in testColumns)
+            columns = new DatalistColumns();
+            foreach (DatalistColumn column in allColumns)
                 columns.Add(column.Key, column.Header, column.CssClass);
 
-            IEnumerator<DatalistColumn> expected = testColumns.GetEnumerator();
+            IEnumerator<DatalistColumn> expected = allColumns.GetEnumerator();
             IEnumerator<DatalistColumn> actual = columns.GetEnumerator();
 
             while (expected.MoveNext() | actual.MoveNext())
@@ -130,35 +147,25 @@ namespace Datalist.Tests.Unit
         #region Method: Remove(DatalistColumn column)
 
         [Fact]
-        public void Remove_RemovesColumn()
+        public void Remove_NoColumn_ReturnsFalse()
         {
-            foreach (DatalistColumn column in testColumns)
-                columns.Add(column);
-
-            DatalistColumn firstColumn = testColumns[0];
-            testColumns.RemoveAt(0);
-
-            Assert.True(columns.Remove(firstColumn));
-            Assert.Equal(testColumns, columns);
-        }
-
-        [Fact]
-        public void Remove_DoesNotRemoveColumn()
-        {
-            foreach (DatalistColumn column in testColumns)
-                columns.Add(column);
-
             Assert.False(columns.Remove(new DatalistColumn("Test1", "")));
-            Assert.Equal(testColumns, columns);
+            Assert.Equal(allColumns, columns);
         }
 
         [Fact]
-        public void Remove_RemovesItSelf()
+        public void Remove_Column()
         {
-            foreach (DatalistColumn column in testColumns)
-                columns.Add(column);
+            allColumns.RemoveAt(0);
 
-            foreach (DatalistColumn column in columns as IEnumerable)
+            Assert.True(columns.Remove(columns.First()));
+            Assert.Equal(allColumns, columns);
+        }
+
+        [Fact]
+        public void Remove_ItSelf()
+        {
+            foreach (DatalistColumn column in columns)
                 Assert.True(columns.Remove(column));
 
             Assert.Empty(columns);
@@ -169,11 +176,8 @@ namespace Datalist.Tests.Unit
         #region Method: Remove(String key)
 
         [Fact]
-        public void Remove_RemovesByKey()
+        public void Remove_ByKey()
         {
-            foreach (DatalistColumn column in testColumns)
-                columns.Add(column);
-
             foreach (DatalistColumn column in columns)
                 Assert.True(columns.Remove(column.Key));
 
@@ -181,15 +185,10 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void Remove_DoesNotRemoveByKey()
+        public void Remove_NoKey_ReturnsFalse()
         {
-            foreach (DatalistColumn column in testColumns)
-                columns.Add(column);
-
-            foreach (DatalistColumn column in columns)
-                Assert.False(columns.Remove(column.Key + column.Key));
-
-            Assert.Equal(testColumns, columns);
+            Assert.False(columns.Remove("Test3"));
+            Assert.Equal(allColumns, columns);
         }
 
         #endregion
@@ -197,10 +196,8 @@ namespace Datalist.Tests.Unit
         #region Method: Clear()
 
         [Fact]
-        public void Clear_ClearsColumns()
+        public void Clear_Columns()
         {
-            columns.Add("Test1", "");
-            columns.Add("Test2", "");
             columns.Clear();
 
             Assert.Empty(columns);
@@ -211,25 +208,10 @@ namespace Datalist.Tests.Unit
         #region Method: GetEnumerator()
 
         [Fact]
-        public void GetEnumerator_ReturnsColumnsCopy()
-        {
-            foreach (DatalistColumn column in testColumns)
-                columns.Add(column);
-
-            foreach (DatalistColumn column in columns)
-                columns.Remove(column);
-
-            Assert.Empty(columns);
-        }
-
-        [Fact]
         public void GetEnumerator_ReturnsColumns()
         {
-            foreach (DatalistColumn column in testColumns)
-                columns.Add(column);
-
             IEnumerable<DatalistColumn> actual = columns.ToArray();
-            IEnumerable<DatalistColumn> expected = testColumns;
+            IEnumerable<DatalistColumn> expected = allColumns;
 
             Assert.Equal(expected, actual);
         }
@@ -237,9 +219,6 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void GetEnumerator_ReturnsSameColumns()
         {
-            foreach (DatalistColumn column in testColumns)
-                columns.Add(column);
-
             IEnumerable<DatalistColumn> expected = columns.ToArray();
             IEnumerable<DatalistColumn> actual = columns;
 

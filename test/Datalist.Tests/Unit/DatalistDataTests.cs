@@ -8,7 +8,7 @@ namespace Datalist.Tests.Unit
         #region Constructor: DatalistData()
 
         [Fact]
-        public void DatalistData_ZeroFilteredRecords()
+        public void DatalistData_SetsFilteredRecords()
         {
             Int32 actual = new DatalistData().FilteredRecords;
             Int32 expected = 0;
@@ -17,13 +17,13 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void DatalistData_EmptyColumns()
+        public void DatalistData_SetsColumns()
         {
             Assert.Empty(new DatalistData().Columns);
         }
 
         [Fact]
-        public void DatalistData_EmptyRows()
+        public void DatalistData_SetsRows()
         {
             Assert.Empty(new DatalistData().Rows);
         }
