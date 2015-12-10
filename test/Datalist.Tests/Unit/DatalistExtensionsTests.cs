@@ -24,6 +24,7 @@ namespace Datalist.Tests.Unit
                 new HttpResponse(new StringWriter()));
 
             datalist = new TestDatalistProxy();
+            testModel = new TestModel();
             html = MockHtmlHelper();
         }
         public void Dispose()
@@ -725,10 +726,7 @@ namespace Datalist.Tests.Unit
 
         private HtmlHelper<TestModel> MockHtmlHelper()
         {
-            ViewDataDictionary<TestModel> viewData = new ViewDataDictionary<TestModel>();
-            viewData.Model = new TestModel();
-            testModel = viewData.Model;
-
+            ViewDataDictionary<TestModel> viewData = new ViewDataDictionary<TestModel>(testModel);
             Mock<IViewDataContainer> containerMock = new Mock<IViewDataContainer>();
             containerMock.Setup(c => c.ViewData).Returns(viewData);
 

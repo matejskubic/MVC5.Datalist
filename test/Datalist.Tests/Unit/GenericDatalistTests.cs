@@ -72,7 +72,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void GenericDatalist_CallsGetColumnCssClass()
         {
-            IEnumerable<PropertyInfo>  properties = datalist.BaseAttributedProperties;
+            IEnumerable<PropertyInfo> properties = datalist.BaseAttributedProperties;
             Int32 callCount = datalist.BaseAttributedProperties.Count();
 
             datalistMock.Protected().Verify("GetColumnCssClass", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
@@ -358,7 +358,7 @@ namespace Datalist.Tests.Unit
             for (Int32 i = 0; i < 100; i++) models.Add(new NumericIdModel { Id = i });
             GenericDatalistProxy<NumericIdModel> datalist = new GenericDatalistProxy<NumericIdModel>();
 
-            datalist.CurrentFilter.Id = "9";
+            datalist.CurrentFilter.Id = "9.0";
 
             IEnumerable<NumericIdModel> actual = datalist.BaseFilterById(models.AsQueryable());
             IEnumerable<NumericIdModel> expected = models.Where(model => model.Id == 9);

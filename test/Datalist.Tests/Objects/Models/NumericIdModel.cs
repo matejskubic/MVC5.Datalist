@@ -5,6 +5,6 @@ namespace Datalist.Tests.Objects
     public class NumericIdModel
     {
         [DatalistColumn]
-        public Decimal Id { get; set; }
+        public Int32 Id { get; set; }
     }
 }

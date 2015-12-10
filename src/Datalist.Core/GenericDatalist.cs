@@ -91,23 +91,20 @@ namespace Datalist
                 throw new DatalistException(String.Format("Type '{0}' does not have property named 'Id'.", typeof(T).Name));
 
             if (idProperty.PropertyType == typeof(String))
-                return models.Where("Id = \"" + CurrentFilter.Id + "\"");
+                return models.Where("Id = @0", CurrentFilter.Id);
 
             Decimal temp;
             if (IsNumeric(idProperty.PropertyType) && Decimal.TryParse(CurrentFilter.Id, out temp))
-                return models.Where("Id = " + CurrentFilter.Id);
+                return models.Where("Id = @0", temp);
 
             throw new DatalistException(String.Format("{0}.Id can not be filtered by using '{1}' value, because it's not a string nor a number.", typeof(T).Name, CurrentFilter.Id));
         }
         protected virtual IQueryable<T> FilterByAdditionalFilters(IQueryable<T> models)
         {
-            List<String> queries = new List<String>();
             foreach (KeyValuePair<String, Object> filter in CurrentFilter.AdditionalFilters.Where(item => item.Value != null))
-                queries.Add(FormEqualsQuery(GetType(filter.Key), filter.Key, filter.Value));
+                models = models.Where(FormEqualsQuery(GetType(filter.Key), filter.Key), filter.Value);
 
-            if (queries.Count == 0) return models;
-
-            return models.Where(String.Join(" && ", queries));
+            return models;
         }
         protected virtual IQueryable<T> FilterBySearchTerm(IQueryable<T> models)
         {
@@ -118,11 +115,11 @@ namespace Datalist
 
             foreach (String propertyName in Columns.Keys)
                 if (GetType(propertyName) == typeof(String))
-                    queries.Add(FormContainsQuery(propertyName, term));
+                    queries.Add(FormContainsQuery(propertyName));
 
             if (queries.Count == 0) return models;
 
-            return models.Where(String.Join(" || ", queries));
+            return models.Where(String.Join(" || ", queries), term);
         }
         protected virtual IQueryable<T> Sort(IQueryable<T> models)
         {
@@ -185,18 +182,14 @@ namespace Datalist
         {
         }
 
-        private String FormContainsQuery(String propertyName, String term)
+        private String FormContainsQuery(String propertyName)
         {
-            return String.Format(@"({0} && {1}.ToLower().Contains(""{2}""))", FormNotNullQuery(propertyName), propertyName, term);
+            return String.Format(@"({0} && {1}.ToLower().Contains(@0))", FormNotNullQuery(propertyName), propertyName);
         }
-        private String FormEqualsQuery(Type type, String propertyName, Object term)
+        private String FormEqualsQuery(Type type, String propertyName)
         {
-            if (type == typeof(String))
-                return String.Format(@"({0} && {1} == ""{2}"")", FormNotNullQuery(propertyName), propertyName, term);
-
-            Decimal number;
-            if (IsNumeric(type) && Decimal.TryParse(term.ToString(), out number))
-                return String.Format("({0} && {1} == {2})", FormNotNullQuery(propertyName), propertyName, number.ToString().Replace(',', '.'));
+            if (type == typeof(String) || IsNumeric(type))
+                return String.Format(@"({0} && {1} == @0)", FormNotNullQuery(propertyName), propertyName);
 
             throw new DatalistException(String.Format("'{0}' type is not supported in dynamic filtering.", type.Name));
         }
