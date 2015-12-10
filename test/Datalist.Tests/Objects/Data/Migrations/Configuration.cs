@@ -28,8 +28,8 @@ namespace Datalist.Tests.Objects.Data.Migrations
                         ParentId = id,
                         Sum = index + index,
                         Number = (index % 2 == 0) ? index : -index,
-                        CreationDate = DateTime.Now.AddDays(index),
                         NullableString = (index % 3 == 0) ? id : null,
+                        CreationDate = DateTime.Now.Date.AddDays(index),
                         FirstRelationModelId = (index % 2 == 0) ? id : null,
                         SecondRelationModelId = (index % 5 == 0) ? "-" + id : null,
                     });

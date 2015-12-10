@@ -412,39 +412,14 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void FilterByAdditionalFilters_NoProperty_Throws()
-        {
-            datalist.CurrentFilter.AdditionalFilters.Add("Test", "Value");
-
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseFilterByAdditionalFilters(datalist.BaseGetModels()));
-
-            String expected = String.Format("Type {0} does not have property named Test.", typeof(TestModel).Name);
-            String actual = exception.Message;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
         public void FilterByAdditionalFilters_Filters()
         {
             datalist.CurrentFilter.AdditionalFilters.Add("Id", "9");
             datalist.CurrentFilter.AdditionalFilters.Add("Number", 9);
+            datalist.CurrentFilter.AdditionalFilters.Add("CreationDate", DateTime.Now.Date.AddDays(9));
 
-            IQueryable<TestModel> actual = datalist.BaseFilterByAdditionalFilters(datalist.BaseGetModels());
-            IQueryable<TestModel> expected = datalist.BaseGetModels().Where(model => model.Id == "9" && model.Number == 9);
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void FilterByAdditionalFilters_NotSupportedType_Throws()
-        {
-            datalist.CurrentFilter.AdditionalFilters.Add("CreationDate", DateTime.Now);
-
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseFilterByAdditionalFilters(datalist.BaseGetModels()));
-
-            String expected = String.Format("'DateTime' type is not supported in dynamic filtering.", typeof(DateTime).Name);
-            String actual = exception.Message;
+            IEnumerable<TestModel> actual = datalist.BaseFilterByAdditionalFilters(datalist.BaseGetModels());
+            IEnumerable<TestModel> expected = datalist.BaseGetModels().ToArray().Where(model => model.Id == "9" && model.Number == 9 && model.CreationDate == DateTime.Now.Date.AddDays(9));
 
             Assert.Equal(expected, actual);
         }

@@ -102,7 +102,7 @@ namespace Datalist
         protected virtual IQueryable<T> FilterByAdditionalFilters(IQueryable<T> models)
         {
             foreach (KeyValuePair<String, Object> filter in CurrentFilter.AdditionalFilters.Where(item => item.Value != null))
-                models = models.Where(FormEqualsQuery(GetType(filter.Key), filter.Key), filter.Value);
+                models = models.Where(FormEqualsQuery(filter.Key), filter.Value);
 
             return models;
         }
@@ -186,13 +186,6 @@ namespace Datalist
         {
             return String.Format(@"({0} && {1}.ToLower().Contains(@0))", FormNotNullQuery(propertyName), propertyName);
         }
-        private String FormEqualsQuery(Type type, String propertyName)
-        {
-            if (type == typeof(String) || IsNumeric(type))
-                return String.Format(@"({0} && {1} == @0)", FormNotNullQuery(propertyName), propertyName);
-
-            throw new DatalistException(String.Format("'{0}' type is not supported in dynamic filtering.", type.Name));
-        }
         private String FormNotNullQuery(String propertyName)
         {
             List<String> queries = new List<String>();
@@ -202,6 +195,10 @@ namespace Datalist
                 queries.Add(String.Join(".", properties.Take(i + 1)) + " != null");
 
             return String.Join(" && ", queries);
+        }
+        private String FormEqualsQuery(String propertyName)
+        {
+            return String.Format(@"({0} && {1} == @0)", FormNotNullQuery(propertyName), propertyName);
         }
 
         private void AddColumn(Dictionary<String, String> row, String column, T model)
