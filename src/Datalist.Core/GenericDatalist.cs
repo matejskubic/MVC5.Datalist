@@ -126,12 +126,12 @@ namespace Datalist
             String sortColumn = CurrentFilter.SortColumn ?? DefaultSortColumn;
             if (sortColumn != null)
                 if (Columns.Keys.Contains(sortColumn))
-                    return models.OrderBy(String.Format("{0} {1}", sortColumn, CurrentFilter.SortOrder));
+                    return models.OrderBy(sortColumn + " " + CurrentFilter.SortOrder);
                 else
                     throw new DatalistException(String.Format("Datalist does not contain sort column named '{0}'.", sortColumn));
 
             if (Columns.Any())
-                return models.OrderBy(String.Format("{0} {1}", Columns.First().Key, CurrentFilter.SortOrder));
+                return models.OrderBy(Columns.First().Key + " " + CurrentFilter.SortOrder);
 
             throw new DatalistException("Datalist should have at least one column.");
         }
@@ -219,22 +219,20 @@ namespace Datalist
                 return GetValue(property.GetValue(model), String.Join(".", properties.Skip(1)));
 
             Object value = property.GetValue(model) ?? "";
-            DatalistColumnAttribute datalistColumn = property.GetCustomAttribute<DatalistColumnAttribute>(false);
-            if (datalistColumn != null && datalistColumn.Format != null)
-                value = String.Format(datalistColumn.Format, value);
+            DatalistColumnAttribute column = property.GetCustomAttribute<DatalistColumnAttribute>(false);
+            if (column != null && column.Format != null)
+                value = String.Format(column.Format, value);
 
             return value.ToString();
         }
         private Type GetType(String fullPropertyName)
         {
             Type type = typeof(T);
-            String[] properties = fullPropertyName.Split('.');
-            foreach (String propertyName in properties)
+            foreach (String propertyName in fullPropertyName.Split('.'))
             {
                 PropertyInfo property = type.GetProperty(propertyName);
                 if (property == null)
-                    throw new DatalistException(String.Format("Type {0} does not have property named {1}.",
-                        type.Name, propertyName));
+                    throw new DatalistException(String.Format("Type {0} does not have property named {1}.", type.Name, propertyName));
 
                 type = property.PropertyType;
             }
