@@ -78,7 +78,8 @@
                     that._select(selection.item.item, false);
                     e.preventDefault();
                 },
-                minLength: 1
+                minLength: 1,
+                delay: 500
             });
 
             this.element.on('keyup.datalist', function (e) {
