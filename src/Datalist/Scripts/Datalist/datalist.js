@@ -92,7 +92,6 @@
         _initDatalistOpenSpan: function () {
             var datalistAddon = this.element.nextAll('.datalist-open-span:first');
             if (datalistAddon.length != 0) {
-                var datalist = $('#Datalist');
                 var that = this;
 
                 this._on(datalistAddon, {
