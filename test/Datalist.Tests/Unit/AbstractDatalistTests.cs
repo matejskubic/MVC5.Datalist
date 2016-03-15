@@ -2,6 +2,8 @@
 using System;
 using System.IO;
 using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 using Xunit;
 
 namespace Datalist.Tests.Unit
@@ -9,12 +11,16 @@ namespace Datalist.Tests.Unit
     public class AbstractDatalistTests : IDisposable
     {
         private AbstractDatalist datalist;
-        private String baseUrl;
 
         public AbstractDatalistTests()
         {
-            baseUrl = "http://localhost:7013/";
-            HttpRequest request = new HttpRequest(null, baseUrl, null);
+            RouteTable.Routes.Clear();
+            RouteTable.Routes.MapRoute(
+                "Default",
+                "{controller}/{action}/{id}",
+                new { controller = "Home", action = "Index", id = "" });
+
+            HttpRequest request = new HttpRequest(null, "http://localhost:7013/", null);
             HttpResponse response = new HttpResponse(new StringWriter());
             HttpContext.Current = new HttpContext(request, response);
             datalist = new Mock<AbstractDatalist>().Object;
@@ -63,7 +69,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AbstractDatalist_SetsDatalistUrl()
         {
-            String expected = String.Format("{0}{1}/{2}", baseUrl, AbstractDatalist.Prefix, datalist.GetType().Name.Replace(AbstractDatalist.Prefix, ""));
+            String expected = String.Format("/{0}/{1}", AbstractDatalist.Prefix, datalist.GetType().Name.Replace(AbstractDatalist.Prefix, ""));
             String actual = datalist.DatalistUrl;
 
             Assert.Equal(expected, actual);

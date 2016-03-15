@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Datalist
 {
@@ -21,7 +22,10 @@ namespace Datalist
         public UInt32 DefaultRecordsPerPage { get; protected set; }
         public DatalistSortOrder DefaultSortOrder { get; protected set; }
 
-        protected AbstractDatalist()
+        protected AbstractDatalist() : this(new UrlHelper(HttpContext.Current.Request.RequestContext))
+        {
+        }
+        protected AbstractDatalist(UrlHelper url)
         {
             String sanitizedName = GetType().Name.Replace(Prefix, "");
             AdditionalFilters = new List<String>();
@@ -30,16 +34,7 @@ namespace Datalist
             DialogTitle = sanitizedName;
             DefaultRecordsPerPage = 20;
 
-            String applicationPath = HttpContext.Current.Request.ApplicationPath ?? "/";
-            if (!applicationPath.EndsWith("/"))
-                applicationPath += "/";
-
-            DatalistUrl = String.Format("{0}://{1}{2}{3}/{4}",
-                HttpContext.Current.Request.Url.Scheme,
-                HttpContext.Current.Request.Url.Authority,
-                applicationPath,
-                Prefix,
-                sanitizedName);
+            DatalistUrl = url.Action(sanitizedName, Prefix, new { area = "" });
         }
 
         public abstract DatalistData GetData();
