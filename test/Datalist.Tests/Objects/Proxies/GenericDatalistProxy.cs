@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Web.Mvc;
 
 namespace Datalist.Tests.Objects
 {
     public class GenericDatalistProxy<T> : GenericDatalist<T> where T : class
     {
+        public GenericDatalistProxy() : base()
+        { 
+        }
+        public GenericDatalistProxy(UrlHelper url) : base(url)
+        { 
+        }
+
         public String BaseDefaultSortColumn
         {
             get

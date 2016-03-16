@@ -1,5 +1,6 @@
 ﻿using Datalist.Tests.Objects.Data;
 using System.Linq;
+using System.Web.Mvc;
 
 namespace Datalist.Tests.Objects
 {
@@ -8,6 +9,10 @@ namespace Datalist.Tests.Objects
         private IQueryable<TestModel> models;
 
         public TestDatalistProxy()
+        {
+            models = new Context().TestModels.OrderByDescending(model => model.Id);
+        }
+        public TestDatalistProxy(UrlHelper url) : base(url)
         {
             models = new Context().TestModels.OrderByDescending(model => model.Id);
         }

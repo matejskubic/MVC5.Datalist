@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 using Xunit;
 
 namespace Datalist.Tests.Unit
@@ -81,6 +83,71 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void GenericDatalist_AddsColumns()
         {
+            DatalistColumns columns = new DatalistColumns();
+            foreach (PropertyInfo property in datalist.BaseAttributedProperties)
+                columns.Add(new DatalistColumn(datalist.BaseGetColumnKey(property), datalist.BaseGetColumnHeader(property)));
+
+            IEnumerator<DatalistColumn> expected = columns.GetEnumerator();
+            IEnumerator<DatalistColumn> actual = datalist.Columns.GetEnumerator();
+
+            while (expected.MoveNext() | actual.MoveNext())
+            {
+                Assert.Equal(expected.Current.Key, actual.Current.Key);
+                Assert.Equal(expected.Current.Header, actual.Current.Header);
+                Assert.Equal(expected.Current.CssClass, actual.Current.CssClass);
+            }
+        }
+
+        #endregion
+
+        #region Constructor: GenericDatalist(UrlHelper url)
+
+        [Fact]
+        public void GenericDatalist_Url_CallsGetColumnKey()
+        {
+            datalistMock = new Mock<TestDatalistProxy>(new UrlHelper(HttpContext.Current.Request.RequestContext));
+            datalistMock.CallBase = true;
+            datalist = datalistMock.Object;
+
+            IEnumerable<PropertyInfo> properties = datalist.BaseAttributedProperties;
+            Int32 callCount = datalist.BaseAttributedProperties.Count();
+
+            datalistMock.Protected().Verify("GetColumnKey", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
+        }
+
+        [Fact]
+        public void GenericDatalist_Url_CallsGetColumnHeader()
+        {
+            datalistMock = new Mock<TestDatalistProxy>(new UrlHelper(HttpContext.Current.Request.RequestContext));
+            datalistMock.CallBase = true;
+            datalist = datalistMock.Object;
+
+            IEnumerable<PropertyInfo> properties = datalist.BaseAttributedProperties;
+            Int32 callCount = datalist.BaseAttributedProperties.Count();
+
+            datalistMock.Protected().Verify("GetColumnHeader", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
+        }
+
+        [Fact]
+        public void GenericDatalist_Url_CallsGetColumnCssClass()
+        {
+            datalistMock = new Mock<TestDatalistProxy>(new UrlHelper(HttpContext.Current.Request.RequestContext));
+            datalistMock.CallBase = true;
+            datalist = datalistMock.Object;
+
+            IEnumerable<PropertyInfo> properties = datalist.BaseAttributedProperties;
+            Int32 callCount = datalist.BaseAttributedProperties.Count();
+
+            datalistMock.Protected().Verify("GetColumnCssClass", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
+        }
+
+        [Fact]
+        public void GenericDatalist_Url_AddsColumns()
+        {
+            datalistMock = new Mock<TestDatalistProxy>(new UrlHelper(HttpContext.Current.Request.RequestContext));
+            datalistMock.CallBase = true;
+            datalist = datalistMock.Object;
+
             DatalistColumns columns = new DatalistColumns();
             foreach (PropertyInfo property in datalist.BaseAttributedProperties)
                 columns.Add(new DatalistColumn(datalist.BaseGetColumnKey(property), datalist.BaseGetColumnHeader(property)));
