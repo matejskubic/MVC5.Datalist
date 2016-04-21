@@ -31,7 +31,7 @@ namespace Datalist.Tests.Objects.Data.Migrations
                         NullableString = (index % 3 == 0) ? id : null,
                         CreationDate = DateTime.Now.Date.AddDays(index),
                         FirstRelationModelId = (index % 2 == 0) ? id : null,
-                        SecondRelationModelId = (index % 5 == 0) ? "-" + id : null,
+                        SecondRelationModelId = (index % 5 == 0) ? "-" + id : null
                     });
                 }
             }

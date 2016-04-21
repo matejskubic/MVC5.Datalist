@@ -20,8 +20,7 @@ namespace Datalist.Tests.Unit
         {
             ArgumentException exception = Assert.Throws<ArgumentException>(() => new DatalistAttribute(typeof(Object)));
 
-            String expected = String.Format("'{0}' type does not implement '{1}'.",
-                typeof(Object).Name, typeof(AbstractDatalist).Name);
+            String expected = $"'{typeof(Object).Name}' type does not implement '{typeof(AbstractDatalist).Name}'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);

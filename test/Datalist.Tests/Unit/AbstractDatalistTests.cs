@@ -69,7 +69,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AbstractDatalist_SetsDatalistUrl()
         {
-            String expected = String.Format("/{0}/{1}", AbstractDatalist.Prefix, datalist.GetType().Name.Replace(AbstractDatalist.Prefix, ""));
+            String expected = $"/{AbstractDatalist.Prefix}/{datalist.GetType().Name.Replace(AbstractDatalist.Prefix, "")}";
             String actual = datalist.DatalistUrl;
 
             Assert.Equal(expected, actual);

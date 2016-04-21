@@ -8,7 +8,7 @@ namespace Datalist.Tests.Objects
 {
     public class GenericDatalistProxy<T> : GenericDatalist<T> where T : class
     {
-        public GenericDatalistProxy() : base()
+        public GenericDatalistProxy()
         { 
         }
         public GenericDatalistProxy(UrlHelper url) : base(url)

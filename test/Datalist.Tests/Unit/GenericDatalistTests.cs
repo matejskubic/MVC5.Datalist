@@ -9,7 +9,6 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using Xunit;
 
 namespace Datalist.Tests.Unit
@@ -193,7 +192,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseGetColumnKey(property));
 
-            String expected = String.Format("{0}.{1} does not have property named 'None'.", property.DeclaringType.Name, property.Name);
+            String expected = $"{property.DeclaringType.Name}.{property.Name} does not have property named 'None'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -205,7 +204,7 @@ namespace Datalist.Tests.Unit
             PropertyInfo property = typeof(TestModel).GetProperty("FirstRelationModel");
             String relation = property.GetCustomAttribute<DatalistColumnAttribute>(false).Relation;
 
-            String expected = String.Format("{0}.{1}", property.Name, relation);
+            String expected = $"{property.Name}.{relation}";
             String actual = datalist.BaseGetColumnKey(property);
 
             Assert.Equal(expected, actual);
@@ -252,7 +251,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseGetColumnHeader(property));
 
-            String expected = String.Format("{0}.{1} does not have property named 'None'.", property.DeclaringType.Name, property.Name);
+            String expected = $"{property.DeclaringType.Name}.{property.Name} does not have property named 'None'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -401,7 +400,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseFilterById(datalist.BaseGetModels()));
 
-            String expected = String.Format("Type '{0}' does not have property named 'Id'.", typeof(NoIdModel).Name);
+            String expected = $"Type '{typeof(NoIdModel).Name}' does not have property named 'Id'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -442,7 +441,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseFilterById(datalist.BaseGetModels()));
 
-            String expected = String.Format("{0}.Id can not be filtered by using 'Id' value, because it's not a string nor a number.", typeof(EnumModel).Name);
+            String expected = $"{typeof(EnumModel).Name}.Id can not be filtered by using 'Id' value, because it's not a string nor a number.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -457,7 +456,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseFilterById(datalist.BaseGetModels()));
 
-            String expected = String.Format("{0}.Id can not be filtered by using '9' value, because it's not a string nor a number.", typeof(NonNumericIdModel).Name);
+            String expected = $"{typeof(NonNumericIdModel).Name}.Id can not be filtered by using '9' value, because it's not a string nor a number.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -514,7 +513,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseFilterBySearchTerm(datalist.BaseGetModels()));
 
-            String expected = String.Format("Type {0} does not have property named Test.", typeof(TestModel).Name);
+            String expected = $"Type {typeof(TestModel).Name} does not have property named Test.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -731,7 +730,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseAddId(row, new NoIdModel()));
 
-            String expected = String.Format("'{0}' type does not have property named 'Id'.", typeof(NoIdModel).Name);
+            String expected = $"'{typeof(NoIdModel).Name}' type does not have property named 'Id'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -788,7 +787,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseAddAutocomplete(row, new TestModel()));
 
-            String expected = String.Format("'{0}' type does not have property named 'Test'.", typeof(TestModel).Name);
+            String expected = $"'{typeof(TestModel).Name}' type does not have property named 'Test'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -859,7 +858,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseAddColumns(row, new TestModel()));
 
-            String expected = String.Format("'{0}' type does not have property named 'Test'.", typeof(TestModel).Name);
+            String expected = $"'{typeof(TestModel).Name}' type does not have property named 'Test'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -915,7 +914,7 @@ namespace Datalist.Tests.Unit
 
             Object value = property.GetValue(model) ?? "";
             DatalistColumnAttribute datalistColumn = property.GetCustomAttribute<DatalistColumnAttribute>(false);
-            if (datalistColumn != null && datalistColumn.Format != null)
+            if (datalistColumn?.Format != null)
                 value = String.Format(datalistColumn.Format, value);
 
             return value.ToString();

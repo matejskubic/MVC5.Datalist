@@ -64,18 +64,15 @@ namespace Datalist
             DatalistAttribute datalist = exp.Member.GetCustomAttribute<DatalistAttribute>();
 
             if (datalist == null)
-                throw new DatalistException(
-                    String.Format(
-                        "'{0}' property does not have a '{1}' specified.",
-                        exp.Member.Name, typeof(DatalistAttribute).Name));
+                throw new DatalistException($"'{exp.Member.Name}' property does not have a '{typeof(DatalistAttribute).Name}' specified.");
 
             return (AbstractDatalist)Activator.CreateInstance(datalist.Type);
         }
         private static String FormAutoComplete(HtmlHelper html, AbstractDatalist model, String hiddenInput, Object htmlAttributes)
         {
             RouteValueDictionary attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
-            attributes["class"] = String.Format("{0} {1}", attributes["class"], "form-control datalist-input").Trim();
             attributes.Add("data-datalist-filters", String.Join(",", model.AdditionalFilters));
+            attributes["class"] = $"{attributes["class"]} form-control datalist-input".Trim();
             attributes.Add("data-datalist-for", TagBuilder.CreateSanitizedId(hiddenInput));
             attributes.Add("data-datalist-records-per-page", model.DefaultRecordsPerPage);
             attributes.Add("data-datalist-sort-column", model.DefaultSortColumn);

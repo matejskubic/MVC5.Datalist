@@ -21,7 +21,7 @@ namespace Datalist
             }
         }
 
-        protected GenericDatalist() : base()
+        protected GenericDatalist()
         {
             foreach (PropertyInfo property in AttributedProperties)
                 Columns.Add(GetColumnKey(property), GetColumnHeader(property), GetColumnCssClass(property));
@@ -33,20 +33,20 @@ namespace Datalist
         }
         protected virtual String GetColumnKey(PropertyInfo property)
         {
-            if (property == null) throw new ArgumentNullException("property");
+            if (property == null) throw new ArgumentNullException(nameof(property));
 
             DatalistColumnAttribute column = property.GetCustomAttribute<DatalistColumnAttribute>(false);
-            if (column != null && column.Relation != null)
+            if (column?.Relation != null)
                 return property.Name + "." + GetColumnKey(GetRelationProperty(property, column.Relation));
 
             return property.Name;
         }
         protected virtual String GetColumnHeader(PropertyInfo property)
         {
-            if (property == null) throw new ArgumentNullException("property");
+            if (property == null) throw new ArgumentNullException(nameof(property));
 
             DatalistColumnAttribute column = property.GetCustomAttribute<DatalistColumnAttribute>(false);
-            if (column != null && column.Relation != null)
+            if (column?.Relation != null)
                 return GetColumnHeader(GetRelationProperty(property, column.Relation));
 
             DisplayAttribute header = property.GetCustomAttribute<DisplayAttribute>(false);
@@ -64,10 +64,7 @@ namespace Datalist
             if (relationProperty != null)
                 return relationProperty;
 
-            throw new DatalistException(String.Format("{0}.{1} does not have property named '{2}'.",
-                property.DeclaringType.Name,
-                property.Name,
-                relation));
+            throw new DatalistException($"{property.DeclaringType.Name}.{property.Name} does not have property named '{relation}'.");
         }
 
         public override DatalistData GetData()
@@ -94,7 +91,7 @@ namespace Datalist
         {
             PropertyInfo idProperty = typeof(T).GetProperty("Id");
             if (idProperty == null)
-                throw new DatalistException(String.Format("Type '{0}' does not have property named 'Id'.", typeof(T).Name));
+                throw new DatalistException($"Type '{typeof(T).Name}' does not have property named 'Id'.");
 
             if (idProperty.PropertyType == typeof(String))
                 return models.Where("Id = @0", CurrentFilter.Id);
@@ -103,7 +100,7 @@ namespace Datalist
             if (IsNumeric(idProperty.PropertyType) && Decimal.TryParse(CurrentFilter.Id, out temp))
                 return models.Where("Id = @0", temp);
 
-            throw new DatalistException(String.Format("{0}.Id can not be filtered by using '{1}' value, because it's not a string nor a number.", typeof(T).Name, CurrentFilter.Id));
+            throw new DatalistException($"{typeof(T).Name}.Id can not be filtered by using '{CurrentFilter.Id}' value, because it's not a string nor a number.");
         }
         protected virtual IQueryable<T> FilterByAdditionalFilters(IQueryable<T> models)
         {
@@ -134,7 +131,7 @@ namespace Datalist
                 if (Columns.Keys.Contains(sortColumn))
                     return models.OrderBy(sortColumn + " " + CurrentFilter.SortOrder);
                 else
-                    throw new DatalistException(String.Format("Datalist does not contain sort column named '{0}'.", sortColumn));
+                    throw new DatalistException($"Datalist does not contain sort column named '{sortColumn}'.");
 
             if (Columns.Any())
                 return models.OrderBy(Columns.First().Key + " " + CurrentFilter.SortOrder);
@@ -190,7 +187,7 @@ namespace Datalist
 
         private String FormContainsQuery(String propertyName)
         {
-            return String.Format(@"({0} && {1}.ToLower().Contains(@0))", FormNotNullQuery(propertyName), propertyName);
+            return $@"({FormNotNullQuery(propertyName)} && {propertyName}.ToLower().Contains(@0))";
         }
         private String FormNotNullQuery(String propertyName)
         {
@@ -204,7 +201,7 @@ namespace Datalist
         }
         private String FormEqualsQuery(String propertyName)
         {
-            return String.Format(@"({0} && {1} == @0)", FormNotNullQuery(propertyName), propertyName);
+            return $@"({FormNotNullQuery(propertyName)} && {propertyName} == @0)";
         }
 
         private void AddColumn(Dictionary<String, String> row, String column, T model)
@@ -219,14 +216,14 @@ namespace Datalist
             String[] properties = fullPropertyName.Split('.');
             PropertyInfo property = type.GetProperty(properties[0]);
             if (property == null)
-                throw new DatalistException(String.Format("'{0}' type does not have property named '{1}'.", type.Name, properties[0]));
+                throw new DatalistException($"'{type.Name}' type does not have property named '{properties[0]}'.");
 
             if (properties.Length > 1)
                 return GetValue(property.GetValue(model), String.Join(".", properties.Skip(1)));
 
             Object value = property.GetValue(model) ?? "";
             DatalistColumnAttribute column = property.GetCustomAttribute<DatalistColumnAttribute>(false);
-            if (column != null && column.Format != null)
+            if (column?.Format != null)
                 value = String.Format(column.Format, value);
 
             return value.ToString();
@@ -238,7 +235,7 @@ namespace Datalist
             {
                 PropertyInfo property = type.GetProperty(propertyName);
                 if (property == null)
-                    throw new DatalistException(String.Format("Type {0} does not have property named {1}.", type.Name, propertyName));
+                    throw new DatalistException($"Type {type.Name} does not have property named {propertyName}.");
 
                 type = property.PropertyType;
             }

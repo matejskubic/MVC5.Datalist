@@ -745,7 +745,7 @@ namespace Datalist.Tests.Unit
         }
         private void AddsIdAttribute(String id, Object actual)
         {
-            String pattern = String.Format(@"<input(.*) id=""{0}{1}""(.*) />", id, AbstractDatalist.Prefix);
+            String pattern = $@"<input(.*) id=""{id}{AbstractDatalist.Prefix}""(.*) />";
 
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
@@ -757,48 +757,48 @@ namespace Datalist.Tests.Unit
         }
         private void AddsSpecifiedClass(String classAttribute, Object actual)
         {
-            String pattern = String.Format(@"<input(.*) class=""(.*){0}(.*)""(.*) />", classAttribute);
+            String pattern = $@"<input(.*) class=""(.*){classAttribute}(.*)""(.*) />";
 
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsFiltersAttribute(Object actual)
         {
-            String pattern = String.Format(@"<input(.*) data-datalist-filters=""{0}""(.*) />", String.Join(",", datalist.AdditionalFilters));
+            String pattern = $@"<input(.*) data-datalist-filters=""{String.Join(",", datalist.AdditionalFilters)}""(.*) />";
 
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsRecordsPerPageAttribute(Object actual)
         {
-            String pattern = String.Format(@"<input(.*) data-datalist-records-per-page=""{0}""(.*) />", datalist.DefaultRecordsPerPage);
+            String pattern = $@"<input(.*) data-datalist-records-per-page=""{datalist.DefaultRecordsPerPage}""(.*) />";
 
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsSortColumnAttribute(Object actual)
         {
-            String pattern = String.Format(@"<input(.*) data-datalist-sort-column=""{0}""(.*) />", datalist.DefaultSortColumn);
+            String pattern = $@"<input(.*) data-datalist-sort-column=""{datalist.DefaultSortColumn}""(.*) />";
 
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsSortOrderAttribute(Object actual)
         {
-            String pattern = String.Format(@"<input(.*) data-datalist-sort-order=""{0}""(.*) />", datalist.DefaultSortOrder);
+            String pattern = $@"<input(.*) data-datalist-sort-order=""{datalist.DefaultSortOrder}""(.*) />";
 
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsDialogTitleAttribute(Object actual)
         {
-            String pattern = String.Format(@"<input(.*) data-datalist-dialog-title=""{0}""(.*) />", datalist.DialogTitle);
+            String pattern = $@"<input(.*) data-datalist-dialog-title=""{datalist.DialogTitle}""(.*) />";
 
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsHiddenInputAttribute(String id, Object actual)
         {
-            String pattern = String.Format(@"<input(.*) data-datalist-for=""{0}""(.*) />", id);
+            String pattern = $@"<input(.*) data-datalist-for=""{id}""(.*) />";
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsUrlAttribute(Object actual)
         {
-            String pattern = String.Format(@"<input(.*) data-datalist-url=""{0}""(.*) />", datalist.DatalistUrl);
+            String pattern = $@"<input(.*) data-datalist-url=""{datalist.DatalistUrl}""(.*) />";
 
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
@@ -815,13 +815,13 @@ namespace Datalist.Tests.Unit
         }
         private void AddsIdForHiddenInput(String id, Object actual)
         {
-            String pattern = String.Format(@"<input(.*) id=""{0}""(.*) />", id);
+            String pattern = $@"<input(.*) id=""{id}""(.*) />";
 
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }
         private void AddsValueForHiddenInput(String value, Object actual)
         {
-            String pattern = String.Format(@"/><input(.*) value=""{0}""(.*) />", value);
+            String pattern = $@"/><input(.*) value=""{value}""(.*) />";
 
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }

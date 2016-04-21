@@ -10,7 +10,6 @@ namespace Datalist
         private List<DatalistColumn> Columns
         {
             get;
-            set;
         }
         public IEnumerable<String> Keys
         {
@@ -28,10 +27,10 @@ namespace Datalist
         public void Add(DatalistColumn column)
         {
             if (column == null)
-                throw new ArgumentNullException("column");
+                throw new ArgumentNullException(nameof(column));
 
             if (Columns.Any(col => col.Key == column.Key))
-                throw new DatalistException(String.Format("Can not add datalist column with the same key '{0}'.", column.Key));
+                throw new DatalistException($"Can not add datalist column with the same key '{column.Key}'.");
 
             Columns.Add(column);
         }

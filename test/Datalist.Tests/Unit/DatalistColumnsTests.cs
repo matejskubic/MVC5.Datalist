@@ -64,7 +64,7 @@ namespace Datalist.Tests.Unit
         {
             DatalistException exception = Assert.Throws<DatalistException>(() => columns.Add(columns.First()));
 
-            String expected = String.Format("Can not add datalist column with the same key '{0}'.", columns.First().Key);
+            String expected = $"Can not add datalist column with the same key '{columns.First().Key}'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -117,7 +117,7 @@ namespace Datalist.Tests.Unit
         {
             DatalistException exception = Assert.Throws<DatalistException>(() => columns.Add(columns.First().Key, "1"));
 
-            String expected = String.Format("Can not add datalist column with the same key '{0}'.", columns.First().Key);
+            String expected = $"Can not add datalist column with the same key '{columns.First().Key}'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
