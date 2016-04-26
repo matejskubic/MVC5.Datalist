@@ -248,9 +248,9 @@
         _update: function (datalist) {
             var that = this;
             var term = datalist.find('.datalist-search-input').val();
+            datalist.find('.datalist-error-container').fadeOut(300);
 
             var timeout = setTimeout(function () {
-                datalist.find('.datalist-error-container').fadeOut(300);
                 datalist.find('.datalist-processing').fadeIn(300);
                 datalist.find('.datalist-pager').fadeOut(300);
                 datalist.find('.datalist-data').fadeOut(300);
