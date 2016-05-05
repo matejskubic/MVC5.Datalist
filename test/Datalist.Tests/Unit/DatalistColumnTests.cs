@@ -5,7 +5,7 @@ namespace Datalist.Tests.Unit
 {
     public class DatalistColumnTests
     {
-        #region Constructor: DatalistColumn(String key, String header, String cssClass = "")
+        #region DatalistColumn(String key, String header, String cssClass = "")
 
         [Fact]
         public void Add_NullKey_Throws()

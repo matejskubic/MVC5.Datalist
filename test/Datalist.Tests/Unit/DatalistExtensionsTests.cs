@@ -32,7 +32,7 @@ namespace Datalist.Tests.Unit
             HttpContext.Current = null;
         }
 
-        #region Extension method: AutoComplete<TModel>(this HtmlHelper<TModel> html, String name, Object value, AbstractDatalist model, Object htmlAttributes = null)
+        #region AutoComplete<TModel>(this HtmlHelper<TModel> html, String name, Object value, AbstractDatalist model, Object htmlAttributes = null)
 
         [Fact]
         public void AutoComplete_CreatesAutocompleteAndHiddenInput()
@@ -135,7 +135,7 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region Extension method: AutoCompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, Object htmlAttributes = null)
+        #region AutoCompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, Object htmlAttributes = null)
 
         [Fact]
         public void AutoCompleteFor_WithoutModel_MissingAttributeThrows()
@@ -246,7 +246,7 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region Extension method: AutoCompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, AbstractDatalist model, Object htmlAttributes = null)
+        #region AutoCompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, AbstractDatalist model, Object htmlAttributes = null)
 
         [Fact]
         public void AutoCompleteFor_CreatesAutocompleteAndHiddenInputFromExpression()
@@ -359,7 +359,7 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region Extension method: Datalist<TModel>(this HtmlHelper<TModel> html, String name, Object value, AbstractDatalist model, Object htmlAttributes = null)
+        #region Datalist<TModel>(this HtmlHelper<TModel> html, String name, Object value, AbstractDatalist model, Object htmlAttributes = null)
 
         [Fact]
         public void Datalist_WrapsAutocompleteInInputGroup()
@@ -474,7 +474,7 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region Extension method: DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, Object htmlAttributes = null)
+        #region DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, Object htmlAttributes = null)
 
         [Fact]
         public void DatalistFor_WithoutModel_WrapsAutocompleteInInputGroup()
@@ -597,7 +597,7 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region Extension method: DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, AbstractDatalist model, Object htmlAttributes = null)
+        #region DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, AbstractDatalist model, Object htmlAttributes = null)
 
         [Fact]
         public void DatalistFor_WrapsAutocompleteInInputGroup()

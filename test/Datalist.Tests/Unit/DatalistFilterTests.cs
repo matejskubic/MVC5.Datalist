@@ -11,7 +11,7 @@ namespace Datalist.Tests.Unit
             filter = new DatalistFilter();
         }
 
-        #region Constructor: DatalistFilter()
+        #region DatalistFilter()
 
         [Fact]
         public void DatalistFilter_SetsId()

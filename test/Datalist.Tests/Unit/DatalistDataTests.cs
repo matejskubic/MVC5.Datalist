@@ -5,7 +5,7 @@ namespace Datalist.Tests.Unit
 {
     public class DatalistDataTests
     {
-        #region Constructor: DatalistData()
+        #region DatalistData()
 
         [Fact]
         public void DatalistData_SetsFilteredRecords()

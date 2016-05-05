@@ -5,7 +5,7 @@ namespace Datalist.Tests.Unit
 {
     public class DatalistExceptionTests
     {
-        #region Constructor: DatalistException(String message)
+        #region DatalistException(String message)
 
         [Fact]
         public void DatalistException_SetsMessage()

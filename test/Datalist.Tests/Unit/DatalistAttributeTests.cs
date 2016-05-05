@@ -5,7 +5,7 @@ namespace Datalist.Tests.Unit
 {
     public class DatalistAttributeTests
     {
-        #region Constructor: DatalistAttribute(Type type)
+        #region DatalistAttribute(Type type)
 
         [Fact]
         public void DatalistAttribute_NullType_Throws()

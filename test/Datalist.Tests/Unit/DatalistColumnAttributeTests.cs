@@ -5,7 +5,7 @@ namespace Datalist.Tests.Unit
 {
     public class DatalistColumnAttributeTests
     {
-        #region Constructor: DatalistColumnAttribute()
+        #region DatalistColumnAttribute()
 
         [Fact]
         public void DatalistColumnAttribute_NullPosition()
@@ -27,7 +27,7 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region Constructor: DatalistColumnAttribute(Int32 position)
+        #region DatalistColumnAttribute(Int32 position)
 
         [Fact]
         public void DatalistColumnAttribute_SetsPosition()

@@ -55,7 +55,7 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region Constructor: AbstractDatalist()
+        #region AbstractDatalist()
 
         [Fact]
         public void AbstractDatalist_SetsDialogTitle()
