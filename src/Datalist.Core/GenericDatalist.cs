@@ -147,7 +147,7 @@ namespace Datalist
 
             IQueryable<T> pagedModels = models
                 .Skip(CurrentFilter.Page * CurrentFilter.RecordsPerPage)
-                .Take(CurrentFilter.RecordsPerPage);
+                .Take(Math.Min(CurrentFilter.RecordsPerPage, 99));
 
             foreach (T model in pagedModels)
             {
