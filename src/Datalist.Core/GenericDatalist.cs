@@ -52,7 +52,7 @@ namespace Datalist
             DisplayAttribute header = property.GetCustomAttribute<DisplayAttribute>(false);
             if (header != null) return header.GetName();
 
-            return property.Name;
+            return "";
         }
         protected virtual String GetColumnCssClass(PropertyInfo property)
         {

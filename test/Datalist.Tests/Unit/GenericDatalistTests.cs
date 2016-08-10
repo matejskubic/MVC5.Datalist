@@ -223,14 +223,13 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void GetColumnHeader_ReturnsPropertyName()
+        public void GetColumnHeader_NoDisplayName_ReturnsEmpty()
         {
             PropertyInfo property = typeof(TestModel).GetProperty("Sum");
 
             String actual = datalist.BaseGetColumnHeader(property);
-            String expected = property.Name;
 
-            Assert.Equal(expected, actual);
+            Assert.Empty(actual);
         }
 
         [Fact]
@@ -258,14 +257,13 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void GetColumnHeader_ReturnsRelationName()
+        public void GetColumnHeader_NoRelationDisplayName_ReturnsEmpty()
         {
             PropertyInfo property = typeof(TestModel).GetProperty("SecondRelationModel");
 
-            String expected = property.GetCustomAttribute<DatalistColumnAttribute>(false).Relation;
             String actual = datalist.BaseGetColumnHeader(property);
 
-            Assert.Equal(expected, actual);
+            Assert.Empty(actual);
         }
 
         [Fact]
