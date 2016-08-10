@@ -27,14 +27,11 @@ namespace Datalist
         }
         protected AbstractDatalist(UrlHelper url)
         {
-            String sanitizedName = GetType().Name.Replace(Prefix, "");
+            DatalistUrl = url.Action(GetType().Name.Replace(Prefix, ""), Prefix, new { area = "" });
             AdditionalFilters = new List<String>();
             CurrentFilter = new DatalistFilter();
             Columns = new DatalistColumns();
-            DialogTitle = sanitizedName;
             DefaultRecordsPerPage = 20;
-
-            DatalistUrl = url.Action(sanitizedName, Prefix, new { area = "" });
         }
 
         public abstract DatalistData GetData();

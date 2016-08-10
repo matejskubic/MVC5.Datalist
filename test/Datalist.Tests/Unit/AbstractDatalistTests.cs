@@ -60,10 +60,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AbstractDatalist_SetsDialogTitle()
         {
-            String expected = datalist.GetType().Name.Replace(AbstractDatalist.Prefix, "");
-            String actual = datalist.DialogTitle;
-
-            Assert.Equal(expected, actual);
+            Assert.Null(datalist.DialogTitle);
         }
 
         [Fact]
