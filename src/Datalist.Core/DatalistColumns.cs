@@ -34,9 +34,9 @@ namespace Datalist
 
             Columns.Add(column);
         }
-        public void Add(String key, String header, String cssClass = "")
+        public void Add(String key, String header, String cssClass = null)
         {
-            Add(new DatalistColumn(key, header, cssClass));
+            Add(new DatalistColumn(key, header) { CssClass = cssClass });
         }
         public Boolean Remove(DatalistColumn column)
         {

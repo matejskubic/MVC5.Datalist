@@ -12,13 +12,10 @@ namespace Datalist.Tests.Unit
 
         public DatalistColumnsTests()
         {
-            allColumns = new List<DatalistColumn>
-            {
-                new DatalistColumn("Test1", "Header1", "Class1"),
-                new DatalistColumn("Test2", "Header2", "Class2")
-            };
-
             columns = new DatalistColumns();
+            allColumns = new List<DatalistColumn>();
+            allColumns.Add(new DatalistColumn("Test1", "Header1"));
+            allColumns.Add(new DatalistColumn("Test2", "Header2"));
 
             foreach (DatalistColumn column in allColumns)
                 columns.Add(column);
@@ -40,11 +37,9 @@ namespace Datalist.Tests.Unit
         #region DatalistColumns()
 
         [Fact]
-        public void DatalistColumns_AreEmpty()
+        public void DatalistColumnsEmpty()
         {
-            columns = new DatalistColumns();
-
-            Assert.Empty(columns);
+            Assert.Empty(new DatalistColumns());
         }
 
         #endregion
@@ -86,7 +81,7 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region Add(String key, String header, String cssClass = ")
+        #region Add(String key, String header, String cssClass = null)
 
         [Fact]
         public void Add_NullKey_Throws()
@@ -94,22 +89,6 @@ namespace Datalist.Tests.Unit
             ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => columns.Add(null, ""));
 
             Assert.Equal("key", actual.ParamName);
-        }
-
-        [Fact]
-        public void Add_NullHeader_Throws()
-        {
-            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => columns.Add("", null));
-
-            Assert.Equal("header", actual.ParamName);
-        }
-
-        [Fact]
-        public void Add_NullCssClass_Throws()
-        {
-            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => columns.Add("", "", null));
-
-            Assert.Equal("cssClass", actual.ParamName);
         }
 
         [Fact]
@@ -146,19 +125,17 @@ namespace Datalist.Tests.Unit
         #region Remove(DatalistColumn column)
 
         [Fact]
-        public void Remove_NoColumn_ReturnsFalse()
+        public void Remove_NoColumn()
         {
-            Assert.False(columns.Remove(new DatalistColumn("Test1", "")));
+            Assert.False(columns.Remove(new DatalistColumn("Test1", "Header1")));
             Assert.Equal(allColumns, columns);
         }
 
         [Fact]
         public void Remove_Column()
         {
-            allColumns.RemoveAt(0);
-
             Assert.True(columns.Remove(columns.First()));
-            Assert.Equal(allColumns, columns);
+            Assert.Equal(allColumns.Skip(1), columns);
         }
 
         [Fact]
@@ -184,7 +161,7 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void Remove_NoKey_ReturnsFalse()
+        public void Remove_NoKey()
         {
             Assert.False(columns.Remove("Test3"));
             Assert.Equal(allColumns, columns);
@@ -211,15 +188,6 @@ namespace Datalist.Tests.Unit
         {
             IEnumerable<DatalistColumn> actual = columns.ToArray();
             IEnumerable<DatalistColumn> expected = allColumns;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void GetEnumerator_ReturnsSameColumns()
-        {
-            IEnumerable<DatalistColumn> expected = columns.ToArray();
-            IEnumerable<DatalistColumn> actual = columns;
 
             Assert.Equal(expected, actual);
         }

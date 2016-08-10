@@ -1,4 +1,4 @@
-﻿using Moq;
+﻿using NSubstitute;
 using System;
 using System.IO;
 using System.Web;
@@ -10,8 +10,6 @@ namespace Datalist.Tests.Unit
 {
     public class AbstractDatalistTests : IDisposable
     {
-        private AbstractDatalist datalist;
-
         public AbstractDatalistTests()
         {
             RouteTable.Routes.Clear();
@@ -23,7 +21,6 @@ namespace Datalist.Tests.Unit
             HttpRequest request = new HttpRequest(null, "http://localhost:7013/", null);
             HttpResponse response = new HttpResponse(new StringWriter());
             HttpContext.Current = new HttpContext(request, response);
-            datalist = new Mock<AbstractDatalist>().Object;
         }
         public void Dispose()
         {
@@ -58,60 +55,14 @@ namespace Datalist.Tests.Unit
         #region AbstractDatalist()
 
         [Fact]
-        public void AbstractDatalist_SetsDialogTitle()
+        public void AbstractDatalist_Defaults()
         {
-            Assert.Null(datalist.DialogTitle);
-        }
+            AbstractDatalist actual = Substitute.For<AbstractDatalist>();
 
-        [Fact]
-        public void AbstractDatalist_SetsUrl()
-        {
-            String expected = $"/{AbstractDatalist.Prefix}/{datalist.GetType().Name.Replace(AbstractDatalist.Prefix, "")}";
-            String actual = datalist.Url;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void AbstractDatalist_SetsDefaultSortColumn()
-        {
-            Assert.Null(datalist.DefaultSortColumn);
-        }
-
-        [Fact]
-        public void AbstractDatalist_SetsDefaultRecordsPerPage()
-        {
-            UInt32 actual = datalist.DefaultRecordsPerPage;
-            UInt32 expected = 20;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void AbstractDatalist_SetsAdditionalFilters()
-        {
-            Assert.Empty(datalist.AdditionalFilters);
-        }
-
-        [Fact]
-        public void AbstractDatalist_SetsDefaultSortOrder()
-        {
-            DatalistSortOrder actual = datalist.DefaultSortOrder;
-            DatalistSortOrder expected = DatalistSortOrder.Asc;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void AbstractDatalist_SetsColumns()
-        {
-            Assert.Empty(datalist.Columns);
-        }
-
-        [Fact]
-        public void AbstractDatalist_SetsCurrentFilter()
-        {
-            Assert.NotNull(datalist.CurrentFilter);
+            Assert.Equal<UInt32>(20, actual.DefaultRecordsPerPage);
+            Assert.Empty(actual.AdditionalFilters);
+            Assert.NotNull(actual.CurrentFilter);
+            Assert.Empty(actual.Columns);
         }
 
         #endregion

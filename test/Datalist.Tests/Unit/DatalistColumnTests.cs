@@ -5,7 +5,7 @@ namespace Datalist.Tests.Unit
 {
     public class DatalistColumnTests
     {
-        #region DatalistColumn(String key, String header, String cssClass = "")
+        #region DatalistColumn(String key, String header, String cssClass = null)
 
         [Fact]
         public void Add_NullKey_Throws()
@@ -16,23 +16,7 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void Add_NullHeader_Throws()
-        {
-            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => new DatalistColumn("", null));
-
-            Assert.Equal("header", actual.ParamName);
-        }
-
-        [Fact]
-        public void Add_NullCssClass_Throws()
-        {
-            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => new DatalistColumn("", "", null));
-
-            Assert.Equal("cssClass", actual.ParamName);
-        }
-
-        [Fact]
-        public void DatalistColumn_SetsKey()
+        public void DatalistColumn_Key()
         {
             String actual = new DatalistColumn("Test", "").Key;
             String expected = "Test";
@@ -41,18 +25,9 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void DatalistColumn_SetsHeader()
+        public void DatalistColumn_Header()
         {
             String actual = new DatalistColumn("", "Test").Header;
-            String expected = "Test";
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void DatalistColumn_SetsCssClass()
-        {
-            String actual = new DatalistColumn("", "", "Test").CssClass;
             String expected = "Test";
 
             Assert.Equal(expected, actual);

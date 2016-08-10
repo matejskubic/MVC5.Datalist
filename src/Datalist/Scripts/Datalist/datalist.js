@@ -100,7 +100,7 @@
                         datalist
                             .find('.datalist-search-input')
                             .off('keyup.datalist')
-                            .on('keyup.datalist', null, function () {
+                            .on('keyup.datalist', function () {
                                 var input = this;
                                 clearTimeout(timeout);
                                 timeout = setTimeout(function () {
@@ -285,7 +285,7 @@
 
             for (var i = 0; i < columns.length; i++) {
                 var column = columns[i];
-                header += '<th class="' + (column.CssClass != null ? column.CssClass : '') + '" data-column="' + column.Key + '"><span class="datalist-header-title">' + (column.Header != null ? column.Header : '') + '</span>';
+                header += '<th class="' + (column.CssClass || '') + '" data-column="' + column.Key + '"><span class="datalist-header-title">' + (column.Header || '') + '</span>';
                 if (that.options.sortColumn == column.Key || (that.options.sortColumn == '' && i == 0)) {
                     header += '<span class="datalist-sort-arrow ' + (that.options.sortOrder == 'Asc' ? 'asc' : 'desc') + '"></span></th>';
                     that.options.sortColumn = column.Key;
@@ -326,7 +326,7 @@
 
                 for (var j = 0; j < data.Columns.length; j++) {
                     var column = data.Columns[j];
-                    tableRow += '<td class="' + (column.CssClass != null ? column.CssClass : '') + '">' + (row[column.Key] != null ? row[column.Key] : '') + '</td>';
+                    tableRow += '<td class="' + (column.CssClass || '') + '">' + (row[column.Key] || '') + '</td>';
                 }
 
                 tableRow += '<td class="datalist-select-cell"><div class="datalist-select-container"><i></i></div></td></tr>';

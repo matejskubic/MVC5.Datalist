@@ -2,9 +2,9 @@
 
 namespace Datalist.Tests.Objects
 {
-    public class NumericIdModel
+    public class GuidModel
     {
         [DatalistColumn]
-        public Int32 Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

@@ -11,16 +11,16 @@ namespace Datalist
         public const String IdKey = "DatalistIdKey";
         public const String AcKey = "DatalistAcKey";
 
-        public String Url { get; protected set; }
-        public String DialogTitle { get; protected set; }
+        public String Url { get; set; }
+        public String DialogTitle { get; set; }
 
+        public DatalistColumns Columns { get; set; }
         public DatalistFilter CurrentFilter { get; set; }
-        public DatalistColumns Columns { get; protected set; }
-        public IList<String> AdditionalFilters { get; protected set; }
+        public IList<String> AdditionalFilters { get; set; }
 
-        public String DefaultSortColumn { get; protected set; }
-        public UInt32 DefaultRecordsPerPage { get; protected set; }
-        public DatalistSortOrder DefaultSortOrder { get; protected set; }
+        public String DefaultSortColumn { get; set; }
+        public UInt32 DefaultRecordsPerPage { get; set; }
+        public DatalistSortOrder DefaultSortOrder { get; set; }
 
         protected AbstractDatalist() : this(new UrlHelper(HttpContext.Current.Request.RequestContext))
         {

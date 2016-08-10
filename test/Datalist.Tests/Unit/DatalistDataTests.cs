@@ -1,5 +1,4 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
 namespace Datalist.Tests.Unit
 {
@@ -8,24 +7,13 @@ namespace Datalist.Tests.Unit
         #region DatalistData()
 
         [Fact]
-        public void DatalistData_SetsFilteredRecords()
+        public void DatalistData_CreatesEmpty()
         {
-            Int32 actual = new DatalistData().FilteredRecords;
-            Int32 expected = 0;
+            DatalistData actual = new DatalistData();
 
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void DatalistData_SetsColumns()
-        {
-            Assert.Empty(new DatalistData().Columns);
-        }
-
-        [Fact]
-        public void DatalistData_SetsRows()
-        {
-            Assert.Empty(new DatalistData().Rows);
+            Assert.Equal(0, actual.FilteredRecords);
+            Assert.Empty(actual.Columns);
+            Assert.Empty(actual.Rows);
         }
 
         #endregion

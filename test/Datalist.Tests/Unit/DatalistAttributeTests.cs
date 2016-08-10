@@ -8,7 +8,7 @@ namespace Datalist.Tests.Unit
         #region DatalistAttribute(Type type)
 
         [Fact]
-        public void DatalistAttribute_NullType_Throws()
+        public void DatalistAttribute_Null_Throws()
         {
             ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => new DatalistAttribute(null));
 
@@ -16,7 +16,7 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void DatalistAttribute_NotDatalistType_Throws()
+        public void DatalistAttribute_NoDatalist_Throws()
         {
             ArgumentException exception = Assert.Throws<ArgumentException>(() => new DatalistAttribute(typeof(Object)));
 
@@ -27,7 +27,7 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void DatalistAttribute_SetsType()
+        public void DatalistAttribute_Type()
         {
             Type actual = new DatalistAttribute(typeof(AbstractDatalist)).Type;
             Type expected = typeof(AbstractDatalist);

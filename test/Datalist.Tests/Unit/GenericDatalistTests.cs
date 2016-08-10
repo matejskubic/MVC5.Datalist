@@ -1,6 +1,4 @@
 ﻿using Datalist.Tests.Objects;
-using Moq;
-using Moq.Protected;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,26 +6,35 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
-using System.Web.Mvc;
 using Xunit;
 
 namespace Datalist.Tests.Unit
 {
     public class GenericDatalistTests : IDisposable
     {
-        private Mock<TestDatalistProxy> datalistMock;
         private Dictionary<String, String> row;
-        private TestDatalistProxy datalist;
+        private TestDatalist<TestModel> datalist;
 
         public GenericDatalistTests()
         {
             HttpContext.Current = new HttpContext(
-                new HttpRequest(null, "http://localhost:7013/", null),
-                new HttpResponse(new StringWriter()));
+               new HttpRequest(null, "http://localhost:7013/", null),
+               new HttpResponse(new StringWriter()));
 
-            datalistMock = new Mock<TestDatalistProxy> { CallBase = true };
             row = new Dictionary<String, String>();
-            datalist = datalistMock.Object;
+            datalist = new TestDatalist<TestModel>();
+
+            datalist.DefaultSortColumn = null;
+            datalist.CurrentFilter.SearchTerm = null;
+
+            for (Int32 i = 0; i < 20; i++)
+                datalist.Models.Add(new TestModel
+                {
+                    Id = i + "I",
+                    Count = i + 10,
+                    Value = i + "V",
+                    CreationDate = new DateTime(2014, 12, 10).AddDays(i)
+                });
         }
         public void Dispose()
         {
@@ -39,7 +46,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AttributedProperties_GetsOrderedProperties()
         {
-            List<PropertyInfo> actual = datalist.BaseAttributedProperties.ToList();
+            List<PropertyInfo> actual = datalist.AttributedProperties.ToList();
             List<PropertyInfo> expected = typeof(TestModel).GetProperties()
                 .Where(property => property.GetCustomAttribute<DatalistColumnAttribute>(false) != null)
                 .OrderBy(property => property.GetCustomAttribute<DatalistColumnAttribute>(false).Position)
@@ -50,106 +57,15 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region GenericDatalist()
+        #region AbstractDatalist()
 
         [Fact]
-        public void GenericDatalist_CallsGetColumnKey()
-        {
-            IEnumerable<PropertyInfo> properties = datalist.BaseAttributedProperties;
-            Int32 callCount = datalist.BaseAttributedProperties.Count();
-
-            datalistMock.Protected().Verify("GetColumnKey", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
-        }
-
-        [Fact]
-        public void GenericDatalist_CallsGetColumnHeader()
-        {
-            IEnumerable<PropertyInfo> properties = datalist.BaseAttributedProperties;
-            Int32 callCount = datalist.BaseAttributedProperties.Count();
-
-            datalistMock.Protected().Verify("GetColumnHeader", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
-        }
-
-        [Fact]
-        public void GenericDatalist_CallsGetColumnCssClass()
-        {
-            IEnumerable<PropertyInfo> properties = datalist.BaseAttributedProperties;
-            Int32 callCount = datalist.BaseAttributedProperties.Count();
-
-            datalistMock.Protected().Verify("GetColumnCssClass", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
-        }
-
-        [Fact]
-        public void GenericDatalist_AddsColumns()
+        public void AbstractDatalist_AddsColumns()
         {
             DatalistColumns columns = new DatalistColumns();
-            foreach (PropertyInfo property in datalist.BaseAttributedProperties)
-                columns.Add(new DatalistColumn(datalist.BaseGetColumnKey(property), datalist.BaseGetColumnHeader(property)));
-
-            IEnumerator<DatalistColumn> expected = columns.GetEnumerator();
-            IEnumerator<DatalistColumn> actual = datalist.Columns.GetEnumerator();
-
-            while (expected.MoveNext() | actual.MoveNext())
-            {
-                Assert.Equal(expected.Current.Key, actual.Current.Key);
-                Assert.Equal(expected.Current.Header, actual.Current.Header);
-                Assert.Equal(expected.Current.CssClass, actual.Current.CssClass);
-            }
-        }
-
-        #endregion
-
-        #region GenericDatalist(UrlHelper url)
-
-        [Fact]
-        public void GenericDatalist_Url_CallsGetColumnKey()
-        {
-            datalistMock = new Mock<TestDatalistProxy>(new UrlHelper(HttpContext.Current.Request.RequestContext));
-            datalistMock.CallBase = true;
-            datalist = datalistMock.Object;
-
-            IEnumerable<PropertyInfo> properties = datalist.BaseAttributedProperties;
-            Int32 callCount = datalist.BaseAttributedProperties.Count();
-
-            datalistMock.Protected().Verify("GetColumnKey", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
-        }
-
-        [Fact]
-        public void GenericDatalist_Url_CallsGetColumnHeader()
-        {
-            datalistMock = new Mock<TestDatalistProxy>(new UrlHelper(HttpContext.Current.Request.RequestContext));
-            datalistMock.CallBase = true;
-            datalist = datalistMock.Object;
-
-            IEnumerable<PropertyInfo> properties = datalist.BaseAttributedProperties;
-            Int32 callCount = datalist.BaseAttributedProperties.Count();
-
-            datalistMock.Protected().Verify("GetColumnHeader", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
-        }
-
-        [Fact]
-        public void GenericDatalist_Url_CallsGetColumnCssClass()
-        {
-            datalistMock = new Mock<TestDatalistProxy>(new UrlHelper(HttpContext.Current.Request.RequestContext));
-            datalistMock.CallBase = true;
-            datalist = datalistMock.Object;
-
-            IEnumerable<PropertyInfo> properties = datalist.BaseAttributedProperties;
-            Int32 callCount = datalist.BaseAttributedProperties.Count();
-
-            datalistMock.Protected().Verify("GetColumnCssClass", Times.Exactly(callCount), ItExpr.Is<PropertyInfo>(match => properties.Contains(match)));
-        }
-
-        [Fact]
-        public void GenericDatalist_Url_AddsColumns()
-        {
-            datalistMock = new Mock<TestDatalistProxy>(new UrlHelper(HttpContext.Current.Request.RequestContext));
-            datalistMock.CallBase = true;
-            datalist = datalistMock.Object;
-
-            DatalistColumns columns = new DatalistColumns();
-            foreach (PropertyInfo property in datalist.BaseAttributedProperties)
-                columns.Add(new DatalistColumn(datalist.BaseGetColumnKey(property), datalist.BaseGetColumnHeader(property)));
+            columns.Add(new DatalistColumn("Value", null));
+            columns.Add(new DatalistColumn("CreationDate", "Date"));
+            columns.Add(new DatalistColumn("Count", "Count's value"));
 
             IEnumerator<DatalistColumn> expected = columns.GetEnumerator();
             IEnumerator<DatalistColumn> actual = datalist.Columns.GetEnumerator();
@@ -169,7 +85,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void GetColumnKey_NullProperty_Throws()
         {
-            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => datalist.BaseGetColumnKey(null));
+            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => datalist.GetColumnKey(null));
 
             Assert.Equal("property", actual.ParamName);
         }
@@ -177,9 +93,9 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void GetColumnKey_ReturnsPropertyName()
         {
-            PropertyInfo property = typeof(TestModel).GetProperty("Sum");
+            PropertyInfo property = typeof(TestModel).GetProperty("Count");
 
-            String actual = datalist.BaseGetColumnKey(property);
+            String actual = datalist.GetColumnKey(property);
             String expected = property.Name;
 
             Assert.Equal(expected, actual);
@@ -192,28 +108,28 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void GetColumnHeader_NullProperty_Throws()
         {
-            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => datalist.BaseGetColumnHeader(null));
+            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => datalist.GetColumnHeader(null));
 
             Assert.Equal("property", actual.ParamName);
         }
 
         [Fact]
-        public void GetColumnHeader_NoDisplayName_ReturnsEmpty()
+        public void GetColumnHeader_NoDisplayName_ReturnsNull()
         {
-            PropertyInfo property = typeof(TestModel).GetProperty("Sum");
+            PropertyInfo property = typeof(TestModel).GetProperty("Value");
 
-            String actual = datalist.BaseGetColumnHeader(property);
+            String actual = datalist.GetColumnHeader(property);
 
-            Assert.Empty(actual);
+            Assert.Null(actual);
         }
 
         [Fact]
         public void GetColumnHeader_ReturnsDisplayName()
         {
-            PropertyInfo property = typeof(TestModel).GetProperty("Number");
+            PropertyInfo property = typeof(TestModel).GetProperty("Count");
 
             String expected = property.GetCustomAttribute<DisplayAttribute>().Name;
-            String actual = datalist.BaseGetColumnHeader(property);
+            String actual = datalist.GetColumnHeader(property);
 
             Assert.Equal(expected, actual);
         }
@@ -223,9 +139,9 @@ namespace Datalist.Tests.Unit
         #region GetColumnCssClass(PropertyInfo property)
 
         [Fact]
-        public void GetColumnCssClass_ReturnsEmptyString()
+        public void GetColumnCssClass_ReturnsNull()
         {
-            Assert.Empty(datalist.BaseGetColumnCssClass(null));
+            Assert.Null(datalist.GetColumnCssClass(null));
         }
 
         #endregion
@@ -233,99 +149,98 @@ namespace Datalist.Tests.Unit
         #region GetData()
 
         [Fact]
-        public void GetData_CallsGetModels()
+        public void GetData_FiltersById()
         {
-            datalist.GetData();
+            datalist.CurrentFilter.Id = "9I";
+            datalist.CurrentFilter.SearchTerm = "Term";
+            datalist.CurrentFilter.AdditionalFilters.Add("Value", "5V");
 
-            datalistMock.Protected().Verify("GetModels", Times.Once());
+            DatalistData actual = datalist.GetData();
+
+            Assert.Equal(new DateTime(2014, 12, 19).ToShortDateString(), actual.Rows[0]["CreationDate"]);
+            Assert.Equal("9V", actual.Rows[0][AbstractDatalist.AcKey]);
+            Assert.Equal("9I", actual.Rows[0][AbstractDatalist.IdKey]);
+            Assert.Equal("9V", actual.Rows[0]["Value"]);
+            Assert.Equal("19", actual.Rows[0]["Count"]);
+
+            Assert.Equal(datalist.Columns, actual.Columns);
+            Assert.Equal(1, actual.FilteredRecords);
+            Assert.Single(actual.Rows);
         }
 
         [Fact]
-        public void GetData_CallsFilterById()
+        public void GetData_FiltersByAdditionalFilters()
         {
-            datalist.CurrentFilter.Id = "1";
+            datalist.CurrentFilter.SearchTerm = "6V";
+            datalist.CurrentFilter.AdditionalFilters.Add("Count", 16);
 
             datalist.GetData();
 
-            datalistMock.Protected().Verify("FilterById", Times.Once(), datalist.BaseGetModels());
+            DatalistData actual = datalist.GetData();
+
+            Assert.Equal(new DateTime(2014, 12, 16).ToShortDateString(), actual.Rows[0]["CreationDate"]);
+            Assert.Equal("6V", actual.Rows[0][AbstractDatalist.AcKey]);
+            Assert.Equal("6I", actual.Rows[0][AbstractDatalist.IdKey]);
+            Assert.Equal("6V", actual.Rows[0]["Value"]);
+            Assert.Equal("16", actual.Rows[0]["Count"]);
+
+            Assert.Equal(datalist.Columns, actual.Columns);
+            Assert.Equal(1, actual.FilteredRecords);
+            Assert.Single(actual.Rows);
         }
 
         [Fact]
-        public void GetData_DoesNotCallFilterById()
+        public void GetData_FiltersBySearchTerm()
         {
-            datalist.CurrentFilter.Id = null;
+            datalist.CurrentFilter.SearchTerm = "5V";
 
             datalist.GetData();
 
-            datalistMock.Protected().Verify("FilterById", Times.Never(), datalist.BaseGetModels());
+            DatalistData actual = datalist.GetData();
+
+            Assert.Equal(new DateTime(2014, 12, 25).ToShortDateString(), actual.Rows[0]["CreationDate"]);
+            Assert.Equal("15V", actual.Rows[0][AbstractDatalist.AcKey]);
+            Assert.Equal("15I", actual.Rows[0][AbstractDatalist.IdKey]);
+            Assert.Equal("15V", actual.Rows[0]["Value"]);
+            Assert.Equal("25", actual.Rows[0]["Count"]);
+
+            Assert.Equal(new DateTime(2014, 12, 15).ToShortDateString(), actual.Rows[1]["CreationDate"]);
+            Assert.Equal("5V", actual.Rows[1][AbstractDatalist.AcKey]);
+            Assert.Equal("5I", actual.Rows[1][AbstractDatalist.IdKey]);
+            Assert.Equal("5V", actual.Rows[1]["Value"]);
+            Assert.Equal("15", actual.Rows[1]["Count"]);
+
+            Assert.Equal(datalist.Columns, actual.Columns);
+            Assert.Equal(2, actual.FilteredRecords);
+            Assert.Equal(2, actual.Rows.Count);
         }
 
         [Fact]
-        public void GetData_CallsFilterByAdditionalFilters()
+        public void GetData_Sorts()
         {
-            datalist.CurrentFilter.AdditionalFilters.Add("Id", "1");
+            datalist.CurrentFilter.SortOrder = DatalistSortOrder.Asc;
+            datalist.CurrentFilter.SortColumn = "Count";
+            datalist.CurrentFilter.SearchTerm = "5V";
 
             datalist.GetData();
 
-            datalistMock.Protected().Verify("FilterByAdditionalFilters", Times.Once(), datalist.BaseGetModels());
-        }
+            DatalistData actual = datalist.GetData();
 
-        [Fact]
-        public void GetData_DoesNotCallFilterByAdditionalFiltersBecauseEmpty()
-        {
-            datalist.CurrentFilter.AdditionalFilters.Clear();
+            Assert.Equal(new DateTime(2014, 12, 15).ToShortDateString(), actual.Rows[0]["CreationDate"]);
+            Assert.Equal("5V", actual.Rows[0][AbstractDatalist.AcKey]);
+            Assert.Equal("5I", actual.Rows[0][AbstractDatalist.IdKey]);
+            Assert.Equal("5V", actual.Rows[0]["Value"]);
+            Assert.Equal("15", actual.Rows[0]["Count"]);
 
-            datalist.GetData();
+            Assert.Equal(new DateTime(2014, 12, 25).ToShortDateString(), actual.Rows[1]["CreationDate"]);
+            Assert.Equal("15V", actual.Rows[1][AbstractDatalist.AcKey]);
+            Assert.Equal("15I", actual.Rows[1][AbstractDatalist.IdKey]);
+            Assert.Equal("15V", actual.Rows[1]["Value"]);
+            Assert.Equal("25", actual.Rows[1]["Count"]);
 
-            datalistMock.Protected().Verify("FilterByAdditionalFilters", Times.Never(), datalist.BaseGetModels());
-        }
-
-        [Fact]
-        public void GetData_DoesNotCallFilterByAdditionalFiltersBecauseFiltersById()
-        {
-            datalist.CurrentFilter.Id = "1";
-
-            datalist.GetData();
-            datalistMock.Protected().Verify("FilterByAdditionalFilters", Times.Never(), datalist.BaseGetModels());
-        }
-
-        [Fact]
-        public void GetData_CallsFilterBySearchTerm()
-        {
-            datalist.CurrentFilter.Id = null;
-
-            datalist.GetData();
-
-            datalistMock.Protected().Verify("FilterBySearchTerm", Times.Once(), datalist.BaseGetModels());
-        }
-
-        [Fact]
-        public void GetData_CallsFilterBySearchTermAfterAdditionalFiltered()
-        {
-            datalist.CurrentFilter.AdditionalFilters.Add("Id", "1");
-            datalist.CurrentFilter.Id = null;
-
-            datalist.GetData();
-
-            datalistMock.Protected().Verify("FilterBySearchTerm", Times.Once(), datalist.BaseGetModels().Where(model => model.Id == "1"));
-        }
-
-        [Fact]
-        public void GetData_DoesNotCallFilterBySearchTermBecauseFiltersById()
-        {
-            datalist.CurrentFilter.Id = "1";
-
-            datalist.GetData();
-
-            datalistMock.Protected().Verify("FilterBySearchTerm", Times.Never(), datalist.BaseGetModels());
-        }
-
-        [Fact]
-        public void GetData_CallsFormDatalistData()
-        {
-            datalist.GetData();
-
-            datalistMock.Protected().Verify("FormDatalistData", Times.Once(), datalist.BaseGetModels());
+            Assert.Equal(datalist.Columns, actual.Columns);
+            Assert.Equal(2, actual.FilteredRecords);
+            Assert.Equal(2, actual.Rows.Count);
         }
 
         #endregion
@@ -335,9 +250,9 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FilterById_NoIdProperty_Throws()
         {
-            GenericDatalistProxy<NoIdModel> datalist = new GenericDatalistProxy<NoIdModel>();
+            TestDatalist<NoIdModel> datalist = new TestDatalist<NoIdModel>();
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseFilterById(datalist.BaseGetModels()));
+            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.FilterById(null));
 
             String expected = $"'{typeof(NoIdModel).Name}' type does not have property named 'Id'.";
             String actual = exception.Message;
@@ -348,10 +263,10 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FilterById_String()
         {
-            datalist.CurrentFilter.Id = "9";
+            datalist.CurrentFilter.Id = "9I";
 
-            IEnumerable<TestModel> expected = datalist.BaseGetModels().Where(model => model.Id == datalist.CurrentFilter.Id);
-            IEnumerable<TestModel> actual = datalist.BaseFilterById(datalist.BaseGetModels());
+            IQueryable<TestModel> expected = datalist.GetModels().Where(model => model.Id == datalist.CurrentFilter.Id);
+            IQueryable<TestModel> actual = datalist.FilterById(datalist.GetModels());
 
             Assert.Equal(expected, actual);
         }
@@ -359,43 +274,24 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FilterById_Number()
         {
-            List<NumericIdModel> models = new List<NumericIdModel>();
-            for (Int32 i = 0; i < 100; i++) models.Add(new NumericIdModel { Id = i });
-            GenericDatalistProxy<NumericIdModel> datalist = new GenericDatalistProxy<NumericIdModel>();
+            TestDatalist<NumericModel> datalist = new TestDatalist<NumericModel>();
+            for (Int32 i = 0; i < 20; i++)
+                datalist.Models.Add(new NumericModel { Id = i });
 
             datalist.CurrentFilter.Id = "9.0";
 
-            IEnumerable<NumericIdModel> actual = datalist.BaseFilterById(models.AsQueryable());
-            IEnumerable<NumericIdModel> expected = models.Where(model => model.Id == 9);
+            IQueryable<NumericModel> expected = datalist.GetModels().Where(model => model.Id == 9);
+            IQueryable<NumericModel> actual = datalist.FilterById(datalist.GetModels());
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void FilterById_EnumId_Throws()
+        public void FilterById_NotSupportedIdType_Throws()
         {
-            GenericDatalistProxy<EnumModel> datalist = new GenericDatalistProxy<EnumModel>();
+            DatalistException exception = Assert.Throws<DatalistException>(() => new TestDatalist<GuidModel>().FilterById(null));
 
-            datalist.CurrentFilter.Id = IdEnum.Id.ToString();
-
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseFilterById(datalist.BaseGetModels()));
-
-            String expected = $"'{typeof(EnumModel).Name}.Id' can not be filtered by using 'Id' value, because it's not a string nor a number.";
-            String actual = exception.Message;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void FilterById_NotNumericId_Throws()
-        {
-            GenericDatalistProxy<NonNumericIdModel> datalist = new GenericDatalistProxy<NonNumericIdModel>();
-
-            datalist.CurrentFilter.Id = "9";
-
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseFilterById(datalist.BaseGetModels()));
-
-            String expected = $"'{typeof(NonNumericIdModel).Name}.Id' can not be filtered by using '9' value, because it's not a string nor a number.";
+            String expected = $"'{typeof(GuidModel).Name}.Id' can not be filtered by using '' value, because it's not a string nor a number.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -410,8 +306,8 @@ namespace Datalist.Tests.Unit
         {
             datalist.CurrentFilter.AdditionalFilters.Add("Id", null);
 
-            IQueryable<TestModel> actual = datalist.BaseFilterByAdditionalFilters(datalist.BaseGetModels());
-            IQueryable<TestModel> expected = datalist.BaseGetModels();
+            IQueryable<TestModel> actual = datalist.FilterByAdditionalFilters(datalist.GetModels());
+            IQueryable<TestModel> expected = datalist.GetModels();
 
             Assert.Equal(expected, actual);
         }
@@ -419,12 +315,13 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FilterByAdditionalFilters_Filters()
         {
-            datalist.CurrentFilter.AdditionalFilters.Add("Id", "9");
-            datalist.CurrentFilter.AdditionalFilters.Add("Number", 9);
-            datalist.CurrentFilter.AdditionalFilters.Add("CreationDate", DateTime.Now.Date.AddDays(9));
+            datalist.CurrentFilter.AdditionalFilters.Add("Id", "9I");
+            datalist.CurrentFilter.AdditionalFilters.Add("Count", 9);
+            datalist.CurrentFilter.AdditionalFilters.Add("CreationDate", new DateTime(2014, 12, 15));
 
-            IEnumerable<TestModel> actual = datalist.BaseFilterByAdditionalFilters(datalist.BaseGetModels());
-            IEnumerable<TestModel> expected = datalist.BaseGetModels().ToArray().Where(model => model.Id == "9" && model.Number == 9 && model.CreationDate == DateTime.Now.Date.AddDays(9));
+            IQueryable<TestModel> actual = datalist.FilterByAdditionalFilters(datalist.GetModels());
+            IQueryable<TestModel> expected = datalist.GetModels().Where(model =>
+                model.Id == "9I" && model.Count == 9 && model.CreationDate == new DateTime(2014, 12, 15));
 
             Assert.Equal(expected, actual);
         }
@@ -438,8 +335,8 @@ namespace Datalist.Tests.Unit
         {
             datalist.CurrentFilter.SearchTerm = null;
 
-            IQueryable<TestModel> expected = datalist.BaseGetModels();
-            IQueryable<TestModel> actual = datalist.BaseFilterBySearchTerm(datalist.BaseGetModels());
+            IQueryable<TestModel> actual = datalist.FilterBySearchTerm(datalist.GetModels());
+            IQueryable<TestModel> expected = datalist.GetModels();
 
             Assert.Equal(expected, actual);
         }
@@ -448,25 +345,12 @@ namespace Datalist.Tests.Unit
         public void FilterBySearchTerm_NoProperty_Throws()
         {
             datalist.CurrentFilter.SearchTerm = "Test";
-            datalist.Columns.Add(new DatalistColumn("Test", ""));
+            datalist.Columns.Add(new DatalistColumn("Test", "Test"));
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseFilterBySearchTerm(datalist.BaseGetModels()));
+            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.FilterBySearchTerm(datalist.GetModels()));
 
             String expected = $"'{typeof(TestModel).Name}' type does not have property named 'Test'.";
             String actual = exception.Message;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void FilterBySearchTerm_FiltersWhiteSpace()
-        {
-            datalist.CurrentFilter.SearchTerm = " ";
-
-            IQueryable<TestModel> actual = datalist.BaseFilterBySearchTerm(datalist.BaseGetModels());
-            IQueryable<TestModel> expected = datalist.BaseGetModels().Where(model =>
-                (model.Id != null && model.Id.ToLower().Contains(datalist.CurrentFilter.SearchTerm)) ||
-                model.Id != null && model.Id.ToLower().Contains(datalist.CurrentFilter.SearchTerm));
 
             Assert.Equal(expected, actual);
         }
@@ -476,23 +360,21 @@ namespace Datalist.Tests.Unit
         {
             datalist.CurrentFilter.SearchTerm = "1";
 
-            IQueryable<TestModel> actual = datalist.BaseFilterBySearchTerm(datalist.BaseGetModels());
-            IQueryable<TestModel> expected = datalist.BaseGetModels().Where(model =>
-                (model.Id != null && model.Id.ToLower().Contains(datalist.CurrentFilter.SearchTerm)) ||
-                model.Id != null && model.Id.ToLower().Contains(datalist.CurrentFilter.SearchTerm));
+            IQueryable<TestModel> expected = datalist.GetModels().Where(model => model.Id.Contains("1"));
+            IQueryable<TestModel> actual = datalist.FilterBySearchTerm(datalist.GetModels());
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void FilterBySearchTerm_NotStringProperties_DoesNotFilter()
+        public void FilterBySearchTerm_DoesNotFilterNonStringProperties()
         {
             datalist.Columns.Clear();
             datalist.CurrentFilter.SearchTerm = "1";
-            datalist.Columns.Add(new DatalistColumn("Number", ""));
+            datalist.Columns.Add(new DatalistColumn("Count", ""));
 
-            IQueryable<TestModel> expected = datalist.BaseGetModels();
-            IQueryable<TestModel> actual = datalist.BaseFilterBySearchTerm(expected.AsQueryable());
+            IQueryable<TestModel> actual = datalist.FilterBySearchTerm(datalist.GetModels());
+            IQueryable<TestModel> expected = datalist.GetModels();
 
             Assert.Equal(expected, actual);
         }
@@ -504,10 +386,10 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void Sort_ByColumn()
         {
-            datalist.CurrentFilter.SortColumn = datalist.BaseAttributedProperties.First().Name;
+            datalist.CurrentFilter.SortColumn = "Count";
 
-            IQueryable<TestModel> expected = datalist.BaseGetModels().OrderBy(model => model.Number);
-            IQueryable<TestModel> actual = datalist.BaseSort(datalist.BaseGetModels());
+            IQueryable<TestModel> expected = datalist.GetModels().OrderBy(model => model.Count);
+            IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels());
 
             Assert.Equal(expected, actual);
         }
@@ -515,21 +397,21 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void Sort_ByDefaultSortColumn()
         {
+            datalist.DefaultSortColumn = "Count";
             datalist.CurrentFilter.SortColumn = null;
-            datalist.BaseDefaultSortColumn = datalist.BaseAttributedProperties.First().Name;
 
-            IQueryable<TestModel> expected = datalist.BaseGetModels().OrderBy(model => model.Number);
-            IQueryable<TestModel> actual = datalist.BaseSort(datalist.BaseGetModels());
+            IQueryable<TestModel> expected = datalist.GetModels().OrderBy(model => model.Count);
+            IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels());
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void Sort_NoProperty_Throws()
+        public void Sort_NoColumn_Throws()
         {
             datalist.CurrentFilter.SortColumn = "Test";
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseSort(datalist.BaseGetModels()));
+            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.Sort(datalist.GetModels()));
 
             String expected = "Datalist does not contain sort column named 'Test'.";
             String actual = exception.Message;
@@ -540,10 +422,10 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void Sort_NoDefaultProperty_Throws()
         {
-            datalist.BaseDefaultSortColumn = "Test";
+            datalist.DefaultSortColumn = "Test";
             datalist.CurrentFilter.SortColumn = null;
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseSort(datalist.BaseGetModels()));
+            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.Sort(datalist.GetModels()));
 
             String expected = "Datalist does not contain sort column named 'Test'.";
             String actual = exception.Message;
@@ -554,21 +436,23 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void Sort_ByFirstColumn()
         {
-            datalist.BaseDefaultSortColumn = null;
+            datalist.DefaultSortColumn = null;
             datalist.CurrentFilter.SortColumn = null;
 
-            IQueryable<TestModel> actual = datalist.BaseSort(datalist.BaseGetModels());
-            IQueryable<TestModel> expected = datalist.BaseGetModels().OrderBy(model => model.Number);
+            IQueryable<TestModel> expected = datalist.GetModels().OrderBy(model => model.Value);
+            IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels());
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void Sort_EmptyColumns_Throws()
+        public void Sort_NoColumns_Throws()
         {
             datalist.Columns.Clear();
+            datalist.DefaultSortColumn = null;
+            datalist.CurrentFilter.SortColumn = null;
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseSort(datalist.BaseGetModels()));
+            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.Sort(datalist.GetModels()));
 
             String expected = "Datalist should have at least one column.";
             String actual = exception.Message;
@@ -581,79 +465,63 @@ namespace Datalist.Tests.Unit
         #region FormDatalistData(IQueryable<T> models)
 
         [Fact]
-        public void FormDatalistData_SetsFilteredRecords()
+        public void FormDatalistData_FilteredRecords()
         {
-            Int32 actual = datalist.BaseFormDatalistData(datalist.BaseGetModels()).FilteredRecords;
-            Int32 expected = datalist.BaseGetModels().Count();
+            Int32 actual = datalist.FormDatalistData(datalist.GetModels()).FilteredRecords;
+            Int32 expected = datalist.GetModels().Count();
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void FormDatalistData_FormsColumns()
+        public void FormDatalistData_Columns()
         {
-            DatalistColumns actual = datalist.BaseFormDatalistData(datalist.BaseGetModels()).Columns;
+            DatalistColumns actual = datalist.FormDatalistData(datalist.GetModels()).Columns;
             DatalistColumns expected = datalist.Columns;
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void FormDatalistData_FormsRows()
+        public void FormDatalistData_Rows()
         {
-            Int32 expected = datalist.CurrentFilter.RecordsPerPage;
-            Int32 actual = datalist.BaseFormDatalistData(datalist.BaseGetModels()).Rows.Count;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void FormDatalistData_FormsRowsUsingModels()
-        {
-            datalist.CurrentFilter.Page = 3;
+            datalist.CurrentFilter.Page = 2;
             datalist.CurrentFilter.RecordsPerPage = 3;
-            datalist.BaseFormDatalistData(datalist.BaseGetModels());
 
-            List<TestModel> models = datalist.BaseGetModels().Skip(9).Take(3).ToList();
-            Int32 callCount = Math.Min(datalist.CurrentFilter.RecordsPerPage, datalist.BaseGetModels().Count());
+            IEnumerator<Dictionary<String, String>> actual = datalist.FormDatalistData(datalist.GetModels()).Rows.GetEnumerator();
+            IEnumerator<Dictionary<String, String>> expected = new List<Dictionary<String, String>>
+            {
+                new Dictionary<String, String>
+                {
+                    [AbstractDatalist.IdKey] = "6I",
+                    [AbstractDatalist.AcKey] = "6V",
+                    ["Value"] = "6V",
+                    ["CreationDate"] = new DateTime(2014, 12, 16).ToShortDateString(),
+                    ["Count"] = "16"
+                },
+                new Dictionary<String, String>
+                {
+                    [AbstractDatalist.IdKey] = "7I",
+                    [AbstractDatalist.AcKey] = "7V",
+                    ["Value"] = "7V",
+                    ["CreationDate"] = new DateTime(2014, 12, 17).ToShortDateString(),
+                    ["Count"] = "17"
+                },
+                new Dictionary<String, String>
+                {
+                    [AbstractDatalist.IdKey] = "8I",
+                    [AbstractDatalist.AcKey] = "8V",
+                    ["Value"] = "8V",
+                    ["CreationDate"] = new DateTime(2014, 12, 18).ToShortDateString(),
+                    ["Count"] = "18"
+                }
+            }.GetEnumerator();
 
-            datalistMock.Protected().Verify("AddId", Times.Exactly(callCount), ItExpr.IsAny<Dictionary<String, String>>(), ItExpr.Is<TestModel>(match => models.Contains(match)));
-        }
-
-        [Fact]
-        public void FormDatalistData_CallsAddId()
-        {
-            datalist.BaseFormDatalistData(datalist.BaseGetModels());
-            Int32 callCount = Math.Min(datalist.CurrentFilter.RecordsPerPage, datalist.BaseGetModels().Count());
-
-            datalistMock.Protected().Verify("AddId", Times.Exactly(callCount), ItExpr.IsAny<Dictionary<String, String>>(), ItExpr.IsAny<TestModel>());
-        }
-
-        [Fact]
-        public void FormDatalistData_CallsAddAutocomplete()
-        {
-            datalist.BaseFormDatalistData(datalist.BaseGetModels());
-            Int32 callCount = Math.Min(datalist.CurrentFilter.RecordsPerPage, datalist.BaseGetModels().Count());
-
-            datalistMock.Protected().Verify("AddAutocomplete", Times.Exactly(callCount), ItExpr.IsAny<Dictionary<String, String>>(), ItExpr.IsAny<TestModel>());
-        }
-
-        [Fact]
-        public void FormDatalistData_CallsAddColumns()
-        {
-            datalist.BaseFormDatalistData(datalist.BaseGetModels());
-            Int32 callCount = Math.Min(datalist.CurrentFilter.RecordsPerPage, datalist.BaseGetModels().Count());
-
-            datalistMock.Protected().Verify("AddColumns", Times.Exactly(callCount), ItExpr.IsAny<Dictionary<String, String>>(), ItExpr.IsAny<TestModel>());
-        }
-
-        [Fact]
-        public void FormDatalistData_CallsAddAdditionalData()
-        {
-            datalist.BaseFormDatalistData(datalist.BaseGetModels());
-            Int32 callCount = Math.Min(datalist.CurrentFilter.RecordsPerPage, datalist.BaseGetModels().Count());
-
-            datalistMock.Protected().Verify("AddAdditionalData", Times.Exactly(callCount), ItExpr.IsAny<Dictionary<String, String>>(), ItExpr.IsAny<TestModel>());
+            while (expected.MoveNext() | actual.MoveNext())
+            {
+                Assert.Equal(expected.Current.Values, actual.Current.Values);
+                Assert.Equal(expected.Current.Keys, actual.Current.Keys);
+            }
         }
 
         #endregion
@@ -663,9 +531,9 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AddId_NoProperty_Throws()
         {
-            GenericDatalistProxy<NoIdModel> datalist = new GenericDatalistProxy<NoIdModel>();
+            TestDatalist<NoIdModel> datalist = new TestDatalist<NoIdModel>();
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseAddId(row, new NoIdModel()));
+            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.AddId(row, new NoIdModel()));
 
             String expected = $"'{typeof(NoIdModel).Name}' type does not have property named 'Id'.";
             String actual = exception.Message;
@@ -674,29 +542,14 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void AddId_Key()
+        public void AddId_Values()
         {
-            datalist.BaseAddId(row, new TestModel());
+            datalist.AddId(row, new TestModel { Id = "Test" });
 
-            Assert.True(row.ContainsKey(AbstractDatalist.IdKey));
-        }
+            KeyValuePair<String, String> actual = row.Single();
 
-        [Fact]
-        public void AddId_Value()
-        {
-            TestModel model = new TestModel { Id = "Test" };
-
-            datalist.BaseAddId(row, model);
-
-            Assert.True(row.ContainsValue(model.Id));
-        }
-
-        [Fact]
-        public void AddId_Element()
-        {
-            datalist.BaseAddId(row, new TestModel());
-
-            Assert.Equal(1, row.Keys.Count);
+            Assert.Equal(AbstractDatalist.IdKey, actual.Key);
+            Assert.Equal("Test", actual.Value);
         }
 
         #endregion
@@ -704,11 +557,11 @@ namespace Datalist.Tests.Unit
         #region AddAutocomplete(Dictionary<String, String> row, T model)
 
         [Fact]
-        public void AddAutocomplete_EmptyColumns_Throws()
+        public void AddAutocomplete_NoColumns_Throws()
         {
             datalist.Columns.Clear();
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseAddAutocomplete(row, new TestModel()));
+            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.AddAutocomplete(row, new TestModel()));
 
             String expected = "Datalist should have at least one column.";
             String actual = exception.Message;
@@ -722,7 +575,7 @@ namespace Datalist.Tests.Unit
             datalist.Columns.Clear();
             datalist.Columns.Add(new DatalistColumn("Test", ""));
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseAddAutocomplete(row, new TestModel()));
+            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.AddAutocomplete(row, new TestModel()));
 
             String expected = $"'{typeof(TestModel).Name}' type does not have property named 'Test'.";
             String actual = exception.Message;
@@ -731,30 +584,14 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void AddAutocomplete_Key()
+        public void AddAutocomplete_Values()
         {
-            datalist.BaseAddAutocomplete(row, new TestModel());
+            datalist.AddAutocomplete(row, new TestModel { Value = "Test" });
 
-            Assert.Equal(AbstractDatalist.AcKey, row.First().Key);
-        }
+            KeyValuePair<String, String> actual = row.Single();
 
-        [Fact]
-        public void AddAutocomplete_Value()
-        {
-            TestModel model = new TestModel();
-            PropertyInfo firstProperty = model.GetType().GetProperty(datalist.Columns.First().Key);
-
-            datalist.BaseAddAutocomplete(row, model);
-
-            Assert.Equal(firstProperty.GetValue(model).ToString(), row.First().Value);
-        }
-
-        [Fact]
-        public void AddAutocomplete_Element()
-        {
-            datalist.BaseAddAutocomplete(row, new TestModel());
-
-            Assert.Equal(1, row.Keys.Count);
+            Assert.Equal(AbstractDatalist.AcKey, actual.Key);
+            Assert.Equal("Test", actual.Value);
         }
 
         #endregion
@@ -762,11 +599,11 @@ namespace Datalist.Tests.Unit
         #region AddColumns(Dictionary<String, String> row, T model)
 
         [Fact]
-        public void AddColumns_EmptyColumns_Throws()
+        public void AddColumns_NoColumns_Throws()
         {
             datalist.Columns.Clear();
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseAddColumns(null, new TestModel()));
+            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.AddColumns(null, new TestModel()));
 
             String expected = "Datalist should have at least one column.";
             String actual = exception.Message;
@@ -780,7 +617,7 @@ namespace Datalist.Tests.Unit
             datalist.Columns.Clear();
             datalist.Columns.Add(new DatalistColumn("Test", ""));
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseAddColumns(row, new TestModel()));
+            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.AddColumns(row, new TestModel()));
 
             String expected = $"'{typeof(TestModel).Name}' type does not have property named 'Test'.";
             String actual = exception.Message;
@@ -789,22 +626,12 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void AddColumns_Keys()
-        {
-            datalist.BaseAddColumns(row, new TestModel());
-
-            Assert.Equal(datalist.Columns.Keys, row.Keys);
-        }
-
-        [Fact]
         public void AddColumns_Values()
         {
-            datalist.BaseAddColumns(row, new TestModel());
+            datalist.AddColumns(row, new TestModel { Value = "Test", CreationDate = DateTime.Now.Date, Count = 4 });
 
-            String[] expected = { "0", "0001-01-01", "" };
-            String[] actual = row.Values.ToArray();
-
-            Assert.Equal(expected, row.Values);
+            Assert.Equal(new[] { "Test", DateTime.Now.Date.ToShortDateString(), "4" }, row.Values);
+            Assert.Equal(datalist.Columns.Keys, row.Keys);
         }
 
         #endregion
@@ -814,7 +641,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AddAdditionalData_DoesNothing()
         {
-            datalist.BaseAddAdditionalData(row, new TestModel());
+            datalist.AddAdditionalData(row, new TestModel());
 
             Assert.Empty(row.Keys);
         }

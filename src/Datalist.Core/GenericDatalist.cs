@@ -10,7 +10,7 @@ namespace Datalist
 {
     public abstract class GenericDatalist<T> : AbstractDatalist where T : class
     {
-        protected IEnumerable<PropertyInfo> AttributedProperties
+        public virtual IEnumerable<PropertyInfo> AttributedProperties
         {
             get
             {
@@ -31,23 +31,23 @@ namespace Datalist
             foreach (PropertyInfo property in AttributedProperties)
                 Columns.Add(GetColumnKey(property), GetColumnHeader(property), GetColumnCssClass(property));
         }
-        protected virtual String GetColumnKey(PropertyInfo property)
+        public virtual String GetColumnKey(PropertyInfo property)
         {
             if (property == null)
                 throw new ArgumentNullException(nameof(property));
 
             return property.Name;
         }
-        protected virtual String GetColumnHeader(PropertyInfo property)
+        public virtual String GetColumnHeader(PropertyInfo property)
         {
             if (property == null)
                 throw new ArgumentNullException(nameof(property));
 
-            return property.GetCustomAttribute<DisplayAttribute>(false)?.GetName() ?? "";
+            return property.GetCustomAttribute<DisplayAttribute>(false)?.GetName();
         }
-        protected virtual String GetColumnCssClass(PropertyInfo property)
+        public virtual String GetColumnCssClass(PropertyInfo property)
         {
-            return "";
+            return null;
         }
 
         public override DatalistData GetData()
@@ -58,7 +58,7 @@ namespace Datalist
 
             return FormDatalistData(models);
         }
-        protected abstract IQueryable<T> GetModels();
+        public abstract IQueryable<T> GetModels();
 
         private IQueryable<T> Filter(IQueryable<T> models)
         {
@@ -70,7 +70,7 @@ namespace Datalist
 
             return FilterBySearchTerm(models);
         }
-        protected virtual IQueryable<T> FilterById(IQueryable<T> models)
+        public virtual IQueryable<T> FilterById(IQueryable<T> models)
         {
             PropertyInfo idProperty = typeof(T).GetProperty("Id");
             if (idProperty == null)
@@ -79,24 +79,24 @@ namespace Datalist
             if (idProperty.PropertyType == typeof(String))
                 return models.Where("Id = @0", CurrentFilter.Id);
 
-            Decimal temp;
-            if (IsNumeric(idProperty.PropertyType) && Decimal.TryParse(CurrentFilter.Id, out temp))
-                return models.Where("Id = @0", temp);
+            Decimal id;
+            if (IsNumeric(idProperty.PropertyType) && Decimal.TryParse(CurrentFilter.Id, out id))
+                return models.Where("Id = @0", id);
 
             throw new DatalistException($"'{typeof(T).Name}.Id' can not be filtered by using '{CurrentFilter.Id}' value, because it's not a string nor a number.");
         }
-        protected virtual IQueryable<T> FilterByAdditionalFilters(IQueryable<T> models)
+        public virtual IQueryable<T> FilterByAdditionalFilters(IQueryable<T> models)
         {
             foreach (KeyValuePair<String, Object> filter in CurrentFilter.AdditionalFilters.Where(item => item.Value != null))
                 models = models.Where($@"({filter.Key} != null && {filter.Key} == @0)", filter.Value);
 
             return models;
         }
-        protected virtual IQueryable<T> FilterBySearchTerm(IQueryable<T> models)
+        public virtual IQueryable<T> FilterBySearchTerm(IQueryable<T> models)
         {
-            if (CurrentFilter.SearchTerm == null) return models;
+            if (CurrentFilter.SearchTerm == null)
+                return models;
 
-            String term = CurrentFilter.SearchTerm.ToLower();
             List<String> queries = new List<String>();
 
             foreach (String property in Columns.Keys)
@@ -105,9 +105,10 @@ namespace Datalist
 
             if (queries.Count == 0) return models;
 
-            return models.Where(String.Join(" || ", queries), term);
+            return models.Where(String.Join(" || ", queries), CurrentFilter.SearchTerm.ToLower());
         }
-        protected virtual IQueryable<T> Sort(IQueryable<T> models)
+
+        public virtual IQueryable<T> Sort(IQueryable<T> models)
         {
             String sortColumn = CurrentFilter.SortColumn ?? DefaultSortColumn;
             if (sortColumn != null)
@@ -117,12 +118,12 @@ namespace Datalist
                     throw new DatalistException($"Datalist does not contain sort column named '{sortColumn}'.");
 
             if (Columns.Any())
-                return models.OrderBy(Columns.First().Key + " " + CurrentFilter.SortOrder);
+                return models.OrderBy(Columns.Keys.First() + " " + CurrentFilter.SortOrder);
 
             throw new DatalistException("Datalist should have at least one column.");
         }
 
-        protected virtual DatalistData FormDatalistData(IQueryable<T> models)
+        public virtual DatalistData FormDatalistData(IQueryable<T> models)
         {
             DatalistData data = new DatalistData();
             data.FilteredRecords = models.Count();
@@ -145,18 +146,18 @@ namespace Datalist
 
             return data;
         }
-        protected virtual void AddId(Dictionary<String, String> row, T model)
+        public virtual void AddId(Dictionary<String, String> row, T model)
         {
             row.Add(IdKey, GetValue(model, "Id"));
         }
-        protected virtual void AddAutocomplete(Dictionary<String, String> row, T model)
+        public virtual void AddAutocomplete(Dictionary<String, String> row, T model)
         {
             if (!Columns.Any())
                 throw new DatalistException("Datalist should have at least one column.");
 
             row.Add(AcKey, GetValue(model, Columns.Keys.First()));
         }
-        protected virtual void AddColumns(Dictionary<String, String> row, T model)
+        public virtual void AddColumns(Dictionary<String, String> row, T model)
         {
             if (!Columns.Any())
                 throw new DatalistException("Datalist should have at least one column.");
@@ -164,7 +165,7 @@ namespace Datalist
             foreach (String column in Columns.Keys)
                 row.Add(column, GetValue(model, column));
         }
-        protected virtual void AddAdditionalData(Dictionary<String, String> row, T model)
+        public virtual void AddAdditionalData(Dictionary<String, String> row, T model)
         {
         }
 
@@ -192,7 +193,6 @@ namespace Datalist
         private Boolean IsNumeric(Type type)
         {
             type = Nullable.GetUnderlyingType(type) ?? type;
-            if (type.IsEnum) return false;
 
             switch (Type.GetTypeCode(type))
             {

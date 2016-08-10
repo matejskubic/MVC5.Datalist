@@ -1,5 +1,4 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
 namespace Datalist.Tests.Unit
 {
@@ -10,10 +9,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void DatalistException_SetsMessage()
         {
-            String actual = new DatalistException("Test").Message;
-            String expected = "Test";
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("Test", new DatalistException("Test").Message);
         }
 
         #endregion

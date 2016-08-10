@@ -1,35 +1,15 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
 namespace Datalist.Tests.Unit
 {
     public class DatalistColumnAttributeTests
     {
-        #region DatalistColumnAttribute()
-
-        [Fact]
-        public void DatalistColumnAttribute_NullPosition()
-        {
-            Assert.Null(new DatalistColumnAttribute().Position);
-        }
-
-        [Fact]
-        public void DatalistColumnAttribute_NullFormat()
-        {
-            Assert.Null(new DatalistColumnAttribute().Format);
-        }
-
-        #endregion
-
         #region DatalistColumnAttribute(Int32 position)
 
         [Fact]
-        public void DatalistColumnAttribute_SetsPosition()
+        public void DatalistColumnAttribute_Position()
         {
-            Int32? actual = new DatalistColumnAttribute(-5).Position;
-            Int32? expected = -5;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(-5, new DatalistColumnAttribute(-5).Position);
         }
 
         #endregion
