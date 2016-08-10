@@ -64,10 +64,10 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void AbstractDatalist_SetsDatalistUrl()
+        public void AbstractDatalist_SetsUrl()
         {
             String expected = $"/{AbstractDatalist.Prefix}/{datalist.GetType().Name.Replace(AbstractDatalist.Prefix, "")}";
-            String actual = datalist.DatalistUrl;
+            String actual = datalist.Url;
 
             Assert.Equal(expected, actual);
         }

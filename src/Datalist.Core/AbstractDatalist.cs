@@ -11,8 +11,8 @@ namespace Datalist
         public const String IdKey = "DatalistIdKey";
         public const String AcKey = "DatalistAcKey";
 
+        public String Url { get; protected set; }
         public String DialogTitle { get; protected set; }
-        public String DatalistUrl { get; protected set; }
 
         public DatalistFilter CurrentFilter { get; set; }
         public DatalistColumns Columns { get; protected set; }
@@ -27,7 +27,7 @@ namespace Datalist
         }
         protected AbstractDatalist(UrlHelper url)
         {
-            DatalistUrl = url.Action(GetType().Name.Replace(Prefix, ""), Prefix, new { area = "" });
+            Url = url.Action(GetType().Name.Replace(Prefix, ""), Prefix, new { area = "" });
             AdditionalFilters = new List<String>();
             CurrentFilter = new DatalistFilter();
             Columns = new DatalistColumns();

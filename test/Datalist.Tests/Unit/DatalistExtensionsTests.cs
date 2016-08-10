@@ -798,7 +798,7 @@ namespace Datalist.Tests.Unit
         }
         private void AddsUrlAttribute(Object actual)
         {
-            String pattern = $@"<input(.*) data-datalist-url=""{datalist.DatalistUrl}""(.*) />";
+            String pattern = $@"<input(.*) data-datalist-url=""{datalist.Url}""(.*) />";
 
             Assert.True(Regex.IsMatch(actual.ToString(), pattern));
         }

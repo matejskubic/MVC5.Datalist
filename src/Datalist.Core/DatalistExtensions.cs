@@ -78,7 +78,7 @@ namespace Datalist
             attributes.Add("data-datalist-sort-column", model.DefaultSortColumn);
             attributes.Add("data-datalist-sort-order", model.DefaultSortOrder);
             attributes.Add("data-datalist-dialog-title", model.DialogTitle);
-            attributes.Add("data-datalist-url", model.DatalistUrl);
+            attributes.Add("data-datalist-url", model.Url);
             attributes.Add("data-datalist-term", "");
             attributes.Add("data-datalist-page", 0);
 
