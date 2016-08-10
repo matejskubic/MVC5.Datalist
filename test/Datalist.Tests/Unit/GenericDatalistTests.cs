@@ -185,31 +185,6 @@ namespace Datalist.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void GetColumnKey_NoRelation_Throws()
-        {
-            PropertyInfo property = typeof(NoRelationModel).GetProperty("NoRelation");
-
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseGetColumnKey(property));
-
-            String expected = $"'{property.DeclaringType.Name}.{property.Name}' does not have property named 'None'.";
-            String actual = exception.Message;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void GetColumnKey_ReturnsRelationKey()
-        {
-            PropertyInfo property = typeof(TestModel).GetProperty("FirstRelationModel");
-            String relation = property.GetCustomAttribute<DatalistColumnAttribute>(false).Relation;
-
-            String expected = $"{property.Name}.{relation}";
-            String actual = datalist.BaseGetColumnKey(property);
-
-            Assert.Equal(expected, actual);
-        }
-
         #endregion
 
         #region GetColumnHeader(PropertyInfo property)
@@ -238,40 +213,6 @@ namespace Datalist.Tests.Unit
             PropertyInfo property = typeof(TestModel).GetProperty("Number");
 
             String expected = property.GetCustomAttribute<DisplayAttribute>().Name;
-            String actual = datalist.BaseGetColumnHeader(property);
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void GetColumnHeader_NoRelation_Throws()
-        {
-            PropertyInfo property = typeof(NoRelationModel).GetProperty("NoRelation");
-
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseGetColumnHeader(property));
-
-            String expected = $"'{property.DeclaringType.Name}.{property.Name}' does not have property named 'None'.";
-            String actual = exception.Message;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void GetColumnHeader_NoRelationDisplayName_ReturnsEmpty()
-        {
-            PropertyInfo property = typeof(TestModel).GetProperty("SecondRelationModel");
-
-            String actual = datalist.BaseGetColumnHeader(property);
-
-            Assert.Empty(actual);
-        }
-
-        [Fact]
-        public void GetColumnHeader_ReturnsRelationDisplayName()
-        {
-            PropertyInfo property = typeof(TestModel).GetProperty("FirstRelationModel");
-
-            String expected = property.PropertyType.GetProperty("Value").GetCustomAttribute<DisplayAttribute>().Name;
             String actual = datalist.BaseGetColumnHeader(property);
 
             Assert.Equal(expected, actual);
@@ -525,8 +466,7 @@ namespace Datalist.Tests.Unit
             IQueryable<TestModel> actual = datalist.BaseFilterBySearchTerm(datalist.BaseGetModels());
             IQueryable<TestModel> expected = datalist.BaseGetModels().Where(model =>
                 (model.Id != null && model.Id.ToLower().Contains(datalist.CurrentFilter.SearchTerm)) ||
-                (model.FirstRelationModel != null && model.FirstRelationModel.Value != null && model.FirstRelationModel.Value.ToLower().Contains(datalist.CurrentFilter.SearchTerm)) ||
-                (model.SecondRelationModel != null && model.SecondRelationModel.Value != null && model.SecondRelationModel.Value.ToLower().Contains(datalist.CurrentFilter.SearchTerm)));
+                model.Id != null && model.Id.ToLower().Contains(datalist.CurrentFilter.SearchTerm));
 
             Assert.Equal(expected, actual);
         }
@@ -539,8 +479,7 @@ namespace Datalist.Tests.Unit
             IQueryable<TestModel> actual = datalist.BaseFilterBySearchTerm(datalist.BaseGetModels());
             IQueryable<TestModel> expected = datalist.BaseGetModels().Where(model =>
                 (model.Id != null && model.Id.ToLower().Contains(datalist.CurrentFilter.SearchTerm)) ||
-                (model.FirstRelationModel != null && model.FirstRelationModel.Value != null && model.FirstRelationModel.Value.ToLower().Contains(datalist.CurrentFilter.SearchTerm)) ||
-                (model.SecondRelationModel != null && model.SecondRelationModel.Value != null && model.SecondRelationModel.Value.ToLower().Contains(datalist.CurrentFilter.SearchTerm)));
+                model.Id != null && model.Id.ToLower().Contains(datalist.CurrentFilter.SearchTerm));
 
             Assert.Equal(expected, actual);
         }
@@ -811,19 +750,6 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void AddAutocomplete_RelationValue()
-        {
-            datalist.Columns.Clear();
-            datalist.Columns.Add(new DatalistColumn("FirstRelationModel.Value", ""));
-            TestModel model = new TestModel { FirstRelationModel = new TestRelationModel { Value = "Test" } };
-            PropertyInfo firstProperty = typeof(TestRelationModel).GetProperty("Value");
-
-            datalist.BaseAddAutocomplete(row, model);
-
-            Assert.Equal(firstProperty.GetValue(model.FirstRelationModel).ToString(), row.First().Value);
-        }
-
-        [Fact]
         public void AddAutocomplete_Element()
         {
             datalist.BaseAddAutocomplete(row, new TestModel());
@@ -873,12 +799,10 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AddColumns_Values()
         {
-            List<String> expected = new List<String>();
-            TestModel model = new TestModel { FirstRelationModel = new TestRelationModel { Value = "Test" } };
-            foreach (DatalistColumn column in datalist.Columns)
-                expected.Add(GetValue(model, column.Key));
+            datalist.BaseAddColumns(row, new TestModel());
 
-            datalist.BaseAddColumns(row, model);
+            String[] expected = { "0", "0001-01-01", "" };
+            String[] actual = row.Values.ToArray();
 
             Assert.Equal(expected, row.Values);
         }
@@ -893,29 +817,6 @@ namespace Datalist.Tests.Unit
             datalist.BaseAddAdditionalData(row, new TestModel());
 
             Assert.Empty(row.Keys);
-        }
-
-        #endregion
-
-        #region Testing helpers
-
-        private String GetValue(Object model, String fullPropertyName)
-        {
-            if (model == null) return "";
-
-            Type type = model.GetType();
-            String[] properties = fullPropertyName.Split('.');
-            PropertyInfo property = type.GetProperty(properties[0]);
-
-            if (properties.Length > 1)
-                return GetValue(property.GetValue(model), String.Join(".", properties.Skip(1)));
-
-            Object value = property.GetValue(model) ?? "";
-            DatalistColumnAttribute datalistColumn = property.GetCustomAttribute<DatalistColumnAttribute>(false);
-            if (datalistColumn?.Format != null)
-                value = String.Format(datalistColumn.Format, value);
-
-            return value.ToString();
         }
 
         #endregion

@@ -14,12 +14,6 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void DatalistColumnAttribute_NullRelation()
-        {
-            Assert.Null(new DatalistColumnAttribute().Relation);
-        }
-
-        [Fact]
         public void DatalistColumnAttribute_NullFormat()
         {
             Assert.Null(new DatalistColumnAttribute().Format);

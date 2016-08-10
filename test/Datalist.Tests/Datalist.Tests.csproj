@@ -90,7 +90,6 @@
     <Compile Include="Objects\Models\EnumModel.cs" />
     <Compile Include="Objects\Models\NoIdModel.cs" />
     <Compile Include="Objects\Proxies\TestDatalistProxy.cs" />
-    <Compile Include="Objects\Models\NoRelationModel.cs" />
     <Compile Include="Objects\Models\TestModel.cs" />
     <Compile Include="Objects\Models\TestRelationModel.cs" />
     <Compile Include="Objects\Proxies\GenericDatalistProxy.cs" />
