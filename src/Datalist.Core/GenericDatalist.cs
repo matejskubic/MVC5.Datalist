@@ -64,7 +64,7 @@ namespace Datalist
             if (relationProperty != null)
                 return relationProperty;
 
-            throw new DatalistException($"{property.DeclaringType.Name}.{property.Name} does not have property named '{relation}'.");
+            throw new DatalistException($"'{property.DeclaringType.Name}.{property.Name}' does not have property named '{relation}'.");
         }
 
         public override DatalistData GetData()
@@ -91,7 +91,7 @@ namespace Datalist
         {
             PropertyInfo idProperty = typeof(T).GetProperty("Id");
             if (idProperty == null)
-                throw new DatalistException($"Type '{typeof(T).Name}' does not have property named 'Id'.");
+                throw new DatalistException($"'{typeof(T).Name}' type does not have property named 'Id'.");
 
             if (idProperty.PropertyType == typeof(String))
                 return models.Where("Id = @0", CurrentFilter.Id);
@@ -100,7 +100,7 @@ namespace Datalist
             if (IsNumeric(idProperty.PropertyType) && Decimal.TryParse(CurrentFilter.Id, out temp))
                 return models.Where("Id = @0", temp);
 
-            throw new DatalistException($"{typeof(T).Name}.Id can not be filtered by using '{CurrentFilter.Id}' value, because it's not a string nor a number.");
+            throw new DatalistException($"'{typeof(T).Name}.Id' can not be filtered by using '{CurrentFilter.Id}' value, because it's not a string nor a number.");
         }
         protected virtual IQueryable<T> FilterByAdditionalFilters(IQueryable<T> models)
         {
@@ -235,7 +235,7 @@ namespace Datalist
             {
                 PropertyInfo property = type.GetProperty(propertyName);
                 if (property == null)
-                    throw new DatalistException($"Type {type.Name} does not have property named {propertyName}.");
+                    throw new DatalistException($"'{type.Name}' type does not have property named '{propertyName}'.");
 
                 type = property.PropertyType;
             }

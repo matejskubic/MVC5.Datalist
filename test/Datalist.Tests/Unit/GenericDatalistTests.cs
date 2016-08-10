@@ -192,7 +192,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseGetColumnKey(property));
 
-            String expected = $"{property.DeclaringType.Name}.{property.Name} does not have property named 'None'.";
+            String expected = $"'{property.DeclaringType.Name}.{property.Name}' does not have property named 'None'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -251,7 +251,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseGetColumnHeader(property));
 
-            String expected = $"{property.DeclaringType.Name}.{property.Name} does not have property named 'None'.";
+            String expected = $"'{property.DeclaringType.Name}.{property.Name}' does not have property named 'None'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -400,7 +400,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseFilterById(datalist.BaseGetModels()));
 
-            String expected = $"Type '{typeof(NoIdModel).Name}' does not have property named 'Id'.";
+            String expected = $"'{typeof(NoIdModel).Name}' type does not have property named 'Id'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -441,7 +441,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseFilterById(datalist.BaseGetModels()));
 
-            String expected = $"{typeof(EnumModel).Name}.Id can not be filtered by using 'Id' value, because it's not a string nor a number.";
+            String expected = $"'{typeof(EnumModel).Name}.Id' can not be filtered by using 'Id' value, because it's not a string nor a number.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -456,7 +456,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseFilterById(datalist.BaseGetModels()));
 
-            String expected = $"{typeof(NonNumericIdModel).Name}.Id can not be filtered by using '9' value, because it's not a string nor a number.";
+            String expected = $"'{typeof(NonNumericIdModel).Name}.Id' can not be filtered by using '9' value, because it's not a string nor a number.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -513,7 +513,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.BaseFilterBySearchTerm(datalist.BaseGetModels()));
 
-            String expected = $"Type {typeof(TestModel).Name} does not have property named Test.";
+            String expected = $"'{typeof(TestModel).Name}' type does not have property named 'Test'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
