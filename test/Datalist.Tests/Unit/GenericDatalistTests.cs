@@ -33,7 +33,7 @@ namespace Datalist.Tests.Unit
                     Id = i + "I",
                     Count = i + 10,
                     Value = i + "V",
-                    CreationDate = new DateTime(2014, 12, 10).AddDays(i)
+                    Date = new DateTime(2014, 12, 10).AddDays(i)
                 });
         }
         public void Dispose()
@@ -64,8 +64,8 @@ namespace Datalist.Tests.Unit
         {
             DatalistColumns columns = new DatalistColumns();
             columns.Add(new DatalistColumn("Value", null));
-            columns.Add(new DatalistColumn("CreationDate", "Date"));
-            columns.Add(new DatalistColumn("Count", "Count's value"));
+            columns.Add(new DatalistColumn("Date", "Date"));
+            columns.Add(new DatalistColumn("Count", "Value"));
 
             IEnumerator<DatalistColumn> expected = columns.GetEnumerator();
             IEnumerator<DatalistColumn> actual = datalist.Columns.GetEnumerator();
@@ -126,9 +126,20 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void GetColumnHeader_ReturnsDisplayName()
         {
-            PropertyInfo property = typeof(TestModel).GetProperty("Count");
+            PropertyInfo property = typeof(TestModel).GetProperty("Date");
 
             String expected = property.GetCustomAttribute<DisplayAttribute>().Name;
+            String actual = datalist.GetColumnHeader(property);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void GetColumnHeader_ReturnsDisplayShortName()
+        {
+            PropertyInfo property = typeof(TestModel).GetProperty("Count");
+
+            String expected = property.GetCustomAttribute<DisplayAttribute>().ShortName;
             String actual = datalist.GetColumnHeader(property);
 
             Assert.Equal(expected, actual);
@@ -157,7 +168,7 @@ namespace Datalist.Tests.Unit
 
             DatalistData actual = datalist.GetData();
 
-            Assert.Equal(new DateTime(2014, 12, 19).ToShortDateString(), actual.Rows[0]["CreationDate"]);
+            Assert.Equal(new DateTime(2014, 12, 19).ToShortDateString(), actual.Rows[0]["Date"]);
             Assert.Equal("9V", actual.Rows[0][AbstractDatalist.AcKey]);
             Assert.Equal("9I", actual.Rows[0][AbstractDatalist.IdKey]);
             Assert.Equal("9V", actual.Rows[0]["Value"]);
@@ -178,7 +189,7 @@ namespace Datalist.Tests.Unit
 
             DatalistData actual = datalist.GetData();
 
-            Assert.Equal(new DateTime(2014, 12, 16).ToShortDateString(), actual.Rows[0]["CreationDate"]);
+            Assert.Equal(new DateTime(2014, 12, 16).ToShortDateString(), actual.Rows[0]["Date"]);
             Assert.Equal("6V", actual.Rows[0][AbstractDatalist.AcKey]);
             Assert.Equal("6I", actual.Rows[0][AbstractDatalist.IdKey]);
             Assert.Equal("6V", actual.Rows[0]["Value"]);
@@ -198,13 +209,13 @@ namespace Datalist.Tests.Unit
 
             DatalistData actual = datalist.GetData();
 
-            Assert.Equal(new DateTime(2014, 12, 25).ToShortDateString(), actual.Rows[0]["CreationDate"]);
+            Assert.Equal(new DateTime(2014, 12, 25).ToShortDateString(), actual.Rows[0]["Date"]);
             Assert.Equal("15V", actual.Rows[0][AbstractDatalist.AcKey]);
             Assert.Equal("15I", actual.Rows[0][AbstractDatalist.IdKey]);
             Assert.Equal("15V", actual.Rows[0]["Value"]);
             Assert.Equal("25", actual.Rows[0]["Count"]);
 
-            Assert.Equal(new DateTime(2014, 12, 15).ToShortDateString(), actual.Rows[1]["CreationDate"]);
+            Assert.Equal(new DateTime(2014, 12, 15).ToShortDateString(), actual.Rows[1]["Date"]);
             Assert.Equal("5V", actual.Rows[1][AbstractDatalist.AcKey]);
             Assert.Equal("5I", actual.Rows[1][AbstractDatalist.IdKey]);
             Assert.Equal("5V", actual.Rows[1]["Value"]);
@@ -226,13 +237,13 @@ namespace Datalist.Tests.Unit
 
             DatalistData actual = datalist.GetData();
 
-            Assert.Equal(new DateTime(2014, 12, 15).ToShortDateString(), actual.Rows[0]["CreationDate"]);
+            Assert.Equal(new DateTime(2014, 12, 15).ToShortDateString(), actual.Rows[0]["Date"]);
             Assert.Equal("5V", actual.Rows[0][AbstractDatalist.AcKey]);
             Assert.Equal("5I", actual.Rows[0][AbstractDatalist.IdKey]);
             Assert.Equal("5V", actual.Rows[0]["Value"]);
             Assert.Equal("15", actual.Rows[0]["Count"]);
 
-            Assert.Equal(new DateTime(2014, 12, 25).ToShortDateString(), actual.Rows[1]["CreationDate"]);
+            Assert.Equal(new DateTime(2014, 12, 25).ToShortDateString(), actual.Rows[1]["Date"]);
             Assert.Equal("15V", actual.Rows[1][AbstractDatalist.AcKey]);
             Assert.Equal("15I", actual.Rows[1][AbstractDatalist.IdKey]);
             Assert.Equal("15V", actual.Rows[1]["Value"]);
@@ -317,11 +328,11 @@ namespace Datalist.Tests.Unit
         {
             datalist.CurrentFilter.AdditionalFilters.Add("Id", "9I");
             datalist.CurrentFilter.AdditionalFilters.Add("Count", 9);
-            datalist.CurrentFilter.AdditionalFilters.Add("CreationDate", new DateTime(2014, 12, 15));
+            datalist.CurrentFilter.AdditionalFilters.Add("Date", new DateTime(2014, 12, 15));
 
             IQueryable<TestModel> actual = datalist.FilterByAdditionalFilters(datalist.GetModels());
             IQueryable<TestModel> expected = datalist.GetModels().Where(model =>
-                model.Id == "9I" && model.Count == 9 && model.CreationDate == new DateTime(2014, 12, 15));
+                model.Id == "9I" && model.Count == 9 && model.Date == new DateTime(2014, 12, 15));
 
             Assert.Equal(expected, actual);
         }
@@ -496,7 +507,7 @@ namespace Datalist.Tests.Unit
                     [AbstractDatalist.IdKey] = "6I",
                     [AbstractDatalist.AcKey] = "6V",
                     ["Value"] = "6V",
-                    ["CreationDate"] = new DateTime(2014, 12, 16).ToShortDateString(),
+                    ["Date"] = new DateTime(2014, 12, 16).ToShortDateString(),
                     ["Count"] = "16"
                 },
                 new Dictionary<String, String>
@@ -504,7 +515,7 @@ namespace Datalist.Tests.Unit
                     [AbstractDatalist.IdKey] = "7I",
                     [AbstractDatalist.AcKey] = "7V",
                     ["Value"] = "7V",
-                    ["CreationDate"] = new DateTime(2014, 12, 17).ToShortDateString(),
+                    ["Date"] = new DateTime(2014, 12, 17).ToShortDateString(),
                     ["Count"] = "17"
                 },
                 new Dictionary<String, String>
@@ -512,7 +523,7 @@ namespace Datalist.Tests.Unit
                     [AbstractDatalist.IdKey] = "8I",
                     [AbstractDatalist.AcKey] = "8V",
                     ["Value"] = "8V",
-                    ["CreationDate"] = new DateTime(2014, 12, 18).ToShortDateString(),
+                    ["Date"] = new DateTime(2014, 12, 18).ToShortDateString(),
                     ["Count"] = "18"
                 }
             }.GetEnumerator();
@@ -628,7 +639,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AddColumns_Values()
         {
-            datalist.AddColumns(row, new TestModel { Value = "Test", CreationDate = DateTime.Now.Date, Count = 4 });
+            datalist.AddColumns(row, new TestModel { Value = "Test", Date = DateTime.Now.Date, Count = 4 });
 
             Assert.Equal(new[] { "Test", DateTime.Now.Date.ToShortDateString(), "4" }, row.Values);
             Assert.Equal(datalist.Columns.Keys, row.Keys);

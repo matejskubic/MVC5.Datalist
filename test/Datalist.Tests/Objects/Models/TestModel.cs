@@ -8,7 +8,7 @@ namespace Datalist.Tests.Objects
         public String Id { get; set; }
 
         [DatalistColumn(8)]
-        [Display(Name = "Count's value")]
+        [Display(Name = "Count's value", ShortName = "Value")]
         public Int32 Count { get; set; }
 
         [DatalistColumn]
@@ -19,7 +19,7 @@ namespace Datalist.Tests.Objects
 
         [Display(Name = "Date")]
         [DatalistColumn(-3, Format = "{0:d}")]
-        public DateTime CreationDate { get; set; }
+        public DateTime Date { get; set; }
 
         public String NullableString { get; set; }
 
