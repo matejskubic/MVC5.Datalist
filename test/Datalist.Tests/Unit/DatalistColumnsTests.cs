@@ -14,7 +14,7 @@ namespace Datalist.Tests.Unit
         {
             columns = new DatalistColumns();
             allColumns = new List<DatalistColumn>();
-            allColumns.Add(new DatalistColumn("Test1", "Header1"));
+            allColumns.Add(new DatalistColumn("Test1", null));
             allColumns.Add(new DatalistColumn("Test2", "Header2"));
 
             foreach (DatalistColumn column in allColumns)
@@ -55,17 +55,6 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void Add_SameColumnKey_Throws()
-        {
-            DatalistException exception = Assert.Throws<DatalistException>(() => columns.Add(columns.First()));
-
-            String expected = $"Can not add datalist column with the same key '{columns.First().Key}'.";
-            String actual = exception.Message;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
         public void Add_Column()
         {
             DatalistColumn column = new DatalistColumn("Test3", "3");
@@ -86,20 +75,9 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void Add_NullKey_Throws()
         {
-            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => columns.Add(null, ""));
+            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => columns.Add(null, null));
 
             Assert.Equal("key", actual.ParamName);
-        }
-
-        [Fact]
-        public void Add_SameKey_Throws()
-        {
-            DatalistException exception = Assert.Throws<DatalistException>(() => columns.Add(columns.First().Key, "1"));
-
-            String expected = $"Can not add datalist column with the same key '{columns.First().Key}'.";
-            String actual = exception.Message;
-
-            Assert.Equal(expected, actual);
         }
 
         [Fact]

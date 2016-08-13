@@ -8,14 +8,6 @@ namespace Datalist.Tests.Unit
         #region DatalistAttribute(Type type)
 
         [Fact]
-        public void DatalistAttribute_Null_Throws()
-        {
-            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => new DatalistAttribute(null));
-
-            Assert.Equal("type", actual.ParamName);
-        }
-
-        [Fact]
         public void DatalistAttribute_NoDatalist_Throws()
         {
             ArgumentException exception = Assert.Throws<ArgumentException>(() => new DatalistAttribute(typeof(Object)));

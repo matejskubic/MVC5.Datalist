@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Datalist.Tests.Unit
 {
@@ -106,11 +107,9 @@ namespace Datalist.Tests.Unit
         #region GetColumnHeader(PropertyInfo property)
 
         [Fact]
-        public void GetColumnHeader_NullProperty_Throws()
+        public void GetColumnHeader_NullProperty_ReturnsNull()
         {
-            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => datalist.GetColumnHeader(null));
-
-            Assert.Equal("property", actual.ParamName);
+            Assert.Null(datalist.GetColumnHeader(null));
         }
 
         [Fact]
@@ -118,9 +117,7 @@ namespace Datalist.Tests.Unit
         {
             PropertyInfo property = typeof(TestModel).GetProperty("Value");
 
-            String actual = datalist.GetColumnHeader(property);
-
-            Assert.Null(actual);
+            Assert.Null(datalist.GetColumnHeader(property));
         }
 
         [Fact]
@@ -265,7 +262,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.FilterById(null));
 
-            String expected = $"'{typeof(NoIdModel).Name}' type does not have property named 'Id'.";
+            String expected = $"'{typeof(NoIdModel).Name}' type does not have property named 'Id', required for automatic id filtering.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -302,7 +299,7 @@ namespace Datalist.Tests.Unit
         {
             DatalistException exception = Assert.Throws<DatalistException>(() => new TestDatalist<GuidModel>().FilterById(null));
 
-            String expected = $"'{typeof(GuidModel).Name}.Id' can not be filtered by using '' value, because it's not a string nor a number.";
+            String expected = $"'{typeof(GuidModel).Name}.Id' property type has to be a string or a number.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -341,10 +338,12 @@ namespace Datalist.Tests.Unit
 
         #region FilterBySearchTerm(IQueryable<T> models)
 
-        [Fact]
-        public void FilterBySearchTerm_SkipsNullTerm()
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        public void FilterBySearchTerm_SkipsEmptyTerm(String term)
         {
-            datalist.CurrentFilter.SearchTerm = null;
+            datalist.CurrentFilter.SearchTerm = term;
 
             IQueryable<TestModel> actual = datalist.FilterBySearchTerm(datalist.GetModels());
             IQueryable<TestModel> expected = datalist.GetModels();
@@ -353,15 +352,14 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void FilterBySearchTerm_NoProperty_Throws()
+        public void FilterBySearchTerm_DoesNotFilterNotExistingProperties()
         {
-            datalist.CurrentFilter.SearchTerm = "Test";
+            datalist.Columns.Clear();
+            datalist.CurrentFilter.SearchTerm = "1";
             datalist.Columns.Add(new DatalistColumn("Test", "Test"));
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.FilterBySearchTerm(datalist.GetModels()));
-
-            String expected = $"'{typeof(TestModel).Name}' type does not have property named 'Test'.";
-            String actual = exception.Message;
+            IQueryable<TestModel> actual = datalist.FilterBySearchTerm(datalist.GetModels());
+            IQueryable<TestModel> expected = datalist.GetModels();
 
             Assert.Equal(expected, actual);
         }
@@ -382,7 +380,7 @@ namespace Datalist.Tests.Unit
         {
             datalist.Columns.Clear();
             datalist.CurrentFilter.SearchTerm = "1";
-            datalist.Columns.Add(new DatalistColumn("Count", ""));
+            datalist.Columns.Add(new DatalistColumn("Count", null));
 
             IQueryable<TestModel> actual = datalist.FilterBySearchTerm(datalist.GetModels());
             IQueryable<TestModel> expected = datalist.GetModels();
@@ -418,33 +416,6 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void Sort_NoColumn_Throws()
-        {
-            datalist.CurrentFilter.SortColumn = "Test";
-
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.Sort(datalist.GetModels()));
-
-            String expected = "Datalist does not contain sort column named 'Test'.";
-            String actual = exception.Message;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void Sort_NoDefaultProperty_Throws()
-        {
-            datalist.DefaultSortColumn = "Test";
-            datalist.CurrentFilter.SortColumn = null;
-
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.Sort(datalist.GetModels()));
-
-            String expected = "Datalist does not contain sort column named 'Test'.";
-            String actual = exception.Message;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
         public void Sort_ByFirstColumn()
         {
             datalist.DefaultSortColumn = null;
@@ -456,17 +427,26 @@ namespace Datalist.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Sort_NoColumns_Throws()
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("", " ")]
+        [InlineData("", null)]
+
+        [InlineData(" ", "")]
+        [InlineData(" ", " ")]
+        [InlineData(" ", null)]
+
+        [InlineData(null, "")]
+        [InlineData(null, " ")]
+        [InlineData(null, null)]
+        public void Sort_NoSortColumns(String defaultColumn, String sortColumn)
         {
             datalist.Columns.Clear();
             datalist.DefaultSortColumn = null;
             datalist.CurrentFilter.SortColumn = null;
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.Sort(datalist.GetModels()));
-
-            String expected = "Datalist should have at least one column.";
-            String actual = exception.Message;
+            IQueryable<TestModel> expected = datalist.GetModels();
+            IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels());
 
             Assert.Equal(expected, actual);
         }
@@ -540,16 +520,16 @@ namespace Datalist.Tests.Unit
         #region AddId(Dictionary<String, String> row, T model)
 
         [Fact]
-        public void AddId_NoProperty_Throws()
+        public void AddId_EmptyValues()
         {
             TestDatalist<NoIdModel> datalist = new TestDatalist<NoIdModel>();
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.AddId(row, new NoIdModel()));
+            datalist.AddId(row, new NoIdModel());
 
-            String expected = $"'{typeof(NoIdModel).Name}' type does not have property named 'Id'.";
-            String actual = exception.Message;
+            KeyValuePair<String, String> actual = row.Single();
 
-            Assert.Equal(expected, actual);
+            Assert.Equal(AbstractDatalist.IdKey, actual.Key);
+            Assert.Null(actual.Value);
         }
 
         [Fact]
@@ -568,30 +548,16 @@ namespace Datalist.Tests.Unit
         #region AddAutocomplete(Dictionary<String, String> row, T model)
 
         [Fact]
-        public void AddAutocomplete_NoColumns_Throws()
+        public void AddAutocomplete_EmptyValues()
         {
             datalist.Columns.Clear();
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.AddAutocomplete(row, new TestModel()));
+            datalist.AddAutocomplete(row, new TestModel());
 
-            String expected = "Datalist should have at least one column.";
-            String actual = exception.Message;
+            KeyValuePair<String, String> actual = row.Single();
 
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void AddAutocomplete_NoProperty_Throws()
-        {
-            datalist.Columns.Clear();
-            datalist.Columns.Add(new DatalistColumn("Test", ""));
-
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.AddAutocomplete(row, new TestModel()));
-
-            String expected = $"'{typeof(TestModel).Name}' type does not have property named 'Test'.";
-            String actual = exception.Message;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(AbstractDatalist.AcKey, actual.Key);
+            Assert.Null(actual.Value);
         }
 
         [Fact]
@@ -610,30 +576,15 @@ namespace Datalist.Tests.Unit
         #region AddColumns(Dictionary<String, String> row, T model)
 
         [Fact]
-        public void AddColumns_NoColumns_Throws()
+        public void AddColumns_EmptyValues()
         {
             datalist.Columns.Clear();
+            datalist.Columns.Add(new DatalistColumn("Test", null));
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.AddColumns(null, new TestModel()));
+            datalist.AddColumns(row, new TestModel { Value = "Test", Date = DateTime.Now.Date, Count = 4 });
 
-            String expected = "Datalist should have at least one column.";
-            String actual = exception.Message;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void AddColumns_NoProperty_Throws()
-        {
-            datalist.Columns.Clear();
-            datalist.Columns.Add(new DatalistColumn("Test", ""));
-
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.AddColumns(row, new TestModel()));
-
-            String expected = $"'{typeof(TestModel).Name}' type does not have property named 'Test'.";
-            String actual = exception.Message;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(new String[] { null }, row.Values);
+            Assert.Equal(datalist.Columns.Keys, row.Keys);
         }
 
         [Fact]

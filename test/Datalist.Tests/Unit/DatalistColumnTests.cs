@@ -10,7 +10,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void Add_NullKey_Throws()
         {
-            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => new DatalistColumn(null, ""));
+            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => new DatalistColumn(null, null));
 
             Assert.Equal("key", actual.ParamName);
         }
@@ -18,7 +18,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void DatalistColumn_Key()
         {
-            String actual = new DatalistColumn("Test", "").Key;
+            String actual = new DatalistColumn("Test", null).Key;
             String expected = "Test";
 
             Assert.Equal(expected, actual);
@@ -27,7 +27,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void DatalistColumn_Header()
         {
-            String actual = new DatalistColumn("", "Test").Header;
+            String actual = new DatalistColumn("Test", "Test").Header;
             String expected = "Test";
 
             Assert.Equal(expected, actual);

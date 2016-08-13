@@ -40,10 +40,7 @@ namespace Datalist
         }
         public virtual String GetColumnHeader(PropertyInfo property)
         {
-            if (property == null)
-                throw new ArgumentNullException(nameof(property));
-
-            return property.GetCustomAttribute<DisplayAttribute>(false)?.GetShortName();
+            return property?.GetCustomAttribute<DisplayAttribute>(false)?.GetShortName();
         }
         public virtual String GetColumnCssClass(PropertyInfo property)
         {
@@ -74,7 +71,7 @@ namespace Datalist
         {
             PropertyInfo idProperty = typeof(T).GetProperty("Id");
             if (idProperty == null)
-                throw new DatalistException($"'{typeof(T).Name}' type does not have property named 'Id'.");
+                throw new DatalistException($"'{typeof(T).Name}' type does not have property named 'Id', required for automatic id filtering.");
 
             if (idProperty.PropertyType == typeof(String))
                 return models.Where("Id = @0", CurrentFilter.Id);
@@ -83,7 +80,7 @@ namespace Datalist
             if (IsNumeric(idProperty.PropertyType) && Decimal.TryParse(CurrentFilter.Id, out id))
                 return models.Where("Id = @0", id);
 
-            throw new DatalistException($"'{typeof(T).Name}.Id' can not be filtered by using '{CurrentFilter.Id}' value, because it's not a string nor a number.");
+            throw new DatalistException($"'{typeof(T).Name}.Id' property type has to be a string or a number.");
         }
         public virtual IQueryable<T> FilterByAdditionalFilters(IQueryable<T> models)
         {
@@ -94,13 +91,13 @@ namespace Datalist
         }
         public virtual IQueryable<T> FilterBySearchTerm(IQueryable<T> models)
         {
-            if (CurrentFilter.SearchTerm == null)
+            if (String.IsNullOrEmpty(CurrentFilter.SearchTerm))
                 return models;
 
             List<String> queries = new List<String>();
 
             foreach (String property in Columns.Keys)
-                if (GetType(property) == typeof(String))
+                if (typeof(T).GetProperty(property)?.PropertyType == typeof(String))
                     queries.Add($"({property} != null && {property}.ToLower().Contains(@0))");
 
             if (queries.Count == 0) return models;
@@ -110,17 +107,11 @@ namespace Datalist
 
         public virtual IQueryable<T> Sort(IQueryable<T> models)
         {
-            String sortColumn = CurrentFilter.SortColumn ?? DefaultSortColumn;
-            if (sortColumn != null)
-                if (Columns.Keys.Contains(sortColumn))
-                    return models.OrderBy(sortColumn + " " + CurrentFilter.SortOrder);
-                else
-                    throw new DatalistException($"Datalist does not contain sort column named '{sortColumn}'.");
+            String column = CurrentFilter.SortColumn ?? DefaultSortColumn ?? Columns.Keys.FirstOrDefault();
+            if (String.IsNullOrWhiteSpace(column))
+                return models;
 
-            if (Columns.Any())
-                return models.OrderBy(Columns.Keys.First() + " " + CurrentFilter.SortOrder);
-
-            throw new DatalistException("Datalist should have at least one column.");
+            return models.OrderBy(column + " " + CurrentFilter.SortOrder);
         }
 
         public virtual DatalistData FormDatalistData(IQueryable<T> models)
@@ -152,18 +143,12 @@ namespace Datalist
         }
         public virtual void AddAutocomplete(Dictionary<String, String> row, T model)
         {
-            if (!Columns.Any())
-                throw new DatalistException("Datalist should have at least one column.");
-
-            row.Add(AcKey, GetValue(model, Columns.Keys.First()));
+            row.Add(AcKey, GetValue(model, Columns.Keys.FirstOrDefault() ?? ""));
         }
         public virtual void AddColumns(Dictionary<String, String> row, T model)
         {
-            if (!Columns.Any())
-                throw new DatalistException("Datalist should have at least one column.");
-
             foreach (String column in Columns.Keys)
-                row.Add(column, GetValue(model, column));
+                row[column] = GetValue(model, column);
         }
         public virtual void AddAdditionalData(Dictionary<String, String> row, T model)
         {
@@ -172,23 +157,13 @@ namespace Datalist
         private String GetValue(T model, String propertyName)
         {
             PropertyInfo property = typeof(T).GetProperty(propertyName);
-            if (property == null)
-                throw new DatalistException($"'{typeof(T).Name}' type does not have property named '{propertyName}'.");
+            if (property == null) return null;
 
-            Object value = property.GetValue(model) ?? "";
             DatalistColumnAttribute column = property.GetCustomAttribute<DatalistColumnAttribute>(false);
             if (column?.Format != null)
-                value = String.Format(column.Format, value);
+                return String.Format(column.Format, property.GetValue(model));
 
-            return value.ToString();
-        }
-        private Type GetType(String propertyName)
-        {
-            PropertyInfo property = typeof(T).GetProperty(propertyName);
-            if (property == null)
-                throw new DatalistException($"'{typeof(T).Name}' type does not have property named '{propertyName}'.");
-
-            return property.PropertyType;
+            return property.GetValue(model)?.ToString();
         }
         private Boolean IsNumeric(Type type)
         {

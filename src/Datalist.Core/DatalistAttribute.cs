@@ -8,9 +8,6 @@ namespace Datalist
 
         public DatalistAttribute(Type type)
         {
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
-
             if (!typeof(AbstractDatalist).IsAssignableFrom(type))
                 throw new ArgumentException($"'{type.Name}' type does not implement '{typeof(AbstractDatalist).Name}'.");
 
