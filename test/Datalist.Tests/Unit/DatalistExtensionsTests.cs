@@ -23,15 +23,15 @@ namespace Datalist.Tests.Unit
             html = MockHtmlHelper();
             datalist = new TestDatalist<TestModel>();
 
-            datalist.DefaultRows = 11;
+            datalist.Filter.Rows = 11;
             datalist.Title = "Dialog title";
             datalist.AdditionalFilters.Clear();
             datalist.Filter.Search = "Terminal";
-            datalist.DefaultSortColumn = "First";
+            datalist.Filter.SortColumn = "First";
             datalist.AdditionalFilters.Add("Add1");
             datalist.AdditionalFilters.Add("Add2");
             datalist.Url = "http://localhost/Datalist";
-            datalist.DefaultSortOrder = DatalistSortOrder.Desc;
+            datalist.Filter.SortOrder = DatalistSortOrder.Desc;
         }
         public void Dispose()
         {
@@ -74,7 +74,7 @@ namespace Datalist.Tests.Unit
             String expected =
                 "<input attribute=\"attr\" class=\"classes form-control datalist-input\" " +
                     "data-datalist-filters=\"Test1,Test2\" data-datalist-for=\"ParentId\" data-datalist-page=\"0\" " +
-                    "data-datalist-rows=\"7\" data-datalist-search=\"\" data-datalist-sort-column=\"SortCol\" " +
+                    "data-datalist-rows=\"7\" data-datalist-search=\"\" data-datalist-sort-column=\"Id\" " +
                     "data-datalist-sort-order=\"Asc\" data-datalist-title=\"Test title\" data-datalist-url=\"http://localhost/Test\" " +
                     "id=\"ParentIdDatalist\" name=\"ParentIdDatalist\" type=\"text\" value=\"\" />" +
                 "<input class=\"datalist-hidden-input\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />";
@@ -145,7 +145,7 @@ namespace Datalist.Tests.Unit
                 "<div class=\"input-group\">" +
                     "<input attribute=\"attr\" class=\"classes form-control datalist-input\" " +
                     "data-datalist-filters=\"Test1,Test2\" data-datalist-for=\"ParentId\" data-datalist-page=\"0\" " +
-                    "data-datalist-rows=\"7\" data-datalist-search=\"\" data-datalist-sort-column=\"SortCol\" " +
+                    "data-datalist-rows=\"7\" data-datalist-search=\"\" data-datalist-sort-column=\"Id\" " +
                     "data-datalist-sort-order=\"Asc\" data-datalist-title=\"Test title\" data-datalist-url=\"http://localhost/Test\" " +
                     "id=\"ParentIdDatalist\" name=\"ParentIdDatalist\" type=\"text\" value=\"\" />" +
                     "<input class=\"datalist-hidden-input\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +

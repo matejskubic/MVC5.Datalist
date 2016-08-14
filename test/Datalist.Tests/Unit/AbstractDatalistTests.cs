@@ -59,8 +59,8 @@ namespace Datalist.Tests.Unit
         {
             AbstractDatalist actual = Substitute.For<AbstractDatalist>();
 
-            Assert.Equal<UInt32>(20, actual.DefaultRows);
             Assert.Empty(actual.AdditionalFilters);
+            Assert.Equal(20, actual.Filter.Rows);
             Assert.NotNull(actual.Filter);
             Assert.Empty(actual.Columns);
         }

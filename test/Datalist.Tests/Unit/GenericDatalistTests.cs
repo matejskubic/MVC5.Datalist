@@ -25,9 +25,6 @@ namespace Datalist.Tests.Unit
             row = new Dictionary<String, String>();
             datalist = new TestDatalist<TestModel>();
 
-            datalist.DefaultSortColumn = null;
-            datalist.Filter.Search = null;
-
             for (Int32 i = 0; i < 20; i++)
                 datalist.Models.Add(new TestModel
                 {
@@ -404,21 +401,8 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void Sort_ByDefaultSortColumn()
-        {
-            datalist.DefaultSortColumn = "Count";
-            datalist.Filter.SortColumn = null;
-
-            IQueryable<TestModel> expected = datalist.GetModels().OrderBy(model => model.Count);
-            IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels());
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
         public void Sort_ByFirstColumn()
         {
-            datalist.DefaultSortColumn = null;
             datalist.Filter.SortColumn = null;
 
             IQueryable<TestModel> expected = datalist.GetModels().OrderBy(model => model.Value);
@@ -428,22 +412,13 @@ namespace Datalist.Tests.Unit
         }
 
         [Theory]
-        [InlineData("", "")]
-        [InlineData("", " ")]
-        [InlineData("", null)]
-
-        [InlineData(" ", "")]
-        [InlineData(" ", " ")]
-        [InlineData(" ", null)]
-
-        [InlineData(null, "")]
-        [InlineData(null, " ")]
-        [InlineData(null, null)]
-        public void Sort_NoSortColumns(String defaultColumn, String sortColumn)
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public void Sort_NoSortColumns(String column)
         {
             datalist.Columns.Clear();
-            datalist.DefaultSortColumn = null;
-            datalist.Filter.SortColumn = null;
+            datalist.Filter.SortColumn = column;
 
             IQueryable<TestModel> expected = datalist.GetModels();
             IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels());

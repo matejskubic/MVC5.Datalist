@@ -9,16 +9,14 @@ namespace Datalist.Tests.Objects
 
         public TestDatalist()
         {
-            DefaultRows = 7;
-            Filter.Rows = 10;
+            Filter.Rows = 7;
             Title = "Test title";
             Models = new List<T>();
+            Filter.SortColumn = "Id";
             Filter.Search = "Data up";
-            DefaultSortColumn = "SortCol";
             Url = "http://localhost/Test";
             AdditionalFilters.Add("Test1");
             AdditionalFilters.Add("Test2");
-            DefaultSortOrder = DatalistSortOrder.Asc;
         }
 
         public override IQueryable<T> GetModels()

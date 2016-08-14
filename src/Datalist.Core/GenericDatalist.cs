@@ -107,7 +107,7 @@ namespace Datalist
 
         public virtual IQueryable<T> Sort(IQueryable<T> models)
         {
-            String column = Filter.SortColumn ?? DefaultSortColumn ?? Columns.Keys.FirstOrDefault();
+            String column = Filter.SortColumn ?? Columns.Keys.FirstOrDefault();
             if (String.IsNullOrWhiteSpace(column))
                 return models;
 

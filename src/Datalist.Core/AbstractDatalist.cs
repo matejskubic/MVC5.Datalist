@@ -18,10 +18,6 @@ namespace Datalist
         public DatalistColumns Columns { get; set; }
         public IList<String> AdditionalFilters { get; set; }
 
-        public UInt32 DefaultRows { get; set; }
-        public String DefaultSortColumn { get; set; }
-        public DatalistSortOrder DefaultSortOrder { get; set; }
-
         protected AbstractDatalist() : this(new UrlHelper(HttpContext.Current.Request.RequestContext))
         {
         }
@@ -31,7 +27,7 @@ namespace Datalist
             AdditionalFilters = new List<String>();
             Columns = new DatalistColumns();
             Filter = new DatalistFilter();
-            DefaultRows = 20;
+            Filter.Rows = 20;
         }
 
         public abstract DatalistData GetData();
