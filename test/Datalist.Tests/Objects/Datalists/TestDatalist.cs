@@ -9,11 +9,12 @@ namespace Datalist.Tests.Objects
 
         public TestDatalist()
         {
+            Filter.Page = 3;
             Filter.Rows = 7;
             Title = "Test title";
             Models = new List<T>();
+            Filter.Search = "Term";
             Filter.SortColumn = "Id";
-            Filter.Search = "Data up";
             Url = "http://localhost/Test";
             AdditionalFilters.Add("Test1");
             AdditionalFilters.Add("Test2");

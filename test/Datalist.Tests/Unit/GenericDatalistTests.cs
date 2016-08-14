@@ -24,6 +24,7 @@ namespace Datalist.Tests.Unit
 
             row = new Dictionary<String, String>();
             datalist = new TestDatalist<TestModel>();
+            datalist.Filter.Page = 0;
 
             for (Int32 i = 0; i < 20; i++)
                 datalist.Models.Add(new TestModel

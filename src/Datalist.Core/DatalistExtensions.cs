@@ -76,11 +76,11 @@ namespace Datalist
             attributes.Add("data-datalist-for", TagBuilder.CreateSanitizedId(hiddenInput));
             attributes.Add("data-datalist-sort-column", model.Filter.SortColumn);
             attributes.Add("data-datalist-sort-order", model.Filter.SortOrder);
+            attributes.Add("data-datalist-search", model.Filter.Search);
+            attributes.Add("data-datalist-page", model.Filter.Page);
             attributes.Add("data-datalist-rows", model.Filter.Rows);
             attributes.Add("data-datalist-title", model.Title);
             attributes.Add("data-datalist-url", model.Url);
-            attributes.Add("data-datalist-search", "");
-            attributes.Add("data-datalist-page", 0);
 
             return html.TextBox(hiddenInput + AbstractDatalist.Prefix, null, attributes).ToString();
         }
