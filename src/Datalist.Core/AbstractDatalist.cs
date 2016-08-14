@@ -12,14 +12,14 @@ namespace Datalist
         public const String AcKey = "DatalistAcKey";
 
         public String Url { get; set; }
-        public String DialogTitle { get; set; }
+        public String Title { get; set; }
 
+        public DatalistFilter Filter { get; set; }
         public DatalistColumns Columns { get; set; }
-        public DatalistFilter CurrentFilter { get; set; }
         public IList<String> AdditionalFilters { get; set; }
 
+        public UInt32 DefaultRows { get; set; }
         public String DefaultSortColumn { get; set; }
-        public UInt32 DefaultRecordsPerPage { get; set; }
         public DatalistSortOrder DefaultSortOrder { get; set; }
 
         protected AbstractDatalist() : this(new UrlHelper(HttpContext.Current.Request.RequestContext))
@@ -29,9 +29,9 @@ namespace Datalist
         {
             Url = url.Action(GetType().Name.Replace(Prefix, ""), Prefix, new { area = "" });
             AdditionalFilters = new List<String>();
-            CurrentFilter = new DatalistFilter();
             Columns = new DatalistColumns();
-            DefaultRecordsPerPage = 20;
+            Filter = new DatalistFilter();
+            DefaultRows = 20;
         }
 
         public abstract DatalistData GetData();

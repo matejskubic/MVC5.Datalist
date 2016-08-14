@@ -11,7 +11,7 @@ namespace Datalist.Tests.Unit
         {
             DatalistData actual = new DatalistData();
 
-            Assert.Equal(0, actual.FilteredRecords);
+            Assert.Equal(0, actual.FilteredRows);
             Assert.Empty(actual.Columns);
             Assert.Empty(actual.Rows);
         }

@@ -26,7 +26,7 @@ namespace Datalist.Tests.Unit
             datalist = new TestDatalist<TestModel>();
 
             datalist.DefaultSortColumn = null;
-            datalist.CurrentFilter.SearchTerm = null;
+            datalist.Filter.Search = null;
 
             for (Int32 i = 0; i < 20; i++)
                 datalist.Models.Add(new TestModel
@@ -159,9 +159,9 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void GetData_FiltersById()
         {
-            datalist.CurrentFilter.Id = "9I";
-            datalist.CurrentFilter.SearchTerm = "Term";
-            datalist.CurrentFilter.AdditionalFilters.Add("Value", "5V");
+            datalist.Filter.Id = "9I";
+            datalist.Filter.Search = "Term";
+            datalist.Filter.AdditionalFilters.Add("Value", "5V");
 
             DatalistData actual = datalist.GetData();
 
@@ -172,15 +172,15 @@ namespace Datalist.Tests.Unit
             Assert.Equal("19", actual.Rows[0]["Count"]);
 
             Assert.Equal(datalist.Columns, actual.Columns);
-            Assert.Equal(1, actual.FilteredRecords);
+            Assert.Equal(1, actual.FilteredRows);
             Assert.Single(actual.Rows);
         }
 
         [Fact]
         public void GetData_FiltersByAdditionalFilters()
         {
-            datalist.CurrentFilter.SearchTerm = "6V";
-            datalist.CurrentFilter.AdditionalFilters.Add("Count", 16);
+            datalist.Filter.Search = "6V";
+            datalist.Filter.AdditionalFilters.Add("Count", 16);
 
             datalist.GetData();
 
@@ -193,14 +193,14 @@ namespace Datalist.Tests.Unit
             Assert.Equal("16", actual.Rows[0]["Count"]);
 
             Assert.Equal(datalist.Columns, actual.Columns);
-            Assert.Equal(1, actual.FilteredRecords);
+            Assert.Equal(1, actual.FilteredRows);
             Assert.Single(actual.Rows);
         }
 
         [Fact]
-        public void GetData_FiltersBySearchTerm()
+        public void GetData_FiltersBySearch()
         {
-            datalist.CurrentFilter.SearchTerm = "5V";
+            datalist.Filter.Search = "5V";
 
             datalist.GetData();
 
@@ -219,16 +219,16 @@ namespace Datalist.Tests.Unit
             Assert.Equal("15", actual.Rows[1]["Count"]);
 
             Assert.Equal(datalist.Columns, actual.Columns);
-            Assert.Equal(2, actual.FilteredRecords);
+            Assert.Equal(2, actual.FilteredRows);
             Assert.Equal(2, actual.Rows.Count);
         }
 
         [Fact]
         public void GetData_Sorts()
         {
-            datalist.CurrentFilter.SortOrder = DatalistSortOrder.Asc;
-            datalist.CurrentFilter.SortColumn = "Count";
-            datalist.CurrentFilter.SearchTerm = "5V";
+            datalist.Filter.SortOrder = DatalistSortOrder.Asc;
+            datalist.Filter.SortColumn = "Count";
+            datalist.Filter.Search = "5V";
 
             datalist.GetData();
 
@@ -247,7 +247,7 @@ namespace Datalist.Tests.Unit
             Assert.Equal("25", actual.Rows[1]["Count"]);
 
             Assert.Equal(datalist.Columns, actual.Columns);
-            Assert.Equal(2, actual.FilteredRecords);
+            Assert.Equal(2, actual.FilteredRows);
             Assert.Equal(2, actual.Rows.Count);
         }
 
@@ -271,9 +271,9 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FilterById_String()
         {
-            datalist.CurrentFilter.Id = "9I";
+            datalist.Filter.Id = "9I";
 
-            IQueryable<TestModel> expected = datalist.GetModels().Where(model => model.Id == datalist.CurrentFilter.Id);
+            IQueryable<TestModel> expected = datalist.GetModels().Where(model => model.Id == datalist.Filter.Id);
             IQueryable<TestModel> actual = datalist.FilterById(datalist.GetModels());
 
             Assert.Equal(expected, actual);
@@ -286,7 +286,7 @@ namespace Datalist.Tests.Unit
             for (Int32 i = 0; i < 20; i++)
                 datalist.Models.Add(new NumericModel { Id = i });
 
-            datalist.CurrentFilter.Id = "9.0";
+            datalist.Filter.Id = "9.0";
 
             IQueryable<NumericModel> expected = datalist.GetModels().Where(model => model.Id == 9);
             IQueryable<NumericModel> actual = datalist.FilterById(datalist.GetModels());
@@ -312,7 +312,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FilterByAdditionalFilters_SkipsNullValues()
         {
-            datalist.CurrentFilter.AdditionalFilters.Add("Id", null);
+            datalist.Filter.AdditionalFilters.Add("Id", null);
 
             IQueryable<TestModel> actual = datalist.FilterByAdditionalFilters(datalist.GetModels());
             IQueryable<TestModel> expected = datalist.GetModels();
@@ -323,9 +323,9 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FilterByAdditionalFilters_Filters()
         {
-            datalist.CurrentFilter.AdditionalFilters.Add("Id", "9I");
-            datalist.CurrentFilter.AdditionalFilters.Add("Count", 9);
-            datalist.CurrentFilter.AdditionalFilters.Add("Date", new DateTime(2014, 12, 15));
+            datalist.Filter.AdditionalFilters.Add("Id", "9I");
+            datalist.Filter.AdditionalFilters.Add("Count", 9);
+            datalist.Filter.AdditionalFilters.Add("Date", new DateTime(2014, 12, 15));
 
             IQueryable<TestModel> actual = datalist.FilterByAdditionalFilters(datalist.GetModels());
             IQueryable<TestModel> expected = datalist.GetModels().Where(model =>
@@ -336,53 +336,53 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region FilterBySearchTerm(IQueryable<T> models)
+        #region FilterBySearch(IQueryable<T> models)
 
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void FilterBySearchTerm_SkipsEmptyTerm(String term)
+        public void FilterBySearch_SkipsEmptyTerm(String term)
         {
-            datalist.CurrentFilter.SearchTerm = term;
+            datalist.Filter.Search = term;
 
-            IQueryable<TestModel> actual = datalist.FilterBySearchTerm(datalist.GetModels());
+            IQueryable<TestModel> actual = datalist.FilterBySearch(datalist.GetModels());
             IQueryable<TestModel> expected = datalist.GetModels();
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void FilterBySearchTerm_DoesNotFilterNotExistingProperties()
+        public void FilterBySearch_DoesNotFilterNotExistingProperties()
         {
             datalist.Columns.Clear();
-            datalist.CurrentFilter.SearchTerm = "1";
+            datalist.Filter.Search = "1";
             datalist.Columns.Add(new DatalistColumn("Test", "Test"));
 
-            IQueryable<TestModel> actual = datalist.FilterBySearchTerm(datalist.GetModels());
+            IQueryable<TestModel> actual = datalist.FilterBySearch(datalist.GetModels());
             IQueryable<TestModel> expected = datalist.GetModels();
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void FilterBySearchTerm_UsesContainsSearch()
+        public void FilterBySearch_UsesContainsSearch()
         {
-            datalist.CurrentFilter.SearchTerm = "1";
+            datalist.Filter.Search = "1";
 
             IQueryable<TestModel> expected = datalist.GetModels().Where(model => model.Id.Contains("1"));
-            IQueryable<TestModel> actual = datalist.FilterBySearchTerm(datalist.GetModels());
+            IQueryable<TestModel> actual = datalist.FilterBySearch(datalist.GetModels());
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void FilterBySearchTerm_DoesNotFilterNonStringProperties()
+        public void FilterBySearch_DoesNotFilterNonStringProperties()
         {
             datalist.Columns.Clear();
-            datalist.CurrentFilter.SearchTerm = "1";
+            datalist.Filter.Search = "1";
             datalist.Columns.Add(new DatalistColumn("Count", null));
 
-            IQueryable<TestModel> actual = datalist.FilterBySearchTerm(datalist.GetModels());
+            IQueryable<TestModel> actual = datalist.FilterBySearch(datalist.GetModels());
             IQueryable<TestModel> expected = datalist.GetModels();
 
             Assert.Equal(expected, actual);
@@ -395,7 +395,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void Sort_ByColumn()
         {
-            datalist.CurrentFilter.SortColumn = "Count";
+            datalist.Filter.SortColumn = "Count";
 
             IQueryable<TestModel> expected = datalist.GetModels().OrderBy(model => model.Count);
             IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels());
@@ -407,7 +407,7 @@ namespace Datalist.Tests.Unit
         public void Sort_ByDefaultSortColumn()
         {
             datalist.DefaultSortColumn = "Count";
-            datalist.CurrentFilter.SortColumn = null;
+            datalist.Filter.SortColumn = null;
 
             IQueryable<TestModel> expected = datalist.GetModels().OrderBy(model => model.Count);
             IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels());
@@ -419,7 +419,7 @@ namespace Datalist.Tests.Unit
         public void Sort_ByFirstColumn()
         {
             datalist.DefaultSortColumn = null;
-            datalist.CurrentFilter.SortColumn = null;
+            datalist.Filter.SortColumn = null;
 
             IQueryable<TestModel> expected = datalist.GetModels().OrderBy(model => model.Value);
             IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels());
@@ -443,7 +443,7 @@ namespace Datalist.Tests.Unit
         {
             datalist.Columns.Clear();
             datalist.DefaultSortColumn = null;
-            datalist.CurrentFilter.SortColumn = null;
+            datalist.Filter.SortColumn = null;
 
             IQueryable<TestModel> expected = datalist.GetModels();
             IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels());
@@ -456,9 +456,9 @@ namespace Datalist.Tests.Unit
         #region FormDatalistData(IQueryable<T> models)
 
         [Fact]
-        public void FormDatalistData_FilteredRecords()
+        public void FormDatalistData_FilteredRows()
         {
-            Int32 actual = datalist.FormDatalistData(datalist.GetModels()).FilteredRecords;
+            Int32 actual = datalist.FormDatalistData(datalist.GetModels()).FilteredRows;
             Int32 expected = datalist.GetModels().Count();
 
             Assert.Equal(expected, actual);
@@ -476,8 +476,8 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FormDatalistData_Rows()
         {
-            datalist.CurrentFilter.Page = 2;
-            datalist.CurrentFilter.RecordsPerPage = 3;
+            datalist.Filter.Page = 2;
+            datalist.Filter.Rows = 3;
 
             IEnumerator<Dictionary<String, String>> actual = datalist.FormDatalistData(datalist.GetModels()).Rows.GetEnumerator();
             IEnumerator<Dictionary<String, String>> expected = new List<Dictionary<String, String>>

@@ -74,12 +74,12 @@ namespace Datalist
             attributes.Add("data-datalist-filters", String.Join(",", model.AdditionalFilters));
             attributes["class"] = $"{attributes["class"]} form-control datalist-input".Trim();
             attributes.Add("data-datalist-for", TagBuilder.CreateSanitizedId(hiddenInput));
-            attributes.Add("data-datalist-records-per-page", model.DefaultRecordsPerPage);
             attributes.Add("data-datalist-sort-column", model.DefaultSortColumn);
             attributes.Add("data-datalist-sort-order", model.DefaultSortOrder);
-            attributes.Add("data-datalist-dialog-title", model.DialogTitle);
+            attributes.Add("data-datalist-rows", model.DefaultRows);
+            attributes.Add("data-datalist-title", model.Title);
             attributes.Add("data-datalist-url", model.Url);
-            attributes.Add("data-datalist-term", "");
+            attributes.Add("data-datalist-search", "");
             attributes.Add("data-datalist-page", 0);
 
             return html.TextBox(hiddenInput + AbstractDatalist.Prefix, null, attributes).ToString();

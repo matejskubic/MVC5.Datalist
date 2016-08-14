@@ -28,7 +28,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void DatalistFilter_SetsSearchTerm()
         {
-            Assert.Null(filter.SearchTerm);
+            Assert.Null(filter.Search);
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void DatalistFilter_SetsRecordsPerPage()
         {
-            Assert.Equal(0, filter.RecordsPerPage);
+            Assert.Equal(0, filter.Rows);
         }
 
         [Fact]

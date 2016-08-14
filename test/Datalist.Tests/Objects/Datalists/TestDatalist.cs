@@ -9,15 +9,15 @@ namespace Datalist.Tests.Objects
 
         public TestDatalist()
         {
+            DefaultRows = 7;
+            Filter.Rows = 10;
+            Title = "Test title";
             Models = new List<T>();
-            DefaultRecordsPerPage = 7;
-            DialogTitle = "Test title";
+            Filter.Search = "Data up";
             DefaultSortColumn = "SortCol";
             Url = "http://localhost/Test";
             AdditionalFilters.Add("Test1");
             AdditionalFilters.Add("Test2");
-            CurrentFilter.RecordsPerPage = 10;
-            CurrentFilter.SearchTerm = "Data up";
             DefaultSortOrder = DatalistSortOrder.Asc;
         }
 
