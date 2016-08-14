@@ -207,6 +207,6 @@
         cursor: pointer;
     }
 
-        .datalist-pager .pagination > li > a {
+        .datalist-pager .pagination > li > span {
             padding: 2px 8px;
         }
