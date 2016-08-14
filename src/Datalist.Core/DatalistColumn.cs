@@ -6,6 +6,7 @@ namespace Datalist
     {
         public String Key { get; }
         public String Header { get; set; }
+        public Boolean Hidden { get; set; }
         public String CssClass { get; set; }
 
         public DatalistColumn(String key, String header)

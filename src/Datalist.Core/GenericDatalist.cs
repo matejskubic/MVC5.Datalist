@@ -24,7 +24,11 @@ namespace Datalist
         protected GenericDatalist()
         {
             foreach (PropertyInfo property in AttributedProperties)
-                Columns.Add(GetColumnKey(property), GetColumnHeader(property), GetColumnCssClass(property));
+                Columns.Add(new DatalistColumn(GetColumnKey(property), GetColumnHeader(property))
+                {
+                    Hidden = property.GetCustomAttribute<DatalistColumnAttribute>(false).Hidden,
+                    CssClass = GetColumnCssClass(property)
+                });
         }
         protected GenericDatalist(UrlHelper url) : base(url)
         {
@@ -89,7 +93,7 @@ namespace Datalist
 
             List<String> queries = new List<String>();
 
-            foreach (String property in Columns.Keys)
+            foreach (String property in Columns.Where(column => !column.Hidden).Select(column => column.Key))
                 if (typeof(T).GetProperty(property)?.PropertyType == typeof(String))
                     queries.Add($"({property} != null && {property}.ToLower().Contains(@0))");
 
@@ -107,7 +111,7 @@ namespace Datalist
 
         public virtual IQueryable<T> Sort(IQueryable<T> models)
         {
-            String column = Filter.SortColumn ?? Columns.Keys.FirstOrDefault();
+            String column = Filter.SortColumn ?? Columns.Where(col => !col.Hidden).Select(col => col.Key).FirstOrDefault();
             if (String.IsNullOrWhiteSpace(column))
                 return models;
 
@@ -143,7 +147,7 @@ namespace Datalist
         }
         public virtual void AddAutocomplete(Dictionary<String, String> row, T model)
         {
-            row.Add(AcKey, GetValue(model, Columns.Keys.FirstOrDefault() ?? ""));
+            row.Add(AcKey, GetValue(model, Columns.Where(col => !col.Hidden).Select(col => col.Key).FirstOrDefault() ?? ""));
         }
         public virtual void AddColumns(Dictionary<String, String> row, T model)
         {

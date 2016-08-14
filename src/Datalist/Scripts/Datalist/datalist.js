@@ -285,6 +285,10 @@
 
             for (var i = 0; i < columns.length; i++) {
                 var column = columns[i];
+                if (column.hidden) {
+                    continue;
+                }
+
                 header += '<th class="' + (column.CssClass || '') + '" data-column="' + column.Key + '"><span class="datalist-header-title">' + (column.Header || '') + '</span>';
                 if (that.options.sortColumn == column.Key || (that.options.sortColumn == '' && i == 0)) {
                     header += '<span class="datalist-sort-arrow ' + (that.options.sortOrder == 'Asc' ? 'asc' : 'desc') + '"></span></th>';
@@ -326,6 +330,10 @@
 
                 for (var j = 0; j < data.Columns.length; j++) {
                     var column = data.Columns[j];
+                    if (column.hidden) {
+                        continue;
+                    }
+
                     tableRow += '<td class="' + (column.CssClass || '') + '">' + (row[column.Key] || '') + '</td>';
                 }
 

@@ -62,9 +62,10 @@ namespace Datalist.Tests.Unit
         public void AbstractDatalist_AddsColumns()
         {
             DatalistColumns columns = new DatalistColumns();
-            columns.Add(new DatalistColumn("Value", null));
-            columns.Add(new DatalistColumn("Date", "Date"));
-            columns.Add(new DatalistColumn("Count", "Value"));
+            columns.Add(new DatalistColumn("Id", null) { Hidden = true });
+            columns.Add(new DatalistColumn("Value", null) { Hidden = false });
+            columns.Add(new DatalistColumn("Date", "Date") { Hidden = false });
+            columns.Add(new DatalistColumn("Count", "Value") { Hidden = false });
 
             IEnumerator<DatalistColumn> expected = columns.GetEnumerator();
             IEnumerator<DatalistColumn> actual = datalist.Columns.GetEnumerator();
@@ -73,6 +74,7 @@ namespace Datalist.Tests.Unit
             {
                 Assert.Equal(expected.Current.Key, actual.Current.Key);
                 Assert.Equal(expected.Current.Header, actual.Current.Header);
+                Assert.Equal(expected.Current.Hidden, actual.Current.Hidden);
                 Assert.Equal(expected.Current.CssClass, actual.Current.CssClass);
             }
         }
@@ -462,6 +464,7 @@ namespace Datalist.Tests.Unit
                 {
                     [AbstractDatalist.IdKey] = "6I",
                     [AbstractDatalist.AcKey] = "6V",
+                    ["Id"] = "6I",
                     ["Value"] = "6V",
                     ["Date"] = new DateTime(2014, 12, 16).ToShortDateString(),
                     ["Count"] = "16"
@@ -470,6 +473,7 @@ namespace Datalist.Tests.Unit
                 {
                     [AbstractDatalist.IdKey] = "7I",
                     [AbstractDatalist.AcKey] = "7V",
+                    ["Id"] = "7I",
                     ["Value"] = "7V",
                     ["Date"] = new DateTime(2014, 12, 17).ToShortDateString(),
                     ["Count"] = "17"
@@ -478,6 +482,7 @@ namespace Datalist.Tests.Unit
                 {
                     [AbstractDatalist.IdKey] = "8I",
                     [AbstractDatalist.AcKey] = "8V",
+                    ["Id"] = "8I",
                     ["Value"] = "8V",
                     ["Date"] = new DateTime(2014, 12, 18).ToShortDateString(),
                     ["Count"] = "18"
@@ -568,7 +573,7 @@ namespace Datalist.Tests.Unit
         {
             datalist.AddColumns(row, new TestModel { Value = "Test", Date = DateTime.Now.Date, Count = 4 });
 
-            Assert.Equal(new[] { "Test", DateTime.Now.Date.ToShortDateString(), "4" }, row.Values);
+            Assert.Equal(new[] { null, "Test", DateTime.Now.Date.ToShortDateString(), "4" }, row.Values);
             Assert.Equal(datalist.Columns.Keys, row.Keys);
         }
 
