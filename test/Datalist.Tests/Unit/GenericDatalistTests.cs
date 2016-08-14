@@ -554,39 +554,27 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region AddColumns(Dictionary<String, String> row, T model)
+        #region AddData(Dictionary<String, String> row, T model)
 
         [Fact]
-        public void AddColumns_EmptyValues()
+        public void AddData_EmptyValues()
         {
             datalist.Columns.Clear();
             datalist.Columns.Add(new DatalistColumn("Test", null));
 
-            datalist.AddColumns(row, new TestModel { Value = "Test", Date = DateTime.Now.Date, Count = 4 });
+            datalist.AddData(row, new TestModel { Value = "Test", Date = DateTime.Now.Date, Count = 4 });
 
             Assert.Equal(new String[] { null }, row.Values);
             Assert.Equal(new[] { "Test" }, row.Keys);
         }
 
         [Fact]
-        public void AddColumns_Values()
+        public void AddData_Values()
         {
-            datalist.AddColumns(row, new TestModel { Value = "Test", Date = DateTime.Now.Date, Count = 4 });
+            datalist.AddData(row, new TestModel { Value = "Test", Date = DateTime.Now.Date, Count = 4 });
 
             Assert.Equal(new[] { null, "Test", DateTime.Now.Date.ToShortDateString(), "4" }, row.Values);
             Assert.Equal(datalist.Columns.Select(column => column.Key), row.Keys);
-        }
-
-        #endregion
-
-        #region AddAdditionalData(Dictionary<String, String> row, T model)
-
-        [Fact]
-        public void AddAdditionalData_DoesNothing()
-        {
-            datalist.AddAdditionalData(row, new TestModel());
-
-            Assert.Empty(row.Keys);
         }
 
         #endregion
