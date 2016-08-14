@@ -72,7 +72,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Unit\AbstractDatalistTests.cs" />
-    <Compile Include="Unit\DatalistColumnsTests.cs" />
     <Compile Include="Unit\DatalistColumnTests.cs" />
     <Compile Include="Unit\GenericDatalistTests.cs" />
     <Compile Include="Unit\DatalistAttributeTests.cs" />

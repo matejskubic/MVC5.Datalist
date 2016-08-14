@@ -61,7 +61,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AbstractDatalist_AddsColumns()
         {
-            DatalistColumns columns = new DatalistColumns();
+            List<DatalistColumn> columns = new List<DatalistColumn>();
             columns.Add(new DatalistColumn("Id", null) { Hidden = true });
             columns.Add(new DatalistColumn("Value", null) { Hidden = false });
             columns.Add(new DatalistColumn("Date", "Date") { Hidden = false });
@@ -445,8 +445,8 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FormDatalistData_Columns()
         {
-            DatalistColumns actual = datalist.FormDatalistData(datalist.GetModels()).Columns;
-            DatalistColumns expected = datalist.Columns;
+            IList<DatalistColumn> actual = datalist.FormDatalistData(datalist.GetModels()).Columns;
+            IList<DatalistColumn> expected = datalist.Columns;
 
             Assert.Equal(expected, actual);
         }
@@ -565,7 +565,7 @@ namespace Datalist.Tests.Unit
             datalist.AddColumns(row, new TestModel { Value = "Test", Date = DateTime.Now.Date, Count = 4 });
 
             Assert.Equal(new String[] { null }, row.Values);
-            Assert.Equal(datalist.Columns.Keys, row.Keys);
+            Assert.Equal(new[] { "Test" }, row.Keys);
         }
 
         [Fact]
@@ -574,7 +574,7 @@ namespace Datalist.Tests.Unit
             datalist.AddColumns(row, new TestModel { Value = "Test", Date = DateTime.Now.Date, Count = 4 });
 
             Assert.Equal(new[] { null, "Test", DateTime.Now.Date.ToShortDateString(), "4" }, row.Values);
-            Assert.Equal(datalist.Columns.Keys, row.Keys);
+            Assert.Equal(datalist.Columns.Select(column => column.Key), row.Keys);
         }
 
         #endregion

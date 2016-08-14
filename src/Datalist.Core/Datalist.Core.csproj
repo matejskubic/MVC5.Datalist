@@ -46,7 +46,6 @@
     <Compile Include="DatalistAttribute.cs" />
     <Compile Include="DatalistColumn.cs" />
     <Compile Include="DatalistColumnAttribute.cs" />
-    <Compile Include="DatalistColumns.cs" />
     <Compile Include="DatalistData.cs" />
     <Compile Include="DatalistException.cs" />
     <Compile Include="DatalistExtensions.cs" />

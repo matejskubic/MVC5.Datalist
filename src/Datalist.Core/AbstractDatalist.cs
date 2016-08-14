@@ -15,7 +15,7 @@ namespace Datalist
         public String Title { get; set; }
 
         public DatalistFilter Filter { get; set; }
-        public DatalistColumns Columns { get; set; }
+        public IList<DatalistColumn> Columns { get; set; }
         public IList<String> AdditionalFilters { get; set; }
 
         protected AbstractDatalist() : this(new UrlHelper(HttpContext.Current.Request.RequestContext))
@@ -25,7 +25,7 @@ namespace Datalist
         {
             Url = url.Action(GetType().Name.Replace(Prefix, ""), Prefix, new { area = "" });
             AdditionalFilters = new List<String>();
-            Columns = new DatalistColumns();
+            Columns = new List<DatalistColumn>();
             Filter = new DatalistFilter();
             Filter.Rows = 20;
         }

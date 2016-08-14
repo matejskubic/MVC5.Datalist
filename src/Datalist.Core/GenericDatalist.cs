@@ -33,7 +33,11 @@ namespace Datalist
         protected GenericDatalist(UrlHelper url) : base(url)
         {
             foreach (PropertyInfo property in AttributedProperties)
-                Columns.Add(GetColumnKey(property), GetColumnHeader(property), GetColumnCssClass(property));
+                Columns.Add(new DatalistColumn(GetColumnKey(property), GetColumnHeader(property))
+                {
+                    Hidden = property.GetCustomAttribute<DatalistColumnAttribute>(false).Hidden,
+                    CssClass = GetColumnCssClass(property)
+                });
         }
         public virtual String GetColumnKey(PropertyInfo property)
         {
@@ -151,8 +155,8 @@ namespace Datalist
         }
         public virtual void AddColumns(Dictionary<String, String> row, T model)
         {
-            foreach (String column in Columns.Keys)
-                row[column] = GetValue(model, column);
+            foreach (DatalistColumn column in Columns)
+                row[column.Key] = GetValue(model, column.Key);
         }
         public virtual void AddAdditionalData(Dictionary<String, String> row, T model)
         {
