@@ -2,24 +2,18 @@
 using NSubstitute;
 using System;
 using System.Collections;
-using System.IO;
-using System.Web;
 using System.Web.Mvc;
 using Xunit;
 
 namespace Datalist.Tests.Unit
 {
-    public class DatalistExtensionsTests : IDisposable
+    public class DatalistExtensionsTests
     {
         private TestDatalist<TestModel> datalist;
         private HtmlHelper<TestModel> html;
 
         public DatalistExtensionsTests()
         {
-            HttpContext.Current = new HttpContext(
-                new HttpRequest(null, "http://localhost:7013/", null),
-                new HttpResponse(new StringWriter()));
-
             html = MockHtmlHelper();
             datalist = new TestDatalist<TestModel>();
 
@@ -33,10 +27,6 @@ namespace Datalist.Tests.Unit
             datalist.AdditionalFilters.Add("Add2");
             datalist.Url = "http://localhost/Datalist";
             datalist.Filter.SortOrder = DatalistSortOrder.Desc;
-        }
-        public void Dispose()
-        {
-            HttpContext.Current = null;
         }
 
         #region AutoComplete<TModel>(this IHtmlHelper<TModel> html, String name, Object value, MvcDatalist model, Object htmlAttributes = null)

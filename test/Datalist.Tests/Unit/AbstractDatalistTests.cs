@@ -1,32 +1,10 @@
 ﻿using NSubstitute;
-using System;
-using System.IO;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
 using Xunit;
 
 namespace Datalist.Tests.Unit
 {
-    public class AbstractDatalistTests : IDisposable
+    public class AbstractDatalistTests
     {
-        public AbstractDatalistTests()
-        {
-            RouteTable.Routes.Clear();
-            RouteTable.Routes.MapRoute(
-                "Default",
-                "{controller}/{action}/{id}",
-                new { controller = "Home", action = "Index", id = "" });
-
-            HttpRequest request = new HttpRequest(null, "http://localhost:7013/", null);
-            HttpResponse response = new HttpResponse(new StringWriter());
-            HttpContext.Current = new HttpContext(request, response);
-        }
-        public void Dispose()
-        {
-            HttpContext.Current = null;
-        }
-
         #region Constants
 
         [Fact]

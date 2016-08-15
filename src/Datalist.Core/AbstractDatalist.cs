@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web;
-using System.Web.Mvc;
 
 namespace Datalist
 {
@@ -18,12 +16,8 @@ namespace Datalist
         public IList<DatalistColumn> Columns { get; set; }
         public IList<String> AdditionalFilters { get; set; }
 
-        protected AbstractDatalist() : this(new UrlHelper(HttpContext.Current.Request.RequestContext))
+        protected AbstractDatalist()
         {
-        }
-        protected AbstractDatalist(UrlHelper url)
-        {
-            Url = url.Action(GetType().Name.Replace(Prefix, ""), Prefix, new { area = "" });
             AdditionalFilters = new List<String>();
             Columns = new List<DatalistColumn>();
             Filter = new DatalistFilter();

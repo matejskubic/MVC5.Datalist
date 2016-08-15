@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Reflection;
-using System.Web.Mvc;
 
 namespace Datalist
 {
@@ -22,15 +21,6 @@ namespace Datalist
         }
 
         protected GenericDatalist()
-        {
-            foreach (PropertyInfo property in AttributedProperties)
-                Columns.Add(new DatalistColumn(GetColumnKey(property), GetColumnHeader(property))
-                {
-                    Hidden = property.GetCustomAttribute<DatalistColumnAttribute>(false).Hidden,
-                    CssClass = GetColumnCssClass(property)
-                });
-        }
-        protected GenericDatalist(UrlHelper url) : base(url)
         {
             foreach (PropertyInfo property in AttributedProperties)
                 Columns.Add(new DatalistColumn(GetColumnKey(property), GetColumnHeader(property))

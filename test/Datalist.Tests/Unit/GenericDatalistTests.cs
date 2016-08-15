@@ -2,26 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using Xunit;
 using Xunit.Extensions;
 
 namespace Datalist.Tests.Unit
 {
-    public class GenericDatalistTests : IDisposable
+    public class GenericDatalistTests
     {
         private Dictionary<String, String> row;
         private TestDatalist<TestModel> datalist;
 
         public GenericDatalistTests()
         {
-            HttpContext.Current = new HttpContext(
-               new HttpRequest(null, "http://localhost:7013/", null),
-               new HttpResponse(new StringWriter()));
-
             row = new Dictionary<String, String>();
             datalist = new TestDatalist<TestModel>();
             datalist.Filter.Page = 0;
@@ -34,10 +28,6 @@ namespace Datalist.Tests.Unit
                     Value = i + "V",
                     Date = new DateTime(2014, 12, 10).AddDays(i)
                 });
-        }
-        public void Dispose()
-        {
-            HttpContext.Current = null;
         }
 
         #region AttributedProperties
