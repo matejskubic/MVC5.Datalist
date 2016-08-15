@@ -96,7 +96,6 @@ namespace Datalist
                 return models;
 
             List<String> queries = new List<String>();
-
             foreach (String property in Columns.Where(column => !column.Hidden).Select(column => column.Key))
                 if (typeof(T).GetProperty(property)?.PropertyType == typeof(String))
                     queries.Add($"({property} != null && {property}.ToLower().Contains(@0))");
@@ -107,8 +106,8 @@ namespace Datalist
         }
         public virtual IQueryable<T> FilterByAdditionalFilters(IQueryable<T> models)
         {
-            foreach (KeyValuePair<String, Object> filter in Filter.AdditionalFilters.Where((KeyValuePair<String, Object> item) => item.Value != null))
-                models = models.Where($@"({filter.Key} != null && {filter.Key} == @0)", filter.Value);
+            foreach (KeyValuePair<String, Object> filter in Filter.AdditionalFilters.Where(item => item.Value != null))
+                models = models.Where($"({filter.Key} != null && {filter.Key} == @0)", filter.Value);
 
             return models;
         }
@@ -116,6 +115,7 @@ namespace Datalist
         public virtual IQueryable<T> Sort(IQueryable<T> models)
         {
             String column = Filter.SortColumn ?? Columns.Where(col => !col.Hidden).Select(col => col.Key).FirstOrDefault();
+
             if (String.IsNullOrWhiteSpace(column))
                 return models;
 
@@ -164,8 +164,7 @@ namespace Datalist
             if (property == null) return null;
 
             DatalistColumnAttribute column = property.GetCustomAttribute<DatalistColumnAttribute>(false);
-            if (column?.Format != null)
-                return String.Format(column.Format, property.GetValue(model));
+            if (column?.Format != null) return String.Format(column.Format, property.GetValue(model));
 
             return property.GetValue(model)?.ToString();
         }

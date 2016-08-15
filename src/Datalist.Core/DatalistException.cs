@@ -2,7 +2,6 @@
 
 namespace Datalist
 {
-    [Serializable]
     public class DatalistException : Exception
     {
         public DatalistException(String message)

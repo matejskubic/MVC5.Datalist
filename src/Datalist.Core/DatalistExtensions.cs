@@ -52,8 +52,8 @@ namespace Datalist
             Expression<Func<TModel, TProperty>> expression, AbstractDatalist model, Object htmlAttributes = null)
         {
             TagBuilder inputGroup = new TagBuilder("div");
-            inputGroup.AddCssClass("input-group");
             inputGroup.InnerHtml = html.AutoCompleteFor(expression, model, htmlAttributes) + FormDatalistOpenSpan();
+            inputGroup.AddCssClass("input-group");
 
             return new MvcHtmlString(inputGroup.ToString());
         }
