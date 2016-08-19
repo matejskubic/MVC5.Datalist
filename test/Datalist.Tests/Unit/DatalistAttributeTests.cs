@@ -12,7 +12,7 @@ namespace Datalist.Tests.Unit
         {
             ArgumentException exception = Assert.Throws<ArgumentException>(() => new DatalistAttribute(typeof(Object)));
 
-            String expected = $"'{typeof(Object).Name}' type does not implement '{typeof(AbstractDatalist).Name}'.";
+            String expected = $"'{typeof(Object).Name}' type does not implement '{typeof(MvcDatalist).Name}'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -21,8 +21,8 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void DatalistAttribute_Type()
         {
-            Type actual = new DatalistAttribute(typeof(AbstractDatalist)).Type;
-            Type expected = typeof(AbstractDatalist);
+            Type actual = new DatalistAttribute(typeof(MvcDatalist)).Type;
+            Type expected = typeof(MvcDatalist);
 
             Assert.Equal(expected, actual);
         }

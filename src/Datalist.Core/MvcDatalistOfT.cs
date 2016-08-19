@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace Datalist
 {
-    public abstract class GenericDatalist<T> : AbstractDatalist where T : class
+    public abstract class MvcDatalist<T> : MvcDatalist where T : class
     {
         public virtual IEnumerable<PropertyInfo> AttributedProperties
         {
@@ -20,7 +20,7 @@ namespace Datalist
             }
         }
 
-        protected GenericDatalist()
+        protected MvcDatalist()
         {
             foreach (PropertyInfo property in AttributedProperties)
                 Columns.Add(new DatalistColumn(GetColumnKey(property), GetColumnHeader(property))

@@ -8,8 +8,8 @@ namespace Datalist
 
         public DatalistAttribute(Type type)
         {
-            if (!typeof(AbstractDatalist).IsAssignableFrom(type))
-                throw new ArgumentException($"'{type.Name}' type does not implement '{typeof(AbstractDatalist).Name}'.");
+            if (!typeof(MvcDatalist).IsAssignableFrom(type))
+                throw new ArgumentException($"'{type.Name}' type does not implement '{typeof(MvcDatalist).Name}'.");
 
             Type = type;
         }

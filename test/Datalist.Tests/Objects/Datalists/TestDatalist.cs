@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Datalist.Tests.Objects
 {
-    public class TestDatalist<T> : GenericDatalist<T> where T : class
+    public class TestDatalist<T> : MvcDatalist<T> where T : class
     {
         public IList<T> Models { get; set; }
 

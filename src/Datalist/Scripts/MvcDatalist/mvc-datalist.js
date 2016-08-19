@@ -1,5 +1,5 @@
 ﻿/*!
- * Datalist 3.6.1
+ * Datalist 4.0.0
  * https://github.com/NonFactors/MVC5.Datalist
  *
  * Copyright © NonFactors
@@ -285,7 +285,7 @@
 
             for (var i = 0; i < columns.length; i++) {
                 var column = columns[i];
-                if (column.hidden) {
+                if (column.Hidden) {
                     continue;
                 }
 
@@ -318,7 +318,7 @@
         _updateData: function (datalist, data) {
             if (data.Rows.length == 0) {
                 var columns = (data.Columns) ? data.Columns.length + 1 : 1;
-                datalist.find('.datalist-table-body').html('<tr><td colspan="' + columns + '" style="text-align: center">' + $.fn.datalist.lang.NoDataFound + '</td></tr>');
+                datalist.find('.datalist-table-body').html('<tr><td colspan="' + columns + '" style="text-align: center">' + $.fn.datalist.lang.NoData + '</td></tr>');
 
                 return;
             }
@@ -330,7 +330,7 @@
 
                 for (var j = 0; j < data.Columns.length; j++) {
                     var column = data.Columns[j];
-                    if (column.hidden) {
+                    if (column.Hidden) {
                         continue;
                     }
 
@@ -420,7 +420,7 @@
 
     $.fn.datalist.lang = {
         Error: 'Error while retrieving records',
-        NoDataFound: 'No data found',
+        NoData: 'No data found',
         Search: 'Search...'
     };
 

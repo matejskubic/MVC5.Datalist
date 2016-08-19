@@ -9,12 +9,12 @@ using Xunit.Extensions;
 
 namespace Datalist.Tests.Unit
 {
-    public class GenericDatalistTests
+    public class MvcDatalistOfTTests
     {
         private Dictionary<String, String> row;
         private TestDatalist<TestModel> datalist;
 
-        public GenericDatalistTests()
+        public MvcDatalistOfTTests()
         {
             row = new Dictionary<String, String>();
             datalist = new TestDatalist<TestModel>();
@@ -156,8 +156,8 @@ namespace Datalist.Tests.Unit
             DatalistData actual = datalist.GetData();
 
             Assert.Equal(new DateTime(2014, 12, 19).ToShortDateString(), actual.Rows[0]["Date"]);
-            Assert.Equal("9V", actual.Rows[0][AbstractDatalist.AcKey]);
-            Assert.Equal("9I", actual.Rows[0][AbstractDatalist.IdKey]);
+            Assert.Equal("9V", actual.Rows[0][MvcDatalist.AcKey]);
+            Assert.Equal("9I", actual.Rows[0][MvcDatalist.IdKey]);
             Assert.Equal("9V", actual.Rows[0]["Value"]);
             Assert.Equal("19", actual.Rows[0]["Count"]);
 
@@ -177,8 +177,8 @@ namespace Datalist.Tests.Unit
             DatalistData actual = datalist.GetData();
 
             Assert.Equal(new DateTime(2014, 12, 16).ToShortDateString(), actual.Rows[0]["Date"]);
-            Assert.Equal("6V", actual.Rows[0][AbstractDatalist.AcKey]);
-            Assert.Equal("6I", actual.Rows[0][AbstractDatalist.IdKey]);
+            Assert.Equal("6V", actual.Rows[0][MvcDatalist.AcKey]);
+            Assert.Equal("6I", actual.Rows[0][MvcDatalist.IdKey]);
             Assert.Equal("6V", actual.Rows[0]["Value"]);
             Assert.Equal("16", actual.Rows[0]["Count"]);
 
@@ -197,14 +197,14 @@ namespace Datalist.Tests.Unit
             DatalistData actual = datalist.GetData();
 
             Assert.Equal(new DateTime(2014, 12, 25).ToShortDateString(), actual.Rows[0]["Date"]);
-            Assert.Equal("15V", actual.Rows[0][AbstractDatalist.AcKey]);
-            Assert.Equal("15I", actual.Rows[0][AbstractDatalist.IdKey]);
+            Assert.Equal("15V", actual.Rows[0][MvcDatalist.AcKey]);
+            Assert.Equal("15I", actual.Rows[0][MvcDatalist.IdKey]);
             Assert.Equal("15V", actual.Rows[0]["Value"]);
             Assert.Equal("25", actual.Rows[0]["Count"]);
 
             Assert.Equal(new DateTime(2014, 12, 15).ToShortDateString(), actual.Rows[1]["Date"]);
-            Assert.Equal("5V", actual.Rows[1][AbstractDatalist.AcKey]);
-            Assert.Equal("5I", actual.Rows[1][AbstractDatalist.IdKey]);
+            Assert.Equal("5V", actual.Rows[1][MvcDatalist.AcKey]);
+            Assert.Equal("5I", actual.Rows[1][MvcDatalist.IdKey]);
             Assert.Equal("5V", actual.Rows[1]["Value"]);
             Assert.Equal("15", actual.Rows[1]["Count"]);
 
@@ -225,14 +225,14 @@ namespace Datalist.Tests.Unit
             DatalistData actual = datalist.GetData();
 
             Assert.Equal(new DateTime(2014, 12, 15).ToShortDateString(), actual.Rows[0]["Date"]);
-            Assert.Equal("5V", actual.Rows[0][AbstractDatalist.AcKey]);
-            Assert.Equal("5I", actual.Rows[0][AbstractDatalist.IdKey]);
+            Assert.Equal("5V", actual.Rows[0][MvcDatalist.AcKey]);
+            Assert.Equal("5I", actual.Rows[0][MvcDatalist.IdKey]);
             Assert.Equal("5V", actual.Rows[0]["Value"]);
             Assert.Equal("15", actual.Rows[0]["Count"]);
 
             Assert.Equal(new DateTime(2014, 12, 25).ToShortDateString(), actual.Rows[1]["Date"]);
-            Assert.Equal("15V", actual.Rows[1][AbstractDatalist.AcKey]);
-            Assert.Equal("15I", actual.Rows[1][AbstractDatalist.IdKey]);
+            Assert.Equal("15V", actual.Rows[1][MvcDatalist.AcKey]);
+            Assert.Equal("15I", actual.Rows[1][MvcDatalist.IdKey]);
             Assert.Equal("15V", actual.Rows[1]["Value"]);
             Assert.Equal("25", actual.Rows[1]["Count"]);
 
@@ -452,8 +452,8 @@ namespace Datalist.Tests.Unit
             {
                 new Dictionary<String, String>
                 {
-                    [AbstractDatalist.IdKey] = "6I",
-                    [AbstractDatalist.AcKey] = "6V",
+                    [MvcDatalist.IdKey] = "6I",
+                    [MvcDatalist.AcKey] = "6V",
                     ["Id"] = "6I",
                     ["Value"] = "6V",
                     ["Date"] = new DateTime(2014, 12, 16).ToShortDateString(),
@@ -461,8 +461,8 @@ namespace Datalist.Tests.Unit
                 },
                 new Dictionary<String, String>
                 {
-                    [AbstractDatalist.IdKey] = "7I",
-                    [AbstractDatalist.AcKey] = "7V",
+                    [MvcDatalist.IdKey] = "7I",
+                    [MvcDatalist.AcKey] = "7V",
                     ["Id"] = "7I",
                     ["Value"] = "7V",
                     ["Date"] = new DateTime(2014, 12, 17).ToShortDateString(),
@@ -470,8 +470,8 @@ namespace Datalist.Tests.Unit
                 },
                 new Dictionary<String, String>
                 {
-                    [AbstractDatalist.IdKey] = "8I",
-                    [AbstractDatalist.AcKey] = "8V",
+                    [MvcDatalist.IdKey] = "8I",
+                    [MvcDatalist.AcKey] = "8V",
                     ["Id"] = "8I",
                     ["Value"] = "8V",
                     ["Date"] = new DateTime(2014, 12, 18).ToShortDateString(),
@@ -499,7 +499,7 @@ namespace Datalist.Tests.Unit
 
             KeyValuePair<String, String> actual = row.Single();
 
-            Assert.Equal(AbstractDatalist.IdKey, actual.Key);
+            Assert.Equal(MvcDatalist.IdKey, actual.Key);
             Assert.Null(actual.Value);
         }
 
@@ -510,7 +510,7 @@ namespace Datalist.Tests.Unit
 
             KeyValuePair<String, String> actual = row.Single();
 
-            Assert.Equal(AbstractDatalist.IdKey, actual.Key);
+            Assert.Equal(MvcDatalist.IdKey, actual.Key);
             Assert.Equal("Test", actual.Value);
         }
 
@@ -527,7 +527,7 @@ namespace Datalist.Tests.Unit
 
             KeyValuePair<String, String> actual = row.Single();
 
-            Assert.Equal(AbstractDatalist.AcKey, actual.Key);
+            Assert.Equal(MvcDatalist.AcKey, actual.Key);
             Assert.Null(actual.Value);
         }
 
@@ -538,7 +538,7 @@ namespace Datalist.Tests.Unit
 
             KeyValuePair<String, String> actual = row.Single();
 
-            Assert.Equal(AbstractDatalist.AcKey, actual.Key);
+            Assert.Equal(MvcDatalist.AcKey, actual.Key);
             Assert.Equal("Test", actual.Value);
         }
 

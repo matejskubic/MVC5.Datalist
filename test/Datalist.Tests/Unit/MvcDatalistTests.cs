@@ -3,29 +3,29 @@ using Xunit;
 
 namespace Datalist.Tests.Unit
 {
-    public class AbstractDatalistTests
+    public class MvcDatalistTests
     {
         #region Constants
 
         [Fact]
         public void Prefix_IsConstant()
         {
-            Assert.True(typeof(AbstractDatalist).GetField("Prefix").IsLiteral);
-            Assert.Equal("Datalist", AbstractDatalist.Prefix);
+            Assert.True(typeof(MvcDatalist).GetField("Prefix").IsLiteral);
+            Assert.Equal("Datalist", MvcDatalist.Prefix);
         }
 
         [Fact]
         public void IdKey_IsConstant()
         {
-            Assert.True(typeof(AbstractDatalist).GetField("IdKey").IsLiteral);
-            Assert.Equal("DatalistIdKey", AbstractDatalist.IdKey);
+            Assert.True(typeof(MvcDatalist).GetField("IdKey").IsLiteral);
+            Assert.Equal("DatalistIdKey", MvcDatalist.IdKey);
         }
 
         [Fact]
         public void AcKey_IsConstant()
         {
-            Assert.True(typeof(AbstractDatalist).GetField("AcKey").IsLiteral);
-            Assert.Equal("DatalistAcKey", AbstractDatalist.AcKey);
+            Assert.True(typeof(MvcDatalist).GetField("AcKey").IsLiteral);
+            Assert.Equal("DatalistAcKey", MvcDatalist.AcKey);
         }
 
         #endregion
@@ -35,7 +35,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AbstractDatalist_Defaults()
         {
-            AbstractDatalist actual = Substitute.For<AbstractDatalist>();
+            MvcDatalist actual = Substitute.For<MvcDatalist>();
 
             Assert.Empty(actual.AdditionalFilters);
             Assert.Equal(20, actual.Filter.Rows);

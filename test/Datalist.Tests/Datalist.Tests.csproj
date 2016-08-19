@@ -71,9 +71,9 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Unit\AbstractDatalistTests.cs" />
+    <Compile Include="Unit\MvcDatalistTests.cs" />
     <Compile Include="Unit\DatalistColumnTests.cs" />
-    <Compile Include="Unit\GenericDatalistTests.cs" />
+    <Compile Include="Unit\MvcDatalistOfTTests.cs" />
     <Compile Include="Unit\DatalistAttributeTests.cs" />
     <Compile Include="Unit\DatalistColumnAttributeTests.cs" />
     <Compile Include="Unit\DatalistDataTests.cs" />

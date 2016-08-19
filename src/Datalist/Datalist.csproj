@@ -37,14 +37,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Datalist\datalist.css" />
-    <Content Include="Scripts\Datalist\datalist.js" />
-    <Content Include="Scripts\Datalist\datalist.min.js">
-      <DependentUpon>datalist.js</DependentUpon>
+    <Content Include="Content\MvcDatalist\mvc-datalist.css" />
+    <Content Include="Scripts\MvcDatalist\mvc-datalist.js" />
+    <Content Include="Scripts\MvcDatalist\mvc-datalist.min.js">
+      <DependentUpon>mvc-datalist.js</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Views\Shared\_Datalist.cshtml" />
+    <None Include="Views\Shared\MvcDatalist\_Dialog.cshtml" />
     <None Include="Views\Web.config.transform" />
   </ItemGroup>
   <ItemGroup />

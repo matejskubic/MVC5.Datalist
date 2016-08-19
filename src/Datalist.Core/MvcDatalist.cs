@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Datalist
 {
-    public abstract class AbstractDatalist
+    public abstract class MvcDatalist
     {
         public const String Prefix = "Datalist";
         public const String IdKey = "DatalistIdKey";
@@ -16,7 +16,7 @@ namespace Datalist
         public IList<DatalistColumn> Columns { get; set; }
         public IList<String> AdditionalFilters { get; set; }
 
-        protected AbstractDatalist()
+        protected MvcDatalist()
         {
             AdditionalFilters = new List<String>();
             Columns = new List<DatalistColumn>();

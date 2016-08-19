@@ -11,7 +11,7 @@ namespace Datalist
     public static class DatalistExtensions
     {
         public static IHtmlString AutoComplete<TModel>(this HtmlHelper<TModel> html,
-            String name, Object value, AbstractDatalist model, Object htmlAttributes = null)
+            String name, Object value, MvcDatalist model, Object htmlAttributes = null)
         {
             String autoComplete = FormAutoComplete(html, model, name, htmlAttributes);
             String hiddenInput = FormHiddenInput(html, name, value);
@@ -24,7 +24,7 @@ namespace Datalist
             return html.AutoCompleteFor(expression, GetModelFromExpression(expression), htmlAttributes);
         }
         public static IHtmlString AutoCompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html,
-            Expression<Func<TModel, TProperty>> expression, AbstractDatalist model, Object htmlAttributes = null)
+            Expression<Func<TModel, TProperty>> expression, MvcDatalist model, Object htmlAttributes = null)
         {
             String name = ExpressionHelper.GetExpressionText(expression);
 
@@ -35,7 +35,7 @@ namespace Datalist
         }
 
         public static IHtmlString Datalist<TModel>(this HtmlHelper<TModel> html,
-            String name, Object value, AbstractDatalist model, Object htmlAttributes = null)
+            String name, Object value, MvcDatalist model, Object htmlAttributes = null)
         {
             TagBuilder inputGroup = new TagBuilder("div");
             inputGroup.AddCssClass("input-group");
@@ -49,7 +49,7 @@ namespace Datalist
             return html.DatalistFor(expression, GetModelFromExpression(expression), htmlAttributes);
         }
         public static IHtmlString DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html,
-            Expression<Func<TModel, TProperty>> expression, AbstractDatalist model, Object htmlAttributes = null)
+            Expression<Func<TModel, TProperty>> expression, MvcDatalist model, Object htmlAttributes = null)
         {
             TagBuilder inputGroup = new TagBuilder("div");
             inputGroup.InnerHtml = html.AutoCompleteFor(expression, model, htmlAttributes) + FormDatalistOpenSpan();
@@ -58,7 +58,7 @@ namespace Datalist
             return new MvcHtmlString(inputGroup.ToString());
         }
 
-        private static AbstractDatalist GetModelFromExpression<TModel, TProperty>(Expression<Func<TModel, TProperty>> expression)
+        private static MvcDatalist GetModelFromExpression<TModel, TProperty>(Expression<Func<TModel, TProperty>> expression)
         {
             MemberExpression exp = expression.Body as MemberExpression;
             DatalistAttribute datalist = exp.Member.GetCustomAttribute<DatalistAttribute>();
@@ -66,9 +66,9 @@ namespace Datalist
             if (datalist == null)
                 throw new DatalistException($"'{exp.Member.Name}' property does not have a '{typeof(DatalistAttribute).Name}' specified.");
 
-            return (AbstractDatalist)Activator.CreateInstance(datalist.Type);
+            return (MvcDatalist)Activator.CreateInstance(datalist.Type);
         }
-        private static String FormAutoComplete(HtmlHelper html, AbstractDatalist model, String hiddenInput, Object htmlAttributes)
+        private static String FormAutoComplete(HtmlHelper html, MvcDatalist model, String hiddenInput, Object htmlAttributes)
         {
             RouteValueDictionary attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
             attributes.Add("data-datalist-filters", String.Join(",", model.AdditionalFilters));
@@ -82,7 +82,7 @@ namespace Datalist
             attributes.Add("data-datalist-title", model.Title);
             attributes.Add("data-datalist-url", model.Url);
 
-            return html.TextBox(hiddenInput + AbstractDatalist.Prefix, null, attributes).ToString();
+            return html.TextBox(hiddenInput + MvcDatalist.Prefix, null, attributes).ToString();
         }
 
         private static String FormHiddenInputFor<TModel, TProperty>(HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression)
