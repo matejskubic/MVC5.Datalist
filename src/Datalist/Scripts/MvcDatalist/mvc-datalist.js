@@ -1,5 +1,5 @@
 ﻿/*!
- * Datalist 4.0.0
+ * Datalist 4.1.0
  * https://github.com/NonFactors/MVC5.Datalist
  *
  * Copyright © NonFactors
@@ -27,10 +27,11 @@
             var o = this.options;
 
             o.hiddenElement = $('#' + e.attr('data-datalist-for'))[0];
-            o.filters = e.attr('data-datalist-filters').split(',');
             o.sortColumn = e.attr('data-datalist-sort-column');
             o.sortOrder = e.attr('data-datalist-sort-order');
             o.page = parseInt(e.attr('data-datalist-page'));
+            var filters = e.attr('data-datalist-filters');
+            o.filters = filters ? filters.split(',') : [];
             o.search = e.attr('data-datalist-search');
             o.title = e.attr('data-datalist-title');
             o.rows = e.attr('data-datalist-rows');
