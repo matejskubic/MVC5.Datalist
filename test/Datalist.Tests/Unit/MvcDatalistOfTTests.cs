@@ -314,12 +314,12 @@ namespace Datalist.Tests.Unit
         public void FilterByAdditionalFilters_Filters()
         {
             datalist.Filter.AdditionalFilters.Add("Id", "9I");
-            datalist.Filter.AdditionalFilters.Add("Count", 9);
-            datalist.Filter.AdditionalFilters.Add("Date", new DateTime(2014, 12, 15));
+            datalist.Filter.AdditionalFilters.Add("Count", 19);
+            datalist.Filter.AdditionalFilters.Add("Date", new DateTime(2014, 12, 19));
 
             IQueryable<TestModel> actual = datalist.FilterByAdditionalFilters(datalist.GetModels());
             IQueryable<TestModel> expected = datalist.GetModels().Where(model =>
-                model.Id == "9I" && model.Count == 9 && model.Date == new DateTime(2014, 12, 15));
+                model.Id == "9I" && model.Count == 19 && model.Date == new DateTime(2014, 12, 19));
 
             Assert.Equal(expected, actual);
         }
