@@ -150,7 +150,7 @@
 
         _formAutocompleteUrl: function (search) {
             return this.options.url +
-                '?Search=' + search +
+                '?Search=' + encodeURIComponent(search) +
                 '&SortOrder=Asc' +
                 '&Rows=20' +
                 '&Page=0' +
@@ -158,11 +158,11 @@
         },
         _formDatalistUrl: function (search) {
             return this.options.url +
-                '?Search=' + search +
-                '&SortColumn=' + this.options.sortColumn +
-                '&SortOrder=' + this.options.sortOrder +
-                '&Rows=' + this.options.rows +
-                '&Page=' + this.options.page +
+                '?Search=' + encodeURIComponent(search) +
+                '&SortColumn=' + encodeURIComponent(this.options.sortColumn) +
+                '&SortOrder=' + encodeURIComponent(this.options.sortOrder) +
+                '&Rows=' + encodeURIComponent(this.options.rows) +
+                '&Page=' + encodeURIComponent(this.options.page) +
                 this._formFiltersQuery();
         },
         _formFiltersQuery: function () {
@@ -170,7 +170,7 @@
             for (var i = 0; i < this.options.filters.length; i++) {
                 var filter = $('#' + this.options.filters[i]);
                 if (filter.length == 1) {
-                    additionaFilter += '&' + this.options.filters[i] + '=' + filter.val();
+                    additionaFilter += '&' + encodeURIComponent(this.options.filters[i]) + '=' + encodeURIComponent(filter.val());
                 }
             }
 
@@ -196,7 +196,7 @@
             var id = $(that.options.hiddenElement).val();
             if (id) {
                 $.ajax({
-                    url: that.options.url + '?Id=' + id + '&Rows=1' + this._formFiltersQuery(),
+                    url: that.options.url + '?Id=' + encodeURIComponent(id) + '&Rows=1' + this._formFiltersQuery(),
                     cache: false,
                     success: function (data) {
                         if (data.Rows.length > 0) {
