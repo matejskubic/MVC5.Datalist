@@ -1,5 +1,5 @@
 ﻿/*!
- * Datalist 4.1.1
+ * Datalist 4.1.2
  * https://github.com/NonFactors/MVC5.Datalist
  *
  * Copyright © NonFactors
@@ -151,7 +151,8 @@
         _formAutocompleteUrl: function (search) {
             return this.options.url +
                 '?Search=' + encodeURIComponent(search) +
-                '&SortOrder=Asc' +
+                '&SortColumn=' + encodeURIComponent(this.options.sortColumn) +
+                '&SortOrder=' + encodeURIComponent(this.options.sortOrder) +
                 '&Rows=20' +
                 '&Page=0' +
                 this._formFiltersQuery();
