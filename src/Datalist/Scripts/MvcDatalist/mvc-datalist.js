@@ -280,6 +280,7 @@
             });
         },
         _updateHeader: function (datalist, columns) {
+            var sorted = false;
             var that = this;
             var header = '';
 
@@ -290,9 +291,10 @@
                 }
 
                 header += '<th class="' + (column.CssClass || '') + '" data-column="' + column.Key + '"><span class="datalist-header-title">' + (column.Header || '') + '</span>';
-                if (that.options.sortColumn == column.Key || (that.options.sortColumn == '' && i == 0)) {
+                if (that.options.sortColumn == column.Key || (that.options.sortColumn == '' && !sorted)) {
                     header += '<span class="datalist-sort-arrow ' + (that.options.sortOrder == 'Asc' ? 'asc' : 'desc') + '"></span></th>';
                     that.options.sortColumn = column.Key;
+                    sorted = true;
                 } else {
                     header += '<span class="datalist-sort-arrow"></span></th>';
                 }
