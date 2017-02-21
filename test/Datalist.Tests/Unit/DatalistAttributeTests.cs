@@ -1,5 +1,6 @@
 ﻿using System;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Datalist.Tests.Unit
 {
@@ -7,12 +8,14 @@ namespace Datalist.Tests.Unit
     {
         #region DatalistAttribute(Type type)
 
-        [Fact]
-        public void DatalistAttribute_NoDatalist_Throws()
+        [Theory]
+        [InlineData(null)]
+        [InlineData(typeof(Object))]
+        public void DatalistAttribute_NoDatalist_Throws(Type type)
         {
-            ArgumentException exception = Assert.Throws<ArgumentException>(() => new DatalistAttribute(typeof(Object)));
+            ArgumentException exception = Assert.Throws<ArgumentException>(() => new DatalistAttribute(type));
 
-            String expected = $"'{typeof(Object).Name}' type does not implement '{typeof(MvcDatalist).Name}'.";
+            String expected = $"'{type?.Name}' type does not implement '{typeof(MvcDatalist).Name}'.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
