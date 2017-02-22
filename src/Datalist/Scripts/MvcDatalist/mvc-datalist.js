@@ -428,6 +428,7 @@
     $(function () {
         datalist.find('.datalist-rows input').spinner({ min: 1, max: 99 });
         datalist.dialog({
+            classes: { 'ui-dialog': 'datalist-dialog' },
             dialogClass: 'datalist-dialog',
             autoOpen: false,
             minHeight: 210,
