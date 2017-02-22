@@ -252,7 +252,7 @@ namespace Datalist.Tests.Unit
 
             DatalistException exception = Assert.Throws<DatalistException>(() => datalist.FilterById(null));
 
-            String expected = $"'{typeof(NoIdModel).Name}' type does not have property named 'Id', required for automatic id filtering.";
+            String expected = $"'{typeof(NoIdModel).Name}' type does not have key or property named 'Id', required for automatic id filtering.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -270,15 +270,14 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void FilterById_Number()
+        public void FilterById_NumberKey()
         {
             TestDatalist<NumericModel> datalist = new TestDatalist<NumericModel>();
-            for (Int32 i = 0; i < 20; i++)
-                datalist.Models.Add(new NumericModel { Id = i });
+            for (Int32 i = 0; i < 20; i++) datalist.Models.Add(new NumericModel { Value = i });
 
             datalist.Filter.Id = "9.0";
 
-            IQueryable<NumericModel> expected = datalist.GetModels().Where(model => model.Id == 9);
+            IQueryable<NumericModel> expected = datalist.GetModels().Where(model => model.Value == 9);
             IQueryable<NumericModel> actual = datalist.FilterById(datalist.GetModels());
 
             Assert.Equal(expected, actual);
