@@ -101,14 +101,16 @@
                         datalist
                             .find('.datalist-search')
                             .off('keyup.datalist')
-                            .on('keyup.datalist', function () {
-                                var input = this;
-                                clearTimeout(timeout);
-                                timeout = setTimeout(function () {
-                                    that.options.search = input.value;
-                                    that.options.page = 0;
-                                    that._update(datalist);
-                                }, 500);
+                            .on('keyup.datalist', function (e) {
+                                if (e.keyCode < 112 || e.keyCode > 126) {
+                                    var input = this;
+                                    clearTimeout(timeout);
+                                    timeout = setTimeout(function () {
+                                        that.options.search = input.value;
+                                        that.options.page = 0;
+                                        that._update(datalist);
+                                    }, 500);
+                                }
                             })
                             .val(that.options.search);
                         datalist
