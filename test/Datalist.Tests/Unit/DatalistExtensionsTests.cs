@@ -29,12 +29,12 @@ namespace Datalist.Tests.Unit
             datalist.Filter.SortOrder = DatalistSortOrder.Desc;
         }
 
-        #region AutoComplete<TModel>(this IHtmlHelper<TModel> html, String name, Object value, MvcDatalist model, Object htmlAttributes = null)
+        #region AutoComplete<TModel>(this IHtmlHelper<TModel> html, String name, MvcDatalist model, Object value = null, Object htmlAttributes = null)
 
         [Fact]
         public void AutoComplete_FromModel()
         {
-            String actual = html.AutoComplete("Test", "Value", datalist, new { @class = "classes", attribute = "attr" }).ToString();
+            String actual = html.AutoComplete("Test", datalist, "Value", new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
                 "<input attribute=\"attr\" class=\"classes form-control datalist-input\" " +
                     "data-datalist-filters=\"Add1,Add2\" data-datalist-for=\"Test\" data-datalist-page=\"2\" " +
@@ -94,12 +94,12 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region Datalist<TModel>(this IHtmlHelper<TModel> html, String name, Object value, MvcDatalist model, Object htmlAttributes = null)
+        #region Datalist<TModel>(this IHtmlHelper<TModel> html, String name, MvcDatalist model, Object value = null, Object htmlAttributes = null)
 
         [Fact]
         public void Datalist_FromModel()
         {
-            String actual = html.Datalist("Test", "Value", datalist, new { @class = "classes", attribute = "attr" }).ToString();
+            String actual = html.Datalist("Test", datalist, "Value", new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
                 "<div class=\"input-group\">" +
                     "<input attribute=\"attr\" class=\"classes form-control datalist-input\" " +

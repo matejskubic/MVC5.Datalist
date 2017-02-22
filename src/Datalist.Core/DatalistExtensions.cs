@@ -11,7 +11,7 @@ namespace Datalist
     public static class DatalistExtensions
     {
         public static IHtmlString AutoComplete<TModel>(this HtmlHelper<TModel> html,
-            String name, Object value, MvcDatalist model, Object htmlAttributes = null)
+            String name, MvcDatalist model, Object value = null, Object htmlAttributes = null)
         {
             String autoComplete = FormAutoComplete(html, model, name, htmlAttributes);
             String hiddenInput = FormHiddenInput(html, name, value);
@@ -35,11 +35,11 @@ namespace Datalist
         }
 
         public static IHtmlString Datalist<TModel>(this HtmlHelper<TModel> html,
-            String name, Object value, MvcDatalist model, Object htmlAttributes = null)
+            String name, MvcDatalist model, Object value = null, Object htmlAttributes = null)
         {
             TagBuilder inputGroup = new TagBuilder("div");
             inputGroup.AddCssClass("input-group");
-            inputGroup.InnerHtml = html.AutoComplete(name, value, model, htmlAttributes) + FormDatalistOpenSpan();
+            inputGroup.InnerHtml = html.AutoComplete(name, model, value, htmlAttributes) + FormDatalistOpenSpan();
 
             return new MvcHtmlString(inputGroup.ToString());
         }
