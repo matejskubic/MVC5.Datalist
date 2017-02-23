@@ -103,6 +103,10 @@
                             .find('.datalist-search')
                             .off('keyup.datalist')
                             .on('keyup.datalist', function (e) {
+                                if (that.element.is('[readonly]') || that.element.is('[disabled]')) {
+                                    return;
+                                }
+
                                 if (e.keyCode < 112 || e.keyCode > 126) {
                                     var input = this;
                                     clearTimeout(timeout);
