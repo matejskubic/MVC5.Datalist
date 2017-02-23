@@ -490,6 +490,20 @@ namespace Datalist.Tests.Unit
         #region AddId(Dictionary<String, String> row, T model)
 
         [Fact]
+        public void AddId_FromFunction()
+        {
+            TestDatalist<NoIdModel> datalist = new TestDatalist<NoIdModel>();
+            datalist.Id = (model) => "1";
+
+            datalist.AddId(row, new NoIdModel());
+
+            KeyValuePair<String, String> actual = row.Single();
+
+            Assert.Equal(MvcDatalist.IdKey, actual.Key);
+            Assert.Equal("1", actual.Value);
+        }
+
+        [Fact]
         public void AddId_EmptyValues()
         {
             TestDatalist<NoIdModel> datalist = new TestDatalist<NoIdModel>();
@@ -516,6 +530,19 @@ namespace Datalist.Tests.Unit
         #endregion
 
         #region AddAutocomplete(Dictionary<String, String> row, T model)
+
+        [Fact]
+        public void AddAutocomplete_FromFunction()
+        {
+            datalist.Autocomplete = (model) => "Auto";
+
+            datalist.AddAutocomplete(row, new TestModel { Value = "Test" });
+
+            KeyValuePair<String, String> actual = row.Single();
+
+            Assert.Equal(MvcDatalist.AcKey, actual.Key);
+            Assert.Equal("Auto", actual.Value);
+        }
 
         [Fact]
         public void AddAutocomplete_EmptyValues()
