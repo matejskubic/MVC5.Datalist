@@ -448,6 +448,13 @@
             modal: true
         });
 
+        $('.datalist-dialog').resizable({
+            handles: 'w,e',
+            stop: function (event, ui) {
+                $(this).css('height', 'auto');
+            }
+        });
+
         $('.datalist-input').datalist();
     });
 })(jQuery);
