@@ -313,7 +313,7 @@ namespace Datalist.Tests.Unit
         public void FilterByAdditionalFilters_Filters()
         {
             datalist.Filter.AdditionalFilters.Add("Id", "9I");
-            datalist.Filter.AdditionalFilters.Add("Count", 19);
+            datalist.Filter.AdditionalFilters.Add("Count", new[] { 19, 30 });
             datalist.Filter.AdditionalFilters.Add("Date", new DateTime(2014, 12, 19));
 
             IQueryable<TestModel> actual = datalist.FilterByAdditionalFilters(datalist.GetModels());

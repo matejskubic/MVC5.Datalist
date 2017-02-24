@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -104,7 +105,10 @@ namespace Datalist
         public virtual IQueryable<T> FilterByAdditionalFilters(IQueryable<T> models)
         {
             foreach (KeyValuePair<String, Object> filter in Filter.AdditionalFilters.Where(item => item.Value != null))
-                models = models.Where($"({filter.Key} != null && {filter.Key} == @0)", filter.Value);
+                if (filter.Value is IEnumerable && !(filter.Value is String))
+                    models = models.Where($"@0.Contains(outerIt.{filter.Key})", filter.Value).AsQueryable();
+                else
+                    models = models.Where($"({filter.Key} != null && {filter.Key} == @0)", filter.Value);
 
             return models;
         }
