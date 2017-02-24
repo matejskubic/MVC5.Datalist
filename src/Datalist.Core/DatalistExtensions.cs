@@ -37,11 +37,11 @@ namespace Datalist
         public static IHtmlString Datalist<TModel>(this HtmlHelper<TModel> html,
             String name, MvcDatalist model, Object value = null, Object htmlAttributes = null)
         {
-            TagBuilder inputGroup = new TagBuilder("div");
-            inputGroup.AddCssClass("input-group");
-            inputGroup.InnerHtml = html.AutoComplete(name, model, value, htmlAttributes) + FormDatalistOpenSpan();
+            TagBuilder datalist = new TagBuilder("div");
+            datalist.AddCssClass("datalist-group");
+            datalist.InnerHtml = html.AutoComplete(name, model, value, htmlAttributes) + FormDatalistBrowse();
 
-            return new MvcHtmlString(inputGroup.ToString());
+            return new MvcHtmlString(datalist.ToString());
         }
         public static IHtmlString DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html,
             Expression<Func<TModel, TProperty>> expression, Object htmlAttributes = null)
@@ -51,11 +51,11 @@ namespace Datalist
         public static IHtmlString DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html,
             Expression<Func<TModel, TProperty>> expression, MvcDatalist model, Object htmlAttributes = null)
         {
-            TagBuilder inputGroup = new TagBuilder("div");
-            inputGroup.InnerHtml = html.AutoCompleteFor(expression, model, htmlAttributes) + FormDatalistOpenSpan();
-            inputGroup.AddCssClass("input-group");
+            TagBuilder datalist = new TagBuilder("div");
+            datalist.InnerHtml = html.AutoCompleteFor(expression, model, htmlAttributes) + FormDatalistBrowse();
+            datalist.AddCssClass("datalist-group");
 
-            return new MvcHtmlString(inputGroup.ToString());
+            return new MvcHtmlString(datalist.ToString());
         }
 
         private static MvcDatalist GetModelFromExpression<TModel, TProperty>(Expression<Func<TModel, TProperty>> expression)
@@ -72,8 +72,8 @@ namespace Datalist
         {
             RouteValueDictionary attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
             attributes.Add("data-datalist-filters", String.Join(",", model.AdditionalFilters));
-            attributes["class"] = $"{attributes["class"]} form-control datalist-input".Trim();
             attributes.Add("data-datalist-for", TagBuilder.CreateSanitizedId(hiddenInput));
+            attributes["class"] = $"{attributes["class"]} datalist-input".Trim();
             attributes.Add("data-datalist-sort-column", model.Filter.SortColumn);
             attributes.Add("data-datalist-sort-order", model.Filter.SortOrder);
             attributes.Add("data-datalist-search", model.Filter.Search);
@@ -100,16 +100,12 @@ namespace Datalist
             return html.Hidden(name, value, attributes).ToString();
         }
 
-        private static String FormDatalistOpenSpan()
+        private static String FormDatalistBrowse()
         {
-            TagBuilder outerSpan = new TagBuilder("span");
-            TagBuilder innerSpan = new TagBuilder("span");
+            TagBuilder browse = new TagBuilder("span");
+            browse.AddCssClass("datalist-browse");
 
-            outerSpan.AddCssClass("datalist-open-span input-group-addon");
-            innerSpan.AddCssClass("datalist-open-icon glyphicon");
-            outerSpan.InnerHtml = innerSpan.ToString();
-
-            return outerSpan.ToString();
+            return browse.ToString();
         }
     }
 }

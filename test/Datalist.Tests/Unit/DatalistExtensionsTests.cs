@@ -36,7 +36,7 @@ namespace Datalist.Tests.Unit
         {
             String actual = html.AutoComplete("Test", datalist, "Value", new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
-                "<input attribute=\"attr\" class=\"classes form-control datalist-input\" " +
+                "<input attribute=\"attr\" class=\"classes datalist-input\" " +
                     "data-datalist-filters=\"Add1,Add2\" data-datalist-for=\"Test\" data-datalist-page=\"2\" " +
                     "data-datalist-rows=\"11\" data-datalist-search=\"Test\" data-datalist-sort-column=\"First\" " +
                     "data-datalist-sort-order=\"Desc\" data-datalist-title=\"Dialog title\" data-datalist-url=\"http://localhost/Datalist\" " +
@@ -63,7 +63,7 @@ namespace Datalist.Tests.Unit
         {
             String actual = html.AutoCompleteFor(model => model.ParentId, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
-                "<input attribute=\"attr\" class=\"classes form-control datalist-input\" " +
+                "<input attribute=\"attr\" class=\"classes datalist-input\" " +
                     "data-datalist-filters=\"Test1,Test2\" data-datalist-for=\"ParentId\" data-datalist-page=\"3\" " +
                     "data-datalist-rows=\"7\" data-datalist-search=\"Term\" data-datalist-sort-column=\"Id\" " +
                     "data-datalist-sort-order=\"Asc\" data-datalist-title=\"Test title\" data-datalist-url=\"http://localhost/Test\" " +
@@ -82,7 +82,7 @@ namespace Datalist.Tests.Unit
         {
             String actual = html.AutoCompleteFor(model => model.ParentId, datalist, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
-                "<input attribute=\"attr\" class=\"classes form-control datalist-input\" " +
+                "<input attribute=\"attr\" class=\"classes datalist-input\" " +
                     "data-datalist-filters=\"Add1,Add2\" data-datalist-for=\"ParentId\" data-datalist-page=\"2\" " +
                     "data-datalist-rows=\"11\" data-datalist-search=\"Test\" data-datalist-sort-column=\"First\" " +
                     "data-datalist-sort-order=\"Desc\" data-datalist-title=\"Dialog title\" data-datalist-url=\"http://localhost/Datalist\" " +
@@ -101,16 +101,14 @@ namespace Datalist.Tests.Unit
         {
             String actual = html.Datalist("Test", datalist, "Value", new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
-                "<div class=\"input-group\">" +
-                    "<input attribute=\"attr\" class=\"classes form-control datalist-input\" " +
+                "<div class=\"datalist-group\">" +
+                    "<input attribute=\"attr\" class=\"classes datalist-input\" " +
                         "data-datalist-filters=\"Add1,Add2\" data-datalist-for=\"Test\" data-datalist-page=\"2\" " +
                         "data-datalist-rows=\"11\" data-datalist-search=\"Test\" data-datalist-sort-column=\"First\" " +
                         "data-datalist-sort-order=\"Desc\" data-datalist-title=\"Dialog title\" data-datalist-url=\"http://localhost/Datalist\" " +
                         "id=\"TestDatalist\" name=\"TestDatalist\" type=\"text\" value=\"\" />" +
                     "<input class=\"datalist-hidden-input\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"Value\" />" +
-                    "<span class=\"datalist-open-span input-group-addon\">" +
-                        "<span class=\"datalist-open-icon glyphicon\"></span>" +
-                    "</span>" +
+                    "<span class=\"datalist-browse\"></span>" +
                 "</div>";
 
             Assert.Equal(expected, actual);
@@ -133,16 +131,14 @@ namespace Datalist.Tests.Unit
         {
             String actual = html.DatalistFor(model => model.ParentId, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
-                "<div class=\"input-group\">" +
-                    "<input attribute=\"attr\" class=\"classes form-control datalist-input\" " +
+                "<div class=\"datalist-group\">" +
+                    "<input attribute=\"attr\" class=\"classes datalist-input\" " +
                     "data-datalist-filters=\"Test1,Test2\" data-datalist-for=\"ParentId\" data-datalist-page=\"3\" " +
                     "data-datalist-rows=\"7\" data-datalist-search=\"Term\" data-datalist-sort-column=\"Id\" " +
                     "data-datalist-sort-order=\"Asc\" data-datalist-title=\"Test title\" data-datalist-url=\"http://localhost/Test\" " +
                     "id=\"ParentIdDatalist\" name=\"ParentIdDatalist\" type=\"text\" value=\"\" />" +
                     "<input class=\"datalist-hidden-input\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
-                    "<span class=\"datalist-open-span input-group-addon\">" +
-                        "<span class=\"datalist-open-icon glyphicon\"></span>" +
-                    "</span>" +
+                    "<span class=\"datalist-browse\"></span>" +
                 "</div>";
 
             Assert.Equal(expected, actual);
@@ -157,16 +153,14 @@ namespace Datalist.Tests.Unit
         {
             String actual = html.DatalistFor(model => model.ParentId, datalist, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
-                "<div class=\"input-group\">" +
-                    "<input attribute=\"attr\" class=\"classes form-control datalist-input\" " +
+                "<div class=\"datalist-group\">" +
+                    "<input attribute=\"attr\" class=\"classes datalist-input\" " +
                     "data-datalist-filters=\"Add1,Add2\" data-datalist-for=\"ParentId\" data-datalist-page=\"2\" " +
                     "data-datalist-rows=\"11\" data-datalist-search=\"Test\" data-datalist-sort-column=\"First\" " +
                     "data-datalist-sort-order=\"Desc\" data-datalist-title=\"Dialog title\" data-datalist-url=\"http://localhost/Datalist\" " +
                     "id=\"ParentIdDatalist\" name=\"ParentIdDatalist\" type=\"text\" value=\"\" />" +
                     "<input class=\"datalist-hidden-input\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
-                    "<span class=\"datalist-open-span input-group-addon\">" +
-                        "<span class=\"datalist-open-icon glyphicon\"></span>" +
-                    "</span>" +
+                    "<span class=\"datalist-browse\"></span>" +
                 "</div>";
 
             Assert.Equal(expected, actual);

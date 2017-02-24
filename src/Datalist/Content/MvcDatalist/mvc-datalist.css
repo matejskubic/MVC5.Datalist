@@ -1,12 +1,55 @@
 ﻿/*!
- * Datalist 4.1.2
- * https://github.com/NonFactors/MVC5.Datalist
+ * Mvc.Lookup 1.1.0
+ * https://github.com/NonFactors/MVC6.Lookup
  *
  * Copyright © NonFactors
  *
  * Licensed under the terms of the MIT License
  * http://www.opensource.org/licenses/mit-license.php
  */
+
+.datalist-group {
+    display: table;
+}
+
+.datalist-browse,
+.datalist-group .datalist-input {
+    display: table-cell;
+}
+
+.datalist-input {
+    box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px inset;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+    border: 1px solid #CCCCCC;
+    box-sizing: border-box;
+    padding: 6px 12px;
+    display: block;
+    height: 34px;
+    width: 100%;
+}
+
+.datalist-browse {
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+    border: 1px solid #CCCCCC;
+    background-color: #EEEEEE;
+    vertical-align: middle;
+    padding: 0 12px;
+    cursor: pointer;
+    border-left: 0;
+    line-height: 1;
+    width: 1%;
+}
+
+    .datalist-browse::before {
+        content: '\1F50D';
+    }
+
+.datalist-dialog .ui-dialog-title {
+    line-height: 1.4em;
+    min-height: 1.4em;
+}
 
 .datalist,
 .datalist-dialog,
@@ -17,22 +60,9 @@
     box-sizing: content-box;
 }
 
-    .datalist-dialog .ui-dialog-title {
-        line-height: 1.4em;
-        min-height: 1.4em;
-    }
-
-.datalist-open-span {
-    cursor: pointer;
-}
-
-    .datalist-open-span .datalist-open-icon::before {
-        content: '\e003';
-    }
-
 .datalist {
     font-size: 0.9em;
-    min-width: 350px;
+    min-width: 427px;
     display: none;
 }
 
@@ -50,6 +80,7 @@
     border-bottom-left-radius: 4px;
     border-top-left-radius: 4px;
     border: 1px solid #CCCCCC;
+    box-sizing: border-box;
     display: table-cell;
     padding: 6px 12px;
     width: 100%;
@@ -72,6 +103,7 @@
     .datalist-rows input {
         background-color: #EEEEEE;
         padding: 6px 1.6em 6px 0;
+        box-sizing: border-box;
         text-align: center;
         height: 100%;
         width: 5em;
@@ -91,6 +123,7 @@
 
     .datalist-rows .ui-icon {
         margin-left: -8px;
+        cursor: pointer;
         left: 50%;
     }
 
@@ -108,13 +141,28 @@
 }
 
 .datalist-error {
+    background-color: #F2DEDE;
+    border: 1px solid #EBCCD1;
     text-align: center;
+    color: #A94442;
     margin: 30px 0;
     display: none;
+    padding: 15px;
 }
 
 .datalist table {
+    border-collapse: collapse;
+    border: 1px solid #DDDDDD;
     margin-bottom: 0.8em;
+    width: 100%;
+}
+
+.datalist tbody tr:nth-of-type(2n+1) {
+    background-color: #F9F9F9;
+}
+
+.datalist tbody tr:hover {
+    background-color: #F5F5F5;
 }
 
 .datalist tr {
@@ -133,33 +181,59 @@
 
 .datalist thead > tr > th,
 .datalist tbody > tr > td {
+    border: 1px solid #DDDDDD;
+    line-height: 1.42857143;
     padding: 0.3em 0.6em;
 }
 
-.datalist td:last-child {
+.datalist td:not(:first-child):last-child {
     text-align: center;
     font-weight: bold;
-    width: 2.5em;
+    width: 1em;
 }
 
-    .datalist td:last-child::after {
+    .datalist td:not(:first-child):last-child::after {
         content: '\25CF';
     }
 
-.datalist tr:hover td:last-child::after {
+.datalist tr:hover td:not(:first-child):last-child::after {
     content: '\2714';
     color: #5CB85C;
 }
 
-.datalist .pagination {
-    float: right;
+.datalist ul {
+    text-align: right;
     margin: 0;
 }
 
-    .datalist .pagination > li {
+    .datalist ul li {
+        display: inline;
         cursor: pointer;
     }
 
-        .datalist .pagination > li > span {
-            padding: 0.2em 0.5em;
+        .datalist ul li + li span {
+            border-left: 0;
         }
+
+    .datalist ul span {
+        border: 1px solid #DDDDDD;
+        box-sizing: content-box;
+        display: inline-block;
+        padding: 0.4em 0.6em;
+        text-align: center;
+        min-width: 0.9em;
+        color: #777777;
+    }
+
+        .datalist ul span:focus,
+        .datalist ul span:hover {
+            background-color: #EEEEEE;
+            color: #777777;
+        }
+
+.datalist .active span,
+.datalist .active span:hover {
+    background-color: rgba(77, 78, 80, 0.76);
+    border-color: rgba(77, 78, 80, 0.76);
+    color: #FFFFFF;
+}

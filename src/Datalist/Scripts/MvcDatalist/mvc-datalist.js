@@ -92,11 +92,11 @@
             this.element.prevAll('.ui-helper-hidden-accessible').remove();
         },
         _initDatalistOpenSpan: function () {
-            var datalistAddon = this.element.nextAll('.datalist-open-span:first');
-            if (datalistAddon.length != 0) {
+            var browse = this.element.nextAll('.datalist-browse:first');
+            if (browse.length != 0) {
                 var that = this;
 
-                this._on(datalistAddon, {
+                this._on(browse, {
                     click: function () {
                         var timeout;
                         datalist
@@ -244,8 +244,8 @@
 
             var timeout = setTimeout(function () {
                 datalist.find('.datalist-loading').fadeIn(300);
-                datalist.find('.pagination').fadeOut(300);
                 datalist.find('table').fadeOut(300);
+                datalist.find('ul').fadeOut(300);
             }, 500);
 
             $.ajax({
@@ -259,15 +259,15 @@
                     clearTimeout(timeout);
                     datalist.find('.datalist-error').hide();
                     datalist.find('.datalist-loading').fadeOut(300);
-                    datalist.find('.pagination').fadeIn(300);
                     datalist.find('table').fadeIn(300);
+                    datalist.find('ul').fadeIn(300);
                 },
                 error: function () {
                     clearTimeout(timeout);
                     datalist.find('.datalist-error').fadeIn(300);
                     datalist.find('.datalist-loading').hide();
-                    datalist.find('.pagination').hide();
                     datalist.find('table').hide();
+                    datalist.find('ul').hide();
                 }
             });
         },
@@ -349,7 +349,7 @@
             }
 
             if (totalPages == 0) {
-                datalist.find('.pagination').empty();
+                datalist.find('ul').empty();
             } else {
                 this._paginate(totalPages);
             }
@@ -373,7 +373,7 @@
                 pagination += '<li><span data-page="' + (currentPage + 1) + '">&rsaquo;</span></li><li><span data-page="' + (totalPages - 1) + '">&raquo;</span></li>';
             }
 
-            datalist.find('.pagination').html(pagination).find('li:not(.active) > span').click(function (e) {
+            datalist.find('ul').html(pagination).find('li:not(.active) > span').click(function (e) {
                 that.options.page = parseInt($(this).data('page'));
                 that._update(datalist);
             });
