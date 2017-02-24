@@ -23,17 +23,15 @@
             var e = this.element;
             var o = this.options;
 
-            o.hiddenElement = $('#' + e.attr('data-datalist-for'))[0];
-            o.sortColumn = e.attr('data-datalist-sort-column');
-            o.sortOrder = e.attr('data-datalist-sort-order');
-            o.page = parseInt(e.attr('data-datalist-page'));
-            var filters = e.attr('data-datalist-filters');
-            o.filters = filters ? filters.split(',') : [];
-            o.search = e.attr('data-datalist-search');
-            o.title = e.attr('data-datalist-title');
-            o.rows = e.attr('data-datalist-rows');
-            o.url = e.attr('data-datalist-url');
-            e.addClass('mvc-datalist');
+            o.filters = e.attr('data-filters').split(',').filter(Boolean);
+            o.hiddenElement = $('#' + e.attr('data-for'))[0];
+            o.page = parseInt(e.attr('data-page'));
+            o.order = e.attr('data-order');
+            o.search = e.attr('data-search');
+            o.title = e.attr('data-title');
+            o.rows = e.attr('data-rows');
+            o.sort = e.attr('data-sort');
+            o.url = e.attr('data-url');
         },
         _initFilters: function () {
             for (var i = 0; i < this.options.filters.length; i++) {
@@ -153,16 +151,16 @@
         _formAutocompleteUrl: function (search) {
             return this.options.url +
                 '?Search=' + encodeURIComponent(search) +
-                '&SortColumn=' + encodeURIComponent(this.options.sortColumn) +
-                '&SortOrder=' + encodeURIComponent(this.options.sortOrder) +
+                '&Sort=' + encodeURIComponent(this.options.sort) +
+                '&Order=' + encodeURIComponent(this.options.order) +
                 '&Rows=20' +
                 this._formFiltersQuery();
         },
         _formDatalistUrl: function (search) {
             return this.options.url +
                 '?Search=' + encodeURIComponent(search) +
-                '&SortColumn=' + encodeURIComponent(this.options.sortColumn) +
-                '&SortOrder=' + encodeURIComponent(this.options.sortOrder) +
+                '&Sort=' + encodeURIComponent(this.options.sort) +
+                '&Order=' + encodeURIComponent(this.options.order) +
                 '&Rows=' + encodeURIComponent(this.options.rows) +
                 '&Page=' + encodeURIComponent(this.options.page) +
                 this._formFiltersQuery();
@@ -208,14 +206,14 @@
             return Math.min(Math.max(parseInt(value), min), max) || 20;
         },
         _cleanUp: function () {
-            this.element.removeAttr('data-datalist-sort-column');
-            this.element.removeAttr('data-datalist-sort-order');
-            this.element.removeAttr('data-datalist-filters');
-            this.element.removeAttr('data-datalist-search');
-            this.element.removeAttr('data-datalist-title');
-            this.element.removeAttr('data-datalist-rows');
-            this.element.removeAttr('data-datalist-page');
-            this.element.removeAttr('data-datalist-url');
+            this.element.removeAttr('data-filters');
+            this.element.removeAttr('data-search');
+            this.element.removeAttr('data-order');
+            this.element.removeAttr('data-title');
+            this.element.removeAttr('data-rows');
+            this.element.removeAttr('data-page');
+            this.element.removeAttr('data-sort');
+            this.element.removeAttr('data-url');
         },
 
         _update: function (datalist) {
@@ -264,9 +262,9 @@
                 }
 
                 header += '<th class="' + (column.CssClass || '');
-                if (that.options.sortColumn == column.Key || (that.options.sortColumn == '' && !sorted)) {
-                    header += 'datalist-' + (that.options.sortOrder == 'Asc' ? 'asc' : 'desc');
-                    that.options.sortColumn = column.Key;
+                if (that.options.sort == column.Key || (that.options.sort == '' && !sorted)) {
+                    header += 'datalist-' + (that.options.order == 'Asc' ? 'asc' : 'desc');
+                    that.options.sort = column.Key;
                     sorted = true;
                 }
 
@@ -280,13 +278,13 @@
                     return false;
                 }
 
-                if (that.options.sortColumn == header.attr('data-column')) {
-                    that.options.sortOrder = that.options.sortOrder == 'Asc' ? 'Desc' : 'Asc';
+                if (that.options.sort == header.attr('data-column')) {
+                    that.options.order = that.options.order == 'Asc' ? 'Desc' : 'Asc';
                 } else {
-                    that.options.sortOrder = 'Asc';
+                    that.options.order = 'Asc';
                 }
 
-                that.options.sortColumn = header.attr('data-column');
+                that.options.sort = header.attr('data-column');
                 that._update(datalist);
             });
         },
@@ -393,15 +391,15 @@
             var e = this.element;
             var o = this.options;
 
-            e.attr('data-datalist-filters', o.filters.join());
-            e.attr('data-datalist-sort-column', o.sortColumn);
-            e.attr('data-datalist-sort-order', o.sortOrder);
-            e.attr('data-datalist-search', o.search);
-            e.attr('data-datalist-title', o.title);
-            e.attr('data-datalist-rows', o.rows);
-            e.attr('data-datalist-page', o.page);
-            e.attr('data-datalist-url', o.url);
-            e.removeClass('mvc-datalist');
+            e.attr('data-filters', o.filters.join());
+            e.attr('data-search', o.search);
+            e.attr('data-order', o.order);
+            e.attr('data-title', o.title);
+            e.attr('data-page', o.page);
+            e.attr('data-rows', o.rows);
+            e.attr('data-sort', o.sort);
+            e.attr('data-url', o.url);
+
             e.autocomplete('destroy');
 
             return this._super();

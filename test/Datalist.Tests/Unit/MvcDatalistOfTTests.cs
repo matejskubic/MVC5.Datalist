@@ -216,8 +216,8 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void GetData_Sorts()
         {
-            datalist.Filter.SortOrder = DatalistSortOrder.Asc;
-            datalist.Filter.SortColumn = "Count";
+            datalist.Filter.Order = DatalistSortOrder.Asc;
+            datalist.Filter.Sort = "Count";
             datalist.Filter.Search = "5V";
 
             datalist.GetData();
@@ -384,7 +384,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void Sort_ByColumn()
         {
-            datalist.Filter.SortColumn = "Count";
+            datalist.Filter.Sort = "Count";
 
             IQueryable<TestModel> expected = datalist.GetModels().OrderBy(model => model.Count);
             IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels());
@@ -395,7 +395,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void Sort_ByFirstColumn()
         {
-            datalist.Filter.SortColumn = null;
+            datalist.Filter.Sort = null;
 
             IQueryable<TestModel> expected = datalist.GetModels().OrderBy(model => model.Value);
             IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels());
@@ -410,7 +410,7 @@ namespace Datalist.Tests.Unit
         public void Sort_NoSortColumns(String column)
         {
             datalist.Columns.Clear();
-            datalist.Filter.SortColumn = column;
+            datalist.Filter.Sort = column;
 
             IQueryable<TestModel> expected = datalist.GetModels();
             IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels());

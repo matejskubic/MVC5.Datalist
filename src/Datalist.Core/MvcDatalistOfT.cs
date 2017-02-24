@@ -115,12 +115,12 @@ namespace Datalist
 
         public virtual IQueryable<T> Sort(IQueryable<T> models)
         {
-            String column = Filter.SortColumn ?? Columns.Where(col => !col.Hidden).Select(col => col.Key).FirstOrDefault();
+            String column = Filter.Sort ?? Columns.Where(col => !col.Hidden).Select(col => col.Key).FirstOrDefault();
 
             if (String.IsNullOrWhiteSpace(column))
                 return models;
 
-            return models.OrderBy(column + " " + Filter.SortOrder);
+            return models.OrderBy(column + " " + Filter.Order);
         }
 
         public virtual DatalistData FormDatalistData(IQueryable<T> models)

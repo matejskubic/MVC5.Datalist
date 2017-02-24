@@ -11,10 +11,10 @@ namespace Datalist.Tests.Objects
         {
             Filter.Page = 3;
             Filter.Rows = 7;
+            Filter.Sort = "Id";
             Title = "Test title";
             Models = new List<T>();
             Filter.Search = "Term";
-            Filter.SortColumn = "Id";
             Url = "http://localhost/Test";
             AdditionalFilters.Add("Test1");
             AdditionalFilters.Add("Test2");

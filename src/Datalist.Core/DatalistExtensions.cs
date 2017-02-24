@@ -71,16 +71,16 @@ namespace Datalist
         private static String FormAutoComplete(HtmlHelper html, MvcDatalist model, String hiddenInput, Object htmlAttributes)
         {
             RouteValueDictionary attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
-            attributes["data-datalist-filters"] = String.Join(",", model.AdditionalFilters);
-            attributes["data-datalist-for"] = TagBuilder.CreateSanitizedId(hiddenInput);
+            attributes["data-filters"] = String.Join(",", model.AdditionalFilters);
             attributes["class"] = $"{attributes["class"]} datalist-input".Trim();
-            attributes["data-datalist-sort-column"] = model.Filter.SortColumn;
-            attributes["data-datalist-sort-order"] = model.Filter.SortOrder;
-            attributes["data-datalist-search"] = model.Filter.Search;
-            attributes["data-datalist-page"] = model.Filter.Page;
-            attributes["data-datalist-rows"] = model.Filter.Rows;
-            attributes["data-datalist-title"] = model.Title;
-            attributes["data-datalist-url"] = model.Url;
+            attributes["data-for"] = TagBuilder.CreateSanitizedId(hiddenInput);
+            attributes["data-search"] = model.Filter.Search;
+            attributes["data-order"] = model.Filter.Order;
+            attributes["data-page"] = model.Filter.Page;
+            attributes["data-rows"] = model.Filter.Rows;
+            attributes["data-sort"] = model.Filter.Sort;
+            attributes["data-title"] = model.Title;
+            attributes["data-url"] = model.Url;
 
             return html.TextBox(hiddenInput + MvcDatalist.Prefix, null, attributes).ToString();
         }

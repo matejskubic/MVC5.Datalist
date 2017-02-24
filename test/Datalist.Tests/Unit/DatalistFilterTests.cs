@@ -34,13 +34,13 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void DatalistFilter_SetsSortColumn()
         {
-            Assert.Null(filter.SortColumn);
+            Assert.Null(filter.Sort);
         }
 
         [Fact]
         public void DatalistFilter_SetsSortOrder()
         {
-            Assert.Equal(DatalistSortOrder.Asc, filter.SortOrder);
+            Assert.Equal(DatalistSortOrder.Asc, filter.Order);
         }
 
         [Fact]
