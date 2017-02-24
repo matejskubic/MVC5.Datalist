@@ -1,5 +1,5 @@
 ﻿/*!
- * Datalist 4.1.2
+ * Datalist 5.0.0
  * https://github.com/NonFactors/MVC5.Datalist
  *
  * Copyright © NonFactors
@@ -10,10 +10,6 @@
 (function ($) {
     $.widget('mvc.datalist', {
         _create: function () {
-            if (!this.element.hasClass('datalist-input')) {
-                return;
-            }
-
             this._initOptions();
             this._initFilters();
             this._initAutocomplete();
@@ -160,7 +156,6 @@
                 '&SortColumn=' + encodeURIComponent(this.options.sortColumn) +
                 '&SortOrder=' + encodeURIComponent(this.options.sortOrder) +
                 '&Rows=20' +
-                '&Page=0' +
                 this._formFiltersQuery();
         },
         _formDatalistUrl: function (search) {
@@ -210,20 +205,7 @@
         },
 
         _limitTo: function (value, min, max) {
-            value = parseInt(value);
-            if (isNaN(value)) {
-                return 20;
-            }
-
-            if (value < min) {
-                return min;
-            }
-
-            if (value > max) {
-                return max;
-            }
-
-            return value;
+            return Math.min(Math.max(parseInt(value), min), max) || 20;
         },
         _cleanUp: function () {
             this.element.removeAttr('data-datalist-sort-column');

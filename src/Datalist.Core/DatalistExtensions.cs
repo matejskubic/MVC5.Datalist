@@ -71,16 +71,16 @@ namespace Datalist
         private static String FormAutoComplete(HtmlHelper html, MvcDatalist model, String hiddenInput, Object htmlAttributes)
         {
             RouteValueDictionary attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
-            attributes.Add("data-datalist-filters", String.Join(",", model.AdditionalFilters));
-            attributes.Add("data-datalist-for", TagBuilder.CreateSanitizedId(hiddenInput));
+            attributes["data-datalist-filters"] = String.Join(",", model.AdditionalFilters);
+            attributes["data-datalist-for"] = TagBuilder.CreateSanitizedId(hiddenInput);
             attributes["class"] = $"{attributes["class"]} datalist-input".Trim();
-            attributes.Add("data-datalist-sort-column", model.Filter.SortColumn);
-            attributes.Add("data-datalist-sort-order", model.Filter.SortOrder);
-            attributes.Add("data-datalist-search", model.Filter.Search);
-            attributes.Add("data-datalist-page", model.Filter.Page);
-            attributes.Add("data-datalist-rows", model.Filter.Rows);
-            attributes.Add("data-datalist-title", model.Title);
-            attributes.Add("data-datalist-url", model.Url);
+            attributes["data-datalist-sort-column"] = model.Filter.SortColumn;
+            attributes["data-datalist-sort-order"] = model.Filter.SortOrder;
+            attributes["data-datalist-search"] = model.Filter.Search;
+            attributes["data-datalist-page"] = model.Filter.Page;
+            attributes["data-datalist-rows"] = model.Filter.Rows;
+            attributes["data-datalist-title"] = model.Title;
+            attributes["data-datalist-url"] = model.Url;
 
             return html.TextBox(hiddenInput + MvcDatalist.Prefix, null, attributes).ToString();
         }
@@ -88,14 +88,14 @@ namespace Datalist
         private static String FormHiddenInputFor<TModel, TProperty>(HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression)
         {
             RouteValueDictionary attributes = new RouteValueDictionary();
-            attributes.Add("class", "datalist-hidden-input");
+            attributes["class"] = "datalist-hidden-input";
 
             return html.HiddenFor(expression, attributes).ToString();
         }
         private static String FormHiddenInput(HtmlHelper html, String name, Object value)
         {
             RouteValueDictionary attributes = new RouteValueDictionary();
-            attributes.Add("class", "datalist-hidden-input");
+            attributes["class"] = "datalist-hidden-input";
 
             return html.Hidden(name, value, attributes).ToString();
         }
