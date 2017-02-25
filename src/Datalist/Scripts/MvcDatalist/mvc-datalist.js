@@ -128,6 +128,7 @@
                         datalist.dialog('option', 'title', that.options.title);
                         datalist.find('thead').empty();
                         datalist.find('tbody').empty();
+                        datalist.find('ul').hide();
                         that._update(datalist);
 
                         setTimeout(function () {
