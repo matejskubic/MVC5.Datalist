@@ -416,6 +416,12 @@
 
     $(function () {
         datalist.find('.datalist-rows input').spinner({ min: 1, max: 99 });
+        datalist.on('keyup', '.datalist-rows input', function (e) {
+            if (e.which == 13) {
+                $(this).blur();
+            }
+        });
+ 
         datalist.dialog({
             classes: { 'ui-dialog': 'datalist-dialog' },
             dialogClass: 'datalist-dialog',
