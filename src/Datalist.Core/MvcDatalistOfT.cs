@@ -57,7 +57,7 @@ namespace Datalist
             models = FilterByRequest(models);
             models = Sort(models);
 
-            return FormDatalistData(models);
+            return FormDatalistData(models, Page(models));
         }
         public abstract IQueryable<T> GetModels();
 
@@ -123,17 +123,20 @@ namespace Datalist
             return models.OrderBy(column + " " + Filter.Order);
         }
 
-        public virtual DatalistData FormDatalistData(IQueryable<T> models)
+        public virtual IQueryable<T> Page(IQueryable<T> models)
+        {
+            return models
+                .Skip(Filter.Page * Filter.Rows)
+                .Take(Math.Min(Filter.Rows, 99));
+        }
+
+        public virtual DatalistData FormDatalistData(IQueryable<T> models, IQueryable<T> paged)
         {
             DatalistData data = new DatalistData();
             data.FilteredRows = models.Count();
             data.Columns = Columns;
 
-            IQueryable<T> pagedModels = models
-                .Skip(Filter.Page * Filter.Rows)
-                .Take(Math.Min(Filter.Rows, 99));
-
-            foreach (T model in pagedModels)
+            foreach (T model in paged)
             {
                 Dictionary<String, String> row = new Dictionary<String, String>();
                 AddId(row, model);

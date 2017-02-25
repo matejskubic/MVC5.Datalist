@@ -20,7 +20,7 @@ namespace Datalist.Tests.Unit
             datalist = new TestDatalist<TestModel>();
             datalist.Filter.Page = 0;
 
-            for (Int32 i = 0; i < 20; i++)
+            for (Int32 i = 0; i < 200; i++)
                 datalist.Models.Add(new TestModel
                 {
                     Id = i + "I",
@@ -155,7 +155,7 @@ namespace Datalist.Tests.Unit
 
             DatalistData actual = datalist.GetData();
 
-            Assert.Equal(new DateTime(2014, 12, 19).ToShortDateString(), actual.Rows[0]["Date"]);
+            Assert.Equal(new DateTime(2014, 12, 19).ToString("d"), actual.Rows[0]["Date"]);
             Assert.Equal("9V", actual.Rows[0][MvcDatalist.AcKey]);
             Assert.Equal("9I", actual.Rows[0][MvcDatalist.IdKey]);
             Assert.Equal("9V", actual.Rows[0]["Value"]);
@@ -176,7 +176,7 @@ namespace Datalist.Tests.Unit
 
             DatalistData actual = datalist.GetData();
 
-            Assert.Equal(new DateTime(2014, 12, 16).ToShortDateString(), actual.Rows[0]["Date"]);
+            Assert.Equal(new DateTime(2014, 12, 16).ToString("d"), actual.Rows[0]["Date"]);
             Assert.Equal("6V", actual.Rows[0][MvcDatalist.AcKey]);
             Assert.Equal("6I", actual.Rows[0][MvcDatalist.IdKey]);
             Assert.Equal("6V", actual.Rows[0]["Value"]);
@@ -190,23 +190,24 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void GetData_FiltersBySearch()
         {
-            datalist.Filter.Search = "5V";
+            datalist.Filter.Search = "33V";
+            datalist.Filter.Sort = "Count";
 
             datalist.GetData();
 
             DatalistData actual = datalist.GetData();
 
-            Assert.Equal(new DateTime(2014, 12, 25).ToShortDateString(), actual.Rows[0]["Date"]);
-            Assert.Equal("15V", actual.Rows[0][MvcDatalist.AcKey]);
-            Assert.Equal("15I", actual.Rows[0][MvcDatalist.IdKey]);
-            Assert.Equal("15V", actual.Rows[0]["Value"]);
-            Assert.Equal("25", actual.Rows[0]["Count"]);
+            Assert.Equal(new DateTime(2015, 1, 12).ToString("d"), actual.Rows[0]["Date"]);
+            Assert.Equal("33V", actual.Rows[0][MvcDatalist.AcKey]);
+            Assert.Equal("33I", actual.Rows[0][MvcDatalist.IdKey]);
+            Assert.Equal("33V", actual.Rows[0]["Value"]);
+            Assert.Equal("43", actual.Rows[0]["Count"]);
 
-            Assert.Equal(new DateTime(2014, 12, 15).ToShortDateString(), actual.Rows[1]["Date"]);
-            Assert.Equal("5V", actual.Rows[1][MvcDatalist.AcKey]);
-            Assert.Equal("5I", actual.Rows[1][MvcDatalist.IdKey]);
-            Assert.Equal("5V", actual.Rows[1]["Value"]);
-            Assert.Equal("15", actual.Rows[1]["Count"]);
+            Assert.Equal(new DateTime(2015, 4, 22).ToString("d"), actual.Rows[1]["Date"]);
+            Assert.Equal("133V", actual.Rows[1][MvcDatalist.AcKey]);
+            Assert.Equal("133I", actual.Rows[1][MvcDatalist.IdKey]);
+            Assert.Equal("133V", actual.Rows[1]["Value"]);
+            Assert.Equal("143", actual.Rows[1]["Count"]);
 
             Assert.Equal(datalist.Columns, actual.Columns);
             Assert.Equal(2, actual.FilteredRows);
@@ -217,28 +218,24 @@ namespace Datalist.Tests.Unit
         public void GetData_Sorts()
         {
             datalist.Filter.Order = DatalistSortOrder.Asc;
+            datalist.Filter.Search = "55V";
             datalist.Filter.Sort = "Count";
-            datalist.Filter.Search = "5V";
 
             datalist.GetData();
 
             DatalistData actual = datalist.GetData();
 
-            Assert.Equal(new DateTime(2014, 12, 15).ToShortDateString(), actual.Rows[0]["Date"]);
-            Assert.Equal("5V", actual.Rows[0][MvcDatalist.AcKey]);
-            Assert.Equal("5I", actual.Rows[0][MvcDatalist.IdKey]);
-            Assert.Equal("5V", actual.Rows[0]["Value"]);
-            Assert.Equal("15", actual.Rows[0]["Count"]);
+            Assert.Equal(new DateTime(2015, 2, 3).ToString("d"), actual.Rows[0]["Date"]);
+            Assert.Equal("55V", actual.Rows[0][MvcDatalist.AcKey]);
+            Assert.Equal("55I", actual.Rows[0][MvcDatalist.IdKey]);
+            Assert.Equal("55V", actual.Rows[0]["Value"]);
+            Assert.Equal("65", actual.Rows[0]["Count"]);
 
-            Assert.Equal(new DateTime(2014, 12, 25).ToShortDateString(), actual.Rows[1]["Date"]);
-            Assert.Equal("15V", actual.Rows[1][MvcDatalist.AcKey]);
-            Assert.Equal("15I", actual.Rows[1][MvcDatalist.IdKey]);
-            Assert.Equal("15V", actual.Rows[1]["Value"]);
-            Assert.Equal("25", actual.Rows[1]["Count"]);
-
-            Assert.Equal(datalist.Columns, actual.Columns);
-            Assert.Equal(2, actual.FilteredRows);
-            Assert.Equal(2, actual.Rows.Count);
+            Assert.Equal(new DateTime(2015, 5, 14).ToString("d"), actual.Rows[1]["Date"]);
+            Assert.Equal("155V", actual.Rows[1][MvcDatalist.AcKey]);
+            Assert.Equal("155I", actual.Rows[1][MvcDatalist.IdKey]);
+            Assert.Equal("155V", actual.Rows[1]["Value"]);
+            Assert.Equal("165", actual.Rows[1]["Count"]);
         }
 
         #endregion
@@ -420,12 +417,47 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
+        #region Page(IQueryable<T> models)
+
+        [Theory]
+        [InlineData(0, 0, 0)]
+        [InlineData(0, 1, 1)]
+        [InlineData(0, 5, 5)]
+        [InlineData(1, 0, 0)]
+        [InlineData(1, 1, 1)]
+        [InlineData(1, 5, 5)]
+        [InlineData(19, 0, 0)]
+        [InlineData(19, 1, 1)]
+        [InlineData(20, 0, 0)]
+        [InlineData(20, 1, 1)]
+        [InlineData(20, 5, 5)]
+        [InlineData(199, 0, 0)]
+        [InlineData(199, 1, 1)]
+        [InlineData(199, 5, 5)]
+        [InlineData(200, 0, 0)]
+        [InlineData(0, 98, 98)]
+        [InlineData(0, 99, 99)]
+        [InlineData(0, 100, 99)]
+        [InlineData(0, 150, 99)]
+        public void Page_Rows(Int32 page, Int32 rows, Int32 takeRows)
+        {
+            datalist.Filter.Page = page;
+            datalist.Filter.Rows = rows;
+
+            IQueryable<TestModel> expected = datalist.GetModels().Skip(page * rows).Take(takeRows);
+            IQueryable<TestModel> actual = datalist.Page(datalist.GetModels());
+
+            Assert.Equal(expected, actual);
+        }
+
+        #endregion
+
         #region FormDatalistData(IQueryable<T> models)
 
         [Fact]
         public void FormDatalistData_FilteredRows()
         {
-            Int32 actual = datalist.FormDatalistData(datalist.GetModels()).FilteredRows;
+            Int32 actual = datalist.FormDatalistData(datalist.GetModels(), datalist.GetModels().Take(1)).FilteredRows;
             Int32 expected = datalist.GetModels().Count();
 
             Assert.Equal(expected, actual);
@@ -434,19 +466,18 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FormDatalistData_Columns()
         {
-            IList<DatalistColumn> actual = datalist.FormDatalistData(datalist.GetModels()).Columns;
-            IList<DatalistColumn> expected = datalist.Columns;
+            Object actual = datalist.FormDatalistData(datalist.GetModels(), datalist.GetModels()).Columns;
+            Object expected = datalist.Columns;
 
-            Assert.Equal(expected, actual);
+            Assert.Same(expected, actual);
         }
 
         [Fact]
         public void FormDatalistData_Rows()
         {
-            datalist.Filter.Page = 2;
-            datalist.Filter.Rows = 3;
+            IQueryable<TestModel> paged = datalist.GetModels().Skip(6).Take(3);
 
-            IEnumerator<Dictionary<String, String>> actual = datalist.FormDatalistData(datalist.GetModels()).Rows.GetEnumerator();
+            IEnumerator<Dictionary<String, String>> actual = datalist.FormDatalistData(datalist.GetModels(), paged).Rows.GetEnumerator();
             IEnumerator<Dictionary<String, String>> expected = new List<Dictionary<String, String>>
             {
                 new Dictionary<String, String>
