@@ -19,6 +19,7 @@ namespace Datalist.Tests.Unit
 
             datalist.Filter.Page = 2;
             datalist.Filter.Rows = 11;
+            datalist.Dialog = "Dialog";
             datalist.Filter.Sort = "First";
             datalist.Title = "Dialog title";
             datalist.Filter.Search = "Test";
@@ -37,7 +38,7 @@ namespace Datalist.Tests.Unit
             String actual = html.AutoComplete("Test", datalist, "Value", new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
                 "<input class=\"datalist-hidden-input\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"Value\" />" +
-                "<input attribute=\"attr\" class=\"classes datalist-input\" " +
+                "<input attribute=\"attr\" class=\"classes datalist-input\" data-dialog=\"Dialog\" " +
                     "data-filters=\"Add1,Add2\" data-for=\"Test\" data-multi=\"false\" data-order=\"Desc\" " +
                     "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                     "data-title=\"Dialog title\" data-url=\"http://localhost/Datalist\" " +
@@ -64,7 +65,7 @@ namespace Datalist.Tests.Unit
             String actual = html.AutoCompleteFor(model => model.ParentId, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
                 "<input class=\"datalist-hidden-input\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
-                "<input attribute=\"attr\" class=\"classes datalist-input\" " +
+                "<input attribute=\"attr\" class=\"classes datalist-input\" data-dialog=\"TestDialog\" " +
                     "data-filters=\"Test1,Test2\" data-for=\"ParentId\" data-multi=\"false\" data-order=\"Asc\" " +
                     "data-page=\"3\" data-rows=\"7\" data-search=\"Term\" data-sort=\"Id\" " +
                     "data-title=\"Test title\" data-url=\"http://localhost/Test\" " +
@@ -83,7 +84,7 @@ namespace Datalist.Tests.Unit
             String actual = html.AutoCompleteFor(model => model.ParentId, datalist, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
                 "<input class=\"datalist-hidden-input\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
-                "<input attribute=\"attr\" class=\"classes datalist-input\" " +
+                "<input attribute=\"attr\" class=\"classes datalist-input\" data-dialog=\"Dialog\" " +
                     "data-filters=\"Add1,Add2\" data-for=\"ParentId\" data-multi=\"false\" data-order=\"Desc\" " +
                     "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                     "data-title=\"Dialog title\" data-url=\"http://localhost/Datalist\" " +
@@ -103,7 +104,7 @@ namespace Datalist.Tests.Unit
             String expected =
                 "<div class=\"datalist-group\">" +
                     "<input class=\"datalist-hidden-input\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"Value\" />" +
-                    "<input attribute=\"attr\" class=\"classes datalist-input\" " +
+                    "<input attribute=\"attr\" class=\"classes datalist-input\" data-dialog=\"Dialog\" " +
                         "data-filters=\"Add1,Add2\" data-for=\"Test\" data-multi=\"false\" data-order=\"Desc\" " +
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog title\" data-url=\"http://localhost/Datalist\" " +
@@ -133,7 +134,7 @@ namespace Datalist.Tests.Unit
             String expected =
                 "<div class=\"datalist-group\">" +
                     "<input class=\"datalist-hidden-input\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
-                    "<input attribute=\"attr\" class=\"classes datalist-input\" " +
+                    "<input attribute=\"attr\" class=\"classes datalist-input\" data-dialog=\"TestDialog\" " +
                         "data-filters=\"Test1,Test2\" data-for=\"ParentId\" data-multi=\"false\" data-order=\"Asc\" " +
                         "data-page=\"3\" data-rows=\"7\" data-search=\"Term\" data-sort=\"Id\" " +
                         "data-title=\"Test title\" data-url=\"http://localhost/Test\" " +
@@ -155,7 +156,7 @@ namespace Datalist.Tests.Unit
             String expected =
                 "<div class=\"datalist-group\">" +
                     "<input class=\"datalist-hidden-input\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
-                    "<input attribute=\"attr\" class=\"classes datalist-input\" " +
+                    "<input attribute=\"attr\" class=\"classes datalist-input\" data-dialog=\"Dialog\" " +
                         "data-filters=\"Add1,Add2\" data-for=\"ParentId\" data-multi=\"false\" data-order=\"Desc\" " +
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog title\" data-url=\"http://localhost/Datalist\" " +

@@ -13,6 +13,7 @@ namespace Datalist.Tests.Objects
             Filter.Rows = 7;
             Filter.Sort = "Id";
             Title = "Test title";
+            Dialog = "TestDialog";
             Models = new List<T>();
             Filter.Search = "Term";
             Url = "http://localhost/Test";

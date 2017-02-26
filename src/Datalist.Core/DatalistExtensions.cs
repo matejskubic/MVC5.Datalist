@@ -84,6 +84,7 @@ namespace Datalist
             attributes["data-page"] = model.Filter.Page;
             attributes["data-rows"] = model.Filter.Rows;
             attributes["data-sort"] = model.Filter.Sort;
+            attributes["data-dialog"] = model.Dialog;
             attributes["data-title"] = model.Title;
             attributes["data-for"] = hiddenInput;
             attributes["data-url"] = model.Url;

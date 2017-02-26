@@ -11,6 +11,7 @@ namespace Datalist
 
         public String Url { get; set; }
         public String Title { get; set; }
+        public String Dialog { get; set; }
         public Boolean Multi { get; set; }
 
         public DatalistFilter Filter { get; set; }
@@ -22,6 +23,7 @@ namespace Datalist
             AdditionalFilters = new List<String>();
             Columns = new List<DatalistColumn>();
             Filter = new DatalistFilter();
+            Dialog = "Datalist";
             Filter.Rows = 20;
         }
 

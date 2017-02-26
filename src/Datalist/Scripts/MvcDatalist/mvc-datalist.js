@@ -44,12 +44,13 @@ var MvcDatalistDialog = (function () {
     function MvcDatalistDialog(datalist) {
         this.datalist = datalist;
         this.filter = datalist.filter;
-        this.instance = $('#Datalist');
+        this.title = datalist.element.attr('data-title');
+        this.instance = $('#' + datalist.element.attr('data-dialog'));
+
         this.pager = this.instance.find('ul');
         this.table = this.instance.find('table');
         this.tableHead = this.instance.find('thead');
         this.tableBody = this.instance.find('tbody');
-        this.title = datalist.element.attr('data-title');
         this.error = this.instance.find('.datalist-error');
         this.search = this.instance.find('.datalist-search');
         this.loader = this.instance.find('.datalist-loading');
@@ -528,6 +529,7 @@ var MvcDatalist = (function () {
         },
         cleanUp: function () {
             this.element.removeAttr('data-filters');
+            this.element.removeAttr('data-dialog');
             this.element.removeAttr('data-search');
             this.element.removeAttr('data-multi');
             this.element.removeAttr('data-order');
