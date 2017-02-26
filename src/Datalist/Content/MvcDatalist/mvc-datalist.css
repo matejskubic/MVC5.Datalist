@@ -1,6 +1,6 @@
 ﻿/*!
- * Mvc.Lookup 1.1.0
- * https://github.com/NonFactors/MVC6.Lookup
+ * Datalist 5.0.0
+ * https://github.com/NonFactors/MVC5.Datalist
  *
  * Copyright © NonFactors
  *
@@ -144,8 +144,8 @@
     background-color: #F2DEDE;
     border: 1px solid #EBCCD1;
     text-align: center;
+    margin-top: 30px;
     color: #A94442;
-    margin: 30px 0;
     display: none;
     padding: 15px;
 }
@@ -199,6 +199,10 @@
 .datalist tr:hover td:not(:first-child):last-child::after {
     content: '\2714';
     color: #5CB85C;
+}
+
+.datalist-empty {
+    text-align: center;
 }
 
 .datalist ul {

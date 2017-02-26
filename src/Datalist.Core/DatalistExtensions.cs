@@ -16,7 +16,7 @@ namespace Datalist
             String autoComplete = FormAutoComplete(html, model, name, htmlAttributes);
             String hiddenInput = FormHiddenInput(html, name, value);
 
-            return new MvcHtmlString(autoComplete + hiddenInput);
+            return new MvcHtmlString(hiddenInput + autoComplete);
         }
         public static IHtmlString AutoCompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html,
             Expression<Func<TModel, TProperty>> expression, Object htmlAttributes = null)
@@ -31,7 +31,7 @@ namespace Datalist
             String autoComplete = FormAutoComplete(html, model, name, htmlAttributes);
             String hiddenInput = FormHiddenInputFor(html, expression);
 
-            return new MvcHtmlString(autoComplete + hiddenInput);
+            return new MvcHtmlString(hiddenInput + autoComplete);
         }
 
         public static IHtmlString Datalist<TModel>(this HtmlHelper<TModel> html,
@@ -39,7 +39,7 @@ namespace Datalist
         {
             TagBuilder datalist = new TagBuilder("div");
             datalist.AddCssClass("datalist-group");
-            datalist.InnerHtml = html.AutoComplete(name, model, value, htmlAttributes) + FormDatalistBrowse();
+            datalist.InnerHtml = html.AutoComplete(name, model, value, htmlAttributes) + FormDatalistBrowse(name);
 
             return new MvcHtmlString(datalist.ToString());
         }
@@ -52,7 +52,8 @@ namespace Datalist
             Expression<Func<TModel, TProperty>> expression, MvcDatalist model, Object htmlAttributes = null)
         {
             TagBuilder datalist = new TagBuilder("div");
-            datalist.InnerHtml = html.AutoCompleteFor(expression, model, htmlAttributes) + FormDatalistBrowse();
+            String name = ExpressionHelper.GetExpressionText(expression);
+            datalist.InnerHtml = html.AutoCompleteFor(expression, model, htmlAttributes) + FormDatalistBrowse(name);
             datalist.AddCssClass("datalist-group");
 
             return new MvcHtmlString(datalist.ToString());
@@ -100,10 +101,11 @@ namespace Datalist
             return html.Hidden(name, value, attributes).ToString();
         }
 
-        private static String FormDatalistBrowse()
+        private static String FormDatalistBrowse(String name)
         {
             TagBuilder browse = new TagBuilder("span");
             browse.AddCssClass("datalist-browse");
+            browse.Attributes["data-for"] = name;
 
             return browse.ToString();
         }
