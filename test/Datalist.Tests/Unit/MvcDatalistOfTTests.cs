@@ -432,17 +432,6 @@ namespace Datalist.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Sort_ByFirstColumn()
-        {
-            datalist.Filter.Sort = null;
-
-            IQueryable<TestModel> expected = datalist.GetModels().OrderBy(model => model.Value);
-            IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels());
-
-            Assert.Equal(expected, actual);
-        }
-
         [Theory]
         [InlineData("")]
         [InlineData(" ")]

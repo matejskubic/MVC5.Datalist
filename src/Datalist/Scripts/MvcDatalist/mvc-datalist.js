@@ -180,10 +180,6 @@ var MvcDatalistDialog = (function () {
                 }
             }
 
-            if (!this.filter.sort && columns.length > 0) {
-                tr.children[0].className += ' datalist-' + this.filter.order.toLowerCase();
-            }
-
             tr.appendChild(selection);
             this.tableHead.append(tr);
         },
