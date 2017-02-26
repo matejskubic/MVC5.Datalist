@@ -5,7 +5,8 @@ namespace Datalist
 {
     public class DatalistFilter
     {
-        public String Id { get; set; }
+        public IList<String> Ids { get; set; }
+        public IList<String> Selected { get; set; }
 
         public Int32 Page { get; set; }
         public Int32 Rows { get; set; }
@@ -18,6 +19,8 @@ namespace Datalist
 
         public DatalistFilter()
         {
+            Ids = new List<String>();
+            Selected = new List<String>();
             AdditionalFilters = new Dictionary<String, Object>();
         }
     }

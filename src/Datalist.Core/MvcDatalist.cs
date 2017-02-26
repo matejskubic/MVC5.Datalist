@@ -11,6 +11,7 @@ namespace Datalist
 
         public String Url { get; set; }
         public String Title { get; set; }
+        public Boolean Multi { get; set; }
 
         public DatalistFilter Filter { get; set; }
         public IList<DatalistColumn> Columns { get; set; }

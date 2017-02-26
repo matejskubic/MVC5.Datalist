@@ -46,10 +46,10 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region AbstractDatalist()
+        #region MvcDatalist()
 
         [Fact]
-        public void AbstractDatalist_AddsColumns()
+        public void MvcDatalist_AddsColumns()
         {
             List<DatalistColumn> columns = new List<DatalistColumn>();
             columns.Add(new DatalistColumn("Id", null) { Hidden = true });
@@ -147,10 +147,13 @@ namespace Datalist.Tests.Unit
         #region GetData()
 
         [Fact]
-        public void GetData_FiltersById()
+        public void GetData_FiltersByIds()
         {
-            datalist.Filter.Id = "9I";
+            datalist.Filter.Ids.Add("9I");
+            datalist.Filter.Ids.Add("15I");
+            datalist.Filter.Sort = "Count";
             datalist.Filter.Search = "Term";
+            datalist.Filter.Selected.Add("17I");
             datalist.Filter.AdditionalFilters.Add("Value", "5V");
 
             DatalistData actual = datalist.GetData();
@@ -161,9 +164,50 @@ namespace Datalist.Tests.Unit
             Assert.Equal("9V", actual.Rows[0]["Value"]);
             Assert.Equal("19", actual.Rows[0]["Count"]);
 
+            Assert.Equal(new DateTime(2014, 12, 25).ToString("d"), actual.Rows[1]["Date"]);
+            Assert.Equal("15V", actual.Rows[1][MvcDatalist.AcKey]);
+            Assert.Equal("15I", actual.Rows[1][MvcDatalist.IdKey]);
+            Assert.Equal("15V", actual.Rows[1]["Value"]);
+            Assert.Equal("25", actual.Rows[1]["Count"]);
+
+            Assert.Equal(datalist.Columns, actual.Columns);
+            Assert.Equal(2, actual.FilteredRows);
+            Assert.Equal(2, actual.Rows.Count);
+        }
+
+        [Fact]
+        public void GetData_FiltersByNotSelected()
+        {
+            datalist.Filter.Sort = "Count";
+            datalist.Filter.Search = "133V";
+            datalist.Filter.Selected.Add("15I");
+            datalist.Filter.Selected.Add("125I");
+
+            datalist.GetData();
+
+            DatalistData actual = datalist.GetData();
+
+            Assert.Equal(new DateTime(2014, 12, 25).ToString("d"), actual.Rows[0]["Date"]);
+            Assert.Equal("15V", actual.Rows[0][MvcDatalist.AcKey]);
+            Assert.Equal("15I", actual.Rows[0][MvcDatalist.IdKey]);
+            Assert.Equal("15V", actual.Rows[0]["Value"]);
+            Assert.Equal("25", actual.Rows[0]["Count"]);
+
+            Assert.Equal(new DateTime(2015, 4, 14).ToString("d"), actual.Rows[1]["Date"]);
+            Assert.Equal("125V", actual.Rows[1][MvcDatalist.AcKey]);
+            Assert.Equal("125I", actual.Rows[1][MvcDatalist.IdKey]);
+            Assert.Equal("125V", actual.Rows[1]["Value"]);
+            Assert.Equal("135", actual.Rows[1]["Count"]);
+
+            Assert.Equal(new DateTime(2015, 4, 22).ToString("d"), actual.Rows[2]["Date"]);
+            Assert.Equal("133V", actual.Rows[2][MvcDatalist.AcKey]);
+            Assert.Equal("133I", actual.Rows[2][MvcDatalist.IdKey]);
+            Assert.Equal("133V", actual.Rows[2]["Value"]);
+            Assert.Equal("143", actual.Rows[2]["Count"]);
+
             Assert.Equal(datalist.Columns, actual.Columns);
             Assert.Equal(1, actual.FilteredRows);
-            Assert.Single(actual.Rows);
+            Assert.Equal(3, actual.Rows.Count);
         }
 
         [Fact]
@@ -240,14 +284,14 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region FilterById(IQueryable<T> models)
+        #region FilterByIds(IQueryable<T> models)
 
         [Fact]
-        public void FilterById_NoIdProperty_Throws()
+        public void FilterByIds_NoIdProperty_Throws()
         {
             TestDatalist<NoIdModel> datalist = new TestDatalist<NoIdModel>();
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.FilterById(null));
+            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.FilterByIds(null, null));
 
             String expected = $"'{typeof(NoIdModel).Name}' type does not have key or property named 'Id', required for automatic id filtering.";
             String actual = exception.Message;
@@ -256,34 +300,33 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void FilterById_String()
+        public void FilterByIds_String()
         {
-            datalist.Filter.Id = "9I";
+            List<String> ids = new List<String> { "9I", "10I" };
 
-            IQueryable<TestModel> expected = datalist.GetModels().Where(model => model.Id == datalist.Filter.Id);
-            IQueryable<TestModel> actual = datalist.FilterById(datalist.GetModels());
+            IQueryable<TestModel> actual = datalist.FilterByIds(datalist.GetModels(), ids);
+            IQueryable<TestModel> expected = datalist.GetModels().Where(model => ids.Contains(model.Id));
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void FilterById_NumberKey()
+        public void FilterByIds_NumberKey()
         {
             TestDatalist<NumericModel> datalist = new TestDatalist<NumericModel>();
-            for (Int32 i = 0; i < 20; i++) datalist.Models.Add(new NumericModel { Value = i });
+            for (Int32 i = 0; i < 20; i++)
+                datalist.Models.Add(new NumericModel { Value = i });
 
-            datalist.Filter.Id = "9.0";
-
-            IQueryable<NumericModel> expected = datalist.GetModels().Where(model => model.Value == 9);
-            IQueryable<NumericModel> actual = datalist.FilterById(datalist.GetModels());
+            IQueryable<NumericModel> actual = datalist.FilterByIds(datalist.GetModels(), new List<String> { "9.0", "10" });
+            IQueryable<NumericModel> expected = datalist.GetModels().Where(model => new[] { 9, 10 }.Contains(model.Value));
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void FilterById_NotSupportedIdType_Throws()
+        public void FilterByIds_NotSupportedIdType_Throws()
         {
-            DatalistException exception = Assert.Throws<DatalistException>(() => new TestDatalist<GuidModel>().FilterById(null));
+            DatalistException exception = Assert.Throws<DatalistException>(() => new TestDatalist<GuidModel>().FilterByIds(null, new String[0]));
 
             String expected = $"'{typeof(GuidModel).Name}.Id' property type has to be a string or a number.";
             String actual = exception.Message;
@@ -327,9 +370,9 @@ namespace Datalist.Tests.Unit
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void FilterBySearch_SkipsEmptyTerm(String term)
+        public void FilterBySearch_SkipsEmptySearch(String search)
         {
-            datalist.Filter.Search = term;
+            datalist.Filter.Search = search;
 
             IQueryable<TestModel> actual = datalist.FilterBySearch(datalist.GetModels());
             IQueryable<TestModel> expected = datalist.GetModels();
@@ -452,12 +495,12 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region FormDatalistData(IQueryable<T> models)
+        #region FormDatalistData(IQueryable<T> filtered, IQueryable<T> selected, IQueryable<T> notSelected)
 
         [Fact]
         public void FormDatalistData_FilteredRows()
         {
-            Int32 actual = datalist.FormDatalistData(datalist.GetModels(), datalist.GetModels().Take(1)).FilteredRows;
+            Int32 actual = datalist.FormDatalistData(datalist.GetModels(), new[] { new TestModel() }.AsQueryable(), datalist.GetModels().Take(1)).FilteredRows;
             Int32 expected = datalist.GetModels().Count();
 
             Assert.Equal(expected, actual);
@@ -466,7 +509,7 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FormDatalistData_Columns()
         {
-            Object actual = datalist.FormDatalistData(datalist.GetModels(), datalist.GetModels()).Columns;
+            Object actual = datalist.FormDatalistData(datalist.GetModels(), new[] { new TestModel() }.AsQueryable(), datalist.GetModels()).Columns;
             Object expected = datalist.Columns;
 
             Assert.Same(expected, actual);
@@ -475,9 +518,10 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FormDatalistData_Rows()
         {
-            IQueryable<TestModel> paged = datalist.GetModels().Skip(6).Take(3);
+            IQueryable<TestModel> selected = new TestModel[0].AsQueryable();
+            IQueryable<TestModel> notSelected = datalist.GetModels().Skip(6).Take(3);
 
-            IEnumerator<Dictionary<String, String>> actual = datalist.FormDatalistData(datalist.GetModels(), paged).Rows.GetEnumerator();
+            IEnumerator<Dictionary<String, String>> actual = datalist.FormDatalistData(datalist.GetModels(), selected, notSelected).Rows.GetEnumerator();
             IEnumerator<Dictionary<String, String>> expected = new List<Dictionary<String, String>>
             {
                 new Dictionary<String, String>
@@ -486,7 +530,7 @@ namespace Datalist.Tests.Unit
                     [MvcDatalist.AcKey] = "6V",
                     ["Id"] = "6I",
                     ["Value"] = "6V",
-                    ["Date"] = new DateTime(2014, 12, 16).ToShortDateString(),
+                    ["Date"] = new DateTime(2014, 12, 16).ToString("d"),
                     ["Count"] = "16"
                 },
                 new Dictionary<String, String>
@@ -495,7 +539,7 @@ namespace Datalist.Tests.Unit
                     [MvcDatalist.AcKey] = "7V",
                     ["Id"] = "7I",
                     ["Value"] = "7V",
-                    ["Date"] = new DateTime(2014, 12, 17).ToShortDateString(),
+                    ["Date"] = new DateTime(2014, 12, 17).ToString("d"),
                     ["Count"] = "17"
                 },
                 new Dictionary<String, String>
@@ -504,7 +548,7 @@ namespace Datalist.Tests.Unit
                     [MvcDatalist.AcKey] = "8V",
                     ["Id"] = "8I",
                     ["Value"] = "8V",
-                    ["Date"] = new DateTime(2014, 12, 18).ToShortDateString(),
+                    ["Date"] = new DateTime(2014, 12, 18).ToString("d"),
                     ["Count"] = "18"
                 }
             }.GetEnumerator();
@@ -620,7 +664,7 @@ namespace Datalist.Tests.Unit
         {
             datalist.AddData(row, new TestModel { Value = "Test", Date = DateTime.Now.Date, Count = 4 });
 
-            Assert.Equal(new[] { null, "Test", DateTime.Now.Date.ToShortDateString(), "4" }, row.Values);
+            Assert.Equal(new[] { null, "Test", DateTime.Now.Date.ToString("d"), "4" }, row.Values);
             Assert.Equal(datalist.Columns.Select(column => column.Key), row.Keys);
         }
 

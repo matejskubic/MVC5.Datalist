@@ -38,7 +38,7 @@ namespace Datalist.Tests.Unit
             String expected =
                 "<input class=\"datalist-hidden-input\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"Value\" />" +
                 "<input attribute=\"attr\" class=\"classes datalist-input\" " +
-                    "data-filters=\"Add1,Add2\" data-for=\"Test\" data-order=\"Desc\" " +
+                    "data-filters=\"Add1,Add2\" data-for=\"Test\" data-multi=\"false\" data-order=\"Desc\" " +
                     "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                     "data-title=\"Dialog title\" data-url=\"http://localhost/Datalist\" " +
                     "id=\"TestDatalist\" name=\"TestDatalist\" type=\"text\" value=\"\" />";
@@ -65,7 +65,7 @@ namespace Datalist.Tests.Unit
             String expected =
                 "<input class=\"datalist-hidden-input\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
                 "<input attribute=\"attr\" class=\"classes datalist-input\" " +
-                    "data-filters=\"Test1,Test2\" data-for=\"ParentId\" data-order=\"Asc\" " +
+                    "data-filters=\"Test1,Test2\" data-for=\"ParentId\" data-multi=\"false\" data-order=\"Asc\" " +
                     "data-page=\"3\" data-rows=\"7\" data-search=\"Term\" data-sort=\"Id\" " +
                     "data-title=\"Test title\" data-url=\"http://localhost/Test\" " +
                     "id=\"ParentIdDatalist\" name=\"ParentIdDatalist\" type=\"text\" value=\"\" />";
@@ -84,7 +84,7 @@ namespace Datalist.Tests.Unit
             String expected =
                 "<input class=\"datalist-hidden-input\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
                 "<input attribute=\"attr\" class=\"classes datalist-input\" " +
-                    "data-filters=\"Add1,Add2\" data-for=\"ParentId\" data-order=\"Desc\" " +
+                    "data-filters=\"Add1,Add2\" data-for=\"ParentId\" data-multi=\"false\" data-order=\"Desc\" " +
                     "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                     "data-title=\"Dialog title\" data-url=\"http://localhost/Datalist\" " +
                     "id=\"ParentIdDatalist\" name=\"ParentIdDatalist\" type=\"text\" value=\"\" />";
@@ -104,7 +104,7 @@ namespace Datalist.Tests.Unit
                 "<div class=\"datalist-group\">" +
                     "<input class=\"datalist-hidden-input\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"Value\" />" +
                     "<input attribute=\"attr\" class=\"classes datalist-input\" " +
-                        "data-filters=\"Add1,Add2\" data-for=\"Test\" data-order=\"Desc\" " +
+                        "data-filters=\"Add1,Add2\" data-for=\"Test\" data-multi=\"false\" data-order=\"Desc\" " +
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog title\" data-url=\"http://localhost/Datalist\" " +
                         "id=\"TestDatalist\" name=\"TestDatalist\" type=\"text\" value=\"\" />" +
@@ -134,7 +134,7 @@ namespace Datalist.Tests.Unit
                 "<div class=\"datalist-group\">" +
                     "<input class=\"datalist-hidden-input\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
                     "<input attribute=\"attr\" class=\"classes datalist-input\" " +
-                        "data-filters=\"Test1,Test2\" data-for=\"ParentId\" data-order=\"Asc\" " +
+                        "data-filters=\"Test1,Test2\" data-for=\"ParentId\" data-multi=\"false\" data-order=\"Asc\" " +
                         "data-page=\"3\" data-rows=\"7\" data-search=\"Term\" data-sort=\"Id\" " +
                         "data-title=\"Test title\" data-url=\"http://localhost/Test\" " +
                         "id=\"ParentIdDatalist\" name=\"ParentIdDatalist\" type=\"text\" value=\"\" />" +
@@ -156,7 +156,7 @@ namespace Datalist.Tests.Unit
                 "<div class=\"datalist-group\">" +
                     "<input class=\"datalist-hidden-input\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
                     "<input attribute=\"attr\" class=\"classes datalist-input\" " +
-                        "data-filters=\"Add1,Add2\" data-for=\"ParentId\" data-order=\"Desc\" " +
+                        "data-filters=\"Add1,Add2\" data-for=\"ParentId\" data-multi=\"false\" data-order=\"Desc\" " +
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog title\" data-url=\"http://localhost/Datalist\" " +
                         "id=\"ParentIdDatalist\" name=\"ParentIdDatalist\" type=\"text\" value=\"\" />" +

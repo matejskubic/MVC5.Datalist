@@ -54,39 +54,28 @@ namespace Datalist
         public override DatalistData GetData()
         {
             IQueryable<T> models = GetModels();
-            models = FilterByRequest(models);
-            models = Sort(models);
+            IQueryable<T> selected = new T[0].AsQueryable();
+            IQueryable<T> notSelected = Sort(FilterByRequest(models));
 
-            return FormDatalistData(models, Page(models));
+            if (Filter.Ids.Count == 0 && Filter.Selected.Count > 0)
+                selected = Sort(FilterByIds(models, Filter.Selected));
+
+            return FormDatalistData(notSelected, selected, Page(notSelected));
         }
         public abstract IQueryable<T> GetModels();
 
         private IQueryable<T> FilterByRequest(IQueryable<T> models)
         {
-            if (Filter.Id != null)
-                return FilterById(models);
+            if (Filter.Ids.Count > 0)
+                return FilterByIds(models, Filter.Ids);
+
+            if (Filter.Selected.Count > 0)
+                models = FilterByNotIds(models, Filter.Selected);
 
             if (Filter.AdditionalFilters.Count > 0)
                 models = FilterByAdditionalFilters(models);
 
             return FilterBySearch(models);
-        }
-        public virtual IQueryable<T> FilterById(IQueryable<T> models)
-        {
-            PropertyInfo key = typeof(T).GetProperties()
-                .FirstOrDefault(prop => prop.IsDefined(typeof(KeyAttribute))) ?? typeof(T).GetProperty("Id");
-
-            if (key == null)
-                throw new DatalistException($"'{typeof(T).Name}' type does not have key or property named 'Id', required for automatic id filtering.");
-
-            if (key.PropertyType == typeof(String))
-                return models.Where($"{key.Name} = @0", Filter.Id);
-
-            Decimal id;
-            if (IsNumeric(key.PropertyType) && Decimal.TryParse(Filter.Id, out id))
-                return models.Where($"{key.Name} = @0", id);
-
-            throw new DatalistException($"'{typeof(T).Name}.{key.Name}' property type has to be a string or a number.");
         }
         public virtual IQueryable<T> FilterBySearch(IQueryable<T> models)
         {
@@ -112,6 +101,38 @@ namespace Datalist
 
             return models;
         }
+        public virtual IQueryable<T> FilterByIds(IQueryable<T> models, IList<String> ids)
+        {
+            PropertyInfo key = typeof(T).GetProperties()
+                .FirstOrDefault(prop => prop.IsDefined(typeof(KeyAttribute))) ?? typeof(T).GetProperty("Id");
+
+            if (key == null)
+                throw new DatalistException($"'{typeof(T).Name}' type does not have key or property named 'Id', required for automatic id filtering.");
+
+            if (key.PropertyType == typeof(String))
+                return models.Where($"@0.Contains(outerIt.{key.Name})", ids);
+
+            if (IsNumeric(key.PropertyType))
+                return models.Where($"@0.Contains(decimal(outerIt.{key.Name}))", TryParseDecimals(ids));
+
+            throw new DatalistException($"'{typeof(T).Name}.{key.Name}' property type has to be a string or a number.");
+        }
+        public virtual IQueryable<T> FilterByNotIds(IQueryable<T> models, IList<String> ids)
+        {
+            PropertyInfo key = typeof(T).GetProperties()
+                .FirstOrDefault(prop => prop.IsDefined(typeof(KeyAttribute))) ?? typeof(T).GetProperty("Id");
+
+            if (key == null)
+                throw new DatalistException($"'{typeof(T).Name}' type does not have key or property named 'Id', required for automatic id filtering.");
+
+            if (key.PropertyType == typeof(String))
+                return models.Where($"!@0.Contains(outerIt.{key.Name})", ids);
+
+            if (IsNumeric(key.PropertyType))
+                return models.Where($"!@0.Contains(decimal(outerIt.{key.Name}))", TryParseDecimals(ids));
+
+            throw new DatalistException($"'{typeof(T).Name}.{key.Name}' property type has to be a string or a number.");
+        }
 
         public virtual IQueryable<T> Sort(IQueryable<T> models)
         {
@@ -130,13 +151,13 @@ namespace Datalist
                 .Take(Math.Min(Filter.Rows, 99));
         }
 
-        public virtual DatalistData FormDatalistData(IQueryable<T> models, IQueryable<T> paged)
+        public virtual DatalistData FormDatalistData(IQueryable<T> models, IQueryable<T> selected, IQueryable<T> notSelected)
         {
             DatalistData data = new DatalistData();
             data.FilteredRows = models.Count();
             data.Columns = Columns;
 
-            foreach (T model in paged)
+            foreach (T model in selected.Concat(notSelected))
             {
                 Dictionary<String, String> row = new Dictionary<String, String>();
                 AddId(row, model);
@@ -162,6 +183,18 @@ namespace Datalist
                 row[column.Key] = GetValue(model, column.Key);
         }
 
+        private List<Decimal> TryParseDecimals(IList<String> values)
+        {
+            List<Decimal> numbers = new List<Decimal>();
+            foreach (String value in values)
+            {
+                Decimal number;
+                if (Decimal.TryParse(value, out number))
+                    numbers.Add(number);
+            }
+
+            return numbers;
+        }
         private String GetValue(T model, String propertyName)
         {
             PropertyInfo property = typeof(T).GetProperty(propertyName);
