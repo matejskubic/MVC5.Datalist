@@ -8,13 +8,13 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 var MvcDatalistFilter = (function () {
-    function MvcDatalistFilter(element) {
-        this.page = element.attr('data-page');
-        this.rows = element.attr('data-rows');
-        this.sort = element.attr('data-sort');
-        this.order = element.attr('data-order');
-        this.search = element.attr('data-search');
-        this.additionalFilters = element.attr('data-filters').split(',').filter(Boolean);
+    function MvcDatalistFilter(control) {
+        this.page = control.attr('data-page');
+        this.rows = control.attr('data-rows');
+        this.sort = control.attr('data-sort');
+        this.order = control.attr('data-order');
+        this.search = control.attr('data-search');
+        this.additionalFilters = control.attr('data-filters').split(',').filter(Boolean);
     }
 
     MvcDatalistFilter.prototype = {
@@ -44,8 +44,8 @@ var MvcDatalistDialog = (function () {
     function MvcDatalistDialog(datalist) {
         this.datalist = datalist;
         this.filter = datalist.filter;
-        this.title = datalist.element.attr('data-title');
-        this.instance = $('#' + datalist.element.attr('data-dialog'));
+        this.title = datalist.control.attr('data-title');
+        this.instance = $('#' + datalist.control.attr('data-dialog'));
 
         this.pager = this.instance.find('ul');
         this.table = this.instance.find('table');
@@ -245,12 +245,12 @@ var MvcDatalistDialog = (function () {
             var dialog = this;
             var datalist = this.datalist;
             var row = document.createElement('tr');
-            if (dialog.indexOfSelected(data.DatalistIdKey) >= 0) {
+            if (datalist.indexOf(dialog.selected, data.DatalistIdKey) >= 0) {
                 row.className = 'selected';
             }
 
             $(row).on('click.datalist', function (e) {
-                var index = dialog.indexOfSelected(data.DatalistIdKey);
+                var index = datalist.indexOf(dialog.selected, data.DatalistIdKey);
                 if (index >= 0) {
                     dialog.selected.splice(index, 1);
 
@@ -337,15 +337,6 @@ var MvcDatalistDialog = (function () {
             dialog.pager.append(page);
         },
 
-        indexOfSelected: function (id) {
-            for (var i = 0; i < this.selected.length; i++) {
-                if (this.selected[i].DatalistIdKey == id) {
-                    return i;
-                }
-            }
-
-            return -1;
-        },
         limitRows: function (value) {
             var spinner = this.options.spinner;
 
@@ -397,16 +388,18 @@ var MvcDatalistDialog = (function () {
     return MvcDatalistDialog;
 }());
 var MvcDatalist = (function () {
-    function MvcDatalist(element, options) {
-        this.multi = element.attr('data-multi') == 'true';
-        this.filter = new MvcDatalistFilter(element);
-        this.for = element.attr('data-for');
-        this.url = element.attr('data-url');
+    function MvcDatalist(control, options) {
+        this.multi = control.attr('data-multi') == 'true';
+        this.filter = new MvcDatalistFilter(control);
+        this.for = control.attr('data-for');
+        this.url = control.attr('data-url');
         this.selected = [];
 
-        this.element = element;
-        this.hiddenElements = $('[name="' + this.for + '"]');
         this.browse = $('.datalist-browse[data-for="' + this.for + '"]');
+        this.valueContainer = $('.datalist-values[data-for="' + this.for + '"]');
+        this.values = this.valueContainer.find('.datalist-value');
+        this.search = control.find('.datalist-input');
+        this.control = control;
 
         this.dialog = new MvcDatalistDialog(this);
         this.initOptions();
@@ -422,7 +415,7 @@ var MvcDatalist = (function () {
             options = options || {};
             this.dialog.set(options);
             this.events = $.extend(this.events, options.events);
-            this.element.autocomplete($.extend(this.options.autocomplete, options.autocomplete));
+            this.search.autocomplete($.extend(this.options.autocomplete, options.autocomplete));
         },
         initOptions: function () {
             var datalist = this;
@@ -433,18 +426,21 @@ var MvcDatalist = (function () {
                         $.ajax({
                             url: datalist.url + datalist.filter.getQuery({ search: request.term, rows: 20 }),
                             success: function (data) {
-                                response($.map(data.rows, function (item) {
+                                response($.grep(data.Rows, function (row) {
+                                    return datalist.indexOf(datalist.selected, row.DatalistIdKey) < 0;
+                                }).map(function (row) {
                                     return {
-                                        label: item.DatalistAcKey,
-                                        value: item.DatalistAcKey,
-                                        item: item
+                                        label: row.DatalistAcKey,
+                                        value: row.DatalistAcKey,
+                                        data: row
                                     };
                                 }));
                             }
                         });
                     },
                     select: function (e, selection) {
-                        datalist.select([selection.item.item], true);
+                        datalist.selected.push(selection.item.data);
+                        datalist.select(datalist.selected, true);
                         e.preventDefault();
                     },
                     minLength: 1,
@@ -455,7 +451,7 @@ var MvcDatalist = (function () {
 
         reload: function (triggerChanges) {
             var datalist = this;
-            var ids = $.grep(datalist.hiddenElements.map(function (i, e) { return encodeURIComponent(e.value); }).get(), Boolean);
+            var ids = $.grep(datalist.values.map(function (i, e) { return encodeURIComponent(e.value); }).get(), Boolean);
             if (ids.length > 0) {
                 $.ajax({
                     url: datalist.url + datalist.filter.getQuery({ ids: '&ids=' + ids.join('&ids='), rows: ids.length }),
@@ -476,7 +472,6 @@ var MvcDatalist = (function () {
                 datalist.select([], triggerChanges);
             }
         },
-
         select: function (data, triggerChanges) {
             if (this.events.select) {
                 var e = $.Event('select.datalist');
@@ -488,71 +483,133 @@ var MvcDatalist = (function () {
             }
 
             this.selected = data;
-            if (this.multi) {
-                this.hiddenElements.remove();
-            }
 
-            if (data.length > 0) {
-                if (this.multi) {
-                    this.element.val(data.map(function (x) { return '"' + x.DatalistAcKey + '"'; }).join(', '));
-                    this.hiddenElements = this.createHiddenElements(data);
-                    this.element.before(this.hiddenElements);
-                } else {
-                    this.hiddenElements.val(data[0].DatalistIdKey);
-                    this.element.val(data[0].DatalistAcKey);
-                }
+            if (this.multi) {
+                this.values.remove();
+                this.control.find('.datalist-item').remove();
+                this.control.append(this.createSelectedItems(data));
+                this.control.append(this.search.val(''));
+
+                this.values = this.createValues(data);
+                this.valueContainer.append(this.values);
+                this.resizeDatalistSearch();
+            } else if (data.length > 0) {
+                this.values.val(data[0].DatalistIdKey);
+                this.search.val(data[0].DatalistAcKey);
             } else {
-                this.hiddenElements.val('');
-                this.element.val('');
+                this.values.val('');
+                this.search.val('');
             }
 
             if (triggerChanges) {
-                this.hiddenElements.change();
-                this.element.change();
+                this.search.change().focus();
+                this.values.change();
             }
         },
 
-        createHiddenElements: function (data) {
-            var elements = [];
+        createSelectedItems: function (data) {
+            var items = [];
 
             for (var i = 0; i < data.length; i++) {
-                var element = document.createElement('input');
-                element.className = 'datalist-hidden-input';
-                element.setAttribute('type', 'hidden');
-                element.setAttribute('name', this.for);
-                element.value = data[i].DatalistIdKey;
+                var close = document.createElement('span');
+                close.className = 'datalist-close';
+                close.innerHTML = 'x';
 
-                elements[i] = element;
+                var item = document.createElement('div');
+                item.innerText = data[i].DatalistAcKey;
+                item.className = 'datalist-item';
+                item.appendChild(close);
+
+                this.bindDeselect($(close), data[i].DatalistIdKey);
+
+                items[i] = item;
             }
 
-            return $(elements);
+            return items;
+        },
+        createValues: function (data) {
+            var inputs = [];
+
+            for (var i = 0; i < data.length; i++) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'hidden');
+                input.setAttribute('name', this.for);
+                input.className = 'datalist-value';
+                input.value = data[i].DatalistIdKey;
+
+                inputs[i] = input;
+            }
+
+            return $(inputs);
+        },
+
+        bindDeselect: function (close, id) {
+            var datalist = this;
+
+            close.on('click.datalist', function (e) {
+                datalist.selected.splice(datalist.indexOf(datalist.selected, id), 1);
+
+                datalist.select(datalist.selected, true);
+            });
+        },
+        indexOf: function (selection, id) {
+            for (var i = 0; i < selection.length; i++) {
+                if (selection[i].DatalistIdKey == id) {
+                    return i;
+                }
+            }
+
+            return -1;
+        },
+        resizeDatalistSearch: function () {
+            var total = this.control.width();
+            var lastItem = this.control.find('.datalist-item:last');
+
+            if (lastItem.length > 0) {
+                var widthLeft = Math.floor(total - lastItem.position().left - lastItem.outerWidth(true));
+
+                if (widthLeft > total / 3) {
+                    this.search.outerWidth(widthLeft, true);
+                } else {
+                    this.search.css('width', '');
+                }
+            } else {
+                this.search.css('width', '');
+            }
         },
         cleanUp: function () {
-            this.element.removeAttr('data-filters');
-            this.element.removeAttr('data-dialog');
-            this.element.removeAttr('data-search');
-            this.element.removeAttr('data-multi');
-            this.element.removeAttr('data-order');
-            this.element.removeAttr('data-title');
-            this.element.removeAttr('data-page');
-            this.element.removeAttr('data-rows');
-            this.element.removeAttr('data-sort');
-            this.element.removeAttr('data-url');
+            this.control.removeAttr('data-filters');
+            this.control.removeAttr('data-dialog');
+            this.control.removeAttr('data-search');
+            this.control.removeAttr('data-multi');
+            this.control.removeAttr('data-order');
+            this.control.removeAttr('data-title');
+            this.control.removeAttr('data-page');
+            this.control.removeAttr('data-rows');
+            this.control.removeAttr('data-sort');
+            this.control.removeAttr('data-url');
         },
         bind: function () {
             var datalist = this;
 
-            datalist.element.on('keyup.datalist', function (e) {
-                if (e.which != 9 && this.value.length == 0 && datalist.hiddenElements.val()) {
+            $(window).on('resize.datalist', function () {
+                datalist.resizeDatalistSearch();
+            });
+
+            datalist.search.on('keydown.datalist', function (e) {
+                if (e.which == 8 && this.value.length == 0 && datalist.selected.length > 0) {
+                    datalist.selected.pop();
+
+                    datalist.select(datalist.selected, true);
+                }
+            });
+            datalist.search.on('keyup.datalist', function (e) {
+                if (!datalist.multi && e.which != 9 && this.value.length == 0 && datalist.selected.length > 0) {
                     datalist.select([], true);
                 }
             });
 
             datalist.browse.on('click.datalist', function (e) {
-                if (datalist.element.is('[readonly]') || datalist.element.is('[disabled]')) {
-                    return;
-                }
-
                 datalist.dialog.open();
             });
 
