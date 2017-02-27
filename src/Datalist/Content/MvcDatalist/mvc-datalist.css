@@ -122,10 +122,8 @@
     width: 100%;
 }
 
-.datalist-rows,
-.datalist-selector {
-    vertical-align: middle;
-    white-space: nowrap;
+.datalist-rows {
+    vertical-align: top;
     display: table-cell;
     width: 1%;
 }
@@ -144,7 +142,6 @@
         line-height: 1.42857143;
         box-sizing: border-box;
         text-align: center;
-        height: 100%;
         width: 5em;
         margin: 0;
     }
@@ -166,13 +163,19 @@
         left: 50%;
     }
 
+.datalist-selector {
+    vertical-align: middle;
+    white-space: nowrap;
+    display: table-cell;
+    width: 1%;
+}
+
     .datalist-selector button {
         background-color: rgba(94, 186, 103, 0.81);
         border: 1px solid #5C9845;
-        line-height: 1.42857143;
         border-radius: 4px;
         margin-left: 10px;
-        padding: 6px 8px;
+        padding: 5px 8px;
         min-width: 7em;
         color: #FFFFFF;
     }
