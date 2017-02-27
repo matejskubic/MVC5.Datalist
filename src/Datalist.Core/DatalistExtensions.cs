@@ -150,11 +150,15 @@ namespace Datalist
 
             TagBuilder search = new TagBuilder("input");
             TagBuilder control = new TagBuilder("div");
+            TagBuilder loader = new TagBuilder("div");
+
+            loader.AddCssClass("datalist-control-loader");
             control.AddCssClass("datalist-control");
             search.AddCssClass("datalist-input");
             control.MergeAttributes(attributes);
 
-            control.InnerHtml = search.ToString(TagRenderMode.SelfClosing);
+            control.InnerHtml += search.ToString(TagRenderMode.SelfClosing);
+            control.InnerHtml += loader.ToString();
 
             return control.ToString();
         }

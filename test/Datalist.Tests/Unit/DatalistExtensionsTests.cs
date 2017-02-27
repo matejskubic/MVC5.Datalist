@@ -46,6 +46,7 @@ namespace Datalist.Tests.Unit
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
                         "<input class=\"datalist-input\" />" +
+                        "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
                 "</div>";
 
@@ -78,6 +79,7 @@ namespace Datalist.Tests.Unit
                         "data-page=\"3\" data-rows=\"7\" data-search=\"Term\" data-sort=\"Id\" " +
                         "data-title=\"Test datalist title\" data-url=\"http://localhost/Test\">" +
                         "<input class=\"datalist-input\" />" +
+                        "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
                 "</div>";
 
@@ -102,6 +104,7 @@ namespace Datalist.Tests.Unit
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
                         "<input class=\"datalist-input\" />" +
+                        "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
                 "</div>";
 
@@ -126,6 +129,7 @@ namespace Datalist.Tests.Unit
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
                         "<input class=\"datalist-input\" />" +
+                        "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
                     "<div class=\"datalist-browse\" data-for=\"Test\">" +
                     "</div>" +
@@ -160,6 +164,7 @@ namespace Datalist.Tests.Unit
                         "data-page=\"3\" data-rows=\"7\" data-search=\"Term\" data-sort=\"Id\" " +
                         "data-title=\"Test datalist title\" data-url=\"http://localhost/Test\">" +
                         "<input class=\"datalist-input\" />" +
+                        "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
                     "<div class=\"datalist-browse\" data-for=\"ParentId\">" +
                     "</div>" +
@@ -186,6 +191,7 @@ namespace Datalist.Tests.Unit
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
                         "<input class=\"datalist-input\" />" +
+                        "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
                     "<div class=\"datalist-browse\" data-for=\"ParentId\">" +
                     "</div>" +

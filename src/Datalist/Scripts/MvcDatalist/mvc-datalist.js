@@ -53,8 +53,8 @@ var MvcDatalistDialog = (function () {
         this.tableBody = this.instance.find('tbody');
         this.error = this.instance.find('.datalist-error');
         this.search = this.instance.find('.datalist-search');
-        this.loader = this.instance.find('.datalist-loading');
         this.rows = this.instance.find('.datalist-rows input');
+        this.loader = this.instance.find('.datalist-dialog-loader');
         this.selector = this.instance.find('.datalist-selector button');
 
         this.initOptions();
@@ -435,8 +435,17 @@ var MvcDatalist = (function () {
                                         data: row
                                     };
                                 }));
+                            },
+                            error: function () {
+                                datalist.stopLoading();
                             }
                         });
+                    },
+                    search: function () {
+                        datalist.startLoading(300);
+                    },
+                    response: function () {
+                        datalist.stopLoading();
                     },
                     select: function (e, selection) {
                         datalist.selected.push(selection.item.data);
@@ -453,10 +462,14 @@ var MvcDatalist = (function () {
             var datalist = this;
             var ids = $.grep(datalist.values.map(function (i, e) { return encodeURIComponent(e.value); }).get(), Boolean);
             if (ids.length > 0) {
+                datalist.startLoading(300);
+
                 $.ajax({
                     url: datalist.url + datalist.filter.getQuery({ ids: '&ids=' + ids.join('&ids='), rows: ids.length }),
                     cache: false,
                     success: function (data) {
+                        datalist.stopLoading();
+
                         if (data.Rows.length > 0) {
                             var selected = [];
                             for (var i = 0; i < data.Rows.length; i++) {
@@ -466,6 +479,9 @@ var MvcDatalist = (function () {
 
                             datalist.select(selected, triggerChanges);
                         }
+                    },
+                    error: function () {
+                        datalist.stopLoading();
                     }
                 });
             } else {
@@ -485,10 +501,10 @@ var MvcDatalist = (function () {
             this.selected = data;
 
             if (this.multi) {
+                this.search.val('');
                 this.values.remove();
                 this.control.find('.datalist-item').remove();
-                this.control.append(this.createSelectedItems(data));
-                this.control.append(this.search.val(''));
+                this.createSelectedItems(data).insertBefore(this.search);
 
                 this.values = this.createValues(data);
                 this.valueContainer.append(this.values);
@@ -525,7 +541,7 @@ var MvcDatalist = (function () {
                 items[i] = item;
             }
 
-            return items;
+            return $(items);
         },
         createValues: function (data) {
             var inputs = [];
@@ -541,6 +557,16 @@ var MvcDatalist = (function () {
             }
 
             return $(inputs);
+        },
+
+        startLoading: function (delay) {
+            this.loading = setTimeout(function (datalist) {
+                datalist.search.addClass('datalist-loading');
+            }, delay, this);
+        },
+        stopLoading: function () {
+            clearTimeout(this.loading);
+            this.search.removeClass('datalist-loading');
         },
 
         bindDeselect: function (close, id) {
