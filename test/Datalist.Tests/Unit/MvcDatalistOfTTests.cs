@@ -35,11 +35,10 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AttributedProperties_GetsOrderedProperties()
         {
-            List<PropertyInfo> actual = datalist.AttributedProperties.ToList();
-            List<PropertyInfo> expected = typeof(TestModel).GetProperties()
+            IEnumerable<PropertyInfo> actual = datalist.AttributedProperties;
+            IEnumerable<PropertyInfo> expected = typeof(TestModel).GetProperties()
                 .Where(property => property.GetCustomAttribute<DatalistColumnAttribute>(false) != null)
-                .OrderBy(property => property.GetCustomAttribute<DatalistColumnAttribute>(false).Position)
-                .ToList();
+                .OrderBy(property => property.GetCustomAttribute<DatalistColumnAttribute>(false).Position);
 
             Assert.Equal(expected, actual);
         }
@@ -289,9 +288,9 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FilterByIds_NoIdProperty_Throws()
         {
-            TestDatalist<NoIdModel> datalist = new TestDatalist<NoIdModel>();
+            TestDatalist<NoIdModel> testDatalist = new TestDatalist<NoIdModel>();
 
-            DatalistException exception = Assert.Throws<DatalistException>(() => datalist.FilterByIds(null, null));
+            DatalistException exception = Assert.Throws<DatalistException>(() => testDatalist.FilterByIds(null, null));
 
             String expected = $"'{typeof(NoIdModel).Name}' type does not have key or property named 'Id', required for automatic id filtering.";
             String actual = exception.Message;
@@ -313,12 +312,12 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void FilterByIds_NumberKey()
         {
-            TestDatalist<NumericModel> datalist = new TestDatalist<NumericModel>();
+            TestDatalist<NumericModel> testDatalist = new TestDatalist<NumericModel>();
             for (Int32 i = 0; i < 20; i++)
-                datalist.Models.Add(new NumericModel { Value = i });
+                testDatalist.Models.Add(new NumericModel { Value = i });
 
-            IQueryable<NumericModel> actual = datalist.FilterByIds(datalist.GetModels(), new List<String> { "9.0", "10" });
-            IQueryable<NumericModel> expected = datalist.GetModels().Where(model => new[] { 9, 10 }.Contains(model.Value));
+            IQueryable<NumericModel> actual = testDatalist.FilterByIds(testDatalist.GetModels(), new List<String> { "9.0", "10" });
+            IQueryable<NumericModel> expected = testDatalist.GetModels().Where(model => new[] { 9, 10 }.Contains(model.Value));
 
             Assert.Equal(expected, actual);
         }
@@ -556,10 +555,10 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AddId_FromFunction()
         {
-            TestDatalist<NoIdModel> datalist = new TestDatalist<NoIdModel>();
-            datalist.Id = (model) => "1";
+            TestDatalist<NoIdModel> testDatalist = new TestDatalist<NoIdModel>();
+            testDatalist.Id = (model) => "1";
 
-            datalist.AddId(row, new NoIdModel());
+            testDatalist.AddId(row, new NoIdModel());
 
             KeyValuePair<String, String> actual = row.Single();
 
@@ -570,9 +569,9 @@ namespace Datalist.Tests.Unit
         [Fact]
         public void AddId_EmptyValues()
         {
-            TestDatalist<NoIdModel> datalist = new TestDatalist<NoIdModel>();
+            TestDatalist<NoIdModel> testDatalist = new TestDatalist<NoIdModel>();
 
-            datalist.AddId(row, new NoIdModel());
+            testDatalist.AddId(row, new NoIdModel());
 
             KeyValuePair<String, String> actual = row.Single();
 

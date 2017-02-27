@@ -18,7 +18,7 @@ namespace Datalist
         {
             TagBuilder datalist = CreateDatalistGroup();
             datalist.AddCssClass("datalist-browseless");
-            datalist.InnerHtml += CreateDatalistValues(html, model, name, value);
+            datalist.InnerHtml = CreateDatalistValues(html, model, name, value);
             datalist.InnerHtml += CreateDatalistControl(model, name, htmlAttributes);
 
             return new MvcHtmlString(datalist.ToString());
@@ -34,7 +34,7 @@ namespace Datalist
             TagBuilder datalist = CreateDatalistGroup();
             datalist.AddCssClass("datalist-browseless");
             String name = ExpressionHelper.GetExpressionText(expression);
-            datalist.InnerHtml += CreateDatalistValues(html, model, expression);
+            datalist.InnerHtml = CreateDatalistValues(html, model, expression);
             datalist.InnerHtml += CreateDatalistControl(model, name, htmlAttributes);
 
             return new MvcHtmlString(datalist.ToString());
@@ -44,7 +44,7 @@ namespace Datalist
             String name, MvcDatalist model, Object value = null, Object htmlAttributes = null)
         {
             TagBuilder datalist = CreateDatalistGroup();
-            datalist.InnerHtml += CreateDatalistValues(html, model, name, value);
+            datalist.InnerHtml = CreateDatalistValues(html, model, name, value);
             datalist.InnerHtml += CreateDatalistControl(model, name, htmlAttributes);
             datalist.InnerHtml += CreateDatalistBrowse(name);
 
@@ -60,7 +60,7 @@ namespace Datalist
         {
             TagBuilder datalist = CreateDatalistGroup();
             String name = ExpressionHelper.GetExpressionText(expression);
-            datalist.InnerHtml += CreateDatalistValues(html, model, expression);
+            datalist.InnerHtml = CreateDatalistValues(html, model, expression);
             datalist.InnerHtml += CreateDatalistControl(model, name, htmlAttributes);
             datalist.InnerHtml += CreateDatalistBrowse(name);
 
@@ -76,14 +76,6 @@ namespace Datalist
                 throw new DatalistException($"'{exp.Member.Name}' property does not have a '{typeof(DatalistAttribute).Name}' specified.");
 
             return (MvcDatalist)Activator.CreateInstance(datalist.Type);
-        }
-
-        private static TagBuilder CreateDatalistGroup()
-        {
-            TagBuilder datalist = new TagBuilder("div");
-            datalist.AddCssClass("datalist-group");
-
-            return datalist;
         }
 
         private static String CreateDatalistValues<TModel, TProperty>(HtmlHelper<TModel> html, MvcDatalist model, Expression<Func<TModel, TProperty>> expression)
@@ -132,7 +124,6 @@ namespace Datalist
 
             return container.ToString();
         }
-
         private static String CreateDatalistControl(MvcDatalist datalist, String name, Object htmlAttributes)
         {
             IDictionary<String, Object> attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
@@ -157,7 +148,7 @@ namespace Datalist
             search.AddCssClass("datalist-input");
             control.MergeAttributes(attributes);
 
-            control.InnerHtml += search.ToString(TagRenderMode.SelfClosing);
+            control.InnerHtml = search.ToString(TagRenderMode.SelfClosing);
             control.InnerHtml += loader.ToString();
 
             return control.ToString();
@@ -169,6 +160,13 @@ namespace Datalist
             browse.Attributes["data-for"] = name;
 
             return browse.ToString();
+        }
+        private static TagBuilder CreateDatalistGroup()
+        {
+            TagBuilder datalist = new TagBuilder("div");
+            datalist.AddCssClass("datalist-group");
+
+            return datalist;
         }
     }
 }

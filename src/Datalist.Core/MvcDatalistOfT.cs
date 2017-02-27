@@ -149,10 +149,10 @@ namespace Datalist
                 .Take(Math.Min(Filter.Rows, 99));
         }
 
-        public virtual DatalistData FormDatalistData(IQueryable<T> models, IQueryable<T> selected, IQueryable<T> notSelected)
+        public virtual DatalistData FormDatalistData(IQueryable<T> filtered, IQueryable<T> selected, IQueryable<T> notSelected)
         {
             DatalistData data = new DatalistData();
-            data.FilteredRows = models.Count();
+            data.FilteredRows = filtered.Count();
             data.Columns = Columns;
 
             foreach (T model in selected.Concat(notSelected))

@@ -5,12 +5,12 @@ namespace Datalist.Tests.Unit
 {
     public class DatalistColumnTests
     {
-        #region DatalistColumn(String key, String header, String cssClass = null)
+        #region DatalistColumn(String key, String header)
 
         [Fact]
-        public void Add_NullKey_Throws()
+        public void DatalistColumn_NullKey_Throws()
         {
-            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => new DatalistColumn(null, null));
+            ArgumentNullException actual = Assert.Throws<ArgumentNullException>(() => new DatalistColumn(null, "Test"));
 
             Assert.Equal("key", actual.ParamName);
         }

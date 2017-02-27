@@ -7,7 +7,7 @@ namespace Datalist.Tests.Unit
         #region DatalistException(String message)
 
         [Fact]
-        public void DatalistException_SetsMessage()
+        public void DatalistException_Message()
         {
             Assert.Equal("Test", new DatalistException("Test").Message);
         }
