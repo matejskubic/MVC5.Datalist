@@ -76,7 +76,6 @@ var MvcDatalistDialog = (function () {
                     dialogClass: 'datalist-dialog',
                     title: dialog.title,
                     autoOpen: false,
-                    minHeight: 210,
                     minWidth: 455,
                     width: 'auto',
                     modal: true
@@ -138,9 +137,7 @@ var MvcDatalistDialog = (function () {
             this.error.fadeOut(300);
             var loading = setTimeout(function (dialog) {
                 dialog.loader.fadeIn(300);
-                dialog.table.fadeOut(300);
-                dialog.pager.fadeOut(300);
-            }, 500, dialog);
+            }, 300, dialog);
 
             $.ajax({
                 cache: false,
@@ -166,9 +163,6 @@ var MvcDatalistDialog = (function () {
                 this.renderHeader(data.Columns);
                 this.renderBody(data.Columns, data.Rows);
                 this.renderFooter(data.FilteredRows);
-
-                this.table.fadeIn(300);
-                this.pager.fadeIn(300);
             } else {
                 this.error.fadeIn(300);
             }
@@ -240,6 +234,8 @@ var MvcDatalistDialog = (function () {
                     this.renderPage('&rsaquo;', this.filter.page + 1);
                     this.renderPage('&raquo;', totalPages - 1);
                 }
+            } else {
+                this.renderPage(1, 0);
             }
         },
 
