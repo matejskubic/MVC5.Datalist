@@ -214,6 +214,7 @@
     min-height: 7.3em;
 }
 
+.datalist-error,
 .datalist-dialog-loader {
     background-color: #FFFFFF;
     border: 1px solid #DDDDDD;
@@ -239,6 +240,12 @@
             width: 5em;
         }
 
+.datalist-error {
+    background-color: #FFF6F6;
+    border-color: #EBCCD1;
+    color: #A94442;
+}
+
 @keyframes datalist-spin {
     0% {
         transform: rotate(0deg);
@@ -247,16 +254,6 @@
     100% {
         transform: rotate(360deg);
     }
-}
-
-.datalist-error {
-    background-color: #F2DEDE;
-    border: 1px solid #EBCCD1;
-    text-align: center;
-    margin-top: 30px;
-    color: #A94442;
-    display: none;
-    padding: 15px;
 }
 
 .datalist table {
@@ -327,8 +324,9 @@
 }
 
 .datalist ul {
+    padding-top: 0.8em;
     text-align: right;
-    margin: 0.8em 0 0;
+    margin: 0;
 }
 
     .datalist ul li {

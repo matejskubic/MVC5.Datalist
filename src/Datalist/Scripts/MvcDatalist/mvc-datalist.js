@@ -101,8 +101,8 @@ var MvcDatalistDialog = (function () {
         },
 
         open: function () {
-            this.error.html(this.lang('Error'));
             this.search.val(this.filter.search);
+            this.error.hide().html(this.lang('Error'));
             this.selected = this.datalist.selected.slice();
             this.rows.val(this.limitRows(this.filter.rows));
             this.search.attr('placeholder', this.lang('Search'));
@@ -134,7 +134,7 @@ var MvcDatalistDialog = (function () {
 
         refresh: function () {
             var dialog = this;
-            this.error.fadeOut(300);
+            dialog.error.fadeOut(300);
             var loading = setTimeout(function (dialog) {
                 dialog.loader.fadeIn(300);
             }, 300, dialog);
