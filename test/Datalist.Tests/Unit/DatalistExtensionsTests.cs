@@ -55,43 +55,10 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region AutoCompleteFor<TModel, TProperty>(this IHtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, Object htmlAttributes = null)
-
-        [Fact]
-        public void AutoCompleteFor_NoModel_Throws()
-        {
-            Exception actual = Assert.Throws<DatalistException>(() => html.AutoCompleteFor(model => model.Id));
-
-            Assert.Equal("'Id' property does not have a 'DatalistAttribute' specified.", actual.Message);
-        }
-
-        [Fact]
-        public void AutoCompleteFor_Expression()
-        {
-            String actual = html.AutoCompleteFor(model => model.ParentId, new { @class = "classes", attribute = "attr" }).ToString();
-            String expected =
-                "<div class=\"datalist-browseless datalist-group\">" +
-                    "<div class=\"datalist-values\" data-for=\"ParentId\">" +
-                        "<input class=\"datalist-value\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
-                    "</div>" +
-                    "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"TestDialog\" " +
-                        "data-filters=\"Test1,Test2\" data-for=\"ParentId\" data-multi=\"false\" data-order=\"Asc\" " +
-                        "data-page=\"3\" data-rows=\"7\" data-search=\"Term\" data-sort=\"Id\" " +
-                        "data-title=\"Test datalist title\" data-url=\"http://localhost/Test\">" +
-                        "<input class=\"datalist-input\" />" +
-                        "<div class=\"datalist-control-loader\"></div>" +
-                    "</div>" +
-                "</div>";
-
-            Assert.Equal(expected, actual);
-        }
-
-        #endregion
-
         #region AutoCompleteFor<TModel, TProperty>(this IHtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, MvcDatalist model, Object htmlAttributes = null)
 
         [Fact]
-        public void AutoCompleteFor_FromModelExpression()
+        public void AutoCompleteFor_FromModel()
         {
             String actual = html.AutoCompleteFor(model => model.ParentId, datalist, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
@@ -140,45 +107,10 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region DatalistFor<TModel, TProperty>(this IHtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, Object htmlAttributes = null)
-
-        [Fact]
-        public void DatalistFor_NoModel_Throws()
-        {
-            Exception actual = Assert.Throws<DatalistException>(() => html.DatalistFor(model => model.Id));
-
-            Assert.Equal("'Id' property does not have a 'DatalistAttribute' specified.", actual.Message);
-        }
-
-        [Fact]
-        public void DatalistFor_Expression()
-        {
-            String actual = html.DatalistFor(model => model.ParentId, new { @class = "classes", attribute = "attr" }).ToString();
-            String expected =
-                "<div class=\"datalist-group\">" +
-                    "<div class=\"datalist-values\" data-for=\"ParentId\">" +
-                        "<input class=\"datalist-value\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
-                    "</div>" +
-                    "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"TestDialog\" " +
-                        "data-filters=\"Test1,Test2\" data-for=\"ParentId\" data-multi=\"false\" data-order=\"Asc\" " +
-                        "data-page=\"3\" data-rows=\"7\" data-search=\"Term\" data-sort=\"Id\" " +
-                        "data-title=\"Test datalist title\" data-url=\"http://localhost/Test\">" +
-                        "<input class=\"datalist-input\" />" +
-                        "<div class=\"datalist-control-loader\"></div>" +
-                    "</div>" +
-                    "<div class=\"datalist-browse\" data-for=\"ParentId\">" +
-                    "</div>" +
-                "</div>";
-
-            Assert.Equal(expected, actual);
-        }
-
-        #endregion
-
         #region DatalistFor<TModel, TProperty>(this IHtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, MvcDatalist model, Object htmlAttributes = null)
 
         [Fact]
-        public void DatalistFor_ExpressionWithModel()
+        public void DatalistFor_FromModel()
         {
             String actual = html.DatalistFor(model => model.ParentId, datalist, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =

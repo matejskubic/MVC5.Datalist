@@ -15,7 +15,6 @@ namespace Datalist.Tests.Objects
         [DatalistColumn]
         public String Value { get; set; }
 
-        [Datalist(typeof(TestDatalist<TestModel>))]
         public String ParentId { get; set; }
 
         [Display(Name = "Date")]

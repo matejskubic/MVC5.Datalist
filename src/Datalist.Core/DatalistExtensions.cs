@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -22,11 +21,6 @@ namespace Datalist
             datalist.InnerHtml += CreateDatalistControl(model, name, htmlAttributes);
 
             return new MvcHtmlString(datalist.ToString());
-        }
-        public static IHtmlString AutoCompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html,
-            Expression<Func<TModel, TProperty>> expression, Object htmlAttributes = null)
-        {
-            return html.AutoCompleteFor(expression, CreateModelFrom(expression), htmlAttributes);
         }
         public static IHtmlString AutoCompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html,
             Expression<Func<TModel, TProperty>> expression, MvcDatalist model, Object htmlAttributes = null)
@@ -51,11 +45,6 @@ namespace Datalist
             return new MvcHtmlString(datalist.ToString());
         }
         public static IHtmlString DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html,
-            Expression<Func<TModel, TProperty>> expression, Object htmlAttributes = null)
-        {
-            return html.DatalistFor(expression, CreateModelFrom(expression), htmlAttributes);
-        }
-        public static IHtmlString DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html,
             Expression<Func<TModel, TProperty>> expression, MvcDatalist model, Object htmlAttributes = null)
         {
             TagBuilder datalist = CreateDatalistGroup();
@@ -65,17 +54,6 @@ namespace Datalist
             datalist.InnerHtml += CreateDatalistBrowse(name);
 
             return new MvcHtmlString(datalist.ToString());
-        }
-
-        private static MvcDatalist CreateModelFrom<TModel, TProperty>(Expression<Func<TModel, TProperty>> expression)
-        {
-            MemberExpression exp = expression.Body as MemberExpression;
-            DatalistAttribute datalist = exp.Member.GetCustomAttribute<DatalistAttribute>();
-
-            if (datalist == null)
-                throw new DatalistException($"'{exp.Member.Name}' property does not have a '{typeof(DatalistAttribute).Name}' specified.");
-
-            return (MvcDatalist)Activator.CreateInstance(datalist.Type);
         }
 
         private static String CreateDatalistValues<TModel, TProperty>(HtmlHelper<TModel> html, MvcDatalist model, Expression<Func<TModel, TProperty>> expression)
