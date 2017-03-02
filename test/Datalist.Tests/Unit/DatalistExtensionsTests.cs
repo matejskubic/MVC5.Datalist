@@ -33,7 +33,7 @@ namespace Datalist.Tests.Unit
         #region AutoComplete<TModel>(this IHtmlHelper<TModel> html, String name, MvcDatalist model, Object value = null, Object htmlAttributes = null)
 
         [Fact]
-        public void AutoComplete_FromModel()
+        public void AutoComplete_FromDatalist()
         {
             String actual = html.AutoComplete("Test", datalist, "Value", new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
@@ -53,12 +53,36 @@ namespace Datalist.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
+        [Fact]
+        public void AutoComplete_FromMultiDatalist()
+        {
+            datalist.Multi = true;
+
+            String actual = html.AutoComplete("Test", datalist, new[] { "Value1", "Value2" }, new { @class = "classes", attribute = "attr" }).ToString();
+            String expected =
+                "<div class=\"datalist-browseless datalist-group\">" +
+                    "<div class=\"datalist-values\" data-for=\"Test\">" +
+                        "<input class=\"datalist-value\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"Value1\" />" +
+                        "<input class=\"datalist-value\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"Value2\" />" +
+                    "</div>" +
+                    "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"Dialog\" " +
+                        "data-filters=\"Add1,Add2\" data-for=\"Test\" data-multi=\"true\" data-order=\"Desc\" " +
+                        "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
+                        "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
+                        "<input class=\"datalist-input\" />" +
+                        "<div class=\"datalist-control-loader\"></div>" +
+                    "</div>" +
+                "</div>";
+
+            Assert.Equal(expected, actual);
+        }
+
         #endregion
 
         #region AutoCompleteFor<TModel, TProperty>(this IHtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, MvcDatalist model, Object htmlAttributes = null)
 
         [Fact]
-        public void AutoCompleteFor_FromModel()
+        public void AutoCompleteFor_FromDatalist()
         {
             String actual = html.AutoCompleteFor(model => model.ParentId, datalist, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
@@ -78,21 +102,70 @@ namespace Datalist.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
+        [Fact]
+        public void AutoCompleteFor_FromMultiDatalist()
+        {
+            datalist.Multi = true;
+            html.ViewData.Model.Values = new[] { "Value1's", "Value2's" };
+
+            String actual = html.AutoCompleteFor(model => model.Values, datalist, new { @class = "classes", attribute = "attr" }).ToString();
+            String expected =
+                "<div class=\"datalist-browseless datalist-group\">" +
+                    "<div class=\"datalist-values\" data-for=\"Values\">" +
+                        "<input class=\"datalist-value\" id=\"Values\" name=\"Values\" type=\"hidden\" value=\"Value1&#39;s\" />" +
+                        "<input class=\"datalist-value\" id=\"Values\" name=\"Values\" type=\"hidden\" value=\"Value2&#39;s\" />" +
+                    "</div>" +
+                    "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"Dialog\" " +
+                        "data-filters=\"Add1,Add2\" data-for=\"Values\" data-multi=\"true\" data-order=\"Desc\" " +
+                        "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
+                        "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
+                        "<input class=\"datalist-input\" />" +
+                        "<div class=\"datalist-control-loader\"></div>" +
+                    "</div>" +
+                "</div>";
+
+            Assert.Equal(expected, actual);
+        }
+
         #endregion
 
         #region Datalist<TModel>(this IHtmlHelper<TModel> html, String name, MvcDatalist model, Object value = null, Object htmlAttributes = null)
 
         [Fact]
-        public void Datalist_FromModel()
+        public void Datalist_FromDatalist()
         {
-            String actual = html.Datalist("Test", datalist, "Value", new { @class = "classes", attribute = "attr" }).ToString();
+            String actual = html.Datalist("Test", datalist, 1, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
                 "<div class=\"datalist-group\">" +
                     "<div class=\"datalist-values\" data-for=\"Test\">" +
-                        "<input class=\"datalist-value\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"Value\" />" +
+                        "<input class=\"datalist-value\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"1\" />" +
                     "</div>" +
                     "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"Dialog\" " +
                         "data-filters=\"Add1,Add2\" data-for=\"Test\" data-multi=\"false\" data-order=\"Desc\" " +
+                        "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
+                        "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
+                        "<input class=\"datalist-input\" />" +
+                        "<div class=\"datalist-control-loader\"></div>" +
+                    "</div>" +
+                    "<div class=\"datalist-browse\" data-for=\"Test\">" +
+                    "</div>" +
+                "</div>";
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Datalist_FromMultiDatalist()
+        {
+            datalist.Multi = true;
+
+            String actual = html.Datalist("Test", datalist, 1, new { @class = "classes", attribute = "attr" }).ToString();
+            String expected =
+                "<div class=\"datalist-group\">" +
+                    "<div class=\"datalist-values\" data-for=\"Test\">" +
+                    "</div>" +
+                    "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"Dialog\" " +
+                        "data-filters=\"Add1,Add2\" data-for=\"Test\" data-multi=\"true\" data-order=\"Desc\" " +
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
                         "<input class=\"datalist-input\" />" +
@@ -110,7 +183,7 @@ namespace Datalist.Tests.Unit
         #region DatalistFor<TModel, TProperty>(this IHtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, MvcDatalist model, Object htmlAttributes = null)
 
         [Fact]
-        public void DatalistFor_FromModel()
+        public void DatalistFor_FromDatalist()
         {
             String actual = html.DatalistFor(model => model.ParentId, datalist, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
@@ -126,6 +199,30 @@ namespace Datalist.Tests.Unit
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
                     "<div class=\"datalist-browse\" data-for=\"ParentId\">" +
+                    "</div>" +
+                "</div>";
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void DatalistFor_FromMultiDatalist()
+        {
+            datalist.Multi = true;
+
+            String actual = html.DatalistFor(model => model.Values, datalist, new { @class = "classes", attribute = "attr" }).ToString();
+            String expected =
+                "<div class=\"datalist-group\">" +
+                    "<div class=\"datalist-values\" data-for=\"Values\">" +
+                    "</div>" +
+                    "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"Dialog\" " +
+                        "data-filters=\"Add1,Add2\" data-for=\"Values\" data-multi=\"true\" data-order=\"Desc\" " +
+                        "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
+                        "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
+                        "<input class=\"datalist-input\" />" +
+                        "<div class=\"datalist-control-loader\"></div>" +
+                    "</div>" +
+                    "<div class=\"datalist-browse\" data-for=\"Values\">" +
                     "</div>" +
                 "</div>";
 

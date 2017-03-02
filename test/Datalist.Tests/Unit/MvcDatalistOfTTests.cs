@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Datalist.Tests.Unit
 {
@@ -283,87 +282,6 @@ namespace Datalist.Tests.Unit
 
         #endregion
 
-        #region FilterByIds(IQueryable<T> models)
-
-        [Fact]
-        public void FilterByIds_NoIdProperty_Throws()
-        {
-            TestDatalist<NoIdModel> testDatalist = new TestDatalist<NoIdModel>();
-
-            DatalistException exception = Assert.Throws<DatalistException>(() => testDatalist.FilterByIds(null, null));
-
-            String expected = $"'{typeof(NoIdModel).Name}' type does not have key or property named 'Id', required for automatic id filtering.";
-            String actual = exception.Message;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void FilterByIds_String()
-        {
-            List<String> ids = new List<String> { "9I", "10I" };
-
-            IQueryable<TestModel> actual = datalist.FilterByIds(datalist.GetModels(), ids);
-            IQueryable<TestModel> expected = datalist.GetModels().Where(model => ids.Contains(model.Id));
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void FilterByIds_NumberKey()
-        {
-            TestDatalist<NumericModel> testDatalist = new TestDatalist<NumericModel>();
-            for (Int32 i = 0; i < 20; i++)
-                testDatalist.Models.Add(new NumericModel { Value = i });
-
-            IQueryable<NumericModel> actual = testDatalist.FilterByIds(testDatalist.GetModels(), new List<String> { "9.0", "10" });
-            IQueryable<NumericModel> expected = testDatalist.GetModels().Where(model => new[] { 9, 10 }.Contains(model.Value));
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void FilterByIds_NotSupportedIdType_Throws()
-        {
-            DatalistException exception = Assert.Throws<DatalistException>(() => new TestDatalist<GuidModel>().FilterByIds(null, new String[0]));
-
-            String expected = $"'{typeof(GuidModel).Name}.Id' property type has to be a string or a number.";
-            String actual = exception.Message;
-
-            Assert.Equal(expected, actual);
-        }
-
-        #endregion
-
-        #region FilterByAdditionalFilters(IQueryable<T> models)
-
-        [Fact]
-        public void FilterByAdditionalFilters_SkipsNullValues()
-        {
-            datalist.Filter.AdditionalFilters.Add("Id", null);
-
-            IQueryable<TestModel> actual = datalist.FilterByAdditionalFilters(datalist.GetModels());
-            IQueryable<TestModel> expected = datalist.GetModels();
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void FilterByAdditionalFilters_Filters()
-        {
-            datalist.Filter.AdditionalFilters.Add("Id", "9I");
-            datalist.Filter.AdditionalFilters.Add("Count", new[] { 19, 30 });
-            datalist.Filter.AdditionalFilters.Add("Date", new DateTime(2014, 12, 19));
-
-            IQueryable<TestModel> actual = datalist.FilterByAdditionalFilters(datalist.GetModels());
-            IQueryable<TestModel> expected = datalist.GetModels().Where(model =>
-                model.Id == "9I" && model.Count == 19 && model.Date == new DateTime(2014, 12, 19));
-
-            Assert.Equal(expected, actual);
-        }
-
-        #endregion
-
         #region FilterBySearch(IQueryable<T> models)
 
         [Theory]
@@ -412,6 +330,137 @@ namespace Datalist.Tests.Unit
 
             IQueryable<TestModel> actual = datalist.FilterBySearch(datalist.GetModels());
             IQueryable<TestModel> expected = datalist.GetModels();
+
+            Assert.Equal(expected, actual);
+        }
+
+        #endregion
+
+        #region FilterByAdditionalFilters(IQueryable<T> models)
+
+        [Fact]
+        public void FilterByAdditionalFilters_SkipsNullValues()
+        {
+            datalist.Filter.AdditionalFilters.Add("Id", null);
+
+            IQueryable<TestModel> actual = datalist.FilterByAdditionalFilters(datalist.GetModels());
+            IQueryable<TestModel> expected = datalist.GetModels();
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void FilterByAdditionalFilters_Filters()
+        {
+            datalist.Filter.AdditionalFilters.Add("Id", "9I");
+            datalist.Filter.AdditionalFilters.Add("Count", new[] { 19, 30 });
+            datalist.Filter.AdditionalFilters.Add("Date", new DateTime(2014, 12, 19));
+
+            IQueryable<TestModel> actual = datalist.FilterByAdditionalFilters(datalist.GetModels());
+            IQueryable<TestModel> expected = datalist.GetModels().Where(model =>
+                model.Id == "9I" && model.Count == 19 && model.Date == new DateTime(2014, 12, 19));
+
+            Assert.Equal(expected, actual);
+        }
+
+        #endregion
+
+        #region FilterByIds(IQueryable<T> models, IList<String> ids)
+
+        [Fact]
+        public void FilterByIds_NoIdProperty_Throws()
+        {
+            TestDatalist<NoIdModel> testDatalist = new TestDatalist<NoIdModel>();
+
+            DatalistException exception = Assert.Throws<DatalistException>(() => testDatalist.FilterByIds(null, null));
+
+            String expected = $"'{typeof(NoIdModel).Name}' type does not have key or property named 'Id', required for automatic id filtering.";
+            String actual = exception.Message;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void FilterByIds_String()
+        {
+            List<String> ids = new List<String> { "9I", "10I" };
+
+            IQueryable<TestModel> actual = datalist.FilterByIds(datalist.GetModels(), ids);
+            IQueryable<TestModel> expected = datalist.GetModels().Where(model => ids.Contains(model.Id));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void FilterByIds_NumberKey()
+        {
+            TestDatalist<NumericModel> testDatalist = new TestDatalist<NumericModel>();
+            for (Int32 i = 0; i < 20; i++) testDatalist.Models.Add(new NumericModel { Value = i });
+
+            IQueryable<NumericModel> actual = testDatalist.FilterByIds(testDatalist.GetModels(), new List<String> { "9.0", "10" });
+            IQueryable<NumericModel> expected = testDatalist.GetModels().Where(model => new[] { 9, 10 }.Contains(model.Value));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void FilterByIds_NotSupportedIdType_Throws()
+        {
+            DatalistException exception = Assert.Throws<DatalistException>(() => new TestDatalist<GuidModel>().FilterByIds(null, new String[0]));
+
+            String expected = $"'{typeof(GuidModel).Name}.Id' property type has to be a string or a number.";
+            String actual = exception.Message;
+
+            Assert.Equal(expected, actual);
+        }
+
+        #endregion
+
+        #region FilterByNotIds(IQueryable<T> models, IList<String> ids)
+
+        [Fact]
+        public void FilterByNotIds_NoIdProperty_Throws()
+        {
+            TestDatalist<NoIdModel> testDatalist = new TestDatalist<NoIdModel>();
+
+            DatalistException exception = Assert.Throws<DatalistException>(() => testDatalist.FilterByNotIds(null, null));
+
+            String expected = $"'{typeof(NoIdModel).Name}' type does not have key or property named 'Id', required for automatic id filtering.";
+            String actual = exception.Message;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void FilterByNotIds_String()
+        {
+            List<String> ids = new List<String> { "9I", "10I" };
+
+            IQueryable<TestModel> actual = datalist.FilterByNotIds(datalist.GetModels(), ids);
+            IQueryable<TestModel> expected = datalist.GetModels().Where(model => !ids.Contains(model.Id));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void FilterByNotIds_NumberKey()
+        {
+            TestDatalist<NumericModel> testDatalist = new TestDatalist<NumericModel>();
+            for (Int32 i = 0; i < 20; i++) testDatalist.Models.Add(new NumericModel { Value = i });
+
+            IQueryable<NumericModel> actual = testDatalist.FilterByNotIds(testDatalist.GetModels(), new List<String> { "9.0", "10" });
+            IQueryable<NumericModel> expected = testDatalist.GetModels().Where(model => !new[] { 9, 10 }.Contains(model.Value));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void FilterByNotIds_NotSupportedIdType_Throws()
+        {
+            DatalistException exception = Assert.Throws<DatalistException>(() => new TestDatalist<GuidModel>().FilterByNotIds(null, new String[0]));
+
+            String expected = $"'{typeof(GuidModel).Name}.Id' property type has to be a string or a number.";
+            String actual = exception.Message;
 
             Assert.Equal(expected, actual);
         }

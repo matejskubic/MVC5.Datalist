@@ -87,7 +87,7 @@ namespace Datalist
             if (model.Multi)
             {
                 IEnumerable<Object> values = (value as IEnumerable)?.Cast<Object>();
-                if (values == null) return "";
+                if (values == null) return container.ToString();
 
                 StringBuilder inputs = new StringBuilder();
                 foreach (Object val in values)
