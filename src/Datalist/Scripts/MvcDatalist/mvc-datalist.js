@@ -403,6 +403,7 @@ var MvcDatalist = (function () {
         this.initOptions();
         this.set(options);
 
+        this.methods = { reload: this.reload };
         this.reload(false);
         this.cleanUp();
         this.bind();
@@ -458,7 +459,9 @@ var MvcDatalist = (function () {
 
         reload: function (triggerChanges) {
             var datalist = this;
+            triggerChanges = triggerChanges == null ? true : triggerChanges;
             var ids = $.grep(datalist.values.map(function (i, e) { return encodeURIComponent(e.value); }).get(), Boolean);
+
             if (ids.length > 0) {
                 datalist.startLoading(300);
 
@@ -656,11 +659,26 @@ var MvcDatalist = (function () {
 }());
 
 $.fn.datalist = function (options) {
+    var args = arguments;
+
     return this.each(function () {
         if (!$.data(this, 'mvc-datalist')) {
-            $.data(this, 'mvc-datalist', new MvcDatalist($(this), options));
-        } else if (options) {
-            $.data(this, 'mvc-datalist').set(options);
+            if (typeof options == 'string') {
+                var datalist = new MvcDatalist($(this));
+                datalist.methods[options].apply(datalist, [].slice.apply(args, 1));
+            } else {
+                var datalist = new MvcDatalist($(this), options);
+            }
+
+            $.data(this, 'mvc-datalist', datalist);
+        } else {
+            var datalist = $.data(this, 'mvc-datalist');
+
+            if (typeof options == 'string') {
+                datalist.methods[options].apply(datalist, [].slice.call(args, 1));
+            } else if (options) {
+                datalist.set(options);
+            }
         }
     });
 };
