@@ -11,10 +11,7 @@ namespace Datalist
 
         public DatalistColumn(String key, String header)
         {
-            if (key == null)
-                throw new ArgumentNullException(nameof(key));
-
-            Key = key;
+            Key = key ?? throw new ArgumentNullException(nameof(key));
             Header = header;
         }
     }
