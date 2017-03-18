@@ -72,8 +72,8 @@ var MvcDatalistDialog = (function () {
 
             this.options = {
                 dialog: {
-                    classes: { 'ui-dialog': 'datalist-dialog' },
-                    dialogClass: 'datalist-dialog',
+                    classes: { 'ui-dialog': 'datalist-widget' },
+                    dialogClass: 'datalist-widget',
                     title: dialog.title,
                     autoOpen: false,
                     minWidth: 455,

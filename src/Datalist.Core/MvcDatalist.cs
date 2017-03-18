@@ -23,7 +23,7 @@ namespace Datalist
             AdditionalFilters = new List<String>();
             Columns = new List<DatalistColumn>();
             Filter = new DatalistFilter();
-            Dialog = "Datalist";
+            Dialog = "DatalistDialog";
             Filter.Rows = 20;
         }
 

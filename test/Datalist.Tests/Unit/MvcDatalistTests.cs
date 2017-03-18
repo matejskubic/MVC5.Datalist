@@ -37,7 +37,7 @@ namespace Datalist.Tests.Unit
         {
             MvcDatalist actual = Substitute.For<MvcDatalist>();
 
-            Assert.Equal("Datalist", actual.Dialog);
+            Assert.Equal("DatalistDialog", actual.Dialog);
             Assert.Empty(actual.AdditionalFilters);
             Assert.Equal(20, actual.Filter.Rows);
             Assert.Empty(actual.Columns);

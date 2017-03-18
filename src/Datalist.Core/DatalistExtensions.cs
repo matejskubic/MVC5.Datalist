@@ -15,7 +15,7 @@ namespace Datalist
         public static IHtmlString AutoComplete<TModel>(this HtmlHelper<TModel> html,
             String name, MvcDatalist model, Object value = null, Object htmlAttributes = null)
         {
-            TagBuilder datalist = CreateDatalistGroup();
+            TagBuilder datalist = CreateDatalist();
             datalist.AddCssClass("datalist-browseless");
             datalist.InnerHtml = CreateDatalistValues(html, model, name, value);
             datalist.InnerHtml += CreateDatalistControl(model, name, htmlAttributes);
@@ -25,7 +25,7 @@ namespace Datalist
         public static IHtmlString AutoCompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html,
             Expression<Func<TModel, TProperty>> expression, MvcDatalist model, Object htmlAttributes = null)
         {
-            TagBuilder datalist = CreateDatalistGroup();
+            TagBuilder datalist = CreateDatalist();
             datalist.AddCssClass("datalist-browseless");
             String name = ExpressionHelper.GetExpressionText(expression);
             datalist.InnerHtml = CreateDatalistValues(html, model, expression);
@@ -37,7 +37,7 @@ namespace Datalist
         public static IHtmlString Datalist<TModel>(this HtmlHelper<TModel> html,
             String name, MvcDatalist model, Object value = null, Object htmlAttributes = null)
         {
-            TagBuilder datalist = CreateDatalistGroup();
+            TagBuilder datalist = CreateDatalist();
             datalist.InnerHtml = CreateDatalistValues(html, model, name, value);
             datalist.InnerHtml += CreateDatalistControl(model, name, htmlAttributes);
             datalist.InnerHtml += CreateDatalistBrowse(name);
@@ -47,7 +47,7 @@ namespace Datalist
         public static IHtmlString DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html,
             Expression<Func<TModel, TProperty>> expression, MvcDatalist model, Object htmlAttributes = null)
         {
-            TagBuilder datalist = CreateDatalistGroup();
+            TagBuilder datalist = CreateDatalist();
             String name = ExpressionHelper.GetExpressionText(expression);
             datalist.InnerHtml = CreateDatalistValues(html, model, expression);
             datalist.InnerHtml += CreateDatalistControl(model, name, htmlAttributes);
@@ -139,10 +139,10 @@ namespace Datalist
 
             return browse.ToString();
         }
-        private static TagBuilder CreateDatalistGroup()
+        private static TagBuilder CreateDatalist()
         {
             TagBuilder datalist = new TagBuilder("div");
-            datalist.AddCssClass("datalist-group");
+            datalist.AddCssClass("datalist");
 
             return datalist;
         }

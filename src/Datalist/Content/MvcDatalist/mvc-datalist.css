@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-.datalist-group {
+.datalist {
     display: table;
     width: 100%;
 }
@@ -81,25 +81,25 @@
         content: '\1F50D';
     }
 
-.datalist-dialog .ui-dialog-title {
+.datalist-widget .ui-dialog-title {
     line-height: 1.4em;
     min-height: 1.4em;
 }
 
-.datalist,
 .datalist-dialog,
-.datalist-dialog:after,
-.datalist-dialog:before {
+.datalist-widget,
+.datalist-widget:after,
+.datalist-widget:before {
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box;
 }
 
-    .datalist-dialog .datalist {
+    .datalist-widget .datalist-dialog {
         padding: 1em;
     }
 
-.datalist {
+.datalist-dialog {
     font-size: 0.9em;
     min-width: 428px;
     display: none;
@@ -256,21 +256,21 @@
     }
 }
 
-.datalist table {
+.datalist-dialog table {
     border-collapse: collapse;
     border: none;
     width: 100%;
 }
 
-.datalist tbody tr:hover {
+.datalist-dialog tbody tr:hover {
     background-color: #ECECEC;
 }
 
-.datalist .selected {
+.datalist-dialog .selected {
     background-color: #F5F5F5;
 }
 
-.datalist tr {
+.datalist-dialog tr {
     cursor: pointer;
 }
 
@@ -284,37 +284,37 @@
     content: '\2191';
 }
 
-.datalist thead > tr > th,
-.datalist tbody > tr > td {
+.datalist-dialog thead > tr > th,
+.datalist-dialog tbody > tr > td {
     border: 1px solid #DDDDDD;
     line-height: 1.42857143;
     padding: 0.3em 0.6em;
 }
 
-.datalist .datalist-split td {
+.datalist-dialog .datalist-split td {
     background-color: #FFFFFF;
     cursor: default;
     border: none;
 }
 
-.datalist td:not(:first-child):last-child {
+.datalist-dialog td:not(:first-child):last-child {
     box-sizing: border-box;
     text-align: center;
     font-weight: bold;
     width: 2.5em;
 }
 
-    .datalist td:not(:first-child):last-child::after {
+    .datalist-dialog td:not(:first-child):last-child::after {
         content: '\25CF';
     }
 
-.datalist tr:hover td:not(:first-child):last-child::after,
-.datalist .selected td:not(:first-child):last-child::after {
+.datalist-dialog tr:hover td:not(:first-child):last-child::after,
+.datalist-dialog .selected td:not(:first-child):last-child::after {
     content: '\2714';
     color: #5CB85C;
 }
 
-.datalist .selected:hover td:not(:first-child):last-child::after {
+.datalist-dialog .selected:hover td:not(:first-child):last-child::after {
     content: '\2718';
     color: #D65A5A;
 }
@@ -323,22 +323,22 @@
     text-align: center;
 }
 
-.datalist ul {
+.datalist-dialog ul {
     padding-top: 0.8em;
     text-align: right;
     margin: 0;
 }
 
-    .datalist ul li {
+    .datalist-dialog ul li {
         display: inline;
         cursor: pointer;
     }
 
-        .datalist ul li + li span {
+        .datalist-dialog ul li + li span {
             border-left: 0;
         }
 
-    .datalist ul span {
+    .datalist-dialog ul span {
         border: 1px solid #DDDDDD;
         box-sizing: content-box;
         display: inline-block;
@@ -348,14 +348,14 @@
         color: #777777;
     }
 
-        .datalist ul span:focus,
-        .datalist ul span:hover {
+        .datalist-dialog ul span:focus,
+        .datalist-dialog ul span:hover {
             background-color: #EEEEEE;
             color: #777777;
         }
 
-.datalist .active span,
-.datalist .active span:hover {
+.datalist-dialog .active span,
+.datalist-dialog .active span:hover {
     background-color: rgba(77, 78, 80, 0.76);
     border-color: rgba(77, 78, 80, 0.76);
     color: #FFFFFF;
