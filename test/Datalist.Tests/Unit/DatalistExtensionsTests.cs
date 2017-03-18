@@ -37,14 +37,14 @@ namespace Datalist.Tests.Unit
         {
             String actual = html.AutoComplete("Test", datalist, "Value", new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
-                "<div class=\"datalist-browseless datalist\">" +
-                    "<div class=\"datalist-values\" data-for=\"Test\">" +
-                        "<input class=\"datalist-value\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"Value\" />" +
-                    "</div>" +
-                    "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"Dialog\" " +
+                "<div attribute=\"attr\" class=\"datalist-browseless datalist classes\" data-dialog=\"Dialog\" " +
                         "data-filters=\"Add1,Add2\" data-for=\"Test\" data-multi=\"false\" data-order=\"Desc\" " +
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
+                    "<div class=\"datalist-values\" data-for=\"Test\">" +
+                        "<input class=\"datalist-value\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"Value\" />" +
+                    "</div>" +
+                    "<div class=\"datalist-control\" data-for=\"Test\">" +
                         "<input class=\"datalist-input\" />" +
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
@@ -60,15 +60,15 @@ namespace Datalist.Tests.Unit
 
             String actual = html.AutoComplete("Test", datalist, new[] { "Value1", "Value2" }, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
-                "<div class=\"datalist-browseless datalist\">" +
+                "<div attribute=\"attr\" class=\"datalist-browseless datalist classes\" data-dialog=\"Dialog\" " +
+                        "data-filters=\"Add1,Add2\" data-for=\"Test\" data-multi=\"true\" data-order=\"Desc\" " +
+                        "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
+                        "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
                     "<div class=\"datalist-values\" data-for=\"Test\">" +
                         "<input class=\"datalist-value\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"Value1\" />" +
                         "<input class=\"datalist-value\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"Value2\" />" +
                     "</div>" +
-                    "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"Dialog\" " +
-                        "data-filters=\"Add1,Add2\" data-for=\"Test\" data-multi=\"true\" data-order=\"Desc\" " +
-                        "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
-                        "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
+                    "<div class=\"datalist-control\" data-for=\"Test\">" +
                         "<input class=\"datalist-input\" />" +
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
@@ -86,14 +86,14 @@ namespace Datalist.Tests.Unit
         {
             String actual = html.AutoCompleteFor(model => model.ParentId, datalist, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
-                "<div class=\"datalist-browseless datalist\">" +
-                    "<div class=\"datalist-values\" data-for=\"ParentId\">" +
-                        "<input class=\"datalist-value\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
-                    "</div>" +
-                    "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"Dialog\" " +
+                "<div attribute=\"attr\" class=\"datalist-browseless datalist classes\" data-dialog=\"Dialog\" " +
                         "data-filters=\"Add1,Add2\" data-for=\"ParentId\" data-multi=\"false\" data-order=\"Desc\" " +
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
+                    "<div class=\"datalist-values\" data-for=\"ParentId\">" +
+                        "<input class=\"datalist-value\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
+                    "</div>" +
+                    "<div class=\"datalist-control\" data-for=\"ParentId\">" +
                         "<input class=\"datalist-input\" />" +
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
@@ -110,15 +110,15 @@ namespace Datalist.Tests.Unit
 
             String actual = html.AutoCompleteFor(model => model.Values, datalist, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
-                "<div class=\"datalist-browseless datalist\">" +
+                "<div attribute=\"attr\" class=\"datalist-browseless datalist classes\" data-dialog=\"Dialog\" " +
+                        "data-filters=\"Add1,Add2\" data-for=\"Values\" data-multi=\"true\" data-order=\"Desc\" " +
+                        "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
+                        "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
                     "<div class=\"datalist-values\" data-for=\"Values\">" +
                         "<input class=\"datalist-value\" id=\"Values\" name=\"Values\" type=\"hidden\" value=\"Value1&#39;s\" />" +
                         "<input class=\"datalist-value\" id=\"Values\" name=\"Values\" type=\"hidden\" value=\"Value2&#39;s\" />" +
                     "</div>" +
-                    "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"Dialog\" " +
-                        "data-filters=\"Add1,Add2\" data-for=\"Values\" data-multi=\"true\" data-order=\"Desc\" " +
-                        "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
-                        "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
+                    "<div class=\"datalist-control\" data-for=\"Values\">" +
                         "<input class=\"datalist-input\" />" +
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
@@ -136,14 +136,14 @@ namespace Datalist.Tests.Unit
         {
             String actual = html.Datalist("Test", datalist, 1, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
-                "<div class=\"datalist\">" +
-                    "<div class=\"datalist-values\" data-for=\"Test\">" +
-                        "<input class=\"datalist-value\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"1\" />" +
-                    "</div>" +
-                    "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"Dialog\" " +
+                "<div attribute=\"attr\" class=\"datalist classes\" data-dialog=\"Dialog\" " +
                         "data-filters=\"Add1,Add2\" data-for=\"Test\" data-multi=\"false\" data-order=\"Desc\" " +
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
+                    "<div class=\"datalist-values\" data-for=\"Test\">" +
+                        "<input class=\"datalist-value\" id=\"Test\" name=\"Test\" type=\"hidden\" value=\"1\" />" +
+                    "</div>" +
+                    "<div class=\"datalist-control\" data-for=\"Test\">" +
                         "<input class=\"datalist-input\" />" +
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
@@ -161,13 +161,13 @@ namespace Datalist.Tests.Unit
 
             String actual = html.Datalist("Test", datalist, 1, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
-                "<div class=\"datalist\">" +
-                    "<div class=\"datalist-values\" data-for=\"Test\">" +
-                    "</div>" +
-                    "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"Dialog\" " +
+                "<div attribute=\"attr\" class=\"datalist classes\" data-dialog=\"Dialog\" " +
                         "data-filters=\"Add1,Add2\" data-for=\"Test\" data-multi=\"true\" data-order=\"Desc\" " +
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
+                    "<div class=\"datalist-values\" data-for=\"Test\">" +
+                    "</div>" +
+                    "<div class=\"datalist-control\" data-for=\"Test\">" +
                         "<input class=\"datalist-input\" />" +
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
@@ -187,14 +187,14 @@ namespace Datalist.Tests.Unit
         {
             String actual = html.DatalistFor(model => model.ParentId, datalist, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
-                "<div class=\"datalist\">" +
-                    "<div class=\"datalist-values\" data-for=\"ParentId\">" +
-                        "<input class=\"datalist-value\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
-                    "</div>" +
-                    "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"Dialog\" " +
+                "<div attribute=\"attr\" class=\"datalist classes\" data-dialog=\"Dialog\" " +
                         "data-filters=\"Add1,Add2\" data-for=\"ParentId\" data-multi=\"false\" data-order=\"Desc\" " +
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
+                    "<div class=\"datalist-values\" data-for=\"ParentId\">" +
+                        "<input class=\"datalist-value\" id=\"ParentId\" name=\"ParentId\" type=\"hidden\" value=\"Model&#39;s parent ID\" />" +
+                    "</div>" +
+                    "<div class=\"datalist-control\" data-for=\"ParentId\">" +
                         "<input class=\"datalist-input\" />" +
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
@@ -212,13 +212,13 @@ namespace Datalist.Tests.Unit
 
             String actual = html.DatalistFor(model => model.Values, datalist, new { @class = "classes", attribute = "attr" }).ToString();
             String expected =
-                "<div class=\"datalist\">" +
-                    "<div class=\"datalist-values\" data-for=\"Values\">" +
-                    "</div>" +
-                    "<div attribute=\"attr\" class=\"datalist-control\" data-dialog=\"Dialog\" " +
+                "<div attribute=\"attr\" class=\"datalist classes\" data-dialog=\"Dialog\" " +
                         "data-filters=\"Add1,Add2\" data-for=\"Values\" data-multi=\"true\" data-order=\"Desc\" " +
                         "data-page=\"2\" data-rows=\"11\" data-search=\"Test\" data-sort=\"First\" " +
                         "data-title=\"Dialog datalist title\" data-url=\"http://localhost/Datalist\">" +
+                    "<div class=\"datalist-values\" data-for=\"Values\">" +
+                    "</div>" +
+                    "<div class=\"datalist-control\" data-for=\"Values\">" +
                         "<input class=\"datalist-input\" />" +
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +

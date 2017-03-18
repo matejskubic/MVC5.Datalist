@@ -8,13 +8,13 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 var MvcDatalistFilter = (function () {
-    function MvcDatalistFilter(control) {
-        this.page = control.attr('data-page');
-        this.rows = control.attr('data-rows');
-        this.sort = control.attr('data-sort');
-        this.order = control.attr('data-order');
-        this.search = control.attr('data-search');
-        this.additionalFilters = control.attr('data-filters').split(',').filter(Boolean);
+    function MvcDatalistFilter(group) {
+        this.page = group.attr('data-page');
+        this.rows = group.attr('data-rows');
+        this.sort = group.attr('data-sort');
+        this.order = group.attr('data-order');
+        this.search = group.attr('data-search');
+        this.additionalFilters = group.attr('data-filters').split(',').filter(Boolean);
     }
 
     MvcDatalistFilter.prototype = {
@@ -44,8 +44,8 @@ var MvcDatalistDialog = (function () {
     function MvcDatalistDialog(datalist) {
         this.datalist = datalist;
         this.filter = datalist.filter;
-        this.title = datalist.control.attr('data-title');
-        this.instance = $('#' + datalist.control.attr('data-dialog'));
+        this.title = datalist.group.attr('data-title');
+        this.instance = $('#' + datalist.group.attr('data-dialog'));
 
         this.pager = this.instance.find('ul');
         this.table = this.instance.find('table');
@@ -387,18 +387,19 @@ var MvcDatalistDialog = (function () {
     return MvcDatalistDialog;
 }());
 var MvcDatalist = (function () {
-    function MvcDatalist(control, options) {
-        this.multi = control.attr('data-multi') == 'true';
-        this.filter = new MvcDatalistFilter(control);
-        this.for = control.attr('data-for');
-        this.url = control.attr('data-url');
+    function MvcDatalist(group, options) {
+        this.multi = group.attr('data-multi') == 'true';
+        this.filter = new MvcDatalistFilter(group);
+        this.for = group.attr('data-for');
+        this.url = group.attr('data-url');
         this.selected = [];
 
         this.browse = $('.datalist-browse[data-for="' + this.for + '"]');
         this.valueContainer = $('.datalist-values[data-for="' + this.for + '"]');
         this.values = this.valueContainer.find('.datalist-value');
-        this.search = control.find('.datalist-input');
-        this.control = control;
+        this.control = group.find('.datalist-control');
+        this.search = group.find('.datalist-input');
+        this.group = group;
 
         this.dialog = new MvcDatalistDialog(this);
         this.initOptions();
@@ -606,16 +607,16 @@ var MvcDatalist = (function () {
             }
         },
         cleanUp: function () {
-            this.control.removeAttr('data-filters');
-            this.control.removeAttr('data-dialog');
-            this.control.removeAttr('data-search');
-            this.control.removeAttr('data-multi');
-            this.control.removeAttr('data-order');
-            this.control.removeAttr('data-title');
-            this.control.removeAttr('data-page');
-            this.control.removeAttr('data-rows');
-            this.control.removeAttr('data-sort');
-            this.control.removeAttr('data-url');
+            this.group.removeAttr('data-filters');
+            this.group.removeAttr('data-dialog');
+            this.group.removeAttr('data-search');
+            this.group.removeAttr('data-multi');
+            this.group.removeAttr('data-order');
+            this.group.removeAttr('data-title');
+            this.group.removeAttr('data-page');
+            this.group.removeAttr('data-rows');
+            this.group.removeAttr('data-sort');
+            this.group.removeAttr('data-url');
         },
         bind: function () {
             var datalist = this;
@@ -663,17 +664,21 @@ $.fn.datalist = function (options) {
     var args = arguments;
 
     return this.each(function () {
-        if (!$.data(this, 'mvc-datalist')) {
+        var group = $(this).closest('.datalist');
+        if (!group.length)
+            return;
+
+        if (!$.data(group[0], 'mvc-datalist')) {
             if (typeof options == 'string') {
-                var datalist = new MvcDatalist($(this));
+                var datalist = new MvcDatalist(group);
                 datalist.methods[options].apply(datalist, [].slice.apply(args, 1));
             } else {
-                var datalist = new MvcDatalist($(this), options);
+                var datalist = new MvcDatalist(group, options);
             }
 
-            $.data(this, 'mvc-datalist', datalist);
+            $.data(group[0], 'mvc-datalist', datalist);
         } else {
-            var datalist = $.data(this, 'mvc-datalist');
+            var datalist = $.data(group[0], 'mvc-datalist');
 
             if (typeof options == 'string') {
                 datalist.methods[options].apply(datalist, [].slice.call(args, 1));
