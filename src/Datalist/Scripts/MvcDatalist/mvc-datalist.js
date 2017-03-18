@@ -101,6 +101,7 @@ var MvcDatalistDialog = (function () {
         },
 
         open: function () {
+            this.loader.hide();
             this.search.val(this.filter.search);
             this.error.hide().html(this.lang('Error'));
             this.selected = this.datalist.selected.slice();
