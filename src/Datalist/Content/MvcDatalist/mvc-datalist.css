@@ -50,14 +50,14 @@
         background: #EEEEEE;
     }
 
-    .datalist-item .datalist-close {
-        margin-left: 6px;
-        cursor: pointer;
-    }
+.datalist-close {
+    margin-left: 6px;
+    cursor: pointer;
+}
 
-        .datalist-item .datalist-close:hover {
-            color: #000000;
-        }
+    .datalist-close:hover {
+        color: #000000;
+    }
 
 .datalist-browseless .datalist-control {
     border-radius: 4px;
@@ -283,14 +283,14 @@
     content: '\2191';
 }
 
-.datalist-dialog thead > tr > th,
-.datalist-dialog tbody > tr > td {
+.datalist-dialog th,
+.datalist-dialog td {
     border: 1px solid #DDDDDD;
     line-height: 1.42857143;
     padding: 0.3em 0.6em;
 }
 
-.datalist-dialog .datalist-split td {
+.datalist-split td {
     background-color: #FFFFFF;
     cursor: default;
     border: none;
