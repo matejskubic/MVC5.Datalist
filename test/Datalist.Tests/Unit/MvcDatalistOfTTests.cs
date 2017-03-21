@@ -63,7 +63,6 @@ namespace Datalist.Tests.Unit
                 Assert.Equal(expected.Current.Key, actual.Current.Key);
                 Assert.Equal(expected.Current.Header, actual.Current.Header);
                 Assert.Equal(expected.Current.Hidden, actual.Current.Hidden);
-                Assert.Equal(expected.Current.CssClass, actual.Current.CssClass);
             }
         }
 
