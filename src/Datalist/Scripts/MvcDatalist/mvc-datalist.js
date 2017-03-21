@@ -649,7 +649,7 @@ var MvcDatalist = (function () {
                         datalist.events.filterChange.apply(datalist, [e]);
                     }
 
-                    if (!e.isDefaultPrevented()) {
+                    if (!e.isDefaultPrevented() && datalist.selected.length > 0) {
                         datalist.select([], true);
                     }
                 });
