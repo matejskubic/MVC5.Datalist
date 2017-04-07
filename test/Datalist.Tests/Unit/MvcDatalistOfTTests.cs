@@ -25,6 +25,7 @@ namespace Datalist.Tests.Unit
                     Id = i + "I",
                     Count = i + 10,
                     Value = i + "V",
+                    ParentId = "1000",
                     Date = new DateTime(2014, 12, 10).AddDays(i)
                 });
         }
@@ -152,6 +153,33 @@ namespace Datalist.Tests.Unit
             datalist.Filter.Search = "Term";
             datalist.Filter.Selected.Add("17I");
             datalist.Filter.AdditionalFilters.Add("Value", "5V");
+
+            DatalistData actual = datalist.GetData();
+
+            Assert.Equal(new DateTime(2014, 12, 19).ToString("d"), actual.Rows[0]["Date"]);
+            Assert.Equal("9V", actual.Rows[0][MvcDatalist.AcKey]);
+            Assert.Equal("9I", actual.Rows[0][MvcDatalist.IdKey]);
+            Assert.Equal("9V", actual.Rows[0]["Value"]);
+            Assert.Equal("19", actual.Rows[0]["Count"]);
+
+            Assert.Equal(new DateTime(2014, 12, 25).ToString("d"), actual.Rows[1]["Date"]);
+            Assert.Equal("15V", actual.Rows[1][MvcDatalist.AcKey]);
+            Assert.Equal("15I", actual.Rows[1][MvcDatalist.IdKey]);
+            Assert.Equal("15V", actual.Rows[1]["Value"]);
+            Assert.Equal("25", actual.Rows[1]["Count"]);
+
+            Assert.Equal(datalist.Columns, actual.Columns);
+            Assert.Equal(2, actual.FilteredRows);
+            Assert.Equal(2, actual.Rows.Count);
+        }
+
+        [Fact]
+        public void GetData_FiltersByCheckIds()
+        {
+            datalist.Filter.Sort = "Count";
+            datalist.Filter.CheckIds.Add("9I");
+            datalist.Filter.CheckIds.Add("15I");
+            datalist.Filter.AdditionalFilters.Add("ParentId", "1000");
 
             DatalistData actual = datalist.GetData();
 

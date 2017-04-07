@@ -25,6 +25,7 @@ var MvcDatalistFilter = (function () {
                 '&order=' + encodeURIComponent(filter.order) +
                 '&rows=' + encodeURIComponent(filter.rows) +
                 '&page=' + encodeURIComponent(filter.page) +
+                (filter.checkIds ? filter.checkIds : '') +
                 (filter.ids ? filter.ids : '');
 
             for (var i = 0; i < this.additionalFilters.length; i++) {
@@ -645,7 +646,30 @@ var MvcDatalist = (function () {
                     }
 
                     if (!e.isDefaultPrevented() && datalist.selected.length > 0) {
-                        datalist.select([], true);
+                        datalist.startLoading(300);
+                        var ids = $.grep(datalist.values.map(function (i, e) { return encodeURIComponent(e.value); }).get(), Boolean);
+
+                        $.ajax({
+                            url: datalist.url + datalist.filter.getQuery({ checkIds: '&checkIds=' + ids.join('&checkIds='), rows: ids.length }),
+                            cache: false,
+                            success: function (data) {
+                                datalist.stopLoading();
+
+                                var selected = [];
+                                for (var i = 0; i < data.Rows.length; i++) {
+                                    var index = ids.indexOf(data.Rows[i].DatalistIdKey);
+                                    if (index >= 0) {
+                                        selected[index] = data.Rows[i];
+                                    }
+                                }
+
+                                datalist.select(selected, true);
+                            },
+                            error: function () {
+                                datalist.select([], true);
+                                datalist.stopLoading();
+                            }
+                        });
                     }
                 });
             }

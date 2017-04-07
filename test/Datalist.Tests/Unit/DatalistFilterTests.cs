@@ -13,6 +13,7 @@ namespace Datalist.Tests.Unit
 
             Assert.Empty(filter.AdditionalFilters);
             Assert.Empty(filter.Selected);
+            Assert.Empty(filter.CheckIds);
             Assert.Empty(filter.Ids);
         }
 

@@ -68,6 +68,9 @@ namespace Datalist
             if (Filter.Ids.Count > 0)
                 return FilterByIds(models, Filter.Ids);
 
+            if (Filter.CheckIds.Count > 0)
+                models = FilterByIds(models, Filter.CheckIds);
+
             if (Filter.Selected.Count > 0)
                 models = FilterByNotIds(models, Filter.Selected);
 
