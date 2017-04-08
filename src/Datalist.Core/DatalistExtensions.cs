@@ -60,24 +60,28 @@ namespace Datalist
             return new MvcHtmlString(datalist.ToString());
         }
 
-        private static TagBuilder CreateDatalist(MvcDatalist lookup, String name, Object htmlAttributes)
+        private static TagBuilder CreateDatalist(MvcDatalist datalist, String name, Object htmlAttributes)
         {
             IDictionary<String, Object> attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
-            attributes["data-filters"] = String.Join(",", lookup.AdditionalFilters);
-            attributes["data-multi"] = lookup.Multi ? "true" : "false";
-            attributes["data-order"] = lookup.Filter.Order.ToString();
-            attributes["data-page"] = lookup.Filter.Page.ToString();
-            attributes["data-rows"] = lookup.Filter.Rows.ToString();
-            attributes["data-search"] = lookup.Filter.Search;
-            attributes["data-sort"] = lookup.Filter.Sort;
-            attributes["data-dialog"] = lookup.Dialog;
-            attributes["data-title"] = lookup.Title;
-            attributes["data-url"] = lookup.Url;
+            attributes["data-filters"] = String.Join(",", datalist.AdditionalFilters);
+            attributes["data-readonly"] = datalist.ReadOnly ? "true" : "false";
+            attributes["data-multi"] = datalist.Multi ? "true" : "false";
+            attributes["data-order"] = datalist.Filter.Order.ToString();
+            attributes["data-page"] = datalist.Filter.Page.ToString();
+            attributes["data-rows"] = datalist.Filter.Rows.ToString();
+            attributes["data-search"] = datalist.Filter.Search;
+            attributes["data-sort"] = datalist.Filter.Sort;
+            attributes["data-dialog"] = datalist.Dialog;
+            attributes["data-title"] = datalist.Title;
+            attributes["data-url"] = datalist.Url;
             attributes["data-for"] = name;
 
             TagBuilder group = new TagBuilder("div");
             group.MergeAttributes(attributes);
             group.AddCssClass("datalist");
+
+            if (datalist.ReadOnly)
+                group.AddCssClass("datalist-readonly");
 
             return group;
         }
@@ -134,6 +138,7 @@ namespace Datalist
             TagBuilder control = new TagBuilder("div");
             TagBuilder loader = new TagBuilder("div");
 
+            if (datalist.ReadOnly) search.Attributes["readonly"] = "readonly";
             loader.AddCssClass("datalist-control-loader");
             control.AddCssClass("datalist-control");
             control.Attributes["data-for"] = name;

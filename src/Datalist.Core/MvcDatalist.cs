@@ -13,6 +13,7 @@ namespace Datalist
         public String Title { get; set; }
         public String Dialog { get; set; }
         public Boolean Multi { get; set; }
+        public Boolean ReadOnly { get; set; }
 
         public DatalistFilter Filter { get; set; }
         public IList<DatalistColumn> Columns { get; set; }

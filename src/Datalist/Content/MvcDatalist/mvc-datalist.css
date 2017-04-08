@@ -37,7 +37,7 @@
 .datalist-item {
     transition: background linear 0.3s;
     border: 1px solid #DDDDDD;
-    background: #F3F3F3;
+    background: #F8F8F8;
     border-radius: 3px;
     padding: 1px 6px;
     color: #999999;
@@ -47,7 +47,7 @@
 
     .datalist-item:hover {
         border-color: #CCCCCC;
-        background: #EEEEEE;
+        background: #F0F0F0;
     }
 
 .datalist-close {
@@ -58,6 +58,15 @@
     .datalist-close:hover {
         color: #000000;
     }
+
+.datalist-readonly .datalist-control,
+.datalist-readonly .datalist-control input {
+    background: #EEEEEE;
+}
+
+.datalist-readonly .datalist-close {
+    display: none;
+}
 
 .datalist-browseless .datalist-control {
     border-radius: 4px;
