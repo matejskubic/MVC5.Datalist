@@ -378,7 +378,7 @@ var MvcDatalistDialog = (function () {
                 }
             });
 
-            dialog.selector.off('click').on('click', function () {
+            dialog.selector.off('click.datalist').on('click.datalist', function () {
                 dialog.close();
             });
         }
