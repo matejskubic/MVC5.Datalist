@@ -488,17 +488,15 @@ var MvcDatalist = (function () {
                     success: function (data) {
                         datalist.stopLoading();
 
-                        if (data.Rows.length > 0) {
-                            var rows = [];
-                            for (var i = 0; i < ids.length; i++) {
-                                var index = datalist.indexOf(data.Rows, ids[i])
-                                if (index >= 0) {
-                                    rows.push(data.Rows[index]);
-                                }
+                        var rows = [];
+                        for (var i = 0; i < ids.length; i++) {
+                            var index = datalist.indexOf(data.Rows, ids[i])
+                            if (index >= 0) {
+                                rows.push(data.Rows[index]);
                             }
-
-                            datalist.select(rows, triggerChanges);
                         }
+
+                        datalist.select(rows, triggerChanges);
                     },
                     error: function () {
                         datalist.stopLoading();
