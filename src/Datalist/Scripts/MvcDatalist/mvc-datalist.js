@@ -345,12 +345,15 @@ var MvcDatalistDialog = (function () {
             var timeout;
             var dialog = this;
 
+            dialog.instance.dialog().dialog('destroy');
             dialog.instance.dialog(dialog.options.dialog);
             dialog.instance.dialog('option', 'close', function () {
                 if (dialog.datalist.multi) {
                     dialog.datalist.select(dialog.selected, true);
                 }
             });
+
+            dialog.instance.parent().resizable().resizable('destroy');
             dialog.instance.parent().resizable(dialog.options.resizable);
 
             dialog.search.off('keyup.datalist').on('keyup.datalist', function (e) {
@@ -366,6 +369,7 @@ var MvcDatalistDialog = (function () {
                 }, 500);
             });
 
+            dialog.rows.spinner().spinner('destroy');
             dialog.rows.spinner(dialog.options.spinner);
             dialog.rows.off('keyup.datalist').on('keyup.datalist', function (e) {
                 if (e.which == 13) {
