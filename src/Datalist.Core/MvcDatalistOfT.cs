@@ -31,7 +31,8 @@ namespace Datalist
             foreach (PropertyInfo property in AttributedProperties)
                 Columns.Add(new DatalistColumn(GetColumnKey(property), GetColumnHeader(property))
                 {
-                    Hidden = property.GetCustomAttribute<DatalistColumnAttribute>(false).Hidden
+                    Hidden = property.GetCustomAttribute<DatalistColumnAttribute>(false).Hidden,
+                    CssClass = GetColumnCssClass(property)
                 });
         }
         public virtual String GetColumnKey(PropertyInfo property)

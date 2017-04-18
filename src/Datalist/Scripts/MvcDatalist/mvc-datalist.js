@@ -198,6 +198,7 @@ var MvcDatalistDialog = (function () {
                 for (var j = 0; j < columns.length; j++) {
                     if (!columns[j].Hidden) {
                         var td = document.createElement('td');
+                        td.className = columns[j].CssClass || '';
                         td.innerText = rows[i][columns[j].Key];
 
                         tr.appendChild(td);
@@ -289,6 +290,10 @@ var MvcDatalistDialog = (function () {
             header.innerText = column.Header;
             var filter = this.filter;
             var dialog = this;
+
+            if (column.CssClass) {
+                header.className = column.CssClass;
+            }
 
             if (filter.sort == column.Key) {
                 header.className += ' datalist-' + filter.order.toLowerCase();
