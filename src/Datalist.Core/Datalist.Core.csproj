@@ -1,9 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>5.0.0</Version>
-        <TargetFramework>net45</TargetFramework>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <Version>5.0.0</Version>
+      <Company>NonFactors</Company>
+      <Product>Mvc.Datalist</Product>
+      <TargetFrameworks>net45</TargetFrameworks>
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <Description>Data lookup controls for ASP.NET Core projects</Description>
     </PropertyGroup>
 
     <ItemGroup>
