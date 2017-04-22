@@ -1,5 +1,5 @@
 ﻿/*!
- * Datalist 5.0.0
+ * Datalist 5.0.1
  * https://github.com/NonFactors/MVC5.Datalist
  *
  * Copyright © NonFactors
@@ -271,6 +271,8 @@ var MvcDatalistDialog = (function () {
                     datalist.select(dialog.selected, false);
 
                     dialog.close();
+
+                    datalist.search.focus();
                 }
             });
 
@@ -355,6 +357,7 @@ var MvcDatalistDialog = (function () {
             dialog.instance.dialog('option', 'close', function () {
                 if (dialog.datalist.multi) {
                     dialog.datalist.select(dialog.selected, true);
+                    dialog.datalist.search.focus();
                 }
             });
 
@@ -545,7 +548,7 @@ var MvcDatalist = (function () {
             }
 
             if (triggerChanges) {
-                this.search.change().focus();
+                this.search.change();
                 this.values.change();
             }
         },
@@ -601,6 +604,7 @@ var MvcDatalist = (function () {
 
             close.on('click.datalist', function () {
                 datalist.select(datalist.selected.filter(function (value) { return value.DatalistIdKey != id; }), true);
+                datalist.search.focus();
             });
         },
         indexOf: function (selection, id) {
