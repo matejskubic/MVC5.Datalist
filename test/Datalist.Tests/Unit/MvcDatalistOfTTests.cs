@@ -420,12 +420,12 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void FilterByIds_NumberKey()
+        public void FilterByIds_IntegerKey()
         {
             TestDatalist<NumericModel> testDatalist = new TestDatalist<NumericModel>();
             for (Int32 i = 0; i < 20; i++) testDatalist.Models.Add(new NumericModel { Value = i });
 
-            IQueryable<NumericModel> actual = testDatalist.FilterByIds(testDatalist.GetModels(), new List<String> { "9.0", "10" });
+            IQueryable<NumericModel> actual = testDatalist.FilterByIds(testDatalist.GetModels(), new List<String> { "9", "10" });
             IQueryable<NumericModel> expected = testDatalist.GetModels().Where(model => new[] { 9, 10 }.Contains(model.Value));
 
             Assert.Equal(expected, actual);
@@ -436,7 +436,7 @@ namespace Datalist.Tests.Unit
         {
             DatalistException exception = Assert.Throws<DatalistException>(() => new TestDatalist<GuidModel>().FilterByIds(null, new String[0]));
 
-            String expected = $"'{typeof(GuidModel).Name}.Id' property type has to be a string or a number.";
+            String expected = $"'{typeof(GuidModel).Name}.Id' property type has to be a string or an int.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -471,12 +471,12 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void FilterByNotIds_NumberKey()
+        public void FilterByNotIds_IntegerKey()
         {
             TestDatalist<NumericModel> testDatalist = new TestDatalist<NumericModel>();
             for (Int32 i = 0; i < 20; i++) testDatalist.Models.Add(new NumericModel { Value = i });
 
-            IQueryable<NumericModel> actual = testDatalist.FilterByNotIds(testDatalist.GetModels(), new List<String> { "9.0", "10" });
+            IQueryable<NumericModel> actual = testDatalist.FilterByNotIds(testDatalist.GetModels(), new List<String> { "9", "10" });
             IQueryable<NumericModel> expected = testDatalist.GetModels().Where(model => !new[] { 9, 10 }.Contains(model.Value));
 
             Assert.Equal(expected, actual);
@@ -487,7 +487,7 @@ namespace Datalist.Tests.Unit
         {
             DatalistException exception = Assert.Throws<DatalistException>(() => new TestDatalist<GuidModel>().FilterByNotIds(null, new String[0]));
 
-            String expected = $"'{typeof(GuidModel).Name}.Id' property type has to be a string or a number.";
+            String expected = $"'{typeof(GuidModel).Name}.Id' property type has to be a string or an int.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);

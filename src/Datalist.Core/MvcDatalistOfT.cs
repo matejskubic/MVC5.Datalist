@@ -115,10 +115,10 @@ namespace Datalist
             if (key.PropertyType == typeof(String))
                 return models.Where($"@0.Contains(outerIt.{key.Name})", ids);
 
-            if (IsNumeric(key.PropertyType))
-                return models.Where($"@0.Contains(decimal(outerIt.{key.Name}))", TryParseDecimals(ids));
+            if (key.PropertyType == typeof(Int32))
+                return models.Where($"@0.Contains(outerIt.{key.Name})", TryParseInts(ids));
 
-            throw new DatalistException($"'{typeof(T).Name}.{key.Name}' property type has to be a string or a number.");
+            throw new DatalistException($"'{typeof(T).Name}.{key.Name}' property type has to be a string or an int.");
         }
         public virtual IQueryable<T> FilterByNotIds(IQueryable<T> models, IList<String> ids)
         {
@@ -131,10 +131,10 @@ namespace Datalist
             if (key.PropertyType == typeof(String))
                 return models.Where($"!@0.Contains(outerIt.{key.Name})", ids);
 
-            if (IsNumeric(key.PropertyType))
-                return models.Where($"!@0.Contains(decimal(outerIt.{key.Name}))", TryParseDecimals(ids));
+            if (key.PropertyType == typeof(Int32))
+                return models.Where($"!@0.Contains(outerIt.{key.Name})", TryParseInts(ids));
 
-            throw new DatalistException($"'{typeof(T).Name}.{key.Name}' property type has to be a string or a number.");
+            throw new DatalistException($"'{typeof(T).Name}.{key.Name}' property type has to be a string or an int.");
         }
 
         public virtual IQueryable<T> Sort(IQueryable<T> models)
@@ -158,7 +158,7 @@ namespace Datalist
             data.FilteredRows = filtered.Count();
             data.Columns = Columns;
 
-            foreach (T model in selected.Concat(notSelected))
+            foreach (T model in selected.ToArray().Concat(notSelected).ToArray())
             {
                 Dictionary<String, String> row = new Dictionary<String, String>();
                 AddId(row, model);
@@ -184,11 +184,11 @@ namespace Datalist
                 row[column.Key] = GetValue(model, column.Key);
         }
 
-        private List<Decimal> TryParseDecimals(IList<String> values)
+        private List<Int32> TryParseInts(IList<String> values)
         {
-            List<Decimal> numbers = new List<Decimal>();
+            List<Int32> numbers = new List<Int32>();
             foreach (String value in values)
-                if (Decimal.TryParse(value, out Decimal number))
+                if (Int32.TryParse(value, out Int32 number))
                     numbers.Add(number);
 
             return numbers;
@@ -202,28 +202,6 @@ namespace Datalist
             if (column?.Format != null) return String.Format(column.Format, property.GetValue(model));
 
             return property.GetValue(model)?.ToString();
-        }
-        private Boolean IsNumeric(Type type)
-        {
-            type = Nullable.GetUnderlyingType(type) ?? type;
-
-            switch (Type.GetTypeCode(type))
-            {
-                case TypeCode.SByte:
-                case TypeCode.Byte:
-                case TypeCode.Int16:
-                case TypeCode.UInt16:
-                case TypeCode.Int32:
-                case TypeCode.UInt32:
-                case TypeCode.Int64:
-                case TypeCode.UInt64:
-                case TypeCode.Single:
-                case TypeCode.Double:
-                case TypeCode.Decimal:
-                    return true;
-                default:
-                    return false;
-            }
         }
     }
 }
