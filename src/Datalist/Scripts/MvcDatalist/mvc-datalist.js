@@ -1,5 +1,5 @@
 ﻿/*!
- * Datalist 5.0.2
+ * Datalist 5.0.3
  * https://github.com/NonFactors/MVC5.Datalist
  *
  * Copyright © NonFactors
@@ -268,7 +268,7 @@ var MvcDatalistDialog = (function () {
                 if (datalist.multi) {
                     dialog.selector.text(dialog.lang('Select').replace('{0}', dialog.selected.length));
                 } else {
-                    datalist.select(dialog.selected, false);
+                    datalist.select(dialog.selected, true);
 
                     dialog.close();
 
