@@ -1,5 +1,5 @@
 ﻿/*!
- * Datalist 5.0.3
+ * Datalist 5.0.4
  * https://github.com/NonFactors/MVC5.Datalist
  *
  * Copyright © NonFactors
@@ -515,10 +515,6 @@ var MvcDatalist = (function () {
             }
         },
         select: function (data, triggerChanges) {
-            if (this.readonly) {
-                return;
-            }
-
             if (this.events.select) {
                 var e = $.Event('select.datalist');
                 this.events.select.apply(this, [e, data, triggerChanges]);
