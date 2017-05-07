@@ -523,6 +523,21 @@ namespace Datalist.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public void Sort_NoSortOrderedColumns(String column)
+        {
+            datalist.Columns.Clear();
+            datalist.Filter.Sort = column;
+
+            IQueryable<TestModel> expected = datalist.GetModels().OrderByDescending(model => model.Id);
+            IQueryable<TestModel> actual = datalist.Sort(datalist.GetModels().OrderByDescending(model => model.Id));
+
+            Assert.Equal(expected, actual);
+        }
+
         #endregion
 
         #region Page(IQueryable<T> models)
