@@ -459,7 +459,11 @@ var MvcDatalist = (function () {
                         datalist.stopLoading();
                     },
                     select: function (e, selection) {
-                        datalist.select(datalist.selected.concat(selection.item.data), true);
+                        if (datalist.multi) {
+                            datalist.select(datalist.selected.concat(selection.item.data), true);
+                        } else {
+                            datalist.select([selection.item.data], true);
+                        }
 
                         e.preventDefault();
                     },
