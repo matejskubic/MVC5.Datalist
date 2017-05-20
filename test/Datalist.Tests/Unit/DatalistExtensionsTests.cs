@@ -196,6 +196,7 @@ namespace Datalist.Tests.Unit
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
                     "<div class=\"datalist-browse\" data-for=\"Test\">" +
+                        "<i class=\"datalist-icon\"></i>" +
                     "</div>" +
                 "</div>";
 
@@ -219,6 +220,7 @@ namespace Datalist.Tests.Unit
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
                     "<div class=\"datalist-browse\" data-for=\"Test\">" +
+                        "<i class=\"datalist-icon\"></i>" +
                     "</div>" +
                 "</div>";
 
@@ -243,6 +245,7 @@ namespace Datalist.Tests.Unit
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
                     "<div class=\"datalist-browse\" data-for=\"Test\">" +
+                        "<i class=\"datalist-icon\"></i>" +
                     "</div>" +
                 "</div>";
 
@@ -272,6 +275,7 @@ namespace Datalist.Tests.Unit
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
                     "<div class=\"datalist-browse\" data-for=\"ParentId\">" +
+                        "<i class=\"datalist-icon\"></i>" +
                     "</div>" +
                 "</div>";
 
@@ -295,6 +299,7 @@ namespace Datalist.Tests.Unit
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
                     "<div class=\"datalist-browse\" data-for=\"ParentId\">" +
+                        "<i class=\"datalist-icon\"></i>" +
                     "</div>" +
                 "</div>";
 
@@ -319,6 +324,7 @@ namespace Datalist.Tests.Unit
                         "<div class=\"datalist-control-loader\"></div>" +
                     "</div>" +
                     "<div class=\"datalist-browse\" data-for=\"Values\">" +
+                        "<i class=\"datalist-icon\"></i>" +
                     "</div>" +
                 "</div>";
 

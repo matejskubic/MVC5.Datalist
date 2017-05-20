@@ -155,6 +155,11 @@ namespace Datalist
             browse.AddCssClass("datalist-browse");
             browse.Attributes["data-for"] = name;
 
+            TagBuilder icon = new TagBuilder("i");
+            icon.AddCssClass("datalist-icon");
+
+            browse.InnerHtml = icon.ToString();
+
             return browse.ToString();
         }
     }
