@@ -1,5 +1,5 @@
 ﻿/*!
- * Datalist 5.1.0
+ * Datalist 5.1.1
  * https://github.com/NonFactors/MVC5.Datalist
  *
  * Copyright © NonFactors
@@ -729,7 +729,7 @@ $.fn.datalist = function (options) {
         if (!$.data(group[0], 'mvc-datalist')) {
             if (typeof options == 'string') {
                 var datalist = new MvcDatalist(group);
-                datalist.methods[options].apply(datalist, [].slice.apply(args, 1));
+                datalist.methods[options].apply(datalist, [].slice.call(args, 1));
             } else {
                 var datalist = new MvcDatalist(group, options);
             }
