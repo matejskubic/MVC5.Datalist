@@ -497,20 +497,21 @@ var MvcDatalist = (function () {
         reload: function (triggerChanges) {
             var datalist = this;
             triggerChanges = triggerChanges == null ? true : triggerChanges;
-            var ids = $.grep(datalist.values.map(function (i, e) { return encodeURIComponent(e.value); }).get(), Boolean);
+            var ids = $.grep(datalist.values, function (e) { return e.value; });
 
             if (ids.length > 0) {
                 datalist.startLoading(300);
+                var encodedIds = ids.map(function (e) { return encodeURIComponent(e.value); });
 
                 $.ajax({
-                    url: datalist.url + datalist.filter.getQuery({ ids: '&ids=' + ids.join('&ids='), rows: ids.length }),
+                    url: datalist.url + datalist.filter.getQuery({ ids: '&ids=' + encodedIds.join('&ids='), rows: ids.length }),
                     cache: false,
                     success: function (data) {
                         datalist.stopLoading();
 
                         var rows = [];
                         for (var i = 0; i < ids.length; i++) {
-                            var index = datalist.indexOf(data.Rows, ids[i])
+                            var index = datalist.indexOf(data.Rows, ids[i].value)
                             if (index >= 0) {
                                 rows.push(data.Rows[index]);
                             }
@@ -686,17 +687,18 @@ var MvcDatalist = (function () {
 
                     if (!e.isDefaultPrevented() && datalist.selected.length > 0) {
                         datalist.startLoading(300);
-                        var ids = $.grep(datalist.values.map(function (i, e) { return encodeURIComponent(e.value); }).get(), Boolean);
+                        var ids = $.grep(datalist.values, function (e) { return e.value; });
+                        var encodedIds = ids.map(function (e) { return encodeURIComponent(e.value); });
 
                         $.ajax({
-                            url: datalist.url + datalist.filter.getQuery({ checkIds: '&checkIds=' + ids.join('&checkIds='), rows: ids.length }),
+                            url: datalist.url + datalist.filter.getQuery({ checkIds: '&checkIds=' + encodedIds.join('&checkIds='), rows: ids.length }),
                             cache: false,
                             success: function (data) {
                                 datalist.stopLoading();
 
                                 var rows = [];
                                 for (var i = 0; i < ids.length; i++) {
-                                    var index = datalist.indexOf(data.Rows, ids[i])
+                                    var index = datalist.indexOf(data.Rows, ids[i].value)
                                     if (index >= 0) {
                                         rows.push(data.Rows[index]);
                                     }
