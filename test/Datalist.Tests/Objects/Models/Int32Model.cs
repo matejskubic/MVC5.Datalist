@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Datalist.Tests.Objects
 {
-    public class NumericModel
+    public class Int32Model
     {
         [Key]
         [DatalistColumn]

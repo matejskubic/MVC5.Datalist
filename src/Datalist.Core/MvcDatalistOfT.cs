@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Dynamic;
@@ -116,9 +117,12 @@ namespace Datalist
                 return models.Where($"@0.Contains(outerIt.{key.Name})", ids);
 
             if (key.PropertyType == typeof(Int32))
-                return models.Where($"@0.Contains(outerIt.{key.Name})", TryParseInts(ids));
+                return models.Where($"@0.Contains(outerIt.{key.Name})", Parse<Int32>(ids));
 
-            throw new DatalistException($"'{typeof(T).Name}.{key.Name}' property type has to be a string or an int.");
+            if (key.PropertyType == typeof(Int64))
+                return models.Where($"@0.Contains(outerIt.{key.Name})", Parse<Int64>(ids));
+
+            throw new DatalistException($"'{typeof(T).Name}.{key.Name}' property type has to be a string, int or a long.");
         }
         public virtual IQueryable<T> FilterByNotIds(IQueryable<T> models, IList<String> ids)
         {
@@ -132,9 +136,12 @@ namespace Datalist
                 return models.Where($"!@0.Contains(outerIt.{key.Name})", ids);
 
             if (key.PropertyType == typeof(Int32))
-                return models.Where($"!@0.Contains(outerIt.{key.Name})", TryParseInts(ids));
+                return models.Where($"!@0.Contains(outerIt.{key.Name})", Parse<Int32>(ids));
 
-            throw new DatalistException($"'{typeof(T).Name}.{key.Name}' property type has to be a string or an int.");
+            if (key.PropertyType == typeof(Int64))
+                return models.Where($"!@0.Contains(outerIt.{key.Name})", Parse<Int64>(ids));
+
+            throw new DatalistException($"'{typeof(T).Name}.{key.Name}' property type has to be a string, int or a long.");
         }
 
         public virtual IQueryable<T> Sort(IQueryable<T> models)
@@ -187,12 +194,13 @@ namespace Datalist
                 row[column.Key] = GetValue(model, column.Key);
         }
 
-        private List<Int32> TryParseInts(IList<String> values)
+        private List<TNumber> Parse<TNumber>(IList<String> values)
         {
-            List<Int32> numbers = new List<Int32>();
+            TypeConverter converter = TypeDescriptor.GetConverter(typeof(TNumber));
+            List<TNumber> numbers = new List<TNumber>();
+
             foreach (String value in values)
-                if (Int32.TryParse(value, out Int32 number))
-                    numbers.Add(number);
+                numbers.Add((TNumber)converter.ConvertFrom(value));
 
             return numbers;
         }

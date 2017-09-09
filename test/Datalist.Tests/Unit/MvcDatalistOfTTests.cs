@@ -420,13 +420,25 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void FilterByIds_IntegerKey()
+        public void FilterByIds_Int32Key()
         {
-            TestDatalist<NumericModel> testDatalist = new TestDatalist<NumericModel>();
-            for (Int32 i = 0; i < 20; i++) testDatalist.Models.Add(new NumericModel { Value = i });
+            TestDatalist<Int32Model> testDatalist = new TestDatalist<Int32Model>();
+            for (Int32 i = 0; i < 20; i++) testDatalist.Models.Add(new Int32Model { Value = i });
 
-            IQueryable<NumericModel> actual = testDatalist.FilterByIds(testDatalist.GetModels(), new List<String> { "9", "10" });
-            IQueryable<NumericModel> expected = testDatalist.GetModels().Where(model => new[] { 9, 10 }.Contains(model.Value));
+            IQueryable<Int32Model> actual = testDatalist.FilterByIds(testDatalist.GetModels(), new List<String> { "9", "10" });
+            IQueryable<Int32Model> expected = testDatalist.GetModels().Where(model => new[] { 9, 10 }.Contains(model.Value));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void FilterByIds_Int64Key()
+        {
+            TestDatalist<Int64Model> testDatalist = new TestDatalist<Int64Model>();
+            for (Int64 i = 0; i < 20; i++) testDatalist.Models.Add(new Int64Model { Value = i });
+
+            IQueryable<Int64Model> actual = testDatalist.FilterByIds(testDatalist.GetModels(), new List<String> { "9", "10" });
+            IQueryable<Int64Model> expected = testDatalist.GetModels().Where(model => new[] { 9L, 10L }.Contains(model.Value));
 
             Assert.Equal(expected, actual);
         }
@@ -436,7 +448,7 @@ namespace Datalist.Tests.Unit
         {
             DatalistException exception = Assert.Throws<DatalistException>(() => new TestDatalist<GuidModel>().FilterByIds(null, new String[0]));
 
-            String expected = $"'{typeof(GuidModel).Name}.Id' property type has to be a string or an int.";
+            String expected = $"'{typeof(GuidModel).Name}.Id' property type has to be a string, int or a long.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
@@ -471,13 +483,25 @@ namespace Datalist.Tests.Unit
         }
 
         [Fact]
-        public void FilterByNotIds_IntegerKey()
+        public void FilterByNotIds_Int32Key()
         {
-            TestDatalist<NumericModel> testDatalist = new TestDatalist<NumericModel>();
-            for (Int32 i = 0; i < 20; i++) testDatalist.Models.Add(new NumericModel { Value = i });
+            TestDatalist<Int32Model> testDatalist = new TestDatalist<Int32Model>();
+            for (Int32 i = 0; i < 20; i++) testDatalist.Models.Add(new Int32Model { Value = i });
 
-            IQueryable<NumericModel> actual = testDatalist.FilterByNotIds(testDatalist.GetModels(), new List<String> { "9", "10" });
-            IQueryable<NumericModel> expected = testDatalist.GetModels().Where(model => !new[] { 9, 10 }.Contains(model.Value));
+            IQueryable<Int32Model> actual = testDatalist.FilterByNotIds(testDatalist.GetModels(), new List<String> { "9", "10" });
+            IQueryable<Int32Model> expected = testDatalist.GetModels().Where(model => !new[] { 9, 10 }.Contains(model.Value));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void FilterByNotIds_Int64Key()
+        {
+            TestDatalist<Int64Model> testDatalist = new TestDatalist<Int64Model>();
+            for (Int64 i = Int32.MaxValue; i < 20; i++) testDatalist.Models.Add(new Int64Model { Value = i });
+
+            IQueryable<Int64Model> actual = testDatalist.FilterByNotIds(testDatalist.GetModels(), new List<String> { "9", "10" });
+            IQueryable<Int64Model> expected = testDatalist.GetModels().Where(model => !new[] { 9L, 10L }.Contains(model.Value));
 
             Assert.Equal(expected, actual);
         }
@@ -487,7 +511,7 @@ namespace Datalist.Tests.Unit
         {
             DatalistException exception = Assert.Throws<DatalistException>(() => new TestDatalist<GuidModel>().FilterByNotIds(null, new String[0]));
 
-            String expected = $"'{typeof(GuidModel).Name}.Id' property type has to be a string or an int.";
+            String expected = $"'{typeof(GuidModel).Name}.Id' property type has to be a string, int or a long.";
             String actual = exception.Message;
 
             Assert.Equal(expected, actual);
