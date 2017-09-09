@@ -68,6 +68,10 @@
     display: none;
 }
 
+.datalist-readonly .datalist-browse {
+    cursor: not-allowed;
+}
+
 .datalist-browseless .datalist-control {
     border-radius: 4px;
 }
