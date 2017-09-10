@@ -542,6 +542,13 @@ var MvcDatalist = (function () {
                 }
             }
 
+            if (triggerChanges && data.length == this.selected.length) {
+                triggerChanges = false;
+                for (var i = 0; i < data.length && !triggerChanges; i++) {
+                    triggerChanges = data[i].DatalistIdKey != this.selected[i].DatalistIdKey;
+                }
+            }
+
             this.selected = data;
 
             if (this.multi) {
