@@ -71,11 +71,13 @@ var MvcDatalistDialog = (function () {
         initOptions: function () {
             var dialog = this;
 
-            this.options = {
+            dialog.options = {
                 dialog: {
+                    position: { my: 'center top', at: 'center top+50px', of: window, within: window },
                     classes: { 'ui-dialog': 'datalist-widget' },
                     dialogClass: 'datalist-widget',
                     title: dialog.title,
+                    draggable: false,
                     autoOpen: false,
                     minWidth: 455,
                     width: 'auto',
@@ -120,19 +122,7 @@ var MvcDatalistDialog = (function () {
                     dialog.loader.show();
                 }
 
-                var instance = dialog.instance.dialog('open').parent();
-                var visibleLeft = $(document).scrollLeft();
-                var visibleTop = $(document).scrollTop();
-
-                if (parseInt(instance.css('left')) < visibleLeft) {
-                    instance.css('left', visibleLeft);
-                }
-                if (parseInt(instance.css('top')) > visibleTop + 100) {
-                    instance.css('top', visibleTop + 100);
-                }
-                else if (parseInt(instance.css('top')) < visibleTop) {
-                    instance.css('top', visibleTop);
-                }
+                dialog.instance.dialog('open');
             }, 100);
         },
         close: function () {
@@ -173,6 +163,10 @@ var MvcDatalistDialog = (function () {
                 this.renderHeader(data.Columns);
                 this.renderBody(data.Columns, data.Rows);
                 this.renderFooter(data.FilteredRows);
+
+                this.instance.dialog({
+                    position: this.options.dialog.position || { my: 'center top', at: 'center top+50px', of: window, within: window }
+                });
             } else {
                 this.error.fadeIn(300);
             }

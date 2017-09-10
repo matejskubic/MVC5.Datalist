@@ -113,23 +113,27 @@
         left: 45%;
     }
 
-.datalist-widget .ui-dialog-title {
-    line-height: 1.4em;
-    min-height: 1.4em;
+.datalist-widget {
+    max-width: 98%;
 }
 
-.datalist-dialog,
-.datalist-widget,
-.datalist-widget:after,
-.datalist-widget:before {
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
-}
-
-    .datalist-widget .datalist-dialog {
-        padding: 1em;
+    .datalist-widget .ui-dialog-title {
+        line-height: 1.4em;
+        min-height: 1.4em;
     }
+
+    .datalist-dialog,
+    .datalist-widget,
+    .datalist-widget:after,
+    .datalist-widget:before {
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+    }
+
+        .datalist-widget .datalist-dialog {
+            padding: 1em;
+        }
 
 .datalist-dialog {
     font-size: 0.9em;
@@ -275,6 +279,10 @@
     background-color: #FFF6F6;
     border-color: #EBCCD1;
     color: #A94442;
+}
+
+.datalist-table {
+    overflow-x: auto;
 }
 
 @keyframes datalist-spin {
