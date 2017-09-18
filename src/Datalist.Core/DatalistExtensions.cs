@@ -26,7 +26,7 @@ namespace Datalist
         public static IHtmlString AutoCompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html,
             Expression<Func<TModel, TProperty>> expression, MvcDatalist model, Object htmlAttributes = null)
         {
-            String name = ExpressionHelper.GetExpressionText(expression);
+            String name = html.NameFor(expression).ToString();
             TagBuilder datalist = CreateDatalist(model, name, htmlAttributes);
             datalist.AddCssClass("datalist-browseless");
 
@@ -50,7 +50,7 @@ namespace Datalist
         public static IHtmlString DatalistFor<TModel, TProperty>(this HtmlHelper<TModel> html,
             Expression<Func<TModel, TProperty>> expression, MvcDatalist model, Object htmlAttributes = null)
         {
-            String name = ExpressionHelper.GetExpressionText(expression);
+            String name = html.NameFor(expression).ToString();
             TagBuilder datalist = CreateDatalist(model, name, htmlAttributes);
 
             datalist.InnerHtml = CreateDatalistValues(html, model, expression);
@@ -89,7 +89,7 @@ namespace Datalist
         private static String CreateDatalistValues<TModel, TProperty>(HtmlHelper<TModel> html, MvcDatalist datalist, Expression<Func<TModel, TProperty>> expression)
         {
             Object value = ModelMetadata.FromLambdaExpression(expression, html.ViewData).Model;
-            String name = ExpressionHelper.GetExpressionText(expression);
+            String name = html.NameFor(expression).ToString();
 
             if (datalist.Multi)
                 return CreateDatalistValues(html, datalist, name, value);
